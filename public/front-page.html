@@ -7,6 +7,11 @@
 <link rel="import" href="bower_components/paper-styles/color.html">
 <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="bower_components/paper-scroll-header-panel/demo/sample-content.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="bower_components/polymerfire/firebase-auth.html">
 
 <link rel="stylesheet" href="bower_components/paper-styles/demo.css">
 
@@ -88,8 +93,8 @@
 
                 <paper-icon-button icon="arrow-back"></paper-icon-button>
                 <div class="spacer"></div>
-                <paper-icon-button icon="thumb-up"></paper-icon-button>
-                <paper-icon-button icon="mail"></paper-icon-button>
+                <paper-button raised onclick="modal.open()">Login</paper-button>
+                <paper-button raised>Jsem lékař</paper-button>
                 <div class="bottom indent bottom-text" self-end>
                     <div>Bezcekani.cz</div>
                     <div class="subtitle">Objednáme Vás</div>
@@ -100,17 +105,59 @@
 
             <div class="content">
 
-                <sample-content size="100"></sample-content>
+                Seznam doktorů
 
             </div>
 
         </paper-scroll-header-panel>
 
+        <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
+                       signed-in="{{signedIn}}"></firebase-auth>
+
+        <paper-dialog id="modal" modal>
+            <div>
+                <gold-email-input error-message="Špatný formát" value="{{email}}" label="Vaše emailová adresa" auto-validate required></gold-email-input>
+                <paper-input value="{{password}}" label="Heslo" type="password"></paper-input>
+                <!--<paper-input label="Potvrďte heslo" type="password"></paper-input>-->
+            </div>
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus on-tap="createUserWithEmailAndPassword">Registrovat
+                </paper-button>
+            </div>
+        </paper-dialog>
+
+
     </template>
 
     <script>
         Polymer({
-            is: 'front-page'
+            is: 'front-page',
+
+            properties: {
+                email: String,
+                password: String,
+
+                signedIn: {
+                    type: Boolean,
+                    notify: true, // fires signedIn-changed event TODO: change login button to logout
+
+                },
+
+                userEmail: {
+                    type: String,
+                    value: "Nijaká"
+                }
+            },
+
+            createUserWithEmailAndPassword: function () {
+
+                this.$.auth.createUserWithEmailAndPassword(this.email, this.password);
+
+/*                if(this.$.auth.user != null) {
+                    console.log(this.$.auth.user)
+                    this.properties.userEmail = this.$.auth.user.email;
+                }*/
+            }
         });
     </script>
 </dom-module>
