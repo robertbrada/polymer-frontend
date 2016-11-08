@@ -1,0 +1,12 @@
+<script>
+    DialogBehavior = {
+        properties: {
+            email: String,
+            password: String, // TODO: security
+        },
+
+        changePage: function () {
+            this.domHost.$.ipages.selectNext();
+        }
+    }
+</script>

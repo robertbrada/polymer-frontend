@@ -14,6 +14,7 @@
 
 
 <link rel="import" href="dialog_views/registration_view.html">
+<link rel="import" href="dialog_views/login_view.html">
 
 <link rel="stylesheet" href="bower_components/paper-styles/demo.css">
 
@@ -120,7 +121,8 @@
                        signed-in="{{signedIn}}"></firebase-auth>
 
         <paper-dialog id="modal" modal>
-            <iron-pages selected="0">
+            <iron-pages id="ipages" selected="0">
+                <login-view></login-view>
                 <registration-view></registration-view>
             </iron-pages>
         </paper-dialog>
@@ -134,17 +136,17 @@
 
             properties: {
 
-                signedIn: {
+                signedIn: { // TODO: probably redundant, better to use the variable with firebase auth
                     type: Boolean,
                     notify: true, // fires signedIn-changed event TODO: change login button to logout
-                    default: false
+                    value: false
 
                 },
 
                 userEmail: {
                     type: String,
                     value: "Nijaká"
-                }
+                },
             },
 
             ready: function () {
@@ -156,6 +158,12 @@
                 this.$.auth.createUserWithEmailAndPassword(email, pass);
 
                 console.log(this.$.auth.user);
+            },
+
+            signInWithEmailAndPassword: function (email, pass) {
+
+                this.$.auth.signInWithEmailAndPassword(email, pass);
+
             }
         });
     </script>

@@ -6,11 +6,9 @@
 <link rel="import" href="../behaviours/dialog-bahavior.html">
 
 
-<dom-module id="registration-view">
+<dom-module id="login-view">
     <template>
         <div>
-            <paper-input value="{{name}}" label="Jméno"></paper-input>
-            <paper-input value="{{surName}}" label="Jméno"></paper-input>
             <gold-email-input error-message="Špatný formát" value="{{email}}" label="Vaše emailová adresa"
                               auto-validate required></gold-email-input>
             <paper-input value="{{password}}" label="Heslo" type="password"></paper-input>
@@ -18,29 +16,25 @@
         <div class="buttons">
             <paper-button dialog-confirm>Zrušit
             </paper-button>
-            <paper-button dialog-confirm autofocus on-tap="createUserWithEmailAndPassword">Registrovat
+            <paper-button dialog-confirm autofocus on-tap="signInWithEmailAndPassword">
+                Přihlásit
             </paper-button>
         </div>
         <div class="buttons">
             <paper-button on-tap="changePage">
-                Již mám účet!
+                Nemáte účet? Zaregistrujte se!
             </paper-button>
         </div>
     </template>
 
     <script>
         Polymer({
-            is: 'registration-view',
+            is: 'login-view',
 
             behaviors: [DialogBehavior],
 
-            properties: {
-                name: String,
-                surName: String
-            },
-
-            createUserWithEmailAndPassword: function () {
-                this.domHost.createUserWithEmailAndPassword(this.email, this.password);
+            signInWithEmailAndPassword: function () {
+                this.domHost.signInWithEmailAndPassword(this.email, this.password);
             }
         });
 
