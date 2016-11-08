@@ -1,0 +1,41 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-common.css">
+
+
+<dom-module id="registration-view">
+    <template>
+        <style>
+
+        </style>
+        <div>
+            <gold-email-input error-message="Špatný formát" value="{{email}}" label="Vaše emailová adresa"
+                              auto-validate required></gold-email-input>
+            <paper-input value="{{password}}" label="Heslo" type="password"></paper-input>
+            <!--<a href="">Nemáte účet? Zaregistrujte se!</a>-->
+        </div>
+        <div class="buttons">
+            <paper-button dialog-confirm>Zrušit
+            </paper-button>
+            <paper-button dialog-confirm autofocus on-tap="createUserWithEmailAndPassword">Registrovat
+            </paper-button>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'registration-view',
+
+            properties: {
+                email: String,
+                password: String, // TODO: security
+            },
+
+            createUserWithEmailAndPassword: function () {
+                this.domHost.createUserWithEmailAndPassword(this.email, this.password);
+            }
+        });
+
+    </script>
+</dom-module>
