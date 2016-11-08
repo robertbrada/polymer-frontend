@@ -3,7 +3,6 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-common.css">
-<link rel="import" href="../bower_components/gold-password-input/gold-password-input.html">
 <link rel="import" href="../behaviours/dialog-bahavior.html">
 
 
@@ -16,9 +15,9 @@
                          error-message="Nelze ponechat prázdné" auto-validate required on-input="checkIfValid"></paper-input>
             <gold-email-input id="gemail" error-message="Špatný formát" value="{{email}}" label="Vaše emailová adresa"
                               auto-validate required on-input="checkIfValid"></gold-email-input>
-            <gold-password-input id="gpass" value="{{password}}" label="Heslo" required auto-validate
+            <paper-input id="gpass" value="{{password}}" label="Heslo" required auto-validate type="password" pattern="^.{6,24}$"
                                  minlength="6" maxlength="24" error-message="Moc krátké" on-input="checkIfValid">
-            </gold-password-input>
+            </paper-input>
         </div>
         <div class="buttons">
             <paper-button dialog-confirm>Zrušit

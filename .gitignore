@@ -6,4 +6,4 @@
 .idea
 *.iml
 public/bower_components
-firebase-debug.log
+*.log
