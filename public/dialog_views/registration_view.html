@@ -3,22 +3,28 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-common.css">
+<link rel="import" href="../bower_components/gold-password-input/gold-password-input.html">
 <link rel="import" href="../behaviours/dialog-bahavior.html">
 
 
 <dom-module id="registration-view">
     <template>
         <div>
-            <paper-input value="{{name}}" label="Jméno"></paper-input>
-            <paper-input value="{{surName}}" label="Jméno"></paper-input>
-            <gold-email-input error-message="Špatný formát" value="{{email}}" label="Vaše emailová adresa"
-                              auto-validate required></gold-email-input>
-            <paper-input value="{{password}}" label="Heslo" type="password"></paper-input>
+            <paper-input id="ninput" value="{{name}}" label="Jméno" pattern="^.+$"
+                         error-message="Nelze ponechat prázdné" auto-validate required on-input="checkIfValid"></paper-input>
+            <paper-input id="sninput" value="{{surName}}" label="Příjmení" pattern="^.+$"
+                         error-message="Nelze ponechat prázdné" auto-validate required on-input="checkIfValid"></paper-input>
+            <gold-email-input id="gemail" error-message="Špatný formát" value="{{email}}" label="Vaše emailová adresa"
+                              auto-validate required on-input="checkIfValid"></gold-email-input>
+            <gold-password-input id="gpass" value="{{password}}" label="Heslo" required auto-validate
+                                 minlength="6" maxlength="24" error-message="Moc krátké" on-input="checkIfValid">
+            </gold-password-input>
         </div>
         <div class="buttons">
             <paper-button dialog-confirm>Zrušit
             </paper-button>
-            <paper-button dialog-confirm autofocus on-tap="createUserWithEmailAndPassword">Registrovat
+            <paper-button id="regbutton" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword" disabled>
+                Registrovat
             </paper-button>
         </div>
         <div class="buttons">
@@ -41,6 +47,15 @@
 
             createUserWithEmailAndPassword: function () {
                 this.domHost.createUserWithEmailAndPassword(this.email, this.password);
+            },
+
+            checkIfValid: function () {
+                console.log("huu");
+                if (this.$.gemail.validate() && this.$.gpass.validate() && this.$.ninput.validate() && this.$.sninput.validate()) {
+                    this.$.regbutton.disabled = false;
+                } else {
+                    this.$.regbutton.disabled = true;
+                }
             }
         });
 
