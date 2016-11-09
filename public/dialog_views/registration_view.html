@@ -8,7 +8,13 @@
 
 <dom-module id="registration-view">
     <template>
+        <style>
+            p {
+                color: red
+            }
+        </style>
         <div>
+            <p>{{errorMessage}}</p>
             <paper-input id="ninput" value="{{name}}" label="Jméno" minlength="1"
                          error-message="Nelze ponechat prázdné" auto-validate required
                          on-input="checkIfValid"></paper-input>

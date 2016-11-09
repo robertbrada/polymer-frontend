@@ -138,9 +138,16 @@
             properties: {
                 signedIn: {
                     type: Boolean,
+                    observer: 'authChanged'
                 },
 
-                errorMessage: String
+                errorMessage: {
+                    type: String
+                }
+            },
+
+            authChanged: function () {
+                this.$.auth_button.innerHTML = (this.signedIn ? "Odhlásit" : "Přihlásit");
             },
 
             loginButtonListener: function () {
@@ -148,7 +155,6 @@
                     this.$.auth.signOut().then(function () {
                         /*TODO: find a better way of accessing the shadow DOM properties.
                          This method is searching the IDs globally*/
-                        document.getElementById("auth_button").innerHTML = "Přihlásit";
                         var toast = document.getElementById("main_toast");
                         toast.text = "Odhlášeno";
                         toast.open();
@@ -168,8 +174,7 @@
             },
 
             signInWithEmailAndPassword: function (email, pass) {
-                this.$.auth.signInWithEmailAndPassword(email, pass).then(function (response) {
-                    document.getElementById("auth_button").innerHTML = "Odhlásit";
+                this.$.auth.signInWithEmailAndPassword(email, pass).then(function () {
                     var toast = document.getElementById("main_toast");
                     toast.text = "Přihlášeno";
                     toast.open();
