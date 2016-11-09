@@ -5,7 +5,6 @@
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/paper-styles/color.html">
-<link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="bower_components/paper-scroll-header-panel/demo/sample-content.html">
 <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/polymerfire/firebase-auth.html">
@@ -97,7 +96,7 @@
 
                 <paper-icon-button icon="arrow-back"></paper-icon-button>
                 <div class="spacer"></div>
-                <paper-button id="auth_button" raised on-tap="loginButtonListener"></paper-button>
+                <paper-button id="auth_button" raised on-tap="loginButtonListener">Přihlásit</paper-button>
                 <paper-button raised on-tap="debugFunction">Jsem lékař</paper-button>
                 <div class="bottom indent bottom-text" self-end>
                     <div>Bezcekani.cz</div>
@@ -119,7 +118,7 @@
 
         <!--LINK-->
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
-                       signed-in="{{signedIn}}" on-change="authEventHandler"></firebase-auth>
+                       signed-in="{{signedIn}}"></firebase-auth>
 
         <paper-dialog id="modal" modal>
             <iron-pages id="ipages" selected="0">
@@ -128,7 +127,7 @@
             </iron-pages>
         </paper-dialog>
 
-        <paper-toast id="mainToast"></paper-toast>
+        <paper-toast id="main_toast"></paper-toast>
 
     </template>
 
@@ -139,21 +138,21 @@
             properties: {
                 signedIn: {
                     type: Boolean,
-                    observer: 'authChanged'
                 },
 
                 errorMessage: String
             },
 
-            authChanged: function () {
-                this.$.auth_button.innerHTML = (this.signedIn ? "Odhlásit" : "Přihlásit");
-            },
-
             loginButtonListener: function () {
-                if (this.$.auth.signedIn) {
-                    this.$.auth.signOut();
-                    this.$.mainToast.text = "Odhlášeno";
-                    this.$.mainToast.open();
+                if (this.signedIn) {
+                    this.$.auth.signOut().then(function () {
+                        /*TODO: find a better way of accessing the shadow DOM properties.
+                         This method is searching the IDs globally*/
+                        document.getElementById("auth_button").innerHTML = "Přihlásit";
+                        var toast = document.getElementById("main_toast");
+                        toast.text = "Odhlášeno";
+                        toast.open();
+                    });
 
                 } else {
                     this.$.modal.toggle();
@@ -161,7 +160,7 @@
             },
 
             debugFunction: function () {
-                console.log("debug function: " + this.$.auth.signedIn)
+                console.log("debug function: " + this.$.auth.signedIn);
             },
 
             createUserWithEmailAndPassword: function (email, pass) {
@@ -169,19 +168,14 @@
             },
 
             signInWithEmailAndPassword: function (email, pass) {
-                this.$.auth.signInWithEmailAndPassword(email, pass);
-            },
-
-            authErrorHandler: function (err) {
-                console.log(err.detail["code"]);
-            },
-
-            loginHandler: function (e) {
-                console.log("Logged in");
-            },
-
-            authEventHandler: function (e) {
-                console.log(e)
+                this.$.auth.signInWithEmailAndPassword(email, pass).then(function (response) {
+                    document.getElementById("auth_button").innerHTML = "Odhlásit";
+                    var toast = document.getElementById("main_toast");
+                    toast.text = "Přihlášeno";
+                    toast.open();
+                }).catch(function (error) {
+                    console.log(error)
+                });
             }
         });
     </script>
