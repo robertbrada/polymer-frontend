@@ -3,10 +3,28 @@
         properties: {
             email: String,
             password: String, // TODO: security
+            errorMessage: String
         },
+
+        validationIDs: [],
 
         changePage: function () {
             this.domHost.$.ipages.selectNext();
+        },
+
+        checkIfValid: function () {
+            var disableButton = false;
+            var arrayLength = this.validationIDs.length;
+
+            for (var i = 0; i < arrayLength; i++) {
+
+                if (!this.$[this.validationIDs[i]].validate()) {
+                    disableButton = true;
+                    break;
+                }
+            }
+
+            this.$.confirm_button.disabled = disableButton;
         }
     }
 </script>

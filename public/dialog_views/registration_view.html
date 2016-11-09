@@ -9,20 +9,23 @@
 <dom-module id="registration-view">
     <template>
         <div>
-            <paper-input id="ninput" value="{{name}}" label="Jméno" pattern="^.+$"
-                         error-message="Nelze ponechat prázdné" auto-validate required on-input="checkIfValid"></paper-input>
-            <paper-input id="sninput" value="{{surName}}" label="Příjmení" pattern="^.+$"
-                         error-message="Nelze ponechat prázdné" auto-validate required on-input="checkIfValid"></paper-input>
-            <gold-email-input id="gemail" error-message="Špatný formát" value="{{email}}" label="Vaše emailová adresa"
-                              auto-validate required on-input="checkIfValid"></gold-email-input>
-            <paper-input id="gpass" value="{{password}}" label="Heslo" required auto-validate type="password" pattern="^.{6,24}$"
-                                 minlength="6" maxlength="24" error-message="Moc krátké" on-input="checkIfValid">
+            <paper-input id="ninput" value="{{name}}" label="Jméno" minlength="1"
+                         error-message="Nelze ponechat prázdné" auto-validate required
+                         on-input="checkIfValid"></paper-input>
+            <paper-input id="sninput" value="{{surName}}" label="Příjmení" minlength="1"
+                         error-message="Nelze ponechat prázdné" auto-validate required
+                         on-input="checkIfValid"></paper-input>
+            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                              label="Vaše emailová adresa" auto-validate required
+                              on-input="checkIfValid"></gold-email-input>
+            <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate type="password"
+                         minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
             </paper-input>
         </div>
         <div class="buttons">
             <paper-button dialog-confirm>Zrušit
             </paper-button>
-            <paper-button id="regbutton" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword" disabled>
+            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword" disabled>
                 Registrovat
             </paper-button>
         </div>
@@ -44,17 +47,10 @@
                 surName: String
             },
 
+            validationIDs: ["ninput", "sninput", "emailID", "passID"],
+
             createUserWithEmailAndPassword: function () {
                 this.domHost.createUserWithEmailAndPassword(this.email, this.password);
-            },
-
-            checkIfValid: function () {
-                console.log("huu");
-                if (this.$.gemail.validate() && this.$.gpass.validate() && this.$.ninput.validate() && this.$.sninput.validate()) {
-                    this.$.regbutton.disabled = false;
-                } else {
-                    this.$.regbutton.disabled = true;
-                }
             }
         });
 

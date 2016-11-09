@@ -119,17 +119,16 @@
 
         <!--LINK-->
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
-                       signed-in="{{signedIn}}"></firebase-auth>
+                       signed-in="{{signedIn}}" on-change="authEventHandler"></firebase-auth>
 
         <paper-dialog id="modal" modal>
             <iron-pages id="ipages" selected="0">
-                <login-view></login-view>
+                <login-view error-message="{{errorMessage}}"></login-view>
                 <registration-view></registration-view>
             </iron-pages>
         </paper-dialog>
 
-        <paper-toast id="logoutToast" text="Odhlášeno"></paper-toast>
-
+        <paper-toast id="mainToast"></paper-toast>
 
     </template>
 
@@ -141,7 +140,9 @@
                 signedIn: {
                     type: Boolean,
                     observer: 'authChanged'
-                }
+                },
+
+                errorMessage: String
             },
 
             authChanged: function () {
@@ -151,7 +152,8 @@
             loginButtonListener: function () {
                 if (this.$.auth.signedIn) {
                     this.$.auth.signOut();
-                    this.$.logoutToast.open();
+                    this.$.mainToast.text = "Odhlášeno";
+                    this.$.mainToast.open();
 
                 } else {
                     this.$.modal.toggle();
@@ -163,16 +165,23 @@
             },
 
             createUserWithEmailAndPassword: function (email, pass) {
-
                 this.$.auth.createUserWithEmailAndPassword(email, pass);
-
-                console.log(this.$.auth.user);
             },
 
             signInWithEmailAndPassword: function (email, pass) {
-
                 this.$.auth.signInWithEmailAndPassword(email, pass);
+            },
 
+            authErrorHandler: function (err) {
+                console.log(err.detail["code"]);
+            },
+
+            loginHandler: function (e) {
+                console.log("Logged in");
+            },
+
+            authEventHandler: function (e) {
+                console.log(e)
             }
         });
     </script>

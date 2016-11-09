@@ -8,15 +8,23 @@
 
 <dom-module id="login-view">
     <template>
+        <style>
+            p    {color: red}
+        </style>
         <div>
-            <gold-email-input error-message="Špatný formát" value="{{email}}" label="Vaše emailová adresa"
-                              auto-validate required></gold-email-input>
-            <paper-input value="{{password}}" label="Heslo" type="password"></paper-input>
+            <p>{{errorMessage}}</p>
+            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                              label="Vaše emailová adresa" auto-validate required
+                              on-input="checkIfValid"></gold-email-input>
+            <paper-input id="passID" value="{{password}}" label="Heslo" type="password" required auto-validate
+                         error-message="Neplatné heslo" on-input="checkIfValid" minlength="6" maxlength="48">
+
+            </paper-input>
         </div>
         <div class="buttons">
             <paper-button dialog-confirm>Zrušit
             </paper-button>
-            <paper-button dialog-confirm autofocus on-tap="signInWithEmailAndPassword">
+            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="signInWithEmailAndPassword" disabled>
                 Přihlásit
             </paper-button>
         </div>
@@ -32,6 +40,8 @@
             is: 'login-view',
 
             behaviors: [DialogBehavior],
+
+            validationIDs: ["emailID", "passID"],
 
             signInWithEmailAndPassword: function () {
                 this.domHost.signInWithEmailAndPassword(this.email, this.password);
