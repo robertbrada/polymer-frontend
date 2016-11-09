@@ -11,6 +11,7 @@
 <link rel="import" href="bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-toast/paper-toast.html">
 
 
 <link rel="import" href="dialog_views/registration_view.html">
@@ -96,8 +97,8 @@
 
                 <paper-icon-button icon="arrow-back"></paper-icon-button>
                 <div class="spacer"></div>
-                <paper-button id="auth_button" raised onclick="modal.open()"></paper-button>
-                <paper-button raised>Jsem lékař</paper-button>
+                <paper-button id="auth_button" raised on-tap="loginButtonListener"></paper-button>
+                <paper-button raised on-tap="debugFunction">Jsem lékař</paper-button>
                 <div class="bottom indent bottom-text" self-end>
                     <div>Bezcekani.cz</div>
                     <div class="subtitle">Objednáme Vás</div>
@@ -127,6 +128,8 @@
             </iron-pages>
         </paper-dialog>
 
+        <paper-toast id="logoutToast" text="Odhlášeno"></paper-toast>
+
 
     </template>
 
@@ -135,22 +138,28 @@
             is: 'front-page',
 
             properties: {
-
-                signedIn: { // TODO: probably redundant, better to use the variable with firebase auth
+                signedIn: {
                     type: Boolean,
-                    notify: true, // fires signedIn-changed event TODO: change login button to logout
-                    value: false
-
-                },
-
-                userEmail: {
-                    type: String,
-                    value: "Nijaká"
-                },
+                    observer: 'authChanged'
+                }
             },
 
-            ready: function () {
+            authChanged: function () {
                 this.$.auth_button.innerHTML = (this.signedIn ? "Odhlásit" : "Přihlásit");
+            },
+
+            loginButtonListener: function () {
+                if (this.$.auth.signedIn) {
+                    this.$.auth.signOut();
+                    this.$.logoutToast.open();
+
+                } else {
+                    this.$.modal.toggle();
+                }
+            },
+
+            debugFunction: function () {
+                console.log("debug function: " + this.$.auth.signedIn)
             },
 
             createUserWithEmailAndPassword: function (email, pass) {
