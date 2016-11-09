@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-common.css">
 <link rel="import" href="../behaviours/dialog-bahavior.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 
 
 <dom-module id="registration-view">
@@ -15,18 +16,20 @@
         </style>
         <div>
             <p>{{errorMessage}}</p>
-            <paper-input id="ninput" value="{{name}}" label="Jméno" minlength="1"
+            <paper-input id="ninput" value="{{name}}" label="Jméno" minlength="1" maxlength="80"
                          error-message="Nelze ponechat prázdné" auto-validate required
                          on-input="checkIfValid"></paper-input>
             <paper-input id="sninput" value="{{surName}}" label="Příjmení" minlength="1"
-                         error-message="Nelze ponechat prázdné" auto-validate required
-                         on-input="checkIfValid"></paper-input>
+                         maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
+                         required on-input="checkIfValid"></paper-input>
             <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
                               label="Vaše emailová adresa" auto-validate required
                               on-input="checkIfValid"></gold-email-input>
             <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate type="password"
                          minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
             </paper-input>
+            <!-- TODO: set the icon position next to input-->
+            <paper-icon-button icon="{{eyeIcon}}" on-tap="passVisibilityChange"></paper-icon-button>
         </div>
         <div class="buttons">
             <paper-button dialog-dismiss>Zrušit
@@ -50,13 +53,27 @@
 
             properties: {
                 name: String,
-                surName: String
+                surName: String,
+                eyeIcon: {
+                    type: String,
+                    value: "visibility"
+                }
             },
 
             validationIDs: ["ninput", "sninput", "emailID", "passID"],
 
             createUserWithEmailAndPassword: function () {
                 this.domHost.createUserWithEmailAndPassword(this.email, this.password);
+            },
+
+            passVisibilityChange: function () {
+                if (this.eyeIcon == "visibility") {
+                    this.eyeIcon = "visibility-off";
+                    this.$.passID.type = "text";
+                } else {
+                    this.eyeIcon = "visibility";
+                    this.$.passID.type = "password";
+                }
             }
         });
 

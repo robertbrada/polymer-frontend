@@ -122,8 +122,8 @@
 
         <paper-dialog id="modal" modal>
             <iron-pages id="ipages" selected="0">
-                <login-view id="l_view" error-message="{{errorMessage}}"></login-view>
-                <registration-view></registration-view>
+                <login-view id="l_view"></login-view>
+                <registration-view id="r_view"></registration-view>
             </iron-pages>
         </paper-dialog>
 
@@ -139,10 +139,6 @@
                 signedIn: {
                     type: Boolean,
                     observer: 'authChanged'
-                },
-
-                errorMessage: {
-                    type: String
                 }
             },
 
@@ -167,10 +163,29 @@
 
             debugFunction: function () {
                 console.log("debug function: " + this.$.auth.signedIn);
+                var user = this.$.auth.user;
+                if(!!user) {
+                    console.log(user);
+//                    user.sendEmailVerification();
+                }
             },
 
             createUserWithEmailAndPassword: function (email, pass) {
-                this.$.auth.createUserWithEmailAndPassword(email, pass);
+                this.$.auth.createUserWithEmailAndPassword(email, pass).then(function (user) {
+                    user.sendEmailVerification();
+                    // TODO: dialog
+                }).catch(function (error) {
+                    var errorMessage = "";
+                    switch (error["code"]) {
+                        case "auth/email-already-in-use":
+                            errorMessage = "Účet s touto emailovou adresou již existuje";
+                            break;
+                        default:
+                            errorMessage = error["code"];
+                    }
+                    document.getElementById("r_view").errorMessage = errorMessage;
+                    document.getElementById("modal").toggle();
+                });
             },
 
             signInWithEmailAndPassword: function (email, pass) {
