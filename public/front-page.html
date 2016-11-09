@@ -122,7 +122,7 @@
 
         <paper-dialog id="modal" modal>
             <iron-pages id="ipages" selected="0">
-                <login-view error-message="{{errorMessage}}"></login-view>
+                <login-view id="l_view" error-message="{{errorMessage}}"></login-view>
                 <registration-view></registration-view>
             </iron-pages>
         </paper-dialog>
@@ -174,7 +174,20 @@
                     toast.text = "Přihlášeno";
                     toast.open();
                 }).catch(function (error) {
-                    console.log(error)
+                    var errorMessage = "";
+                    switch (error["code"]) {
+                        case "auth/wrong-password":
+                            errorMessage = "Špatné heslo";
+                            break;
+                        case "auth/user-not-found":
+                        case "auth/invalid-email":
+                            errorMessage = "Uživatelské jméno nenalezeno";
+                            break;
+                        default:
+                            errorMessage = error["code"];
+                    }
+                    document.getElementById("l_view").errorMessage = errorMessage;
+                    document.getElementById("modal").toggle();
                 });
             }
         });
