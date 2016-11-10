@@ -25,11 +25,20 @@
             <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
                               label="Vaše emailová adresa" auto-validate required
                               on-input="checkIfValid"></gold-email-input>
-            <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate type="password"
-                         minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
-            </paper-input>
-            <!-- TODO: set the icon position next to input-->
-            <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange"></paper-icon-button>
+            <table>
+                <tr>
+                    <td>
+                        <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate
+                                     type="password"
+                                     minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
+                        </paper-input>
+                    </td>
+                    <td>
+                        <!-- TODO: set the icon position next to input-->
+                        <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange"></paper-icon-button>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div class="buttons">
             <paper-button dialog-dismiss>Zrušit

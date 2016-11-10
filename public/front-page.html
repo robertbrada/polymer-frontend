@@ -22,6 +22,10 @@
     <template>
 
         <style>
+            #emaildialog {
+                font-size: medium;
+            }
+            /*TODO: staré věci potřeba pročistit*/
             paper-scroll-header-panel {
                 position: absolute;
                 top: 0;
@@ -112,8 +116,6 @@
 
             </div>
 
-            <div></div>
-
         </paper-scroll-header-panel>
 
         <!--LINK-->
@@ -125,6 +127,14 @@
                 <login-view id="l_view"></login-view>
                 <registration-view id="r_view"></registration-view>
             </iron-pages>
+        </paper-dialog>
+
+        <paper-dialog id="emaildialog">
+            <p>Na Vaší emailovou adresu byl poslán potvrzovací email.<br>
+                Jakmile jej potvrdíte, budete se moci objednat.</p>
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus>Zavřít</paper-button>
+            </div>
         </paper-dialog>
 
         <paper-toast id="main_toast"></paper-toast>
@@ -157,6 +167,7 @@
                     });
 
                 } else {
+                    this.$.ipages.selected = "0";
                     this.$.modal.toggle();
                 }
             },
@@ -164,16 +175,17 @@
             debugFunction: function () {
                 console.log("debug function: " + this.$.auth.signedIn);
                 var user = this.$.auth.user;
-                if(!!user) {
+                if (!!user) {
                     console.log(user);
 //                    user.sendEmailVerification();
                 }
+//                this.$.emaildialog.toggle();
             },
 
             createUserWithEmailAndPassword: function (email, pass) {
                 this.$.auth.createUserWithEmailAndPassword(email, pass).then(function (user) {
                     user.sendEmailVerification();
-                    // TODO: dialog
+                    document.getElementById("emaildialog").toggle();
                 }).catch(function (error) {
                     var errorMessage = "";
                     switch (error["code"]) {
