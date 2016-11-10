@@ -25,6 +25,7 @@
             #emaildialog {
                 font-size: medium;
             }
+
             /*TODO: staré věci potřeba pročistit*/
             paper-scroll-header-panel {
                 position: absolute;
@@ -186,7 +187,16 @@
                 this.$.auth.createUserWithEmailAndPassword(email, pass).then(function (user) {
                     user.sendEmailVerification();
                     document.getElementById("emaildialog").toggle();
+   /*                 var view = document.getElementById("r_view");
+
+                    firebase.database().ref('/user/' + user['uid']).set({
+                        name: view.name,
+                        surname: view.surName
+                    }).catch(function (err) {
+                        console.log(err.message);
+                    });*/
                 }).catch(function (error) {
+                    console.log(error.message);
                     var errorMessage = "";
                     switch (error["code"]) {
                         case "auth/email-already-in-use":
