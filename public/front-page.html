@@ -160,13 +160,9 @@
             loginButtonListener: function () {
                 if (this.signedIn) {
                     this.$.auth.signOut().then(function () {
-                        /*TODO: find a better way of accessing the shadow DOM properties.
-                         This method is searching the IDs globally*/
-                        var toast = document.getElementById("main_toast");
-                        toast.text = "Odhlášeno";
-                        toast.open();
-                    });
-
+                        this.$.main_toast.text = "Odhlášeno";
+                        this.$.main_toast.open();
+                    }.bind(this));
                 } else {
                     this.$.ipages.selected = "0";
                     this.$.modal.toggle();
@@ -186,16 +182,15 @@
             createUserWithEmailAndPassword: function (email, pass) {
                 this.$.auth.createUserWithEmailAndPassword(email, pass).then(function (user) {
                     user.sendEmailVerification();
-                    document.getElementById("emaildialog").toggle();
-   /*                 var view = document.getElementById("r_view");
-
-                    firebase.database().ref('/user/' + user['uid']).set({
-                        name: view.name,
-                        surname: view.surName
-                    }).catch(function (err) {
-                        console.log(err.message);
-                    });*/
-                }).catch(function (error) {
+                    this.$.emaildialog.toggle();
+                    /*
+                     this.$.auth.app.database().ref('/user/' + user['uid']).set({
+                     name: this.$.r_view.name,
+                     surname: this.$.r_view.surName
+                     }).catch(function (err) {
+                     console.log(err.message);
+                     });*/
+                }.bind(this)).catch(function (error) {
                     console.log(error.message);
                     var errorMessage = "";
                     switch (error["code"]) {
@@ -205,17 +200,16 @@
                         default:
                             errorMessage = error["code"];
                     }
-                    document.getElementById("r_view").errorMessage = errorMessage;
-                    document.getElementById("modal").toggle();
-                });
+                    this.$.r_view.errorMessage = errorMessage;
+                    this.$.modal.toggle();
+                }.bind(this));
             },
 
             signInWithEmailAndPassword: function (email, pass) {
                 this.$.auth.signInWithEmailAndPassword(email, pass).then(function () {
-                    var toast = document.getElementById("main_toast");
-                    toast.text = "Přihlášeno";
-                    toast.open();
-                }).catch(function (error) {
+                    this.$.main_toast.text = "Přihlášeno";
+                    this.$.main_toast.open();
+                }.bind(this)).catch(function (error) {
                     var errorMessage = "";
                     switch (error["code"]) {
                         case "auth/wrong-password":
@@ -228,9 +222,9 @@
                         default:
                             errorMessage = error["code"];
                     }
-                    document.getElementById("l_view").errorMessage = errorMessage;
-                    document.getElementById("modal").toggle();
-                });
+                    this.$.l_view.errorMessage = errorMessage;
+                    this.$.modal.toggle();
+                }.bind(this));
             }
         });
     </script>
