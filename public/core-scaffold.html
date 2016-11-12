@@ -13,8 +13,6 @@
 
 <link rel="import" href="bower_components/paper-styles/color.html">
 <link rel="import" href="bower_components/paper-dialog-behavior/paper-dialog-common.css">
-<!--TODO: lazy load-->
-<link rel="import" href="/views/login-view.html">
 
 <dom-module id="core-scaffold">
     <template>
@@ -52,7 +50,7 @@
                 <app-toolbar>
                     <div main-title>bezcekani.cz</div>
                     <paper-button id="auth_button" raised on-tap="loginButtonListener">Přihlásit</paper-button>
-                    <paper-button raised on-tap="debugFunction">Jsem lékař</paper-button>
+                    <paper-button raised on-tap="debugFunction">Pro lékaře</paper-button>
                 </app-toolbar>
             </app-header>
 
@@ -68,7 +66,10 @@
         </app-header-layout>
 
         <paper-dialog id="modal" modal>
-            <login-view id="l_view"></login-view>
+            <iron-pages id="dialogpages" selected="login" attr-for-selected="name">
+                <login-view name="login"></login-view>
+                <emaildialog-view name="emaildialog"></emaildialog-view>
+            </iron-pages>
         </paper-dialog>
 
         <paper-toast id="main_toast"></paper-toast>
@@ -107,6 +108,13 @@
                  }*/
             },
 
+            showDialog: function (pageName) {
+                this.importHref("/views/" + pageName + "-view.html", null, null, true);
+                this.$.dialogpages.selected = pageName;
+                this.$.modal.toggle();
+
+            },
+
             authChanged: function () {
                 this.$.auth_button.innerHTML = (this.signedIn ? "Odhlásit" : "Přihlásit");
             },
@@ -118,7 +126,7 @@
                         this.$.main_toast.open();
                     }.bind(this));
                 } else {
-                    this.$.modal.toggle();
+                    this.showDialog("login");
                 }
             },
 

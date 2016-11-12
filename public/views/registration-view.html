@@ -5,17 +5,18 @@
 <link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-common.css">
 <link rel="import" href="../behaviours/input-validation-bahavior.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+
+<link rel="import" href="/shared-styles.html">
 
 
 <dom-module id="registration-view">
     <template>
-        <style>
+        <style include="shared-styles">
             p {
                 color: red
             }
         </style>
-        <div>
+        <div class="card">
             <p>{{errorMessage}}</p>
             <paper-input id="ninput" value="{{firstName}}" label="Jméno" minlength="1" maxlength="80"
                          error-message="Nelze ponechat prázdné" auto-validate required
@@ -26,34 +27,20 @@
             <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
                               label="Vaše emailová adresa" auto-validate required
                               on-input="checkIfValid"></gold-email-input>
-            <table>
-                <tr>
-                    <td>
-                        <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate
-                                     type="password"
-                                     minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
-                        </paper-input>
-                    </td>
-                    <td>
-                        <!-- TODO: set the icon position next to input-->
-                        <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange"></paper-icon-button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="buttons">
-            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword" disabled>
-                Registrovat
-            </paper-button>
-        </div>
 
-        <paper-dialog id="emaildialog">
-            <p>Na Vaší emailovou adresu byl poslán potvrzovací email.<br>
-                Jakmile jej potvrdíte, budete se moci objednat.</p>
+            <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate
+                         type="password"
+                         minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
+            </paper-input>
+            <!-- TODO: set the icon position next to input-->
+            <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange"></paper-icon-button>
             <div class="buttons">
-                <paper-button dialog-confirm autofocus>Zavřít</paper-button>
+                <paper-button id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword"
+                              disabled>
+                    Registrovat
+                </paper-button>
             </div>
-        </paper-dialog>
+        </div>
     </template>
 
     <script>
@@ -77,8 +64,11 @@
                 var domhost = this.domHost;
                 domhost.$.auth.createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
                     user.sendEmailVerification();
-//                    this.$.emaildialog.toggle(); TODO
+
                     domhost.changeRoute('/home');
+                    domhost.$.main_toast.text = "Přihlášeno";
+                    domhost.$.main_toast.open();
+                    domhost.showDialog("emaildialog");
                     /*
                      this.$.auth.app.database().ref('/user/' + user['uid']).set({
                      name: this.$.r_view.name,
