@@ -11,6 +11,9 @@
 <link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/paper-toast/paper-toast.html">
 
+<link rel="import" href="bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="bower_components/neon-animation/animations/fade-out-animation.html">
+
 <link rel="import" href="bower_components/paper-styles/color.html">
 <link rel="import" href="bower_components/paper-dialog-behavior/paper-dialog-common.css">
 
@@ -65,7 +68,8 @@
             </iron-pages>
         </app-header-layout>
 
-        <paper-dialog id="modal" modal>
+        <paper-dialog id="modal" modal entry-animation="scale-up-animation"
+                      exit-animation="fade-out-animation">
             <iron-pages id="dialogpages" selected="login" attr-for-selected="name">
                 <login-view name="login"></login-view>
                 <emaildialog-view name="emaildialog"></emaildialog-view>
@@ -99,6 +103,7 @@
 
             debugFunction: function () {
                 console.log("debug function: " + this.signedIn);
+//                this.showDialog("emaildialog");
                 this.changeRoute('/home');
 
                 /*                if (!!this.user) {
