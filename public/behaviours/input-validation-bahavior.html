@@ -1,5 +1,5 @@
 <script>
-    DialogBehavior = {
+    InputValidationBehavior = {
         properties: {
             email: String,
             password: String, // TODO: security
@@ -7,10 +7,6 @@
         },
 
         validationIDs: [],
-
-        changePage: function () {
-            this.domHost.$.ipages.selectNext();
-        },
 
         checkIfValid: function () {
             var disableButton = false;

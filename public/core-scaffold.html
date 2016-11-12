@@ -7,6 +7,14 @@
 <link rel="import" href="/bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="/bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-toast/paper-toast.html">
+
+<link rel="import" href="bower_components/paper-styles/color.html">
+<link rel="import" href="bower_components/paper-dialog-behavior/paper-dialog-common.css">
+<!--TODO: lazy load-->
+<link rel="import" href="/views/login-view.html">
 
 <dom-module id="core-scaffold">
     <template>
@@ -26,6 +34,8 @@
             app-header paper-icon-button {
                 --paper-icon-button-ink-color: white;
             }
+
+
         </style>
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
@@ -40,8 +50,9 @@
 
             <app-header condenses reveals effects="waterfall">
                 <app-toolbar>
-                    <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-                    <div main-title>My App</div>
+                    <div main-title>bezcekani.cz</div>
+                    <paper-button id="auth_button" raised on-tap="loginButtonListener">Přihlásit</paper-button>
+                    <paper-button raised on-tap="debugFunction">Jsem lékař</paper-button>
                 </app-toolbar>
             </app-header>
 
@@ -52,8 +63,16 @@
                     role="main">
                 <home-view name="home"></home-view>
                 <e404-view name="e404"></e404-view>
+                <registration-view name="registration"></registration-view>
             </iron-pages>
         </app-header-layout>
+
+        <paper-dialog id="modal" modal>
+            <login-view id="l_view"></login-view>
+        </paper-dialog>
+
+        <paper-toast id="main_toast"></paper-toast>
+
     </template>
     <script>
         Polymer({
@@ -64,27 +83,60 @@
                     type: String,
                     reflectToAttribute: true,
                     observer: '_pageChanged'
-                }
+                },
+                signedIn: {
+                    type: Boolean,
+                    observer: 'authChanged'
+                },
+                user: Object,
+                route: Object
             },
 
             observers: [
                 '_routePageChanged(routeData.page)'
             ],
 
+            debugFunction: function () {
+                console.log("debug function: " + this.signedIn);
+                this.changeRoute('/home');
+
+                /*                if (!!this.user) {
+                 var fb = this.$.auth.app;
+                 console.log(!!fb); // Output is true,
+                 var database = fb.database();
+                 }*/
+            },
+
+            authChanged: function () {
+                this.$.auth_button.innerHTML = (this.signedIn ? "Odhlásit" : "Přihlásit");
+            },
+
+            loginButtonListener: function () {
+                if (this.signedIn) {
+                    this.$.auth.signOut().then(function () {
+                        this.$.main_toast.text = "Odhlášeno";
+                        this.$.main_toast.open();
+                    }.bind(this));
+                } else {
+                    this.$.modal.toggle();
+                }
+            },
+
             _routePageChanged: function (page) {
                 this.page = page || 'home';
-//                this.page = page || 'view1';
             },
 
             _pageChanged: function (page) {
-                // Load page import on demand. Show 404 page if fails
                 var resolvedPageUrl = this.resolveUrl("/views/" + page + '-view.html');
-                console.log(resolvedPageUrl);
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
             },
 
             _showPage404: function () {
                 this.page = 'e404';
+            },
+
+            changeRoute: function (url) {
+                this.route = {path: url, prefix: '', __queryParams: {}};
             }
         });
     </script>

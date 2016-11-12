@@ -3,7 +3,7 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-common.css">
-<link rel="import" href="../behaviours/dialog-bahavior.html">
+<link rel="import" href="../behaviours/input-validation-bahavior.html">
 
 
 <dom-module id="login-view">
@@ -31,9 +31,11 @@
             </paper-button>
         </div>
         <div class="buttons">
-            <paper-button on-tap="changePage">
-                Nemáte účet? Zaregistrujte se!
-            </paper-button>
+            <a href="/registration">
+                <paper-button dialog-dismiss>
+                    Nemáte účet? Zaregistrujte se!
+                </paper-button>
+            </a>
         </div>
     </template>
 
@@ -41,12 +43,29 @@
         Polymer({
             is: 'login-view',
 
-            behaviors: [DialogBehavior],
+            behaviors: [InputValidationBehavior],
 
             validationIDs: ["emailID", "passID"],
 
             signInWithEmailAndPassword: function () {
-                this.domHost.signInWithEmailAndPassword(this.email, this.password);
+                var hostElementScope = this.domHost.$;
+                hostElementScope.auth.signInWithEmailAndPassword(this.email, this.password).then(function () {
+                    hostElementScope.main_toast.text = "Přihlášeno";
+                    hostElementScope.main_toast.open();
+                }).catch(function (error) {
+                    switch (error["code"]) {
+                        case "auth/wrong-password":
+                            this.errorMessage = "Špatné heslo";
+                            break;
+                        case "auth/user-not-found":
+                        case "auth/invalid-email":
+                            this.errorMessage = "Uživatelské jméno nenalezeno";
+                            break;
+                        default:
+                            this.errorMessage = error["code"];
+                    }
+                    hostElementScope.modal.toggle();
+                }.bind(this));
             }
         });
 

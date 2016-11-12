@@ -3,8 +3,9 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-common.css">
-<link rel="import" href="../behaviours/dialog-bahavior.html">
-<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../behaviours/input-validation-bahavior.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 
 
 <dom-module id="registration-view">
@@ -16,10 +17,10 @@
         </style>
         <div>
             <p>{{errorMessage}}</p>
-            <paper-input id="ninput" value="{{name}}" label="Jméno" minlength="1" maxlength="80"
+            <paper-input id="ninput" value="{{firstName}}" label="Jméno" minlength="1" maxlength="80"
                          error-message="Nelze ponechat prázdné" auto-validate required
                          on-input="checkIfValid"></paper-input>
-            <paper-input id="sninput" value="{{surName}}" label="Příjmení" minlength="1"
+            <paper-input id="sninput" value="{{lastName}}" label="Příjmení" minlength="1"
                          maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
                          required on-input="checkIfValid"></paper-input>
             <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
@@ -41,28 +42,29 @@
             </table>
         </div>
         <div class="buttons">
-            <paper-button dialog-dismiss>Zrušit
-            </paper-button>
             <paper-button id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword" disabled>
                 Registrovat
             </paper-button>
         </div>
-        <div class="buttons">
-            <paper-button on-tap="changePage">
-                Již mám účet!
-            </paper-button>
-        </div>
+
+        <paper-dialog id="emaildialog">
+            <p>Na Vaší emailovou adresu byl poslán potvrzovací email.<br>
+                Jakmile jej potvrdíte, budete se moci objednat.</p>
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus>Zavřít</paper-button>
+            </div>
+        </paper-dialog>
     </template>
 
     <script>
         Polymer({
             is: 'registration-view',
 
-            behaviors: [DialogBehavior],
+            behaviors: [InputValidationBehavior],
 
             properties: {
-                name: String,
-                surName: String,
+                firstName: String,
+                lastName: String,
                 eyeIcon: {
                     type: String,
                     value: "visibility"
@@ -72,7 +74,28 @@
             validationIDs: ["ninput", "sninput", "emailID", "passID"],
 
             createUserWithEmailAndPassword: function () {
-                this.domHost.createUserWithEmailAndPassword(this.email, this.password);
+                var domhost = this.domHost;
+                domhost.$.auth.createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
+                    user.sendEmailVerification();
+//                    this.$.emaildialog.toggle(); TODO
+                    domhost.changeRoute('/home');
+                    /*
+                     this.$.auth.app.database().ref('/user/' + user['uid']).set({
+                     name: this.$.r_view.name,
+                     surname: this.$.r_view.surName
+                     }).catch(function (err) {
+                     console.log(err.message);
+                     });*/
+                }.bind(this)).catch(function (error) {
+                    console.log(error.message);
+                    switch (error["code"]) {
+                        case "auth/email-already-in-use":
+                            this.errorMessage = "Účet s touto emailovou adresou již existuje";
+                            break;
+                        default:
+                            this.errorMessage = error["code"];
+                    }
+                }.bind(this));
             },
 
             passVisibilityChange: function () {
