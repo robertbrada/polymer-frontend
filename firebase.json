@@ -6,6 +6,10 @@
     "public": "public",
     "rewrites": [
       {
+        "source": "/views/**",
+        "destination": "/views/**"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
