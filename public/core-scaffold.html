@@ -114,9 +114,10 @@
             },
 
             showDialog: function (pageName) {
-                this.importHref("/views/" + pageName + "-view.html", null, null, true);
                 this.$.dialogpages.selected = pageName;
-                this.$.modal.toggle();
+                this.importHref("/views/" + pageName + "-view.html", function (e) {
+                    this.$.modal.toggle();
+                }.bind(this), null, true);
 
             },
 
