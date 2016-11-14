@@ -11,6 +11,9 @@
 <link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/paper-toast/paper-toast.html">
 
+<!--Imported in order to fix the weird bug-->
+<link rel="import" href="bower_components/polymerfire/firebase-document.html">
+
 <link rel="import" href="bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="bower_components/neon-animation/animations/fade-out-animation.html">
 
@@ -109,15 +112,8 @@
             ],
 
             debugFunction: function () {
-                console.log("debug function: " + this.signedIn);
-//                this.showDialog("emaildialog");
+                console.log("signed in (debug function): " + this.signedIn);
                 this.changeRoute('/home');
-
-                /*                if (!!this.user) {
-                 var fb = this.$.auth.app;
-                 console.log(!!fb); // Output is true,
-                 var database = fb.database();
-                 }*/
             },
 
             showDialog: function (pageName) {

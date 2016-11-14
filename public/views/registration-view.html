@@ -18,8 +18,7 @@
                 color: red
             }
         </style>
-        <firebase-document id="document" app-name="doctor-appointment-system"
-                           path="[[userDataPath]]" data="{{userData}}">
+        <firebase-document id="document" app-name="doctor-appointment-system">
         </firebase-document>
 
         <div class="card">
@@ -47,9 +46,6 @@
                 </paper-button>
             </div>
         </div>
-<!--        <paper-button on-tap="debugFunction">
-            Toggle
-        </paper-button>-->
     </template>
 
     <script>
@@ -62,11 +58,6 @@
                 eyeIcon: {
                     type: String,
                     value: "visibility"
-                },
-                userData: Object,
-                userDataPath: {
-                    type: String,
-                    notify: true
                 }
             },
 
@@ -85,7 +76,6 @@
                     this.saveUserData(user);
 
                 }.bind(this)).catch(function (error) {
-                    console.log(error.message);
                     switch (error["code"]) {
                         case "auth/email-already-in-use":
                             this.errorMessage = "Účet s touto emailovou adresou již existuje";
@@ -96,25 +86,13 @@
                 }.bind(this));
             },
 
-            debugFunction: function () {
-                user = this.domHost.user;
-                this.userDataPath = '/users/' + user.uid;
-                this.userData.firstName = "fname";
-                this.userData.lastName = "lname";
-                console.log(user);
-                console.log(this.userDataPath);
-                this.$.document.save(this.userDataPath).then(function () {
-                    console.log("success");
-                });
-            },
-
             saveUserData: function (user) {
-                this.userDataPath = '/users/' + user.uid;
-                this.userData.firstName = this.$.fninput.value;
-                this.userData.lastName = this.$.lninput.value;
-                this.$.document.save(this.userDataPath).then(function () {
-                    console.log("success");
-                });
+                this.$.document.path = null;
+                this.$.document.data = {
+                    'firstName': this.$.fninput.value,
+                    'lastName': this.$.lninput.value
+                };
+                this.$.document.save('users', user.uid);
             },
 
             passVisibilityChange: function () {
