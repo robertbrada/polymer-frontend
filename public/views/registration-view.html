@@ -65,14 +65,14 @@
             validationIDs: ["fninput", "lninput", "emailID", "passID"],
 
             createUserWithEmailAndPassword: function () {
-                var domhost = this.domHost;
-                domhost.$.auth.createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
+                var domHost = this.domHost;
+                domHost.$.auth.createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
                     user.sendEmailVerification();
 
-                    domhost.changeRoute('/home');
-                    domhost.$.main_toast.text = "Přihlášeno";
-                    domhost.$.main_toast.open();
-                    domhost.showDialog("emaildialog");
+                    domHost.changeRoute('/home');
+                    domHost.$.main_toast.text = "Přihlášeno";
+                    domHost.$.main_toast.open();
+                    domHost.showDialog("emaildialog");
 
                     this.saveUserData(user);
 
