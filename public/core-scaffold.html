@@ -30,6 +30,8 @@
             app-header {
                 color: #8a868f;
                 background-color: var(--app-primary-color);
+                /*border-bottom: 1px solid #f0f0f2;*/
+                box-shadow: 0 2px 5px #f2f2f4;
             }
 
             app-header paper-icon-button {
@@ -48,6 +50,57 @@
                 }
             }
 
+            /***** CUSTOM STYLES *********/
+
+            #main-title {
+                font-size: 0.8em;
+                letter-spacing: 0.04em;
+                color: #a2a2a5;
+            }
+
+            .nav_button {
+                color: #fff;
+                font-weight: bolder;
+                box-shadow: none;
+                margin: 0;
+                padding-left: 1.8em;
+                padding-right: 1.8em;
+                height: 100%;
+                border-radius: 0;
+                letter-spacing: 0.05em;
+                font-size: 0.85em;
+
+                text-transform: none;
+                -webkit-transition: all .25s ease;
+                -moz-transition: all .25s ease;
+                -ms-transition: all .25s ease;
+                -o-transition: all .25s ease;
+                transition: all .25s ease;
+            }
+
+            #auth_button {
+                background-color: #4bac3e;
+                /*#4CAF50*/
+                border-right: 1px solid #fff;
+            }
+
+            #pro_lekare_button {
+                background-color: #01478B;
+                margin-right: -16px;
+            }
+
+            .nav_button:active {
+                /*text-transform: none;*/
+            }
+
+            #auth_button:hover {
+                background-color: #3b9c2e;
+            }
+
+            #pro_lekare_button:hover {
+                background-color: #013476;
+            }
+
         </style>
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
@@ -62,9 +115,9 @@
 
             <app-header condenses reveals effects="waterfall">
                 <app-toolbar>
-                    <div main-title>bezcekani.cz</div>
-                    <paper-button id="auth_button" raised on-tap="loginButtonListener">Přihlásit</paper-button>
-                    <paper-button raised on-tap="debugFunction">Pro lékaře</paper-button>
+                    <div main-title id="main-title">bezcekani.cz</div>
+                    <paper-button id="auth_button" class="nav_button" raised on-tap="loginButtonListener">Přihlásit</paper-button>
+                    <paper-button id="pro_lekare_button" class="nav_button" raised on-tap="debugFunction">Pro lékaře</paper-button>
                 </app-toolbar>
             </app-header>
 
@@ -124,7 +177,7 @@
                 this.$.dialogpages.selected = pageName;
                 this.importHref("/views/dialog_views/" + pageName + "-view.html", function (e) {
                     this.$.modal.toggle();
-                }.bind(this),git  null, true);
+                }.bind(this), null, true);
 
             },
 

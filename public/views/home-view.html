@@ -1,4 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
 
 <dom-module id="home-view">
     <template>
@@ -6,13 +9,112 @@
             :host {
                 display: block;
 
-                padding: 16px;
+                /*padding: 16px;*/
             }
+
+            /******* CUSTOM STYLES *********/
+
+            header{
+                text-align: center;
+                padding-top: 100px;
+                padding-bottom: 150px;
+                box-shadow: 0 2px 10px #e4e4e6;
+                background-color: #fff;
+                /*background: #fff url('../images/header.jpg') no-repeat;*/
+                /*background-size: cover;*/
+
+                background: #fff url('../images/doctor_vector.png') no-repeat;
+                background-position-x: 95%;
+                background-position-y: 50%;
+                background-size: auto 50%;
+            }
+
+            header div {
+                width: 60%;
+                margin: 0 auto;
+                text-align: left;
+            }
+
+            h1 {
+                font-size: 2.1em;
+                font-weight: bolder;
+                margin-bottom: 1em;
+                color: #263238;
+                letter-spacing: 0.01em;
+            }
+
+            #search_input {
+                display: inline-block;
+                background-color: #efefef;
+                padding: 0.3em  1.2em;
+                border-radius: 5px;
+                /*font-size: 2em;*/
+                line-height: 2em;
+                width: 70%;
+                float: left;
+
+                -moz-box-shadow:    inset 0 0 6px #dadadb;
+                -webkit-box-shadow: inset 0 0 6px #dadadb;
+                box-shadow:         inset 0 0 6px #dadadb;
+
+                --paper-input-container-input: {
+                    font-size: 1.4em;
+                    color: #263238;
+                    letter-spacing: 0.01em;
+                    font-weight: bolder;
+                };
+
+                --paper-input-container-underline:{
+                    display: none;
+                };
+
+                --paper-input-container-underline-focus:{
+                    display: none;
+                };
+
+                --paper-input-container-label-floating:{
+                    color: #708b8B;
+                    font-size: 1.3em;
+                    margin-top: -5px
+                };
+
+                --paper-input-container-label-focus:{
+                    color: #708b8B;
+
+                };
+
+                --paper-input-container-label:{
+                    font-size: 1.25em;
+                    color: #9d9d9f;
+                };
+
+            }
+
+            #search_button{
+                /*display: inline-block;*/
+                padding: 1.25em;
+                background-color: #4bac3e;
+                color: #fff;
+                font-size: 1.2em;
+                /*text-transform: none;*/
+                font-weight: bolder;
+                letter-spacing: 0.08em;
+                border-radius: 5px;
+            }
+
 
         </style>
 
         <header>
-            <h1>Najděte lékaře a my vás objednáme.</h1>
+            <div>
+                <h1>Najděte lékaře a my vás objednáme.</h1>
+                <paper-input always-float-label id="search_input" label="Zadejte jméno, specializaci nebo adresu..." type="search">
+                </paper-input>
+
+                <paper-button raised id="search_button" >Hledat</paper-button>
+
+            </div>
+
         </header>
 
 
