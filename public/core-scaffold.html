@@ -21,14 +21,14 @@
     <template>
         <style>
             :host {
-                --app-primary-color: #4285f4;
+                --app-primary-color: #fff;
                 --app-secondary-color: black;
 
                 display: block;
             }
 
             app-header {
-                color: #fff;
+                color: #8a868f;
                 background-color: var(--app-primary-color);
             }
 
@@ -47,6 +47,7 @@
                     margin: 0;
                 }
             }
+
         </style>
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
@@ -123,7 +124,7 @@
                 this.$.dialogpages.selected = pageName;
                 this.importHref("/views/dialog_views/" + pageName + "-view.html", function (e) {
                     this.$.modal.toggle();
-                }.bind(this), null, true);
+                }.bind(this),git  null, true);
 
             },
 
