@@ -75,6 +75,7 @@
                 <home-view name="home"></home-view>
                 <e404-view name="e404"></e404-view>
                 <registration-view name="registration"></registration-view>
+                <emailaction-view tail="{{subroute}}"></emailaction-view>
             </iron-pages>
         </app-header-layout>
 
@@ -83,6 +84,7 @@
             <iron-pages id="dialogpages" selected="login" attr-for-selected="name">
                 <login-view name="login"></login-view>
                 <emaildialog-view name="emaildialog"></emaildialog-view>
+                <actionerror-view name="actionerror"></actionerror-view>
             </iron-pages>
         </paper-dialog>
 
@@ -118,7 +120,7 @@
 
             showDialog: function (pageName) {
                 this.$.dialogpages.selected = pageName;
-                this.importHref("/views/" + pageName + "-view.html", function (e) {
+                this.importHref("/views/dialog_views/" + pageName + "-view.html", function (e) {
                     this.$.modal.toggle();
                 }.bind(this), null, true);
 

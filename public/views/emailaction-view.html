@@ -1,0 +1,49 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="emailaction-view">
+    <template>
+        <style>
+        </style>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'emailaction-view',
+
+            ready: function () {
+
+                var actionCode = this.tail.__queryParams["oobCode"];
+
+                var auth = this.domHost.$.auth;
+
+                // Handle the user management action.
+                switch (this.tail.__queryParams["mode"]) {
+                    case 'resetPassword':
+                        this.handleResetPassword(auth, actionCode);
+                        break;
+                    case 'recoverEmail':
+                        this.handleRecoverEmail(auth, actionCode);
+                        break;
+                    case 'verifyEmail':
+                        this.handleVerifyEmail(auth, actionCode);
+                        break;
+                    default:
+                        this.domHost.changeRoute('/home');
+                        this.domHost.showDialog("actionerror");
+                }
+            },
+
+            handleResetPassword: function () {
+                console.log("Handle reset password");
+            },
+
+            handleRecoverEmail: function () {
+                console.log('Handle recover email');
+            },
+
+            handleVerifyEmail: function () {
+                console.log('Handle email verification');
+            }
+        });
+    </script>
+</dom-module>
