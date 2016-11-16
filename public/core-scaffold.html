@@ -21,7 +21,7 @@
     <template>
         <style>
             :host {
-                --app-primary-color: #fff;
+                --app-primary-color: #8BC34A;
                 --app-secondary-color: black;
 
                 display: block;
@@ -30,6 +30,7 @@
             app-header {
                 color: #8a868f;
                 background-color: var(--app-primary-color);
+                height: 82px;
             }
 
             app-header paper-icon-button {
@@ -48,6 +49,55 @@
                 }
             }
 
+            /***** CUSTOM STYLES *********/
+
+            #main-title {
+                font-size: 0.9em;
+                letter-spacing: 0.04em;
+                color: #fff;
+                margin-top: 1em;
+                margin-left: 1em;
+            }
+
+            .nav_button {
+                color: #fff;
+                font-weight: bold;
+                box-shadow: none;
+                padding: 1em 1.6em;
+                border-radius: 0;
+                font-size: 0.9em;
+                margin: 1em 0 0;
+                letter-spacing: 0.03em;
+
+                text-transform: none;
+                -webkit-transition: all .25s ease;
+                -moz-transition: all .25s ease;
+                -ms-transition: all .25s ease;
+                -o-transition: all .25s ease;
+                transition: all .25s ease;
+            }
+
+            #auth_button {
+                color: #fff;
+                background-color: #01478B;
+                margin-right: 0.8em;
+            }
+
+            #pro_lekare_button {
+                margin-right: -1px;
+                color: #01478B;
+                background-color: #fff;
+            }
+
+
+            #auth_button:hover {
+                background-color: #00357a;
+            }
+
+            #pro_lekare_button:hover {
+                /*background-color: #efefef;*/
+            }
+
         </style>
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
@@ -62,9 +112,9 @@
 
             <app-header condenses reveals effects="waterfall">
                 <app-toolbar>
-                    <div main-title>bezcekani.cz</div>
-                    <paper-button id="auth_button" raised on-tap="loginButtonListener">Přihlásit</paper-button>
-                    <paper-button raised on-tap="debugFunction">Pro lékaře</paper-button>
+                    <div main-title id="main-title">bezcekani.cz</div>
+                    <paper-button id="auth_button" class="nav_button" raised on-tap="loginButtonListener">Přihlásit</paper-button>
+                    <paper-button id="pro_lekare_button" class="nav_button" raised on-tap="debugFunction">Pro lékaře</paper-button>
                 </app-toolbar>
             </app-header>
 
