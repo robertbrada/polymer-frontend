@@ -100,21 +100,18 @@
                 margin: 4em 0 0 0;
                 letter-spacing: 0.02em;
                 color: #263238;
-                font-size: 1.25em;
+                font-size: 1.2em;
             }
 
         </style>
         <div>
             <p>{{errorMessage}}</p>
 
-            <!--  onfocusout="validate()"   zajisti, ze dojde k validaci az po opusteni okna, misto auto-validate required
-                              on-input="checkIfValid"-->
             <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                              label="Vaše emailová adresa" auto-validate required
-                              on-input="checkIfValid"></gold-email-input>
-            <paper-input id="passID" value="{{password}}" label="Heslo" type="password" required auto-validate
-                         error-message="Neplatné heslo" on-input="checkIfValid" minlength="6" maxlength="48">
-
+                              label="Vaše emailová adresa" onfocusout="validate()">
+            </gold-email-input>
+            <paper-input id="passID" value="{{password}}" label="Heslo" type="password" onfocusout="validate()"
+                         error-message="Neplatné heslo" minlength="6" maxlength="48">
             </paper-input>
         </div>
         <div class="buttons">
@@ -127,7 +124,7 @@
         <div class="buttons">
             <a href="/registration">
                 <paper-button dialog-dismiss>
-                    <span>Nemáte účet? <b>Zaregistrujte se!</b></span>
+                    <span>Ještě nemáte účet? <span style="border-bottom: 1px solid #263238"><b> Zaregistrujte se!</b></span></span>
                 </paper-button>
             </a>
         </div>
