@@ -10,11 +10,105 @@
     <template>
         <style>
             p {
-                color: red
+                color: #F44336;
+                font-weight: bolder;
+                letter-spacing: 0.03em;
             }
+
+            #confirm_button, #dismiss_button {
+                padding: 1.1em;
+                margin: 0;
+                font-weight: bolder;
+                font-size: 1.3em;
+                letter-spacing: 0.05em;
+                text-transform: none;
+                color: #fff;
+                border-radius: 0;
+            }
+
+            #confirm_button {
+                background-color: #8BC34A;
+                width: 60%;
+            }
+
+            #dismiss_button {
+                color: #263238;
+                background-color: #fff;
+                width: 40%;
+                float: left;
+            }
+
+            #confirm_button[disabled] {
+                background-color: #C5E1A5;
+            }
+
+            gold-email-input, paper-input {
+                background-color: #f2f2f4;
+                border: 1px solid #ddd;
+                padding: 0.2em 1em;
+                font-size: 1.2em;
+                letter-spacing: 0.01em;
+                margin-bottom: 2.1em;
+
+                --paper-input-container-input: {
+                    font-size: 1.2em;
+                    color: #263238;
+                    letter-spacing: 0.01em;
+                };
+
+                --paper-input-container-underline: {
+                    display: none;
+                };
+
+                --paper-input-container-underline-focus: {
+                    display: none;
+                };
+
+                --paper-input-container-label-floating: {
+                    margin-top: -5px;
+                    color: #9d9d9f;
+                };
+
+                --paper-input-container-label-focus: {
+                    color: #9d9d9f;
+                };
+
+                --paper-input-container-label: {
+                    font-size: 1em;
+                    color: #9d9d9f;
+                };
+
+                --paper-input-container-invalid-color: {
+                    color: #ddd;
+                };
+
+                --paper-input-error:{
+                    color: #F44336;
+                    margin-top: 1em;
+                    font-weight: bolder;
+                    letter-spacing: 0.03em;
+                };
+            }
+
+            .buttons a {
+                text-decoration: none;
+            }
+
+            .buttons a paper-button {
+                text-transform: none;
+                width: 100%;
+                margin: 4em 0 0 0;
+                letter-spacing: 0.02em;
+                color: #263238;
+                font-size: 1.25em;
+            }
+
         </style>
         <div>
             <p>{{errorMessage}}</p>
+
+            <!--  onfocusout="validate()"   zajisti, ze dojde k validaci az po opusteni okna, misto auto-validate required
+                              on-input="checkIfValid"-->
             <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
                               label="Vaše emailová adresa" auto-validate required
                               on-input="checkIfValid"></gold-email-input>
@@ -24,7 +118,7 @@
             </paper-input>
         </div>
         <div class="buttons">
-            <paper-button dialog-dismiss>Zrušit
+            <paper-button id="dismiss_button" dialog-dismiss>Zrušit
             </paper-button>
             <paper-button id="confirm_button" dialog-confirm autofocus on-tap="signInWithEmailAndPassword" disabled>
                 Přihlásit
@@ -33,7 +127,7 @@
         <div class="buttons">
             <a href="/registration">
                 <paper-button dialog-dismiss>
-                    Nemáte účet? Zaregistrujte se!
+                    <span>Nemáte účet? <b>Zaregistrujte se!</b></span>
                 </paper-button>
             </a>
         </div>
