@@ -1,0 +1,37 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/behaviors/input-validation-bahavior.html">
+
+
+<dom-module id="passreset-view">
+    <template>
+        <style>
+        </style>
+        <div> Prosím zadejte nové heslo:
+            <paper-input id="passID" value="{{password}}" label="Nové heslo" required auto-validate
+                         type="password"
+                         minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
+            </paper-input>
+            <paper-button dialog-confirm>Zavřít</paper-button>
+            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="resetPassword"
+                          disabled>
+                Změnit heslo
+            </paper-button>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'passreset-view',
+
+            behaviors: [InputValidationBehavior],
+
+            validationIDs: ["passID"],
+
+            resetPassword: function () {
+
+            }
+        });
+    </script>
+</dom-module>

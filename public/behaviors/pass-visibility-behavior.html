@@ -1,0 +1,20 @@
+<script>
+    PassVisibilityBehavior = {
+        properties: {
+            eyeIcon: {
+                type: String,
+                value: "visibility"
+            }
+        },
+
+        passVisibilityChange: function () {
+            if (this.eyeIcon == "visibility") {
+                this.eyeIcon = "visibility-off";
+                this.$.passID.type = "text";
+            } else {
+                this.eyeIcon = "visibility";
+                this.$.passID.type = "password";
+            }
+        }
+    }
+</script>
