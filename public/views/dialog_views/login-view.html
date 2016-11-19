@@ -122,6 +122,9 @@
             </paper-button>
         </div>
         <div class="buttons">
+            <paper-button dialog-dismiss on-tap="passReset">
+                <span>Zapomněli jste heslo? <span style="border-bottom: 1px solid #263238"><b> Obnovit!</b></span></span>
+            </paper-button>
             <a href="/registration">
                 <paper-button dialog-dismiss>
                     <span>Ještě nemáte účet? <span style="border-bottom: 1px solid #263238"><b> Zaregistrujte se!</b></span></span>
@@ -157,6 +160,11 @@
                     }
                     hostElementScope.modal.toggle();
                 }.bind(this));
+            },
+
+            passReset: function () {
+//                this.domHost.showDialog("emaildialog"); TODO: email input dialog
+                console.log("Pass reset");
             }
         });
 

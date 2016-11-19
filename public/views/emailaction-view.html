@@ -1,9 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-meta/iron-meta.html">
 
 <dom-module id="emailaction-view">
     <template>
-        <style>
-        </style>
+        <iron-meta key="actionCode" value$="{{actionCode}}"></iron-meta>
     </template>
 
     <script>
@@ -32,11 +32,12 @@
                 }
             },
 
-            handleResetPassword: function () {
+            handleResetPassword: function (auth, actionCode) {
                 console.log("Handle reset password");
+                this.actionCode = actionCode;
             },
 
-            handleRecoverEmail: function () {
+            handleRecoverEmail: function (auth, actionCode) {
                 console.log('Handle recover email');
             },
 
