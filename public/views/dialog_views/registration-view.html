@@ -7,7 +7,8 @@
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
-<link rel="import" href="/behaviors/input-validation-bahavior.html">
+<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 
 <dom-module id="registration-view">
@@ -50,14 +51,7 @@
         Polymer({
             is: 'registration-view',
 
-            behaviors: [InputValidationBehavior],
-
-            properties: {
-                eyeIcon: {
-                    type: String,
-                    value: "visibility"
-                }
-            },
+            behaviors: [InputValidationBehavior, PassVisibilityBehavior],
 
             validationIDs: ["fninput", "lninput", "emailID", "passID"],
 
@@ -90,16 +84,6 @@
                     'lastName': this.$.lninput.value
                 };
                 this.$.document.save('users', user.uid);
-            },
-
-            passVisibilityChange: function () {
-                if (this.eyeIcon == "visibility") {
-                    this.eyeIcon = "visibility-off";
-                    this.$.passID.type = "text";
-                } else {
-                    this.eyeIcon = "visibility";
-                    this.$.passID.type = "password";
-                }
             }
         });
 

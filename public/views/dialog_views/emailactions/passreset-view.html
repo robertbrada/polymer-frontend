@@ -1,10 +1,13 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-<link rel="import" href="/bower_components/iron-meta/iron-meta.html">
 
+<link rel="import" href="/bower_components/iron-meta/iron-meta.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
-<link rel="import" href="/behaviors/input-validation-bahavior.html">
+<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 
 <dom-module id="passreset-view">
@@ -18,6 +21,7 @@
                          type="password"
                          minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
             </paper-input>
+            <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange"></paper-icon-button>
             <paper-button dialog-dismiss>Zavřít</paper-button>
             <paper-button id="confirm_button" dialog-confirm autofocus on-tap="resetPassword"
                           disabled>
@@ -30,7 +34,7 @@
         Polymer({
             is: 'passreset-view',
 
-            behaviors: [InputValidationBehavior],
+            behaviors: [InputValidationBehavior, PassVisibilityBehavior],
 
             validationIDs: ["passID"],
 
