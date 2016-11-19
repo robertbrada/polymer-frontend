@@ -122,7 +122,7 @@
             </paper-button>
         </div>
         <div class="buttons">
-            <paper-button dialog-dismiss on-tap="passReset">
+            <paper-button on-tap="passReset">
                 <span>Zapomněli jste heslo? <span style="border-bottom: 1px solid #263238"><b> Obnovit!</b></span></span>
             </paper-button>
             <a href="/registration">
@@ -161,7 +161,7 @@
             },
 
             passReset: function () {
-                this.domHost.showDialog("emailinput");
+                this.domHost.showDialog("emailinput", false);
             }
         });
 

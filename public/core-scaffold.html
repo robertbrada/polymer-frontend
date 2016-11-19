@@ -180,10 +180,14 @@
                 this.changeRoute('/docinfo');
             },
 
-            showDialog: function (pageName) {
+//            Use open = false, if the method is called from within the dialog.
+            showDialog: function (pageName, open) {
                 this.$.dialogpages.selected = pageName;
+                open = typeof open == 'undefined' ? true : false;
                 this.importHref("/views/dialog_views/" + pageName + "-view.html", function (e) {
-                    this.$.modal.toggle();
+                    if (open) {
+                        this.$.modal.toggle();
+                    }
                 }.bind(this), null, true);
 
             },
@@ -200,8 +204,7 @@
             loginButtonListener: function () {
                 if (this.signedIn) {
                     this.$.auth.signOut().then(function () {
-                        this.$.main_toast.text = "Odhlášeno";
-                        this.$.main_toast.open();
+                        this.showToast("Odhlášeno");
                     }.bind(this));
                 } else {
                     this.showDialog("login");
