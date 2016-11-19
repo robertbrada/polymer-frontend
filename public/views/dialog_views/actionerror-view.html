@@ -7,13 +7,29 @@
         <style>
         </style>
 
-        <p>Action error</p>
-        <paper-button dialog-confirm autofocus>Zavřít</paper-button>
+        <p>Nepodařilo se potvrdit emailovou adresu. <br>
+            Potvrzení je vyžadováno pro povolení obědnávání.<br>
+            Můžeme Vám znovu poslat potvrzovací email.
+        </p>
+        <paper-button dialog-confirm>Zavřít</paper-button>
+        <paper-button dialog-confirm autofocus on-tap="resendVerification">Poslat znovu</paper-button>
     </template>
 
     <script>
         Polymer({
-            is: 'actionerror-view'
+            is: 'actionerror-view',
+
+            resendVerification: function () {
+                var user = this.domHost.user;
+                if (!!user) {
+                    console.log("Sending email");
+                    user.sendEmailVerification();
+                    this.domHost.showDialog("emaildialog");
+                } else {
+                    console.log("Not logged in error");
+//                    TODO: dialog pro login
+                }
+            }
         });
     </script>
 </dom-module>

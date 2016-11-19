@@ -44,10 +44,10 @@
                 auth.applyActionCode(actionCode).then(function () {
                     this.domHost.changeRoute('/home');
                     this.domHost.showDialog("actionconfirm");
-                }.bind(this)).catch(function (error) {
-                    // Open dialog with resend button
-                    console.log(error);
-                });
+                }.bind(this)).catch(function () {
+                    this.domHost.changeRoute('/home');
+                    this.domHost.showDialog("actionerror");
+                }.bind(this));
             }
         });
     </script>
