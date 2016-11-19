@@ -9,13 +9,10 @@
 
 <link rel="import" href="/behaviors/input-validation-bahavior.html">
 
-<!--TODO: clean CSS-->
-<link rel="import" href="/shared-styles.html">
-
 
 <dom-module id="registration-view">
     <template>
-        <style include="shared-styles">
+        <style>
             p {
                 color: red
             }
@@ -23,7 +20,7 @@
         <firebase-document id="document" app-name="doctor-appointment-system">
         </firebase-document>
 
-        <div class="card">
+        <div>
             <p>{{errorMessage}}</p>
             <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
                          error-message="Nelze ponechat prázdné" auto-validate required
@@ -41,12 +38,11 @@
             </paper-input>
             <!-- TODO: set the icon position next to input-->
             <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange"></paper-icon-button>
-            <div class="buttons">
-                <paper-button id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword"
-                              disabled>
-                    Registrovat
-                </paper-button>
-            </div>
+            <paper-button dialog-dismiss>Zavřít</paper-button>
+            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword"
+                          disabled>
+                Registrovat
+            </paper-button>
         </div>
     </template>
 
@@ -84,6 +80,7 @@
                         default:
                             this.errorMessage = error["code"];
                     }
+                    this.domHost.showDialog("", "registration", true);
                 }.bind(this));
             },
 

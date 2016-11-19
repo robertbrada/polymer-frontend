@@ -125,11 +125,9 @@
             <paper-button on-tap="passReset">
                 <span>Zapomněli jste heslo? <span style="border-bottom: 1px solid #263238"><b> Obnovit!</b></span></span>
             </paper-button>
-            <a href="/registration">
-                <paper-button dialog-dismiss>
+                <paper-button on-tap="showRegistration">
                     <span>Ještě nemáte účet? <span style="border-bottom: 1px solid #263238"><b> Zaregistrujte se!</b></span></span>
                 </paper-button>
-            </a>
         </div>
     </template>
 
@@ -158,6 +156,10 @@
                     }
                     this.domHost.showDialog("", "login", true);
                 }.bind(this));
+            },
+
+            showRegistration: function () {
+                this.domHost.showDialog("", "registration", false);
             },
 
             passReset: function () {
