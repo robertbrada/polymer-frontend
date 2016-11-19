@@ -1,0 +1,53 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
+
+<link rel="import" href="/behaviors/input-validation-bahavior.html">
+
+
+<dom-module id="emailinput-view">
+    <template>
+        <style>
+            p {
+                color: #F44336;
+                font-weight: bolder;
+                letter-spacing: 0.03em;
+            }
+        </style>
+        <iron-meta id="meta"></iron-meta>
+
+        <p>{{errorMessage}}</p>
+        <div> Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:
+            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                              label="Vaše emailová adresa" auto-validate required
+                              on-input="checkIfValid">
+            </gold-email-input>
+            <paper-button dialog-dismiss>Zavřít</paper-button>
+            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="sendEmail"
+                          disabled>
+                Poslat
+            </paper-button>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'emailinput-view',
+
+            behaviors: [InputValidationBehavior],
+
+            validationIDs: ["emailID"],
+
+            sendEmail: function () {
+                this.domHost.$.auth.app.auth().sendPasswordResetEmail(this.email).then(function () {
+                    this.domHost.showToast("Email odeslán");
+                }.bind(this)).catch(function (error) {
+                    this.errorMessage = "Účet s touto emailovou adresou neexistuje";
+                    this.domHost.showDialog("emailinput");
+                }.bind(this))
+
+            }
+        });
+    </script>
+</dom-module>

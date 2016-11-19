@@ -108,9 +108,9 @@
             <p>{{errorMessage}}</p>
 
             <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                              label="Vaše emailová adresa" onfocusout="validate()">
+                              label="Vaše emailová adresa" on-input="checkIfValid">
             </gold-email-input>
-            <paper-input id="passID" value="{{password}}" label="Heslo" type="password" onfocusout="validate()"
+            <paper-input id="passID" value="{{password}}" label="Heslo" type="password" on-input="checkIfValid"
                          error-message="Neplatné heslo" minlength="6" maxlength="48">
             </paper-input>
         </div>
@@ -142,11 +142,9 @@
             validationIDs: ["emailID", "passID"],
 
             signInWithEmailAndPassword: function () {
-                var hostElementScope = this.domHost.$;
-                hostElementScope.auth.signInWithEmailAndPassword(this.email, this.password).then(function () {
-                    hostElementScope.main_toast.text = "Přihlášeno";
-                    hostElementScope.main_toast.open();
-                }).catch(function (error) {
+                this.domHost.$.auth.signInWithEmailAndPassword(this.email, this.password).then(function () {
+                    this.domHost.showToast("Přihlášeno");
+                }.bind(this)).catch(function (error) {
                     switch (error["code"]) {
                         case "auth/wrong-password":
                             this.errorMessage = "Špatné heslo";
@@ -158,13 +156,12 @@
                         default:
                             this.errorMessage = error["code"];
                     }
-                    hostElementScope.modal.toggle();
+                    this.domHost.showDialog("login");
                 }.bind(this));
             },
 
             passReset: function () {
-//                this.domHost.showDialog("emaildialog"); TODO: email input dialog
-                console.log("Pass reset");
+                this.domHost.showDialog("emailinput");
             }
         });
 

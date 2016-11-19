@@ -147,6 +147,7 @@
                 <actionerror-view name="actionerror"></actionerror-view>
                 <actionconfirm-view name="actionconfirm"></actionconfirm-view>
                 <passreset-view name="passreset"></passreset-view>
+                <emailinput-view name="emailinput"></emailinput-view>
             </iron-pages>
         </paper-dialog>
 
@@ -176,8 +177,7 @@
             ],
 
             redirectionFunction: function () {
-                this.showDialog("passreset");
-//                this.changeRoute('/docinfo');
+                this.changeRoute('/docinfo');
             },
 
             showDialog: function (pageName) {
@@ -186,6 +186,11 @@
                     this.$.modal.toggle();
                 }.bind(this), null, true);
 
+            },
+
+            showToast: function (text) {
+                this.$.main_toast.text = text;
+                this.$.main_toast.open();
             },
 
             authChanged: function () {

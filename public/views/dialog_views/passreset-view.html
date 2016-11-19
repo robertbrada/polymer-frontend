@@ -18,7 +18,7 @@
                          type="password"
                          minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
             </paper-input>
-            <paper-button dialog-confirm>Zavřít</paper-button>
+            <paper-button dialog-dismiss>Zavřít</paper-button>
             <paper-button id="confirm_button" dialog-confirm autofocus on-tap="resetPassword"
                           disabled>
                 Změnit heslo
@@ -35,9 +35,12 @@
             validationIDs: ["passID"],
 
             resetPassword: function () {
-                var actionCode = this.$.meta.byKey('actionCode');
                 var auth = this.domHost.$.auth.app.auth(); // TODO: find less retarded way to get reference
-
+                auth.confirmPasswordReset(this.$.meta.byKey('actionCode'), this.password).then(function () {
+                    this.domHost.showToast("Heslo změněno");
+                }.bind(this)).catch(function (error) {
+                    console.log(error);
+                })
             }
         });
     </script>

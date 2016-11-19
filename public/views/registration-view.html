@@ -71,8 +71,7 @@
                     user.sendEmailVerification();
 
                     domHost.changeRoute('/home');
-                    domHost.$.main_toast.text = "Přihlášeno";
-                    domHost.$.main_toast.open();
+                    domHost.showToast("Přihlášeno");
                     domHost.showDialog("emaildialog");
 
                     this.saveUserData(user);
