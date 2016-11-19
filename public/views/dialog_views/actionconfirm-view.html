@@ -1,0 +1,25 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+
+<dom-module id="actionconfirm-view">
+    <template>
+        <style>
+        </style>
+
+        <p>Váš email byl úspěšně potvrzen. Nyní se můžete objednat. <br> V případě že jste doktor prosím pokračujte
+            přidáním ordinace.</p>
+        <paper-button dialog-confirm>Zavřít</paper-button>
+        <paper-button dialog-confirm autofocus on-tap="redirectionFunction">Přidat ordinaci</paper-button>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'actionconfirm-view',
+
+            redirectionFunction: function () {
+                this.domHost.changeRoute('/officeregistration');
+            }
+        });
+    </script>
+</dom-module>

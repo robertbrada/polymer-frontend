@@ -56,7 +56,7 @@
                 }
             }
 
-            app-toolbar{
+            app-toolbar {
                 padding: 0;
                 margin: 0;
             }
@@ -113,12 +113,12 @@
 
         <app-header-layout fullbleed>
 
-            <app-header fixed effects="waterfall" >
+            <app-header fixed effects="waterfall">
                 <app-toolbar>
                     <div main-title id="main-title">bezcekani.cz</div>
                     <paper-button id="auth_button" class="nav_button" raised on-tap="loginButtonListener">Přihlásit
                     </paper-button>
-                    <paper-button id="pro_lekare_button" class="nav_button" raised on-tap="debugFunction">Pro lékaře
+                    <paper-button id="pro_lekare_button" class="nav_button" raised on-tap="redirectionFunction">Pro lékaře
                     </paper-button>
                 </app-toolbar>
             </app-header>
@@ -131,7 +131,9 @@
                 <home-view name="home"></home-view>
                 <e404-view name="e404"></e404-view>
                 <registration-view name="registration"></registration-view>
-                <emailaction-view tail="{{subroute}}"></emailaction-view>
+                <emailaction-view name="emailaction" tail="{{subroute}}"></emailaction-view>
+                <officeregistration-view name="officeregistration"></officeregistration-view>
+                <docinfo-view name="docinfo"></docinfo-view>
             </iron-pages>
         </app-header-layout>
 
@@ -141,6 +143,7 @@
                 <login-view name="login"></login-view>
                 <emaildialog-view name="emaildialog"></emaildialog-view>
                 <actionerror-view name="actionerror"></actionerror-view>
+                <actionconfirm-view name="actionconfirm"></actionconfirm-view>
             </iron-pages>
         </paper-dialog>
 
@@ -169,9 +172,9 @@
                 '_routePageChanged(routeData.page)'
             ],
 
-            debugFunction: function () {
-                console.log("signed in (debug function): " + this.signedIn);
-                this.changeRoute('/home');
+            redirectionFunction: function () {
+//                console.log("signed in (debug function): " + this.signedIn);
+                this.changeRoute('/docinfo');
             },
 
             showDialog: function (pageName) {
