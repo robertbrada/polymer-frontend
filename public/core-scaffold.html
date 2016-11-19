@@ -181,10 +181,9 @@
             },
 
 //            Use open = false, if the method is called from within the dialog.
-            showDialog: function (pageName, open) {
+            showDialog: function (path, pageName, open) {
                 this.$.dialogpages.selected = pageName;
-                open = typeof open == 'undefined' ? true : false;
-                this.importHref("/views/dialog_views/" + pageName + "-view.html", function (e) {
+                this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function (e) {
                     if (open) {
                         this.$.modal.toggle();
                     }
@@ -207,7 +206,7 @@
                         this.showToast("Odhlášeno");
                     }.bind(this));
                 } else {
-                    this.showDialog("login");
+                    this.showDialog("", "login", true);
                 }
             },
 

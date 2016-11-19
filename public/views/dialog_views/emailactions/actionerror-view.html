@@ -24,7 +24,7 @@
                 if (!!user) {
                     console.log("Sending email");
                     user.sendEmailVerification();
-                    this.domHost.showDialog("emaildialog");
+                    this.domHost.showDialog("", "emaildialog", false);
                 } else {
                     console.log("Not logged in error");
 //                    TODO: dialog pro login

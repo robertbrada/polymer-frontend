@@ -28,15 +28,14 @@
                         break;
                     default:
                         this.domHost.changeRoute('/home');
-                        this.domHost.showDialog("actionerror");
+                        this.domHost.showDialog("emailactions/", "actionerror", true);
                 }
             },
 
             handleResetPassword: function (auth, actionCode) {
-                console.log("Handle reset password");
                 this.actionCode = actionCode;
                 this.domHost.changeRoute('/home');
-                this.domHost.showDialog("passreset");
+                this.domHost.showDialog("emailactions/", "passreset", true);
             },
 
             handleRecoverEmail: function (auth, actionCode) {
@@ -46,10 +45,10 @@
             handleVerifyEmail: function (auth, actionCode) {
                 auth.applyActionCode(actionCode).then(function () {
                     this.domHost.changeRoute('/home');
-                    this.domHost.showDialog("actionconfirm");
+                    this.domHost.showDialog("emailactions/", "actionconfirm", true);
                 }.bind(this)).catch(function () {
                     this.domHost.changeRoute('/home');
-                    this.domHost.showDialog("actionerror");
+                    this.domHost.showDialog("emailactions/", "actionerror", true);
                 }.bind(this));
             }
         });

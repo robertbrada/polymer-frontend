@@ -156,12 +156,12 @@
                         default:
                             this.errorMessage = error["code"];
                     }
-                    this.domHost.showDialog("login");
+                    this.domHost.showDialog("", "login", true);
                 }.bind(this));
             },
 
             passReset: function () {
-                this.domHost.showDialog("emailinput", false);
+                this.domHost.showDialog("", "emailinput", false);
             }
         });
 

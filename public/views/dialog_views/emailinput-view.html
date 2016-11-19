@@ -44,7 +44,7 @@
                     this.domHost.showToast("Email odeslán");
                 }.bind(this)).catch(function (error) {
                     this.errorMessage = "Účet s touto emailovou adresou neexistuje";
-                    this.domHost.showDialog("emailinput");
+                    this.domHost.showDialog("", "emailinput", true);
                 }.bind(this))
 
             }
