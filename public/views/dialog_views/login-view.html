@@ -103,6 +103,28 @@
                 font-size: 1.2em;
             }
 
+            @media only screen and (max-height: 500px) {
+                
+                gold-email-input, #dismiss_button{
+                    float: left;
+                }
+
+                paper-input,#confirm_button{
+                    float: right;
+                }
+
+                gold-email-input, paper-input, #confirm_button, #dismiss_button  {
+                    margin: 0;
+                    width: 40%;
+                    display: inline-block;
+                }
+
+                #confirm_button, #dismiss_button {
+                    margin-top: 30px;
+                }
+
+            }
+
         </style>
         <div>
             <p>{{errorMessage}}</p>
