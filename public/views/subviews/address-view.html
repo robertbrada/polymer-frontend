@@ -1,0 +1,67 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="/behaviors/input-validation-behavior.html">
+
+<dom-module id="address-view">
+    <template>
+        <style>
+        </style>
+
+        <firebase-document id="document" app-name="doctor-appointment-system" path="/users/{{user.uid}}/address"
+                           data="{{userData}}">
+        </firebase-document>
+
+        <div>
+            <paper-input id="cinput" label="Město" minlength="1" maxlength="80"
+                         error-message="Nelze ponechat prázdné" auto-validate required
+                         on-input="checkIfValid"></paper-input>
+            <paper-input id="sinput" label="Město a číslo popisné" minlength="1"
+                         maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
+                         required on-input="checkIfValid"></paper-input>
+            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="saveChanges"
+                          disabled>
+                Uložit změny
+            </paper-button>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'address-view',
+
+            behaviors: [InputValidationBehavior],
+
+            validationIDs: ["cinput", "sinput"],
+
+            properties: {
+                user: {
+                    type: Object,
+//                    observer: '_userChanged'
+                },
+
+                userData: {
+                    type: Object,
+                    observer: '_userDataChanged'
+                },
+            },
+
+            _userDataChanged: function (newData) {
+                if (Object.keys(newData).length != 0) {
+                    this.$.cinput.value = newData.city;
+                    this.$.sinput.value = newData.street;
+                    this.checkIfValid();
+                }
+            },
+
+            saveChanges: function () {
+                this.set('userData.city', this.$.cinput.value);
+                this.set('userData.street', this.$.sinput.value);
+                this.domHost.showToast();
+            }
+        });
+    </script>
+</dom-module>

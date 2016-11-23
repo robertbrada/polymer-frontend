@@ -1,46 +1,30 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
-<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="subviews/name-view.html">
+<link rel="import" href="subviews/address-view.html">
 
 <dom-module id="settings-view">
     <template>
         <style>
         </style>
 
-        <firebase-document id="document" app-name="doctor-appointment-system" path="/users/{{user.uid}}"
-                           data="{{userData}}">
-        </firebase-document>
+        <name-view user="{{user}}"></name-view>
+        <address-view user="{{user}}"></address-view>
 
-        <div>
-            <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
-                         error-message="Nelze ponechat prázdné" auto-validate required
-                         on-input="checkIfValid"></paper-input>
-            <paper-input id="lninput" label="Příjmení" minlength="1"
-                         maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
-                         required on-input="checkIfValid"></paper-input>
-            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="saveChanges"
-                          disabled>
-                Uložit změny
-            </paper-button>
-            <hr>
-            Změnit heslo:
-            <paper-button id="passchange_button" dialog-confirm autofocus on-tap="passChange">
-                Poslat email pro změnu hesla
-            </paper-button>
+        <hr>
+        Změnit heslo:
+        <paper-button id="passchange_button" dialog-confirm autofocus on-tap="passChange">
+            Poslat email pro změnu hesla
+        </paper-button>
         </div>
     </template>
 
     <script>
         Polymer({
             is: 'settings-view',
-
-            behaviors: [InputValidationBehavior],
-
-            validationIDs: ["fninput", "lninput"],
 
             properties: {
                 signedIn: {
@@ -52,25 +36,7 @@
                 user: {
                     type: Object,
 //                    observer: '_userChanged'
-                },
-
-                userData: {
-                    type: Object,
-                    observer: '_userDataChanged'
-                },
-            },
-
-            _userDataChanged: function (newData) {
-                if (Object.keys(newData).length != 0) {
-                    this.$.fninput.value = newData.firstName;
-                    this.$.lninput.value = newData.lastName;
-                    this.checkIfValid();
                 }
-            },
-
-            saveChanges: function () {
-                this.set('userData.firstName', this.$.fninput.value);
-                this.set('userData.lastName', this.$.lninput.value);
             },
 
             passChange: function () {
@@ -79,6 +45,11 @@
                 }.bind(this)).catch(function () {
                     console.log("email sending error");
                 })
+            },
+
+//            TODO: Dependency injection
+            showToast: function () {
+                this.domHost.showToast("Změny uloženy");
             }
         });
     </script>

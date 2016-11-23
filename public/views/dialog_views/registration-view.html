@@ -80,8 +80,10 @@
             saveUserData: function (user) {
                 this.$.document.path = null;
                 this.$.document.data = {
-                    'firstName': this.$.fninput.value,
-                    'lastName': this.$.lninput.value
+                    name: {
+                        'firstName': this.$.fninput.value,
+                        'lastName': this.$.lninput.value
+                    }
                 };
                 this.$.document.save('users', user.uid);
             }
