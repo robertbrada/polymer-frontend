@@ -22,14 +22,14 @@
 
         <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
                      error-message="Nelze ponechat prázdné" auto-validate required
-                     on-input="checkIfValid"></paper-input>
+                     on-input="checkIfValid" value="[[nameData.firstName]]"></paper-input>
         <paper-input id="lninput" label="Příjmení" minlength="1"
                      maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
-                     required on-input="checkIfValid"></paper-input>
-        <paper-input id="cinput" label="Město" minlength="1" maxlength="80">
+                     required on-input="checkIfValid" value="[[nameData.lastName]]"></paper-input>
+        <paper-input id="cinput" label="Město" minlength="1" maxlength="80" value="[[addressData.city]]">
         </paper-input>
-        <paper-input id="sinput" label="Město a číslo popisné" minlength="1"
-                     maxlength="80"></paper-input>
+        <paper-input id="sinput" label="Město a číslo popisné" minlength="1" maxlength="80"
+                     value="[[addressData.street]]"></paper-input>
         <paper-button id="confirm_button" dialog-confirm autofocus on-tap="saveChanges"
                       disabled>
             Uložit změny
@@ -65,28 +65,12 @@
 
                 addressData: {
                     type: Object,
-                    observer: '_addressDataChanged'
                 },
 
                 nameData: {
                     type: Object,
-                    observer: '_nameDataChanged'
+                    observer: 'checkIfValid'
                 },
-            },
-
-            _addressDataChanged: function (newData) {
-                if (Object.keys(newData).length != 0) {
-                    this.$.cinput.value = newData.city;
-                    this.$.sinput.value = newData.street;
-                }
-            },
-
-            _nameDataChanged: function (newData) {
-                if (Object.keys(newData).length != 0) {
-                    this.$.fninput.value = newData.firstName;
-                    this.$.lninput.value = newData.lastName;
-                    this.checkIfValid();
-                }
             },
 
             passChange: function () {
