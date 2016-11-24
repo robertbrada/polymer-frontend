@@ -2,17 +2,38 @@
 
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
-<link rel="import" href="subviews/name-view.html">
-<link rel="import" href="subviews/address-view.html">
+<link rel="import" href="/behaviors/input-validation-behavior.html">
+
 
 <dom-module id="settings-view">
     <template>
         <style>
         </style>
 
-        <name-view user="{{user}}"></name-view>
-        <address-view user="{{user}}"></address-view>
+        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
+                           data="{{nameData}}">
+        </firebase-document>
+
+        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/address"
+                           data="{{addressData}}">
+        </firebase-document>
+
+        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
+                     error-message="Nelze ponechat prázdné" auto-validate required
+                     on-input="checkIfValid"></paper-input>
+        <paper-input id="lninput" label="Příjmení" minlength="1"
+                     maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
+                     required on-input="checkIfValid"></paper-input>
+        <paper-input id="cinput" label="Město" minlength="1" maxlength="80">
+        </paper-input>
+        <paper-input id="sinput" label="Město a číslo popisné" minlength="1"
+                     maxlength="80"></paper-input>
+        <paper-button id="confirm_button" dialog-confirm autofocus on-tap="saveChanges"
+                      disabled>
+            Uložit změny
+        </paper-button>
 
         <hr>
         Změnit heslo:
@@ -26,6 +47,10 @@
         Polymer({
             is: 'settings-view',
 
+            behaviors: [InputValidationBehavior],
+
+            validationIDs: ["fninput", "lninput"],
+
             properties: {
                 signedIn: {
                     type: Boolean,
@@ -36,6 +61,31 @@
                 user: {
                     type: Object,
 //                    observer: '_userChanged'
+                },
+
+                addressData: {
+                    type: Object,
+                    observer: '_addressDataChanged'
+                },
+
+                nameData: {
+                    type: Object,
+                    observer: '_nameDataChanged'
+                },
+            },
+
+            _addressDataChanged: function (newData) {
+                if (Object.keys(newData).length != 0) {
+                    this.$.cinput.value = newData.city;
+                    this.$.sinput.value = newData.street;
+                }
+            },
+
+            _nameDataChanged: function (newData) {
+                if (Object.keys(newData).length != 0) {
+                    this.$.fninput.value = newData.firstName;
+                    this.$.lninput.value = newData.lastName;
+                    this.checkIfValid();
                 }
             },
 
@@ -47,8 +97,11 @@
                 })
             },
 
-//            TODO: Dependency injection
-            showToast: function () {
+            saveChanges: function () {
+                this.set('nameData.firstName', this.$.fninput.value);
+                this.set('nameData.lastName', this.$.lninput.value);
+                this.set('addressData.city', this.$.cinput.value);
+                this.set('addressData.street', this.$.sinput.value);
                 this.domHost.showToast("Změny uloženy");
             }
         });
