@@ -196,12 +196,14 @@
             <!-- Two-way bind `drawerOpened` since app-drawer can update `opened` itself. -->
             <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
                 <iron-selector role="navigation" class="drawer-list" selected="[[page]]" attr-for-selected="name">
-                    <a name="settings" href="settings/">Nastavení</a>
+                    <a name="settings" href="settings/" hidden="[[!signedIn]]">Nastavení</a>
                     <a name="docinfo" href="docinfo/">Pro lékaře</a>
                 </iron-selector>
                 <hr>
                 <div class="drawer-list">
-                    <button id="auth_button" on-tap="_loginButtonListener">[[loginButtonText]]</button>
+                    <button id="auth_button" on-tap="_loginButtonHandler">[[loginButtonText]]</button>
+                    <br>
+                    <button on-tap="_registrationButtonHandler" hidden="[[signedIn]]">Registrovat</button>
                 </div>
             </app-drawer>
         </template>
@@ -264,7 +266,7 @@
                 this.loginButtonText = (this.signedIn ? "Odhlásit" : "Přihlásit");
             },
 
-            _loginButtonListener: function () {
+            _loginButtonHandler: function () {
                 if (this.signedIn) {
                     this.$.auth.signOut().then(function () {
                         this.showToast("Odhlášeno");
@@ -275,10 +277,15 @@
                 this.drawerOpened = false;
             },
 
+            _registrationButtonHandler: function () {
+                this.showDialog("", "registration", true);
+                this.drawerOpened = false;
+            },
+
 //            Use open = false, if the method is called from within the dialog.
             showDialog: function (path, pageName, open) {
                 this.$.dialogpages.selected = pageName;
-                this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function (e) {
+                this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function () {
                     if (open) {
                         this.$.modal.toggle();
                     }
