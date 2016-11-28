@@ -9,10 +9,14 @@
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
 
 <!--Lazy load in the future-->
 <link rel="import" href="/bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="bower_components/paper-toast/paper-toast.html">
 <!--Shouldn't be necessary-->
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
 
@@ -87,9 +91,19 @@
                 margin: 0 20px;
             }
 
+            .drawer-list button {
+                background: none;
+                border: none;
+                margin: 0;
+                font-size: 16px;
+                line-height: 40px;
+                text-decoration: none;
+                color: var(--app-secondary-color);
+            }
+
             .drawer-list a {
                 display: block;
-                padding: 0 16px;
+                padding: 0 25px;
                 line-height: 40px;
                 text-decoration: none;
                 color: var(--app-secondary-color);
@@ -119,6 +133,36 @@
                     display: block;
                 }
             }
+
+            /*TODO: simplify*/
+            @media only screen and (max-width: 520px) {
+                #modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    padding: 0;
+                    margin: 0;
+                }
+            }
+
+            @media only screen and (min-width: 520px) {
+                #modal {
+                    width: 80%;
+                    max-width: 500px;
+                    padding: 50px 50px 0 50px;
+                }
+            }
+
+            @media only screen and (max-height: 500px) {
+                #modal {
+                    width: 100%;
+                    max-width: 1000px;
+                    padding: 50px 50px 0 50px;
+                }
+            }
+
 
         </style>
 
@@ -152,10 +196,13 @@
             <!-- Two-way bind `drawerOpened` since app-drawer can update `opened` itself. -->
             <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
                 <iron-selector role="navigation" class="drawer-list" selected="[[page]]" attr-for-selected="name">
-                    <a name="home" href="home/">Domů</a>
                     <a name="settings" href="settings/">Nastavení</a>
-                    <a name="docinfo" href="docinfo/">Pro doktory</a>
+                    <a name="docinfo" href="docinfo/">Pro lékaře</a>
                 </iron-selector>
+                <hr>
+                <div class="drawer-list">
+                    <button id="auth_button" on-tap="_loginButtonListener">[[loginButtonText]]</button>
+                </div>
             </app-drawer>
         </template>
 
@@ -173,6 +220,21 @@
             <settings-view name="settings" signed-in="[[signedIn]]" user="[[user]]"></settings-view>
         </iron-pages>
 
+        <paper-dialog id="modal" modal entry-animation="scale-up-animation"
+                      exit-animation="fade-out-animation">
+            <iron-pages id="dialogpages" selected="login" attr-for-selected="name">
+                <login-view name="login"></login-view>
+                <registration-view name="registration"></registration-view>
+                <emaildialog-view name="emaildialog"></emaildialog-view>
+                <actionerror-view name="actionerror"></actionerror-view>
+                <actionconfirm-view name="actionconfirm"></actionconfirm-view>
+                <passreset-view name="passreset"></passreset-view>
+                <emailinput-view name="emailinput"></emailinput-view>
+            </iron-pages>
+        </paper-dialog>
+
+        <paper-toast id="main_toast"></paper-toast>
+
     </template>
     <script>
         Polymer({
@@ -186,71 +248,75 @@
                 },
                 signedIn: {
                     type: Boolean,
-//                    observer: 'authChanged'
+                    observer: '_authChanged'
                 },
-                user: Object,
-                route: Object,
+                loginButtonText: {
+                    type: String,
+                    value: 'Přihlásit'
+                }
             },
 
             observers: [
                 '_routePageChanged(routeData.page)'
             ],
 
-            redirectionFunction: function () {
-                this.changeRoute('/docinfo');
+            _authChanged: function () {
+                this.loginButtonText = (this.signedIn ? "Odhlásit" : "Přihlásit");
+            },
+
+            _loginButtonListener: function () {
+                if (this.signedIn) {
+                    this.$.auth.signOut().then(function () {
+                        this.showToast("Odhlášeno");
+                    }.bind(this));
+                } else {
+                    this.showDialog("", "login", true);
+                }
+                this.drawerOpened = false;
             },
 
 //            Use open = false, if the method is called from within the dialog.
-            /*            showDialog: function (path, pageName, open) {
-             this.$.dialogpages.selected = pageName;
-             this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function (e) {
-             if (open) {
-             this.$.modal.toggle();
-             }
-             }.bind(this), null, true);
+            showDialog: function (path, pageName, open) {
+                this.$.dialogpages.selected = pageName;
+                this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function (e) {
+                    if (open) {
+                        this.$.modal.toggle();
+                    }
+                }.bind(this), null, true);
 
-             },
+            },
 
-             showToast: function (text) {
-             this.$.main_toast.text = text;
-             this.$.main_toast.open();
-             },
-
-             authChanged: function () {
-             this.$.auth_button.innerHTML = (this.signedIn ? "Odhlásit" : "Přihlásit");
-             },
-
-             loginButtonListener: function () {
-             if (this.signedIn) {
-             this.$.auth.signOut().then(function () {
-             this.showToast("Odhlášeno");
-             }.bind(this));
-             } else {
-             this.showDialog("", "login", true);
-             }
-             },*/
+            showToast: function (text) {
+                this.$.main_toast.text = text;
+                this.$.main_toast.open();
+            },
 
             _routePageChanged: function (page) {
                 this.page = page || 'home';
                 this.drawerOpened = false;
-            },
+            }
+            ,
 
             _toggleDrawer: function () {
                 this.drawerOpened = !this.drawerOpened;
-            },
+            }
+            ,
 
             _pageChanged: function (page) {
                 var resolvedPageUrl = this.resolveUrl("/views/" + page + '-view.html');
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
-            },
+            }
+            ,
 
             _showPage404: function () {
                 this.page = 'e404';
-            },
+            }
+            ,
 
             changeRoute: function (url) {
                 this.route = {path: url, prefix: '', __queryParams: {}};
             }
-        });
+        })
+        ;
     </script>
 </dom-module>
