@@ -45,10 +45,6 @@
                 color: var(--app-primary-color);
             }
 
-            [hidden] {
-                display: none !important;
-            }
-
             app-header {
                 @apply(--layout-fixed-top);
                 z-index: 1;
@@ -69,13 +65,13 @@
             }
 
             .menu-btn {
-                display: none;
+                display: block;
             }
 
             .logo a {
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: 600;
-                letter-spacing: 0.3em;
+                letter-spacing: 0.2em;
                 color: var(--app-primary-color);
                 text-decoration: none;
                 /* required for IE 11, so this <a> can receive pointer events */
@@ -88,19 +84,26 @@
                 width: 40px;
             }
 
+            .text-bar-item {
+                height: 40px;
+                line-height: 40px;
+            }
+
+            .text-bar-item a {
+                text-align: center;
+                font-weight: 500;
+                font-size: 16px;
+                display: inline-block;
+                text-decoration: none;
+                overflow: hidden;
+                white-space: nowrap;
+                color: var(--app-primary-color);
+            }
+
             .drawer-list {
                 margin: 0 20px;
             }
 
-            .drawer-list button {
-                background: none;
-                border: none;
-                margin: 0;
-                font-size: 16px;
-                line-height: 40px;
-                text-decoration: none;
-                color: var(--app-secondary-color);
-            }
 
             .drawer-list a {
                 display: block;
@@ -128,10 +131,6 @@
             @media (max-width: 767px) {
                 :host {
                     padding-top: 64px;
-                }
-
-                .menu-btn {
-                    display: block;
                 }
             }
 
@@ -182,12 +181,15 @@
 
         <app-header role="navigation" id="header" effects="waterfall" condenses reveals>
             <app-toolbar>
-                <div class="bar-item">
+                <div class="bar-item" hidden="[[!smallScreen]]">
                     <paper-icon-button
                             class="menu-btn"
                             icon="menu"
                             on-click="_toggleDrawer">
                     </paper-icon-button>
+                </div>
+                <div class="text-bar-item" hidden="[[smallScreen]]">
+                    <a href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
                 </div>
                 <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">bezcekani.cz</a></div>
                 <div class="bar-item">
@@ -195,8 +197,8 @@
                     </paper-icon-button>
                 </div>
                 <div class="bar-item" hidden="[[!signedIn]]">
-                    <a href="settings/" tabindex="-1">
-                        <paper-icon-button icon="settings">
+                    <a href="account/" tabindex="-1">
+                        <paper-icon-button icon="account-circle">
                         </paper-icon-button>
                     </a>
                 </div>
@@ -223,7 +225,7 @@
             <emailaction-view name="emailaction" tail="{{subroute}}"></emailaction-view>
             <officeregistration-view name="officeregistration"></officeregistration-view>
             <docinfo-view name="docinfo"></docinfo-view>
-            <settings-view name="settings" signed-in="[[signedIn]]" user="[[user]]"></settings-view>
+            <account-view name="account" signed-in="[[signedIn]]" user="[[user]]"></account-view>
         </iron-pages>
 
         <paper-dialog id="modal" modal entry-animation="scale-up-animation"
