@@ -2,6 +2,8 @@
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 
+<link rel="import" href="/behaviors/routing-behavior.html">
+
 <dom-module id="office-view">
     <template>
         <app-route
@@ -24,26 +26,10 @@
         Polymer({
             is: 'office-view',
 
-            properties: {
-                page: {
-                    type: String,
-                    reflectToAttribute: true,
-                    observer: '_pageChanged'
-                }
-            },
+            behaviors: [RoutingBehavior],
 
-            observers: [
-                '_routePageChanged(routeData.page)'
-            ],
-
-            _routePageChanged: function (page) {
-                this.page = page || 'list';
-            },
-
-            _pageChanged: function (page) {
-                var resolvedPageUrl = this.resolveUrl("/views/office_views/" + page + '-view.html');
-                this.importHref(resolvedPageUrl, null, this._show404, true);
-            },
+            defaultPage: 'list',
+            viewPath: '/views/office_views/',
 
             _show404: function () {
                 this.fire('hit-404');

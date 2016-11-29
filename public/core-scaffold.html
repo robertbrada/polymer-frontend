@@ -10,6 +10,7 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/behaviors/routing-behavior.html">
 
 <!--Lazy load in the future-->
 <link rel="import" href="/bower_components/app-layout/app-drawer/app-drawer.html">
@@ -246,12 +247,12 @@
         Polymer({
             is: "core-scaffold",
 
+            behaviors: [RoutingBehavior],
+
+            defaultPage: 'home',
+            viewPath: '/views/',
+
             properties: {
-                page: {
-                    type: String,
-                    reflectToAttribute: true,
-                    observer: '_pageChanged'
-                },
                 signedIn: {
                     type: Boolean,
                 }
@@ -301,21 +302,11 @@
                 this.$.main_toast.open();
             },
 
-            _routePageChanged: function (page) {
-                this.page = page || 'home';
-                this.drawerOpened = false;
-            },
-
             _toggleDrawer: function () {
                 this.drawerOpened = !this.drawerOpened;
             },
 
-            _pageChanged: function (page) {
-                var resolvedPageUrl = this.resolveUrl("/views/" + page + '-view.html');
-                this.importHref(resolvedPageUrl, null, this._showPage404, true);
-            },
-
-            _showPage404: function () {
+            _show404: function () {
                 this.page = 'e404';
             },
 

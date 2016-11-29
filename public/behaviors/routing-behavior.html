@@ -1,0 +1,32 @@
+<script>
+    RoutingBehavior = {
+        properties: {
+            page: {
+                type: String,
+                reflectToAttribute: true,
+                observer: '_pageChanged'
+            }
+        },
+
+        defaultPage: '',
+        viewPath: '',
+
+        observers: [
+            '_routePageChanged(routeData.page)'
+        ],
+
+        _routePageChanged: function (page) {
+            this.page = page || this.defaultPage;
+        },
+
+        _pageChanged: function (page) {
+            var resolvedPageUrl = this.resolveUrl(this.viewPath + page + '-view.html');
+            this.importHref(resolvedPageUrl, null, this._show404, true);
+        },
+
+        _show404: function () {
+        },
+
+
+    }
+</script>
