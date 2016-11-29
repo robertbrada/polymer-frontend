@@ -14,6 +14,15 @@
 <dom-module id="registration-view">
     <template>
         <style include="custom-button layout-styles input-styles">
+            .row {
+                @apply(--layout-horizontal);
+                @apply(--layout-end);
+            }
+
+            paper-checkbox {
+                margin-top: 20px;
+                --primary-color: var(--app-primary-color);
+            }
         </style>
         <div class="main-frame">
             <div class="subsection grid">
@@ -24,7 +33,9 @@
                     <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"></paper-input>
                     <h2>Ordinační hodiny</h2>
                     <template is="dom-repeat" items="[[days]]" as="entry">
-                        <paper-checkbox checked="{{entry.checked}}">[[entry.name]]</paper-checkbox>
+                        <div class="row">
+                            <paper-checkbox checked="{{entry.checked}}">[[entry.name]]</paper-checkbox>
+                        </div>
                     </template>
                     <custom-button responsive>
                         <button id="confirm_button" type="button" on-tap="saveChanges">Zaregistrovat ordinaci</button>
