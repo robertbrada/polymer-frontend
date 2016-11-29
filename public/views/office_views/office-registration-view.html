@@ -5,19 +5,20 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
-<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/custom_components/custom-button.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
 
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 
 <dom-module id="office-registration-view">
     <template>
-        <style include="custom-button layout-styles input-styles">
+        <style include="custom-button layout-styles input-styles header-styles">
             .row {
                 @apply(--layout-horizontal);
                 @apply(--layout-end);
@@ -29,6 +30,11 @@
             }
         </style>
         <div class="main-frame">
+            <header class="subsection">
+                <h1>Registrace ordinace</h1>
+                <span>Tyto údaje můžete později změnit v nastavení</span>
+            </header>
+
             <div class="subsection grid">
                 <section>
                     <h2>Adresa</h2>
@@ -43,9 +49,15 @@
                     </template>
                 </section>
                 <section>
-                    <h2>Vaše pecializace</h2>
+                    <h2>Délka návštěvy</h2>
+                    <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních hodin
+                        určíme objednávací časy.</p>
+                    <paper-input type="number" label="Délka návštěvy" min="1" max="360" value="20">
+                        <div suffix>min</div>
+                    </paper-input>
+                    <h2>Vaše specializace</h2>
                     <paper-dropdown-menu label="Specializace">
-                        <paper-listbox class="dropdown-content" selected="1">
+                        <paper-listbox class="dropdown-content">
                             <template is="dom-repeat" items="[[specializations]]" as="entry">
                                 <paper-item>[[entry]]</paper-item>
                             </template>
@@ -77,7 +89,7 @@
                         {'name': 'Čtvrtek', 'checked': true},
                         {'name': 'Pátek', 'checked': true},
                         {'name': 'Sobota', 'checked': false},
-                        {'name': 'Nedělě', 'checked': false}
+                        {'name': 'Neděle', 'checked': false}
                     ]
                 },
 

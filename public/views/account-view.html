@@ -7,13 +7,14 @@
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
 
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 
 
 <dom-module id="account-view">
     <template>
-        <style include="custom-button layout-styles input-styles">
+        <style include="custom-button layout-styles input-styles header-styles">
         </style>
 
         <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
@@ -25,6 +26,10 @@
         </firebase-document>
 
         <div class="main-frame">
+            <header class="subsection">
+                <h1>Nastavení účtu</h1>
+                <span>Údaje níže můžete kdykoliv změnit.</span>
+            </header>
 
             <div class="subsection grid">
                 <section>
