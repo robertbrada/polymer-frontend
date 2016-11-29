@@ -74,7 +74,7 @@
 
         <div class="main-frame">
 
-            <div class="subsection grid" hidden="[[!signedIn]]">
+            <div class="subsection grid">
                 <section>
                     <h2>Základní informace</h2>
                     <paper-input id="fninput" label="Jméno" minlength="1" maxlength="20"
@@ -84,6 +84,8 @@
                                  maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
                                  required on-input="checkIfValid" value="[[nameData.lastName]]"></paper-input>
                     <h2>Adresa</h2>
+                    <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
+                    V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
                     <paper-input id="cinput" label="Město" minlength="1" maxlength="20" value="[[addressData.city]]">
                     </paper-input>
                     <paper-input id="sinput" label="Město a číslo popisné" minlength="1" maxlength="80"
@@ -113,15 +115,9 @@
             validationIDs: ["fninput", "lninput"],
 
             properties: {
-                signedIn: {
-                    type: Boolean,
-//                    observer: '_signedInChanged',
-                    value: true
-                },
 
                 user: {
                     type: Object,
-//                    observer: '_userChanged'
                 },
 
                 addressData: {
