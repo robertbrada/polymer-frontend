@@ -83,7 +83,8 @@
                 pointer-events: auto;
             }
 
-            .left-bar-item {
+            /*Replaced the left-bar-item*/
+            .bar-item {
                 width: 40px;
             }
 
@@ -181,7 +182,7 @@
 
         <app-header role="navigation" id="header" effects="waterfall" condenses reveals>
             <app-toolbar>
-                <div class="left-bar-item">
+                <div class="bar-item">
                     <paper-icon-button
                             class="menu-btn"
                             icon="menu"
@@ -189,6 +190,16 @@
                     </paper-icon-button>
                 </div>
                 <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">bezcekani.cz</a></div>
+                <div class="bar-item">
+                    <paper-icon-button icon="[[computeLockIcon(signedIn)]]" on-tap="_loginButtonHandler">
+                    </paper-icon-button>
+                </div>
+                <div class="bar-item" hidden="[[!signedIn]]">
+                    <a href="settings/" tabindex="-1">
+                        <paper-icon-button icon="settings">
+                        </paper-icon-button>
+                    </a>
+                </div>
             </app-toolbar>
         </app-header>
 
@@ -196,15 +207,8 @@
             <!-- Two-way bind `drawerOpened` since app-drawer can update `opened` itself. -->
             <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
                 <iron-selector role="navigation" class="drawer-list" selected="[[page]]" attr-for-selected="name">
-                    <a name="settings" href="settings/" hidden="[[!signedIn]]">Nastavení</a>
                     <a name="docinfo" href="docinfo/">Pro lékaře</a>
                 </iron-selector>
-                <hr>
-                <div class="drawer-list">
-                    <button id="auth_button" on-tap="_loginButtonHandler">[[loginButtonText]]</button>
-                    <br>
-                    <button on-tap="_registrationButtonHandler" hidden="[[signedIn]]">Registrovat</button>
-                </div>
             </app-drawer>
         </template>
 
@@ -250,21 +254,12 @@
                 },
                 signedIn: {
                     type: Boolean,
-                    observer: '_authChanged'
-                },
-                loginButtonText: {
-                    type: String,
-                    value: 'Přihlásit'
                 }
             },
 
             observers: [
                 '_routePageChanged(routeData.page)'
             ],
-
-            _authChanged: function () {
-                this.loginButtonText = (this.signedIn ? "Odhlásit" : "Přihlásit");
-            },
 
             _loginButtonHandler: function () {
                 if (this.signedIn) {
@@ -280,6 +275,10 @@
             _registrationButtonHandler: function () {
                 this.showDialog("", "registration", true);
                 this.drawerOpened = false;
+            },
+
+            computeLockIcon: function (signedIn) {
+                return signedIn ? 'lock-open' : 'lock';
             },
 
 //            Use open = false, if the method is called from within the dialog.
