@@ -17,8 +17,8 @@
                 attr-for-selected="name"
                 selected-attribute="visible"
                 role="main">
-            <list-view name="list"></list-view>
-            <registration-view name="registration"></registration-view>
+            <office-list-view name="list"></office-list-view>
+            <office-registration-view name="registration"></office-registration-view>
         </iron-pages>
     </template>
 
@@ -29,7 +29,7 @@
             behaviors: [RoutingBehavior],
 
             defaultPage: 'list',
-            viewPath: '/views/office_views/',
+            viewPath: '/views/office_views/office-',
 
             _show404: function () {
                 this.fire('hit-404');

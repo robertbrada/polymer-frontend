@@ -3,7 +3,11 @@
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="/custom_components/custom-button.html">
 
 <link rel="import" href="/styles/input-styles.html">
@@ -11,7 +15,7 @@
 
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 
-<dom-module id="registration-view">
+<dom-module id="office-registration-view">
     <template>
         <style include="custom-button layout-styles input-styles">
             .row {
@@ -37,6 +41,20 @@
                             <paper-checkbox checked="{{entry.checked}}">[[entry.name]]</paper-checkbox>
                         </div>
                     </template>
+                </section>
+                <section>
+                    <h2>Vaše pecializace</h2>
+                    <paper-dropdown-menu label="Specializace">
+                        <paper-listbox class="dropdown-content" selected="1">
+                            <template is="dom-repeat" items="[[specializations]]" as="entry">
+                                <paper-item>[[entry]]</paper-item>
+                            </template>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                    <h2>Text pro pacienty</h2>
+                    <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu pacientům.
+                        Zpráva není povinná.</p>
+                    <paper-textarea label="Zpráva pro pacienty" char-counter maxlength="400"></paper-textarea>
                     <custom-button responsive>
                         <button id="confirm_button" type="button" on-tap="saveChanges">Zaregistrovat ordinaci</button>
                     </custom-button>
@@ -47,7 +65,7 @@
 
     <script>
         Polymer({
-            is: 'registration-view',
+            is: 'office-registration-view',
 
             properties: {
                 days: {
@@ -61,6 +79,12 @@
                         {'name': 'Sobota', 'checked': false},
                         {'name': 'Nedělě', 'checked': false}
                     ]
+                },
+
+                specializations: {
+                    type: Array,
+//                    TODO: načíst z DB
+                    value: ['Zubař', 'Rektálník', 'Gynekolog']
                 }
             }
         });
