@@ -103,7 +103,6 @@
                 margin: 0 20px;
             }
 
-
             .drawer-list a {
                 display: block;
                 padding: 0 25px;
@@ -222,7 +221,7 @@
             <home-view name="home"></home-view>
             <e404-view name="e404"></e404-view>
             <emailaction-view name="emailaction" tail="{{subroute}}"></emailaction-view>
-            <officeregistration-view name="officeregistration"></officeregistration-view>
+            <office-view name="office" tail="{{subroute}}"></office-view>
             <docinfo-view name="docinfo"></docinfo-view>
             <account-view name="account" user="[[user]]"></account-view>
         </iron-pages>
@@ -261,6 +260,10 @@
             observers: [
                 '_routePageChanged(routeData.page)'
             ],
+
+            listeners: {
+                'hit-404': '_showPage404',
+            },
 
             _loginButtonHandler: function () {
                 if (this.signedIn) {
@@ -301,24 +304,20 @@
             _routePageChanged: function (page) {
                 this.page = page || 'home';
                 this.drawerOpened = false;
-            }
-            ,
+            },
 
             _toggleDrawer: function () {
                 this.drawerOpened = !this.drawerOpened;
-            }
-            ,
+            },
 
             _pageChanged: function (page) {
                 var resolvedPageUrl = this.resolveUrl("/views/" + page + '-view.html');
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
-            }
-            ,
+            },
 
             _showPage404: function () {
                 this.page = 'e404';
-            }
-            ,
+            },
 
             changeRoute: function (url) {
                 this.route = {path: url, prefix: '', __queryParams: {}};
