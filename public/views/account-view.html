@@ -1,15 +1,67 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/custom_components/custom-button.html">
 
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 
 
 <dom-module id="account-view">
     <template>
-        <style>
+        <style include="custom-button">
+
+            :host {
+                display: block;
+                background-color: white;
+            }
+
+            h2 {
+                font-size: 13px;
+            }
+
+            custom-button {
+                margin-top: 20px;
+            }
+
+            p {
+                margin-bottom: 0px;
+            }
+
+            .main-frame {
+                transition: opacity 0.5s;
+                margin: 0 auto;
+                padding: 0 24px 48px 24px;
+                max-width: 900px;
+                overflow: hidden;
+            }
+
+            .grid {
+                margin-top: 40px;
+                @apply(--layout-horizontal);
+            }
+
+            .grid > section {
+                @apply(--layout-flex);
+            }
+
+            .grid > section:not(:first-child) {
+                margin-left: 80px;
+            }
+
+            @media (max-width: 767px) {
+
+                .grid {
+                    display: block;
+                    margin-top: 0;
+                }
+
+                .grid > section:not(:first-child) {
+                    margin-left: 0;
+                }
+
+            }
         </style>
 
         <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
@@ -20,26 +72,35 @@
                            data="{{addressData}}">
         </firebase-document>
 
-        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
-                     error-message="Nelze ponechat prázdné" auto-validate required
-                     on-input="checkIfValid" value="[[nameData.firstName]]"></paper-input>
-        <paper-input id="lninput" label="Příjmení" minlength="1"
-                     maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
-                     required on-input="checkIfValid" value="[[nameData.lastName]]"></paper-input>
-        <paper-input id="cinput" label="Město" minlength="1" maxlength="80" value="[[addressData.city]]">
-        </paper-input>
-        <paper-input id="sinput" label="Město a číslo popisné" minlength="1" maxlength="80"
-                     value="[[addressData.street]]"></paper-input>
-        <paper-button id="confirm_button" dialog-confirm autofocus on-tap="saveChanges"
-                      disabled>
-            Uložit změny
-        </paper-button>
+        <div class="main-frame">
 
-        <hr>
-        Změnit heslo:
-        <paper-button id="passchange_button" dialog-confirm autofocus on-tap="passChange">
-            Poslat email pro změnu hesla
-        </paper-button>
+            <div class="subsection grid" hidden="[[!signedIn]]">
+                <section>
+                    <h2>Základní informace</h2>
+                    <paper-input id="fninput" label="Jméno" minlength="1" maxlength="20"
+                                 error-message="Nelze ponechat prázdné" auto-validate required
+                                 on-input="checkIfValid" value="[[nameData.firstName]]"></paper-input>
+                    <paper-input id="lninput" label="Příjmení" minlength="1"
+                                 maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
+                                 required on-input="checkIfValid" value="[[nameData.lastName]]"></paper-input>
+                    <h2>Adresa</h2>
+                    <paper-input id="cinput" label="Město" minlength="1" maxlength="20" value="[[addressData.city]]">
+                    </paper-input>
+                    <paper-input id="sinput" label="Město a číslo popisné" minlength="1" maxlength="80"
+                                 value="[[addressData.street]]"></paper-input>
+                    <custom-button>
+                        <button id="confirm_button" type="button" on-tap="saveChanges">Uložit změny</button>
+                    </custom-button>
+                </section>
+
+                <section>
+                    <h2>Změna hesla</h2>
+                    <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo změnit.</p>
+                    <custom-button>
+                        <button type="button" on-tap="passChange">Poslat email</button>
+                    </custom-button>
+                </section>
+            </div>
         </div>
     </template>
 

@@ -79,8 +79,7 @@
                 pointer-events: auto;
             }
 
-            /*Replaced the left-bar-item*/
-            .bar-item {
+            .icon-bar-item {
                 width: 40px;
             }
 
@@ -134,7 +133,7 @@
                 }
             }
 
-            /*TODO: simplify*/
+            /*TODO: simplify dialog*/
             @media only screen and (max-width: 520px) {
                 #modal {
                     position: fixed;
@@ -181,7 +180,7 @@
 
         <app-header role="navigation" id="header" effects="waterfall" condenses reveals>
             <app-toolbar>
-                <div class="bar-item" hidden="[[!smallScreen]]">
+                <div class="icon-bar-item" hidden="[[!smallScreen]]">
                     <paper-icon-button
                             class="menu-btn"
                             icon="menu"
@@ -192,11 +191,11 @@
                     <a href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
                 </div>
                 <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">bezcekani.cz</a></div>
-                <div class="bar-item">
+                <div class="icon-bar-item">
                     <paper-icon-button icon="[[computeLockIcon(signedIn)]]" on-tap="_loginButtonHandler">
                     </paper-icon-button>
                 </div>
-                <div class="bar-item" hidden="[[!signedIn]]">
+                <div class="icon-bar-item" hidden="[[!signedIn]]">
                     <a href="account/" tabindex="-1">
                         <paper-icon-button icon="account-circle">
                         </paper-icon-button>
