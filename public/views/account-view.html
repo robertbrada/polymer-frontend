@@ -4,14 +4,16 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/custom_components/custom-button.html">
-<link rel="import" href="/shared-styles.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
 
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 
 
 <dom-module id="account-view">
     <template>
-        <style include="custom-button shared-styles">
+        <style include="custom-button layout-styles input-styles">
         </style>
 
         <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"

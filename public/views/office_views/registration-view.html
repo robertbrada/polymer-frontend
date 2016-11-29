@@ -1,13 +1,57 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="/custom_components/custom-button.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+
+<link rel="import" href="/behaviors/input-validation-behavior.html">
+
 <dom-module id="registration-view">
     <template>
-        TODO: office registration view
+        <style include="custom-button layout-styles input-styles">
+        </style>
+        <div class="main-frame">
+            <div class="subsection grid">
+                <section>
+                    <h2>Adresa</h2>
+                    <paper-input id="cinput" label="Město" minlength="1" maxlength="20">
+                    </paper-input>
+                    <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"></paper-input>
+                    <h2>Ordinační hodiny</h2>
+                    <template is="dom-repeat" items="[[days]]" as="entry">
+                        <paper-checkbox checked="{{entry.checked}}">[[entry.name]]</paper-checkbox>
+                    </template>
+                    <custom-button responsive>
+                        <button id="confirm_button" type="button" on-tap="saveChanges">Zaregistrovat ordinaci</button>
+                    </custom-button>
+                </section>
+            </div>
+        </div>
     </template>
 
     <script>
         Polymer({
             is: 'registration-view',
+
+            properties: {
+                days: {
+                    type: Array,
+                    value: [
+                        {'name': 'Pondělí', 'checked': true},
+                        {'name': 'Úterý', 'checked': true},
+                        {'name': 'Středa', 'checked': true},
+                        {'name': 'Čtvrtek', 'checked': true},
+                        {'name': 'Pátek', 'checked': true},
+                        {'name': 'Sobota', 'checked': false},
+                        {'name': 'Nedělě', 'checked': false}
+                    ]
+                }
+            }
         });
     </script>
 </dom-module>
