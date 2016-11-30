@@ -1,0 +1,39 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="/behaviors/routing-behavior.html">
+
+<dom-module id="office-view">
+    <template>
+        <app-route
+                route="{{tail}}"
+                pattern="/:page"
+                data="{{routeData}}"
+                tail="{{subroute}}"></app-route>
+
+        <iron-pages
+                selected="[[page]]"
+                attr-for-selected="name"
+                selected-attribute="visible"
+                role="main">
+            <office-list-view name="list"></office-list-view>
+            <office-registration-view name="registration"></office-registration-view>
+        </iron-pages>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'office-view',
+
+            behaviors: [RoutingBehavior],
+
+            defaultPage: 'list',
+            viewPath: '/views/office_views/office-',
+
+            _show404: function () {
+                this.fire('hit-404');
+            },
+        });
+    </script>
+</dom-module>

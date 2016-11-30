@@ -1,0 +1,107 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/custom_components/custom-button.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
+
+<link rel="import" href="/behaviors/input-validation-behavior.html">
+
+
+<dom-module id="account-view">
+    <template>
+        <style include="custom-button layout-styles input-styles header-styles">
+        </style>
+
+        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
+                           data="{{nameData}}">
+        </firebase-document>
+
+        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/address"
+                           data="{{addressData}}">
+        </firebase-document>
+
+        <div class="main-frame">
+            <header class="subsection">
+                <h1>Nastavení účtu</h1>
+                <span>Údaje níže můžete kdykoliv změnit.</span>
+            </header>
+
+            <div class="subsection grid">
+                <section>
+                    <h2>Základní informace</h2>
+                    <paper-input id="fninput" label="Jméno" minlength="1" maxlength="20"
+                                 error-message="Nelze ponechat prázdné" auto-validate required
+                                 on-input="checkIfValid" value="[[nameData.firstName]]"></paper-input>
+                    <paper-input id="lninput" label="Příjmení" minlength="1"
+                                 maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
+                                 required on-input="checkIfValid" value="[[nameData.lastName]]"></paper-input>
+                    <h2>Adresa</h2>
+                    <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
+                    V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
+                    <paper-input id="cinput" label="Město" minlength="1" maxlength="20" value="[[addressData.city]]">
+                    </paper-input>
+                    <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
+                                 value="[[addressData.street]]"></paper-input>
+                    <custom-button>
+                        <button id="confirm_button" type="button" on-tap="saveChanges">Uložit změny</button>
+                    </custom-button>
+                </section>
+
+                <section>
+                    <h2>Změna hesla</h2>
+                    <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo změnit.</p>
+                    <custom-button>
+                        <button type="button" on-tap="passChange">Poslat email</button>
+                    </custom-button>
+                </section>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'account-view',
+
+            behaviors: [InputValidationBehavior],
+
+            validationIDs: ["fninput", "lninput"],
+
+            properties: {
+
+                user: {
+                    type: Object,
+                },
+
+                addressData: {
+                    type: Object,
+                },
+
+                nameData: {
+                    type: Object,
+                    observer: 'checkIfValid'
+                },
+            },
+
+            passChange: function () {
+                this.domHost.$.auth.app.auth().sendPasswordResetEmail(this.user.email).then(function () {
+                    this.domHost.showToast("Email odeslán");
+                }.bind(this)).catch(function () {
+                    console.log("email sending error");
+                })
+            },
+
+            saveChanges: function () {
+                this.set('nameData.firstName', this.$.fninput.value);
+                this.set('nameData.lastName', this.$.lninput.value);
+                this.set('addressData.city', this.$.cinput.value);
+                this.set('addressData.street', this.$.sinput.value);
+                this.domHost.showToast("Změny uloženy");
+            }
+        });
+    </script>
+</dom-module>

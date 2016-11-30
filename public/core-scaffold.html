@@ -2,41 +2,139 @@
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="/bower_components/app-route/app-location.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
-<link rel="import" href="/bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="/bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="/bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="/bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/behaviors/routing-behavior.html">
+
+<!--Lazy load in the future-->
+<link rel="import" href="/bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="bower_components/paper-toast/paper-toast.html">
+<!--Shouldn't be necessary-->
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
 
 <!--Imported in order to fix the weird bug-->
 <link rel="import" href="bower_components/polymerfire/firebase-document.html">
 
-<link rel="import" href="bower_components/neon-animation/animations/scale-up-animation.html">
-<link rel="import" href="bower_components/neon-animation/animations/fade-out-animation.html">
+<!-- Since 'home' is the default route, eagerly load it. -->
+<link rel="import" href="views/home-view.html">
 
 <dom-module id="core-scaffold">
     <template>
         <style>
             :host {
-                --app-primary-color: #8BC34A;
-                --app-secondary-color: black;
                 display: block;
+                position: relative;
+                padding-top: 130px;
+                padding-bottom: 64px;
+                min-height: 100vh;
+                --app-primary-color: #202020;
+                --app-secondary-color: #757575;
+                --app-accent-color: #172C50;
+                --paper-button-ink-color: var(--app-accent-color);
+                --paper-icon-button-ink-color: var(--app-accent-color);
+                --paper-spinner-color: var(--app-accent-color);
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                color: var(--app-primary-color);
             }
 
             app-header {
-                color: #8a868f;
-                background-color: var(--app-primary-color);
-                height: 82px;
+                @apply(--layout-fixed-top);
+                z-index: 1;
+                background-color: rgba(255, 255, 255, 0.95);
+                --app-header-shadow: {
+                    box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
+                    height: 10px;
+                    bottom: -10px;
+                };
             }
 
-            app-header paper-icon-button {
-                --paper-icon-button-ink-color: white;
+            paper-icon-button {
+                color: var(--app-primary-color);
             }
 
-            @media only screen and (max-width: 767px) {
+            .logo {
+                text-align: center;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .logo a {
+                font-size: 18px;
+                font-weight: 600;
+                letter-spacing: 0.2em;
+                color: var(--app-primary-color);
+                text-decoration: none;
+                /* required for IE 11, so this <a> can receive pointer events */
+                display: inline-block;
+                pointer-events: auto;
+            }
+
+            .icon-bar-item {
+                width: 40px;
+            }
+
+            .text-bar-item {
+                height: 40px;
+                line-height: 40px;
+            }
+
+            .text-bar-item a {
+                text-align: center;
+                font-weight: 500;
+                font-size: 16px;
+                display: inline-block;
+                text-decoration: none;
+                overflow: hidden;
+                white-space: nowrap;
+                color: var(--app-primary-color);
+            }
+
+            .drawer-list {
+                margin: 0 20px;
+            }
+
+            .drawer-list a {
+                display: block;
+                padding: 0 25px;
+                line-height: 40px;
+                text-decoration: none;
+                color: var(--app-secondary-color);
+            }
+
+            .drawer-list a.iron-selected {
+                color: black;
+                font-weight: bold;
+            }
+
+            app-drawer {
+                z-index: 3;
+            }
+
+            iron-pages {
+                max-width: 1440px;
+                margin: 0 auto;
+            }
+
+            /* small screen */
+            @media (max-width: 767px) {
+                :host {
+                    padding-top: 64px;
+                }
+            }
+
+            /*TODO: simplify dialog*/
+            @media only screen and (max-width: 520px) {
                 #modal {
                     position: fixed;
                     top: 0;
@@ -64,87 +162,70 @@
                 }
             }
 
-            app-toolbar {
-                padding: 0;
-                margin: 0;
-            }
-
-            #main-title {
-                font-size: 0.9em;
-                letter-spacing: 0.04em;
-                color: #fff;
-                margin-top: 1em;
-                margin-left: 1em;
-            }
-
-            .nav_button {
-                color: #fff;
-                font-weight: bold;
-                box-shadow: none;
-                padding: 1em 1.6em;
-                border-radius: 0;
-                font-size: 0.9em;
-                letter-spacing: 0.03em;
-                margin: 1em 0.7em 0 0;
-
-                text-transform: none;
-                -webkit-transition: all .25s ease;
-                -moz-transition: all .25s ease;
-                -ms-transition: all .25s ease;
-                -o-transition: all .25s ease;
-                transition: all .25s ease;
-            }
-
-            #auth_button {
-                color: #fff;
-                background-color: #01478B;
-            }
-
-            #pro_lekare_button {
-                color: #01478B;
-                background-color: #fff;
-            }
-
-            #auth_button:hover {
-                background-color: #00357a;
-            }
 
         </style>
+
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
+
         <app-location route="{{route}}"></app-location>
+
         <app-route
                 route="{{route}}"
                 pattern="/:page"
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
 
-        <app-header-layout fullbleed>
+        <iron-media-query query="max-width: 767px" query-matches="{{smallScreen}}"></iron-media-query>
 
-            <app-header fixed effects="waterfall">
-                <app-toolbar>
-                    <div main-title id="main-title">bezcekani.cz</div>
-                    <paper-button id="auth_button" class="nav_button" raised on-tap="loginButtonListener">Přihlásit
-                    </paper-button>
-                    <paper-button id="pro_lekare_button" class="nav_button" raised on-tap="redirectionFunction">Pro
-                        lékaře
-                    </paper-button>
-                </app-toolbar>
-            </app-header>
+        <app-header role="navigation" id="header" effects="waterfall" condenses reveals>
+            <app-toolbar>
+                <div class="icon-bar-item" hidden="[[!smallScreen]]">
+                    <paper-icon-button
+                            class="menu-btn"
+                            icon="menu"
+                            on-click="_toggleDrawer">
+                    </paper-icon-button>
+                </div>
+                <div class="text-bar-item" hidden="[[smallScreen]]">
+                    <a href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
+                </div>
+                <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">bezcekani.cz</a></div>
+                <div class="icon-bar-item">
+                    <paper-icon-button icon="[[computeLockIcon(signedIn)]]" on-tap="_loginButtonHandler">
+                    </paper-icon-button>
+                </div>
+                <div class="icon-bar-item" hidden="[[!signedIn]]">
+                    <a href="account/" tabindex="-1">
+                        <paper-icon-button icon="account-circle">
+                        </paper-icon-button>
+                    </a>
+                </div>
+            </app-toolbar>
+        </app-header>
 
-            <iron-pages
-                    selected="[[page]]"
-                    attr-for-selected="name"
-                    fallback-selection="e404"
-                    role="main">
-                <home-view name="home"></home-view>
-                <e404-view name="e404"></e404-view>
-                <emailaction-view name="emailaction" tail="{{subroute}}"></emailaction-view>
-                <officeregistration-view name="officeregistration"></officeregistration-view>
-                <docinfo-view name="docinfo"></docinfo-view>
-                <settings-view name="settings"></settings-view>
-            </iron-pages>
-        </app-header-layout>
+        <template is="dom-if" if="[[smallScreen]]">
+            <!-- Two-way bind `drawerOpened` since app-drawer can update `opened` itself. -->
+            <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
+                <iron-selector role="navigation" class="drawer-list" selected="[[page]]" attr-for-selected="name">
+                    <a name="docinfo" href="docinfo/">Pro lékaře</a>
+                </iron-selector>
+            </app-drawer>
+        </template>
+
+        <iron-pages
+                selected="[[page]]"
+                attr-for-selected="name"
+                fallback-selection="e404"
+                selected-attribute="visible"
+                role="main">
+            <home-view name="home"></home-view>
+            <e404-view name="e404"></e404-view>
+            <emailaction-view name="emailaction" tail="{{subroute}}"></emailaction-view>
+            <office-view name="office" tail="{{subroute}}"></office-view>
+            <docinfo-view name="docinfo"></docinfo-view>
+            <account-view name="account" user="[[user]]"></account-view>
+        </iron-pages>
 
         <paper-dialog id="modal" modal entry-animation="scale-up-animation"
                       exit-animation="fade-out-animation">
@@ -166,32 +247,49 @@
         Polymer({
             is: "core-scaffold",
 
+            behaviors: [RoutingBehavior],
+
+            defaultPage: 'home',
+            viewPath: '/views/',
+
             properties: {
-                page: {
-                    type: String,
-                    reflectToAttribute: true,
-                    observer: '_pageChanged'
-                },
                 signedIn: {
                     type: Boolean,
-                    observer: 'authChanged'
-                },
-                user: Object,
-                route: Object
+                }
             },
 
             observers: [
                 '_routePageChanged(routeData.page)'
             ],
 
-            redirectionFunction: function () {
-                this.changeRoute('/docinfo');
+            listeners: {
+                'hit-404': '_showPage404',
+            },
+
+            _loginButtonHandler: function () {
+                if (this.signedIn) {
+                    this.$.auth.signOut().then(function () {
+                        this.showToast("Odhlášeno");
+                    }.bind(this));
+                } else {
+                    this.showDialog("", "login", true);
+                }
+                this.drawerOpened = false;
+            },
+
+            _registrationButtonHandler: function () {
+                this.showDialog("", "registration", true);
+                this.drawerOpened = false;
+            },
+
+            computeLockIcon: function (signedIn) {
+                return signedIn ? 'lock-open' : 'lock';
             },
 
 //            Use open = false, if the method is called from within the dialog.
             showDialog: function (path, pageName, open) {
                 this.$.dialogpages.selected = pageName;
-                this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function (e) {
+                this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function () {
                     if (open) {
                         this.$.modal.toggle();
                     }
@@ -204,36 +302,18 @@
                 this.$.main_toast.open();
             },
 
-            authChanged: function () {
-                this.$.auth_button.innerHTML = (this.signedIn ? "Odhlásit" : "Přihlásit");
+            _toggleDrawer: function () {
+                this.drawerOpened = !this.drawerOpened;
             },
 
-            loginButtonListener: function () {
-                if (this.signedIn) {
-                    this.$.auth.signOut().then(function () {
-                        this.showToast("Odhlášeno");
-                    }.bind(this));
-                } else {
-                    this.showDialog("", "login", true);
-                }
-            },
-
-            _routePageChanged: function (page) {
-                this.page = page || 'home';
-            },
-
-            _pageChanged: function (page) {
-                var resolvedPageUrl = this.resolveUrl("/views/" + page + '-view.html');
-                this.importHref(resolvedPageUrl, null, this._showPage404, true);
-            },
-
-            _showPage404: function () {
+            _show404: function () {
                 this.page = 'e404';
             },
 
             changeRoute: function (url) {
                 this.route = {path: url, prefix: '', __queryParams: {}};
             }
-        });
+        })
+        ;
     </script>
 </dom-module>

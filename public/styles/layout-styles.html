@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+
+<dom-module id="layout-styles">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+
+            .main-frame {
+                transition: opacity 0.5s;
+                margin: 0 auto;
+                padding: 0 24px 48px 24px;
+                max-width: 900px;
+                overflow: hidden;
+            }
+
+            .grid {
+                margin-top: 40px;
+                @apply(--layout-horizontal);
+            }
+
+            .grid > section {
+                @apply(--layout-flex);
+            }
+
+            .grid > section:not(:first-child) {
+                margin-left: 80px;
+            }
+
+            @media (max-width: 767px) {
+
+                .grid {
+                    display: block;
+                    margin-top: 0;
+                }
+
+                .grid > section:not(:first-child) {
+                    margin-left: 0;
+                }
+
+            }
+        </style>
+    </template>
+</dom-module>
