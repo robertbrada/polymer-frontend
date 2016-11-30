@@ -126,36 +126,27 @@
                 margin: 0 auto;
             }
 
-            /* small screen */
-            @media (max-width: 767px) {
-                :host {
-                    padding-top: 64px;
-                }
-            }
-
-            /*TODO: simplify dialog*/
-            @media only screen and (max-width: 520px) {
-                #modal {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    padding: 0;
-                    margin: 0;
-                }
-            }
-
             @media only screen and (min-width: 767px) {
-                #modal {
+                #main_dialog {
                     width: 80%;
                     max-width: 500px;
                     padding: 50px 50px 0 50px;
                 }
             }
 
-            @media only screen and (max-height: 450px) {
-                #modal {
+            @media only screen and (max-width: 767px) {
+                :host {
+                    padding-top: 64px;
+                }
+
+                #main_dialog {
+                    position: fixed;
+                    margin: 0;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+
                     width: 100%;
                     max-width: 1000px;
                     padding: 50px 50px 0 50px;
@@ -227,7 +218,7 @@
             <account-view name="account" user="[[user]]"></account-view>
         </iron-pages>
 
-        <paper-dialog id="modal" modal entry-animation="scale-up-animation"
+        <paper-dialog id="main_dialog" with-backdrop entry-animation="scale-up-animation"
                       exit-animation="fade-out-animation">
             <iron-pages id="dialogpages" selected="login" attr-for-selected="name">
                 <login-view name="login"></login-view>
@@ -291,7 +282,7 @@
                 this.$.dialogpages.selected = pageName;
                 this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function () {
                     if (open) {
-                        this.$.modal.toggle();
+                        this.$.main_dialog.toggle();
                     }
                 }.bind(this), null, true);
 
