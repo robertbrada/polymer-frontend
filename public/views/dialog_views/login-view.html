@@ -3,126 +3,50 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-dialog-behavior/paper-dialog-common.css">
+<link rel="import" href="/custom_components/custom-button.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 
 
 <dom-module id="login-view">
     <template>
-        <style>
+        <style include="custom-button layout-styles input-styles">
+
             p {
                 color: #F44336;
-                font-weight: bolder;
-                letter-spacing: 0.03em;
             }
 
-            #confirm_button, #dismiss_button {
-                padding: 1.1em;
-                margin: 0;
-                font-weight: bolder;
-                font-size: 1.3em;
-                letter-spacing: 0.05em;
-                text-transform: none;
-                color: #fff;
-                border-radius: 0;
+            #closeBtn {
+                position: absolute;
+                right: 5px;
+                top: 5px;
             }
 
-            #confirm_button {
-                background-color: #8BC34A;
-                width: 60%;
+            #lost_pass {
+                float: right;
             }
 
-            #dismiss_button {
-                color: #263238;
-                background-color: #fff;
-                width: 40%;
-                float: left;
-            }
-
-            #confirm_button[disabled] {
-                background-color: #C5E1A5;
-            }
-
-            gold-email-input, paper-input {
-                background-color: #f2f2f4;
-                border: 1px solid #ddd;
-                padding: 0.2em 1em;
-                font-size: 1.2em;
-                letter-spacing: 0.01em;
-                margin-bottom: 2.1em;
-
-                --paper-input-container-input: {
-                    font-size: 1.2em;
-                    color: #263238;
-                    letter-spacing: 0.01em;
-                };
-
-                --paper-input-container-underline: {
-                    display: none;
-                };
-
-                --paper-input-container-underline-focus: {
-                    display: none;
-                };
-
-                --paper-input-container-label-floating: {
-                    margin-top: -5px;
-                    color: #9d9d9f;
-                };
-
-                --paper-input-container-label-focus: {
-                    color: #9d9d9f;
-                };
-
-                --paper-input-container-label: {
-                    font-size: 1em;
-                    color: #9d9d9f;
-                };
-
-                --paper-input-container-invalid-color: {
-                    color: #ddd;
-                };
-
-                --paper-input-error:{
-                    color: #F44336;
-                    margin-top: 1em;
-                    font-weight: bolder;
-                    letter-spacing: 0.03em;
-                };
-            }
-
-            .buttons a {
-                text-decoration: none;
-            }
-
-            .buttons a paper-button {
-                text-transform: none;
+            #reg_button {
                 width: 100%;
-                margin: 4em 0 0 0;
-                letter-spacing: 0.02em;
-                color: #263238;
-                font-size: 1.2em;
+                margin-top: 60px;
             }
 
-            @media only screen and (max-height: 500px) {
-                
-                gold-email-input, #dismiss_button{
-                    float: left;
+            #lost_pass, #reg_button{
+                text-transform: none;
+            }
+
+            @media only screen and (min-width: 767px) {
+                #confirm_button {
+                    width: 352px;
+                    height: 50px;
                 }
 
-                paper-input,#confirm_button{
-                    float: right;
-                }
-
-                gold-email-input, paper-input, #confirm_button, #dismiss_button  {
-                    margin: 0;
-                    width: 40%;
-                    display: inline-block;
-                }
-
-                #confirm_button, #dismiss_button {
+                #reg_button {
                     margin-top: 30px;
                 }
-
             }
 
         </style>
@@ -135,22 +59,26 @@
             <paper-input id="passID" value="{{password}}" label="Heslo" type="password" on-input="checkIfValid"
                          error-message="Neplatné heslo" minlength="6" maxlength="48">
             </paper-input>
+
         </div>
         <div class="buttons">
-            <paper-button id="dismiss_button" dialog-dismiss>Zrušit
+
+            <paper-button id="lost_pass" on-tap="passReset">
+                <span>Zapomněli jste heslo?</span>
             </paper-button>
-            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="signInWithEmailAndPassword" disabled>
-                Přihlásit
+
+            <custom-button responsive>
+                <button id="confirm_button" type="button" dialog-confirm autofocus on-tap="signInWithEmailAndPassword" disabled>
+                    Přihlásit  </button>
+            </custom-button>
+
+            <paper-button id ="reg_button" on-tap="showRegistration">
+                <span>Ještě nemáte účet? <b>Zaregistrujte se!</b></span>
             </paper-button>
         </div>
-        <div class="buttons">
-            <paper-button on-tap="passReset">
-                <span>Zapomněli jste heslo? <span style="border-bottom: 1px solid #263238"><b> Obnovit!</b></span></span>
-            </paper-button>
-                <paper-button on-tap="showRegistration">
-                    <span>Ještě nemáte účet? <span style="border-bottom: 1px solid #263238"><b> Zaregistrujte se!</b></span></span>
-                </paper-button>
-        </div>
+
+        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
+
     </template>
 
     <script>
