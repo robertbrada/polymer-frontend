@@ -1,101 +1,20 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="/bower_components/paper-input/paper-input.html">
-<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
-<link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="/bower_components/paper-item/paper-item.html">
-<link rel="import" href="/custom_components/custom-button.html">
-
-<link rel="import" href="/styles/input-styles.html">
-<link rel="import" href="/styles/layout-styles.html">
-<link rel="import" href="/styles/header-styles.html">
-
-<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/views/office_views/registration_steps/step0-view.html">
 
 <dom-module id="office-registration-view">
     <template>
-        <style include="custom-button layout-styles input-styles header-styles">
-            .row {
-                @apply(--layout-horizontal);
-                @apply(--layout-end);
-            }
+        <iron-pages
+                selected=[[step]]
+                selected-attribute="visible"
+                role="main">
+            <step0-view></step0-view>
+            <step1-view></step1-view>
+            <step2-view></step2-view>
+        </iron-pages>
 
-            paper-checkbox {
-                margin-top: 20px;
-                --primary-color: var(--app-primary-color);
-            }
 
-            .colored {
-                /*TODO: nefunguje a nevim proc*/
-                color: var(--app-accent-color);
-            }
-        </style>
-        <div class="main-frame">
-            <header class="subsection">
-                <h1>Registrace ordinace</h1>
-                <span>Tyto údaje můžete později změnit v nastavení</span>
-            </header>
-
-            <div class="subsection grid">
-                <section>
-                    <h2>Adresa</h2>
-                    <paper-input id="cinput" label="Město" minlength="1" maxlength="20">
-                    </paper-input>
-                    <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"></paper-input>
-                    <h2>Ordinační hodiny</h2>
-                    <template is="dom-repeat" items="[[days]]" as="entry">
-                        <div class="row">
-                            <paper-checkbox checked="{{entry.checked}}">[[entry.name]]</paper-checkbox>
-                        </div>
-                    </template>
-                </section>
-                <section>
-                    <h2>Zařízení v čekárně</h2>
-                    <p>Zaškrtněte, pokud si přejete přidat zařízení v čekárně, které slouží k zařazení pacientů,
-                        kteří se neobjednali online případně po telefonu.
-                    </p>
-                    <paper-checkbox checked="{{device_checked}}">Přidat zařízení</paper-checkbox>
-                    <p hidden="[[!device_checked]]">V krabičce u zařízení jsme Vám poslali papírek
-                        na kterém je napsán identifikátor. Tuto sekvenci znaků prosím opište do políčka níže:</p>
-                    <paper-input id="id_input_id" label="Identifikátor" hidden="[[!device_checked]]"
-                                 focus="[[device_checked]]"></paper-input>
-                    <h2>Klientela</h2>
-                    <p>Checkbox níže zaškrtněte pokud máte omezenou klientelu.</p>
-                    <paper-checkbox checked="{{client_checked}}">Omezená klientela</paper-checkbox>
-                    <p hidden="[[!client_checked]]" class="colored">Při zaškrtnutí omezené klientely si pacient před
-                        prvním objednáním
-                        v našem systému zažádá o potvrzení. Vám poté přijde zpráva s žádostí o potvrzení. Ve zprávě
-                        uvidíte pacientovi osobní údaje (jméno, adresa), na základě kterých umožníte pacientovi
-                        objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
-                    </p>
-                    <h2>Délka návštěvy</h2>
-                    <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních hodin
-                        určíme objednávací časy.</p>
-                    <paper-input type="number" label="Délka návštěvy" min="1" max="360" value="20">
-                        <div suffix>min</div>
-                    </paper-input>
-                    <h2>Vaše specializace</h2>
-                    <paper-dropdown-menu label="Specializace">
-                        <paper-listbox class="dropdown-content">
-                            <template is="dom-repeat" items="[[specializations]]" as="entry">
-                                <paper-item>[[entry]]</paper-item>
-                            </template>
-                        </paper-listbox>
-                    </paper-dropdown-menu>
-                    <h2>Text pro pacienty</h2>
-                    <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu pacientům.
-                        Zpráva není povinná.</p>
-                    <paper-textarea label="Zpráva pro pacienty" char-counter maxlength="400"></paper-textarea>
-                    <custom-button responsive>
-                        <button id="confirm_button" type="button" on-tap="saveChanges">Zaregistrovat ordinaci</button>
-                    </custom-button>
-                </section>
-            </div>
-        </div>
     </template>
 
     <script>
@@ -103,35 +22,15 @@
             is: 'office-registration-view',
 
             properties: {
-                days: {
-                    type: Array,
-                    value: [
-                        {'name': 'Pondělí', 'checked': true},
-                        {'name': 'Úterý', 'checked': true},
-                        {'name': 'Středa', 'checked': true},
-                        {'name': 'Čtvrtek', 'checked': true},
-                        {'name': 'Pátek', 'checked': true},
-                        {'name': 'Sobota', 'checked': false},
-                        {'name': 'Neděle', 'checked': false}
-                    ]
-                },
-
-                specializations: {
-                    type: Array,
-//                    TODO: načíst z DB
-                    value: ['Zubař', 'Rektálník', 'Gynekolog']
-                },
-
-                device_checked: {
-                    type: Boolean,
-                    observer: '_onDevChecked'
+                step: {
+                    type: Number,
+                    value: 0,
                 }
             },
 
-            _onDevChecked: function (value) {
-                if (value) {
-                    this.$.id_input_id.$.input.focus();
-                }
+            nextStep: function (step) {
+                this.step = step;
+                this.importHref("/views/office_views/registration_steps/step" + step + "-view.html");
             }
         });
     </script>
