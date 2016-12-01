@@ -257,6 +257,7 @@
             _loginButtonHandler: function () {
                 if (this.signedIn) {
                     this.$.auth.signOut().then(function () {
+                        this.changeRoute('/home');
                         this.showToast("Odhlášeno");
                     }.bind(this));
                 } else {
