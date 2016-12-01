@@ -28,6 +28,12 @@
                 margin-top: 20px;
                 --primary-color: var(--app-primary-color);
             }
+
+
+            .colored {
+                /*TODO: nefunguje a nevim proc*/
+                color: var(--app-accent-color);
+            }
         </style>
         <div class="main-frame">
             <header class="subsection">
@@ -49,6 +55,14 @@
                     </template>
                 </section>
                 <section>
+                    <h2>Klientela</h2>
+                    <p>Checkbox níže zaškrtněte pokud máte omezenou klientelu.</p>
+                    <paper-checkbox checked="{{client_checked}}">Omezená klientela</paper-checkbox>
+                    <p hidden="[[!client_checked]]" class="colored">Při zaškrtnutí omezené klientely si pacient před prvním objednáním
+                        v našem systému zažádá o potvrzení. Vám poté přijde zpráva s žádostí o potvrzení. Ve zprávě
+                        uvidíte pacientovi osobní údaje (jméno, adresa), na základě kterých umožníte pacientovi
+                        objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
+                    </p>
                     <h2>Délka návštěvy</h2>
                     <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních hodin
                         určíme objednávací časy.</p>
