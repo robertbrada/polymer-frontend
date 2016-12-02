@@ -8,6 +8,7 @@
 <!--icons-->
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../bower_components/google-map/google-map.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -147,6 +148,10 @@
                 }
             }
 
+            google-map {
+                height: 600px;
+            }
+
         </style>
 
         <div class="main-frame">
@@ -209,17 +214,12 @@
             </div>
         </div>
 
-        <section id="map">
-            <p>mapa</p>
+        <section id="map" hidden="[[smallScreen]]">
+            <template is="dom-if" if="[[!smallScreen]]">
+                <!--TODO: restrict API key for our domain -->
+                <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-map>
+            </template>
         </section>
-
-        <!--TODO Vysouvaci mapa na mobilu-->
-        <!--<iron-pages-->
-                <!--selected=[[step]]-->
-                <!--selected-attribute="visible"-->
-                <!--role="main">-->
-            <!--<map-view></map-view>-->
-        <!--</iron-pages>-->
 
     </template>
 
