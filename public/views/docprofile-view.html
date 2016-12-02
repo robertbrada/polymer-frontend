@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -21,7 +22,6 @@
                 display: block;
 
                 padding: 10px 20px;
-            /
             }
 
             /*TODO zpřehlednit a zjednodušit CSS*/
@@ -54,7 +54,7 @@
                 margin-top: 0;
             }
 
-            #order-info > paper-icon-button {
+            #order-info > iron-icon {
                 color: green;
             }
 
@@ -152,6 +152,10 @@
                 height: 600px;
             }
 
+            iron-icon {
+                margin-right: 15px;
+            }
+
         </style>
 
         <div class="main-frame">
@@ -168,27 +172,31 @@
 
                     <section id="info-section">
                         <p>
-                            <paper-icon-button icon="maps:place"></paper-icon-button>
+                            <iron-icon icon="maps:place"></iron-icon>
                             Kardinála Berana 19
                         <p id="address-city">Brandýs nad Labem</p>
                         </p>
 
                         <p>
-                            <paper-icon-button icon="communication:phone"></paper-icon-button>
+                            <iron-icon icon="communication:phone"></iron-icon>
                             726 984 557
                         </p>
 
                         <p>
-                            <paper-icon-button icon="communication:email"></paper-icon-button>
+                            <iron-icon icon="communication:email"></iron-icon>
                             lekaruvmail@gmail.com
                         </p>
 
-                        <!--TODO Objevení dialogu s popisem po najetí myší nad text -->
+                        <!--TODO: Objevení dialogu s popisem po najetí myší nad text. -->
 
                         <p id="order-info">
-                            <paper-icon-button icon="info"></paper-icon-button>
+                            <iron-icon icon="info"></iron-icon>
                             Lékař má omezenou klientelu
                         </p>
+                        <!--Takhle se řeší ty vysvětlivky v polymeru.-->
+                        <!--Asi to nebude potřeba, když nebudou potvrzení, tak se místo kalendáře zobrazí-->
+                        <!--tlačítko potvrdit + vysvětlivky.-->
+                        <paper-tooltip for="order-info">vysvetleni potvrzeni</paper-tooltip>
                     </section>
                 </div>
             </header>
@@ -214,6 +222,7 @@
             </div>
         </div>
 
+        <!--TODO: Na mobilu zobrazit jenom odkaz do mapy je lepší když se to zobrazí v externí aplikaci-->
         <section id="map" hidden="[[smallScreen]]">
             <template is="dom-if" if="[[!smallScreen]]">
                 <!--TODO: restrict API key for our domain -->
