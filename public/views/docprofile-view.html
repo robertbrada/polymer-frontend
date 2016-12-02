@@ -1,0 +1,231 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/custom_components/custom-button.html">
+
+<!--icons-->
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
+
+<dom-module id="docprofile-view">
+    <template>
+        <style include="custom-button input-styles layout-styles header-styles">
+            :host {
+                display: block;
+
+                padding: 10px 20px;
+            /
+            }
+
+            /*TODO zpřehlednit a zjednodušit CSS*/
+
+            #name {
+                margin: 20px 0 0;
+            }
+
+            #profile-photo {
+                width: 140px;
+                height: 140px;
+                border-radius: 50%;
+                border: 1px solid black;
+            }
+
+            ul li {
+                list-style: none;
+            }
+
+            ul {
+                padding: 0;
+                margin-top: 8px;
+            }
+
+            section > p {
+                text-align: left;
+            }
+
+            #info-section > p:first-child {
+                margin-top: 0;
+            }
+
+            #order-info > paper-icon-button {
+                color: green;
+            }
+
+            #address-city {
+                margin-left: 44px;
+                margin-top: 0;
+            }
+
+            #for-patient {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            #calendar, #map {
+                text-align: center;
+                border: 1px solid #e5e5e6;
+                margin: 30px auto;
+                background-color: #fbfbfc;
+                color: #ababac;
+                max-width: 900px;
+            }
+
+            #calendar{
+                height: 350px;
+            }
+
+            #map {
+                min-height: 200px;
+            }
+
+            #map p {
+                text-align: center;
+                margin-top: 70px;
+            }
+
+            /*********** MEDIA **************/
+
+            @media only screen and (max-width: 767px) {
+                :host {
+                    padding: 64px 0 0 0;
+                }
+
+                #profile-photo {
+                    width: 100px;
+                    height: 100px;
+                }
+            }
+
+            /* prepsany FLEX layout. Tady se hodi se aby sekce daly pod sebe az pri mensim rozliseni, jinak je tam zbytecne prazdneho mista*/
+
+            .grid {
+                margin-top: 40px;
+                @apply(--layout-horizontal);
+            }
+
+            .grid > section {
+                @apply(--layout-flex);
+            }
+
+            .grid > section:not(:first-child) {
+                margin-left: 80px;
+            }
+
+            @media (max-width: 667px) {
+
+                .grid {
+                    display: block;
+                    margin-top: 0;
+                }
+
+                .grid > section:not(:first-child) {
+                    margin-left: 0;
+                }
+
+                ul {
+                    text-align: center;
+                    padding-bottom: 30px;
+                    border-bottom: 1px solid #c5c5c6;
+                }
+
+                #calendar {
+                    margin: 0;
+                }
+
+                #info-section {
+                    margin-top: 30px;
+                }
+
+                #for-patient {
+                    margin-top: 30px;
+                }
+            }
+
+        </style>
+
+        <div class="main-frame">
+
+            <header class="subsection">
+                <div class="subsection grid">
+                    <section>
+                        <ul>
+                            <li><img id="profile-photo"></li>
+                            <li><h2 id="name">Jaromír Nohavica</h2>
+                                <span>Dermatolog, Stomatolog</span></li>
+                        </ul>
+                    </section>
+
+                    <section id="info-section">
+                        <p>
+                            <paper-icon-button icon="maps:place"></paper-icon-button>
+                            Kardinála Berana 19
+                        <p id="address-city">Brandýs nad Labem</p>
+                        </p>
+
+                        <p>
+                            <paper-icon-button icon="communication:phone"></paper-icon-button>
+                            726 984 557
+                        </p>
+
+                        <p>
+                            <paper-icon-button icon="communication:email"></paper-icon-button>
+                            lekaruvmail@gmail.com
+                        </p>
+
+                        <!--TODO Objevení dialogu s popisem po najetí myší nad text -->
+
+                        <p id="order-info">
+                            <paper-icon-button icon="info"></paper-icon-button>
+                            Lékař má omezenou klientelu
+                        </p>
+                    </section>
+                </div>
+            </header>
+
+        </div>
+
+        <div id="calendar">
+            <h2>Kalendář</h2>
+            <span>Pro objednání klikněte v kalendáři na čas, který vám vyhovuje</span>
+        </div>
+
+        <div class="main-frame">
+            <div class="subsection grid">
+                <section id="for-patient">
+                    <h4>Informace pro pacienty</h4>
+                    <p>individuální, párové i rodinné poradenství, krátkodobé i systematické
+                        dlouhodobé
+                        psychoterapeutické poradenství
+                        Vystudoval vychovatelství se zaměřením na etopedii. Absolvoval pětiletý sebezkušenostní
+                        výcvik v integrativní psychoterapii. Více jak deset let se věnuje péči o klienty s
+                        rozličnými problémy a z různých věkových skupin. </p>
+                </section>
+            </div>
+        </div>
+
+        <section id="map">
+            <p>mapa</p>
+        </section>
+
+        <!--TODO Vysouvaci mapa na mobilu-->
+        <!--<iron-pages-->
+                <!--selected=[[step]]-->
+                <!--selected-attribute="visible"-->
+                <!--role="main">-->
+            <!--<map-view></map-view>-->
+        <!--</iron-pages>-->
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'docprofile-view'
+        });
+    </script>
+</dom-module>
