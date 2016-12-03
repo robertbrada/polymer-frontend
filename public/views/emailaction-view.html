@@ -12,11 +12,11 @@
 
             ready: function () {
 
-                var actionCode = this.tail.__queryParams["oobCode"];
+                var actionCode = this.route.__queryParams["oobCode"];
 
                 var auth = this.domHost.$.auth.app.auth(); // TODO: find less retarded way to get reference
 
-                switch (this.tail.__queryParams["mode"]) {
+                switch (this.route.__queryParams["mode"]) {
                     case 'resetPassword':
                         this.handleResetPassword(auth, actionCode);
                         break;

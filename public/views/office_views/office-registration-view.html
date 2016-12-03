@@ -8,7 +8,7 @@
 <dom-module id="office-registration-view">
     <template>
         <app-route
-                route="{{tail}}"
+                route="{{route}}"
                 pattern="/:page"
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
@@ -30,11 +30,6 @@
 
             behaviors: [RoutingBehavior],
 
-            ready: function () {
-                console.log(this.page);
-            },
-
-            defaultPage: 'data',
             viewPath: '/views/office_views/registration_steps/',
 
         });

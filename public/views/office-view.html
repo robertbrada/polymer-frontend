@@ -7,7 +7,7 @@
 <dom-module id="office-view">
     <template>
         <app-route
-                route="{{tail}}"
+                route="{{route}}"
                 pattern="/:page"
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
@@ -18,7 +18,7 @@
                 selected-attribute="visible"
                 role="main">
             <office-list-view name="list"></office-list-view>
-            <office-registration-view name="registration" tail="{{subroute}}"></office-registration-view>
+            <office-registration-view name="registration" route="{{subroute}}"></office-registration-view>
         </iron-pages>
     </template>
 
