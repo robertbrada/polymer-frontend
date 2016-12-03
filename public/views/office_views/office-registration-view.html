@@ -1,17 +1,17 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="/views/office_views/registration_steps/step0-view.html">
+<link rel="import" href="/views/office_views/registration_steps/data-view.html">
 
 <dom-module id="office-registration-view">
     <template>
         <iron-pages
-                selected=[[step]]
+                selected="[[viewSelected]]"
+                attr-for-selected="name"
                 selected-attribute="visible"
                 role="main">
-            <step0-view></step0-view>
-            <step1-view></step1-view>
-            <step2-view></step2-view>
+            <data-view name="data"></data-view>
+            <confirm-view name="confirm"></confirm-view>
         </iron-pages>
 
 
@@ -22,15 +22,15 @@
             is: 'office-registration-view',
 
             properties: {
-                step: {
-                    type: Number,
-                    value: 0,
+                viewSelected: {
+                    type: String,
+                    value: "data"
                 }
             },
 
-            nextStep: function (step) {
-                this.step = step;
-                this.importHref("/views/office_views/registration_steps/step" + step + "-view.html");
+            nextStep: function (viewName) {
+                this.importHref("/views/office_views/registration_steps/" + viewName + "-view.html");
+                this.viewSelected = viewName;
             }
         });
     </script>
