@@ -1,51 +1,53 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/paper-dialog-behavior/paper-dialog-common.css">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
+<!--TODO: shouldn't be necessary-->
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="/custom_components/custom-button.html">
 
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
-<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/dialog-styles.html">
+
 
 <dom-module id="registration-view">
     <template>
-        <style include="custom-button input-styles">
-            p {
-                color: red
-            }
+        <style include="custom-button dialog-styles">
         </style>
         <firebase-document id="document" app-name="doctor-appointment-system">
         </firebase-document>
 
-        <div>
-            <p>{{errorMessage}}</p>
-            <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
-                         error-message="Nelze ponechat prázdné" auto-validate required
-                         on-input="checkIfValid"></paper-input>
-            <paper-input id="lninput" label="Příjmení" minlength="1"
-                         maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
-                         required on-input="checkIfValid"></paper-input>
-            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                              label="Vaše emailová adresa" auto-validate required
-                              on-input="checkIfValid"></gold-email-input>
+        <p class="error">{{errorMessage}}</p>
+        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
+                     error-message="Nelze ponechat prázdné" auto-validate required
+                     on-input="checkIfValid"></paper-input>
+        <paper-input id="lninput" label="Příjmení" minlength="1"
+                     maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
+                     required on-input="checkIfValid"></paper-input>
+        <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                          label="Vaše emailová adresa" auto-validate required
+                          on-input="checkIfValid"></gold-email-input>
 
-            <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate
-                         type="password"
-                         minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
-                <div suffix><paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange"></paper-icon-button></div>
-            </paper-input>
+        <!--TODO: remove inconsistent space above the input-->
+        <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate
+                     type="password"
+                     minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
+            <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
+        </paper-input>
 
-            <paper-button dialog-dismiss>Zavřít</paper-button>
-            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword"
-                          disabled>
+        <custom-button responsive>
+            <button id="confirm_button" type="button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword"
+                    disabled>
                 Registrovat
-            </paper-button>
-        </div>
+            </button>
+        </custom-button>
+
+        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
 
     <script>

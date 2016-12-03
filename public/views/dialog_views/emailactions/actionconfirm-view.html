@@ -1,16 +1,24 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/custom_components/custom-button.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="/styles/dialog-styles.html">
 
 <dom-module id="actionconfirm-view">
     <template>
-        <style>
+        <style include="custom-button dialog-styles">
         </style>
 
-        <p>Váš email byl úspěšně potvrzen. Nyní se můžete objednat. <br> V případě že jste doktor prosím pokračujte
-            přidáním ordinace.</p>
-        <paper-button dialog-confirm>Zavřít</paper-button>
-        <paper-button dialog-confirm autofocus on-tap="redirectionFunction">Přidat ordinaci</paper-button>
+        <p class="main_text">Váš email byl úspěšně potvrzen. Nyní se můžete objednat. <br> V případě že jste doktor
+            prosím pokračujte přidáním ordinace.</p>
+        <custom-button responsive>
+            <button type="button" dialog-confirm autofocus on-tap="redirectionFunction">
+                Přidat ordinaci
+            </button>
+        </custom-button>
+
+        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
 
     <script>

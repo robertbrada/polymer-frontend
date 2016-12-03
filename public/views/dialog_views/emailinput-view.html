@@ -1,34 +1,34 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
-
+<link rel="import" href="/custom_components/custom-button.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/custom_components/custom-button.html">
 
+<link rel="import" href="/styles/dialog-styles.html">
 
 <dom-module id="emailinput-view">
     <template>
-        <style>
-            p {
-                color: #F44336;
-                font-weight: bolder;
-                letter-spacing: 0.03em;
-            }
+        <style include="custom-button dialog-styles">
         </style>
         <iron-meta id="meta"></iron-meta>
 
-        <p>{{errorMessage}}</p>
-        <div> Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:
-            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                              label="Vaše emailová adresa" auto-validate required
-                              on-input="checkIfValid">
-            </gold-email-input>
-            <paper-button dialog-dismiss>Zavřít</paper-button>
-            <paper-button id="confirm_button" dialog-confirm autofocus on-tap="sendEmail"
-                          disabled>
+        <p class="error">{{errorMessage}}</p>
+        <p class="main_text">Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:</p>
+        <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                          label="Vaše emailová adresa" auto-validate required
+                          on-input="checkIfValid">
+        </gold-email-input>
+
+        <custom-button responsive>
+            <button id="confirm_button" type="button" dialog-confirm autofocus on-tap="sendEmail"
+                    disabled>
                 Poslat
-            </paper-button>
-        </div>
+            </button>
+        </custom-button>
+
+        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
 
     <script>
