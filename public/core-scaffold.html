@@ -9,15 +9,13 @@
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="/behaviors/routing-behavior.html">
 
 <!--Lazy load in the future-->
 <link rel="import" href="/bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="bower_components/neon-animation/animations/scale-up-animation.html">
-<link rel="import" href="bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="custom_components/main-dialog.html">
 <!--Shouldn't be necessary-->
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
 
@@ -125,27 +123,9 @@
                 margin: 0 auto;
             }
 
-            @media only screen and (min-width: 767px) {
-                #main_dialog {
-                    max-width: 500px;
-                    padding: 30px 50px 0 50px;
-                }
-            }
-
             @media only screen and (max-width: 767px) {
                 :host {
                     padding-top: 64px;
-                }
-
-                #main_dialog {
-                    position: fixed;
-                    margin: 0;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-
-                    width: 100%;
                 }
             }
 
@@ -215,18 +195,7 @@
             <docprofile-view name="docprofile" small-screen="[[smallScreen]]"></docprofile-view>
         </iron-pages>
 
-        <paper-dialog id="main_dialog" with-backdrop entry-animation="scale-up-animation"
-                      exit-animation="fade-out-animation">
-            <iron-pages id="dialogpages" selected="login" attr-for-selected="name">
-                <login-view name="login"></login-view>
-                <registration-view name="registration"></registration-view>
-                <emaildialog-view name="emaildialog"></emaildialog-view>
-                <actionerror-view name="actionerror"></actionerror-view>
-                <actionconfirm-view name="actionconfirm"></actionconfirm-view>
-                <passreset-view name="passreset"></passreset-view>
-                <emailinput-view name="emailinput"></emailinput-view>
-            </iron-pages>
-        </paper-dialog>
+        <main-dialog id="dialogID"></main-dialog>
 
         <paper-toast id="main_toast"></paper-toast>
 
@@ -279,14 +248,9 @@
 
             // Event handlers follow
 
-            // Use open = false, if the method is called from within the dialog.
             _showDialog: function (event) {
-                this.$.dialogpages.selected = event.detail.viewName;
-                this.importHref("/views/dialog_views/" + event.detail.path + event.detail.viewName + "-view.html", function () {
-                    if (event.detail.open) {
-                        this.$.main_dialog.toggle();
-                    }
-                }.bind(this), null, true);
+                // TODO: proper event redirection
+                this.$.dialogID._showDialog(event);
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
