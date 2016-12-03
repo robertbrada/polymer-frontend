@@ -42,7 +42,7 @@
                                  required on-input="checkIfValid" value="[[nameData.lastName]]"></paper-input>
                     <h2>Adresa</h2>
                     <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
-                    V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
+                        V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
                     <paper-input id="cinput" label="Město" minlength="1" maxlength="20" value="[[addressData.city]]">
                     </paper-input>
                     <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
@@ -54,7 +54,8 @@
 
                 <section>
                     <h2>Změna hesla</h2>
-                    <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo změnit.</p>
+                    <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
+                        změnit.</p>
                     <custom-button>
                         <button type="button" on-tap="passChange">Poslat email</button>
                     </custom-button>
@@ -89,7 +90,7 @@
 
             passChange: function () {
                 this.domHost.$.auth.app.auth().sendPasswordResetEmail(this.user.email).then(function () {
-                    this.domHost.showToast("Email odeslán");
+                    this.fire("show-toast", {text: "Email odeslán"});
                 }.bind(this)).catch(function () {
                     console.log("email sending error");
                 })

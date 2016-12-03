@@ -41,7 +41,7 @@
             resetPassword: function () {
                 var auth = this.domHost.$.auth.app.auth(); // TODO: find less retarded way to get reference
                 auth.confirmPasswordReset(this.$.meta.byKey('actionCode'), this.password).then(function () {
-                    this.domHost.showToast("Heslo změněno");
+                    this.fire("show-toast", {text: "Heslo změněno"});
                 }.bind(this)).catch(function (error) {
                     console.log(error);
                 })

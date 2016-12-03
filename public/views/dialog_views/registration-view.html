@@ -59,9 +59,9 @@
                 this.domHost.$.auth.createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
                     user.sendEmailVerification();
 
-                    this.domHost.changeRoute('/home');
-                    this.domHost.showToast("Přihlášeno");
-                    this.domHost.showDialog("", "emaildialog", true);
+                    this.fire('change-route', {url: '/home'});
+                    this.fire("show-toast", {text: "Přihlášeno"});
+                    this.fire("show-dialog", {path: "", viewName: "emaildialog", open: true});
 
                     this.saveUserData(user);
 
@@ -73,7 +73,7 @@
                         default:
                             this.errorMessage = error["code"];
                     }
-                    this.domHost.showDialog("", "registration", true);
+                    this.fire("show-dialog", {path: "", viewName: "registration", open: true});
                 }.bind(this));
             },
 

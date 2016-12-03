@@ -22,9 +22,8 @@
             resendVerification: function () {
                 var user = this.domHost.user;
                 if (!!user) {
-                    console.log("Sending email");
                     user.sendEmailVerification();
-                    this.domHost.showDialog("", "emaildialog", false);
+                    this.fire("show-dialog", {path: "", viewName: "emaildialog", open: false});
                 } else {
                     console.log("Not logged in error");
 //                    TODO: dialog pro login

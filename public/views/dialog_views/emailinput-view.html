@@ -41,10 +41,10 @@
 
             sendEmail: function () {
                 this.domHost.$.auth.app.auth().sendPasswordResetEmail(this.email).then(function () {
-                    this.domHost.showToast("Email odeslán");
+                    this.fire("show-toast", {text: "Email odeslán"});
                 }.bind(this)).catch(function (error) {
                     this.errorMessage = "Účet s touto emailovou adresou neexistuje";
-                    this.domHost.showDialog("", "emailinput", true);
+                    this.fire("show-dialog", {path: "", viewName: "emailinput", open: true});
                 }.bind(this))
 
             }

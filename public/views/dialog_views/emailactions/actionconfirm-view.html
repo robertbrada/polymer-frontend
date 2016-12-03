@@ -18,7 +18,7 @@
             is: 'actionconfirm-view',
 
             redirectionFunction: function () {
-                this.domHost.changeRoute('/office/registration');
+                this.fire('change-route', {url: '/office/registration'});
             }
         });
     </script>

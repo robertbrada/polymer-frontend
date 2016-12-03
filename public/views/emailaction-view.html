@@ -27,15 +27,15 @@
                         this.handleVerifyEmail(auth, actionCode);
                         break;
                     default:
-                        this.domHost.changeRoute('/home');
-                        this.domHost.showDialog("emailactions/", "actionerror", true);
+                        this.fire('change-route', {url: '/home'});
+                        this.fire("show-dialog", {path: "emailactions/", viewName: "actionerror", open: true});
                 }
             },
 
             handleResetPassword: function (auth, actionCode) {
                 this.actionCode = actionCode;
-                this.domHost.changeRoute('/home');
-                this.domHost.showDialog("emailactions/", "passreset", true);
+                this.fire('change-route', {url: '/home'});
+                this.fire("show-dialog", {path: "emailactions/", viewName: "passreset", open: true});
             },
 
             handleRecoverEmail: function (auth, actionCode) {
@@ -44,11 +44,11 @@
 
             handleVerifyEmail: function (auth, actionCode) {
                 auth.applyActionCode(actionCode).then(function () {
-                    this.domHost.changeRoute('/home');
-                    this.domHost.showDialog("emailactions/", "actionconfirm", true);
+                    this.fire('change-route', {url: '/home'});
+                    this.fire("show-dialog", {path: "emailactions/", viewName: "actionconfirm", open: true});
                 }.bind(this)).catch(function () {
-                    this.domHost.changeRoute('/home');
-                    this.domHost.showDialog("emailactions/", "actionerror", true);
+                    this.fire('change-route', {url: '/home'});
+                    this.fire("show-dialog", {path: "emailactions/", viewName: "actionerror", open: true})
                 }.bind(this));
             }
         });

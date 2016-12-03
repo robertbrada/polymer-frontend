@@ -91,7 +91,7 @@
 
             signInWithEmailAndPassword: function () {
                 this.domHost.$.auth.signInWithEmailAndPassword(this.email, this.password).then(function () {
-                    this.domHost.showToast("Přihlášeno");
+                    this.fire("show-toast", {text: "Přihlášeno"});
                 }.bind(this)).catch(function (error) {
                     switch (error["code"]) {
                         case "auth/wrong-password":
@@ -104,16 +104,16 @@
                         default:
                             this.errorMessage = error["code"];
                     }
-                    this.domHost.showDialog("", "login", true);
+                    this.fire("show-dialog", {path: "", viewName: "login", open: true});
                 }.bind(this));
             },
 
             showRegistration: function () {
-                this.domHost.showDialog("", "registration", false);
+                this.fire("show-dialog", {path: "", viewName: "registration", open: false});
             },
 
             passReset: function () {
-                this.domHost.showDialog("", "emailinput", false);
+                this.fire("show-dialog", {path: "", viewName: "emailinput", open: false});
             }
         });
 

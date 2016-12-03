@@ -252,22 +252,20 @@
 
             listeners: {
                 'hit-404': '_show404',
+                'show-dialog': '_showDialog',
+                'show-toast': '_showToast',
+                'change-route': '_changeRoute',
             },
 
             _loginButtonHandler: function () {
                 if (this.signedIn) {
                     this.$.auth.signOut().then(function () {
-                        this.changeRoute('/home');
-                        this.showToast("Odhlášeno");
+                        this.fire('change-route', {url: '/home'});
+                        this.fire("show-toast", {text: "Odhlášeno"});
                     }.bind(this));
                 } else {
-                    this.showDialog("", "login", true);
+                    this.fire("show-dialog", {path: "", viewName: "login", open: true});
                 }
-                this.drawerOpened = false;
-            },
-
-            _registrationButtonHandler: function () {
-                this.showDialog("", "registration", true);
                 this.drawerOpened = false;
             },
 
@@ -275,32 +273,37 @@
                 return signedIn ? 'lock-open' : 'lock';
             },
 
-//            Use open = false, if the method is called from within the dialog.
-            showDialog: function (path, pageName, open) {
-                this.$.dialogpages.selected = pageName;
-                this.importHref("/views/dialog_views/" + path + pageName + "-view.html", function () {
-                    if (open) {
-                        this.$.main_dialog.toggle();
-                    }
-                }.bind(this), null, true);
-
-            },
-
-            showToast: function (text) {
-                this.$.main_toast.text = text;
-                this.$.main_toast.open();
-            },
-
             _toggleDrawer: function () {
                 this.drawerOpened = !this.drawerOpened;
             },
 
-            _show404: function () {
-                this.page = 'e404';
+            // Event handlers follow
+
+            // Use open = false, if the method is called from within the dialog.
+            _showDialog: function (event) {
+                this.$.dialogpages.selected = event.detail.viewName;
+                this.importHref("/views/dialog_views/" + event.detail.path + event.detail.viewName + "-view.html", function () {
+                    if (event.detail.open) {
+                        this.$.main_dialog.toggle();
+                    }
+                }.bind(this), null, true);
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
-            changeRoute: function (url) {
-                this.route = {path: url, prefix: '', __queryParams: {}};
+            _showToast: function (event) {
+                this.$.main_toast.text = event.detail.text;
+                this.$.main_toast.open();
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+            },
+
+            _show404: function (event) {
+                this.page = 'e404';
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true); // support for IE<9
+            },
+
+            _changeRoute: function (event) {
+                this.route = {path: event.detail.url, prefix: '', __queryParams: {}};
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
         });
     </script>
