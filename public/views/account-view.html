@@ -89,7 +89,8 @@
             },
 
             passChange: function () {
-                this.domHost.$.auth.app.auth().sendPasswordResetEmail(this.user.email).then(function () {
+                var app = document.getElementById('appID').app;
+                app.auth().sendPasswordResetEmail(this.user.email).then(function () {
                     this.fire("show-toast", {text: "Email odeslán"});
                 }.bind(this)).catch(function () {
                     console.log("email sending error");
@@ -101,7 +102,7 @@
                 this.set('nameData.lastName', this.$.lninput.value);
                 this.set('addressData.city', this.$.cinput.value);
                 this.set('addressData.street', this.$.sinput.value);
-                this.domHost.showToast("Změny uloženy");
+                this.fire("show-toast", {text: "Změny uloženy"});
             }
         });
     </script>

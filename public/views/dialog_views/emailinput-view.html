@@ -40,7 +40,8 @@
             validationIDs: ["emailID"],
 
             sendEmail: function () {
-                this.domHost.$.auth.app.auth().sendPasswordResetEmail(this.email).then(function () {
+                var app = document.getElementById('appID').app;
+                app.auth().sendPasswordResetEmail(this.email).then(function () {
                     this.fire("show-toast", {text: "Email odeslán"});
                 }.bind(this)).catch(function (error) {
                     this.errorMessage = "Účet s touto emailovou adresou neexistuje";

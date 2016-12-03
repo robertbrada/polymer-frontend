@@ -56,7 +56,8 @@
             validationIDs: ["fninput", "lninput", "emailID", "passID"],
 
             createUserWithEmailAndPassword: function () {
-                this.domHost.$.auth.createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
+                var app = document.getElementById('appID').app;
+                app.auth().createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
                     user.sendEmailVerification();
 
                     this.fire('change-route', {url: '/home'});

@@ -152,7 +152,7 @@
 
         </style>
 
-        <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
+        <firebase-auth id="authID" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
 
         <app-location route="{{route}}"></app-location>
@@ -259,7 +259,7 @@
 
             _loginButtonHandler: function () {
                 if (this.signedIn) {
-                    this.$.auth.signOut().then(function () {
+                    this.$.authID.signOut().then(function () {
                         this.fire('change-route', {url: '/home'});
                         this.fire("show-toast", {text: "Odhlášeno"});
                     }.bind(this));

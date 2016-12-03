@@ -90,7 +90,9 @@
             validationIDs: ["emailID", "passID"],
 
             signInWithEmailAndPassword: function () {
-                this.domHost.$.auth.signInWithEmailAndPassword(this.email, this.password).then(function () {
+                // TODO: find a way to get reference without avoding the shadow dom
+                var app = document.getElementById('appID').app;
+                app.auth().signInWithEmailAndPassword(this.email, this.password).then(function () {
                     this.fire("show-toast", {text: "Přihlášeno"});
                 }.bind(this)).catch(function (error) {
                     switch (error["code"]) {
