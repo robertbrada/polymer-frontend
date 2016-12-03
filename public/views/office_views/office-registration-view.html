@@ -30,6 +30,10 @@
 
             behaviors: [RoutingBehavior],
 
+            ready: function () {
+                console.log(this.page);
+            },
+
             defaultPage: 'data',
             viewPath: '/views/office_views/registration_steps/',
 

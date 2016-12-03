@@ -20,6 +20,9 @@
 <dom-module id="data-view">
     <template>
         <style include="custom-button layout-styles input-styles header-styles">
+            :host {
+                --iron-collapse-transition-duration: 600ms;
+            }
         </style>
         <div class="main-frame">
             <header class="subsection">
