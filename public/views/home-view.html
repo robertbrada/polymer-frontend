@@ -31,7 +31,6 @@
 
             }
 
-
             /* prepsane nektere vlastnosti naimportovane z input styles - specificke pro home-view input */
             paper-input {
                 --paper-input-container-label: {
@@ -123,19 +122,24 @@
 
             <div id="search-div" class="subsection grid">
                 <section>
-                    <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search">
+                    <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search"
+                                 autofocus on-focus="click" on-click="click" on-blur="blur">
                     </paper-input>
                 </section>
 
                 <section>
                     <paper-input id="search_input_place" label="Město nebo ZIP" type="search"
+                                 on-click="click1" on-blur="blur1"
                     >
                     </paper-input>
                 </section>
 
                 <section>
                     <custom-button id="search_button">
-                        <button type="button"> <iron-icon icon="search"></iron-icon> Hledat</button>
+                        <button type="button">
+                            <iron-icon icon="search"></iron-icon>
+                            Hledat
+                        </button>
                     </custom-button>
                 </section>
 
@@ -147,7 +151,29 @@
     </template>
     <script>
         Polymer({
-            is: 'home-view'
+            is: 'home-view',
+
+
+            /* TODO  Je to blbost, nedokázal jsem zjistit jak obecne zavolat "click" a "blur" pro ID zafocusovaneho inputu */
+
+//          document.activeElement
+
+            click: function () {
+                this.$.search_input_doctor.alwaysFloatLabel = true;
+            },
+
+            blur: function () {
+                this.$.search_input_doctor.alwaysFloatLabel = false;
+            },
+
+            click1: function () {
+                this.$.search_input_place.alwaysFloatLabel = true;
+            },
+
+            blur1: function () {
+                this.$.search_input_place.alwaysFloatLabel = false;
+            }
+
         });
     </script>
 </dom-module>
