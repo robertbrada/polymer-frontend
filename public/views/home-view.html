@@ -1,172 +1,220 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
+<link rel="import" href="/custom_components/custom-button.html">
+
+<!--icons-->
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
 
 <dom-module id="home-view">
     <template>
-        <style>
+        <style include="custom-button input-styles layout-styles header-styles">
             :host {
                 display: block;
             }
 
             /******* CUSTOM STYLES *********/
 
-            * {
-                box-sizing: border-box;
-            }
+            /** {*/
+            /*box-sizing: border-box;*/
+            /*}*/
 
-            header{
-                text-align: center;
-                padding-top: 100px;
-                padding-bottom: 150px;
-                /*border-bottom: 6px solid #000;*/
-                box-shadow: 0 2px 10px #e4e4e6;
-                background: #8BC34A url('../images/doctor.png') no-repeat;
-                background-size: contain;
-                background-position-y: 100%;
-            }
-
-            header div {
-                width: 80%;
+            #head {
+                /*text-align: center;*/
+                padding-top: 70px;
+                padding-bottom: 110px;
                 margin: 0 auto;
                 text-align: left;
+                /*max-width: 1200px;*/
+                /*!*border-bottom: 6px solid #000;*!*/
+                background: #8BC34A url('../images/doctor-background.jpg') no-repeat;
+                background-size: cover;
+                /*background-position-y: 100%;*/
+                /*background-color: green;*/
             }
 
+            /*header div {*/
+            /*width: 80%;*/
+            /*margin: 0 auto;*/
+            /*text-align: left;*/
+            /*}*/
 
-            h1 {
-                font-size: 2.1em;
-                font-weight: bolder;
-                margin-bottom: 1em;
-                color: #fff;
-                letter-spacing: 0.01em;
-            }
+            /*h1 {*/
+            /*font-size: 2.1em;*/
+            /*font-weight: bolder;*/
+            /*margin-bottom: 1em;*/
+            /*color: #fff;*/
+            /*letter-spacing: 0.01em;*/
+            /*}*/
 
-            paper-input {
-                display: inline-block;
-                background-color: #fff;
-                padding: 0.5em  0.8em;
-                float: left;
+            /*paper-input {*/
+            /*display: inline-block;*/
+            /*background-color: #fff;*/
+            /*padding: 0.5em  0.8em;*/
+            /*float: left;*/
 
-                --paper-input-container-input: {
-                    font-size: 1.3em;
-                    color: #263238;
-                    letter-spacing: 0.01em;
-                };
+            /*--paper-input-container-input: {*/
+            /*font-size: 1.3em;*/
+            /*color: #263238;*/
+            /*letter-spacing: 0.01em;*/
+            /*};*/
 
-                --paper-input-container-underline:{
-                    display: none;
-                };
+            /*--paper-input-container-underline:{*/
+            /*display: none;*/
+            /*};*/
 
-                --paper-input-container-underline-focus:{
-                    display: none;
-                };
+            /*--paper-input-container-underline-focus:{*/
+            /*display: none;*/
+            /*};*/
 
-                --paper-input-container-label-floating:{
-                    margin-top: -5px
-                };
+            /*--paper-input-container-label-floating:{*/
+            /*margin-top: -5px*/
+            /*};*/
 
-                --paper-input-container-label-focus:{
-                    color: #9d9d9f;
-                    font-size: 0.9em;
-                };
+            /*--paper-input-container-label-focus:{*/
+            /*color: #9d9d9f;*/
+            /*font-size: 0.9em;*/
+            /*};*/
 
-                --paper-input-container-label:{
-                    font-size: 1.2em;
-                    color: #9d9d9f;
-                };
-            }
+            /*--paper-input-container-label:{*/
+            /*font-size: 1.2em;*/
+            /*color: #9d9d9f;*/
+            /*};*/
+            /*}*/
 
-            #search_input_doctor {
-                width: 30%;
-                margin-right: 0.5em;
-            }
+            /*#search_input_doctor {*/
+            /*width: 30%;*/
+            /*margin-right: 0.5em;*/
+            /*}*/
 
-            #search_input_place {
-                width: 33%;
-                margin-right: 0em;
-            }
+            /*#search_input_place {*/
+            /*width: 33%;*/
+            /*margin-right: 0em;*/
+            /*}*/
 
-            #search_button{
-                padding: 1.24em;
-                margin: 0;
-                background-color: #01478B;
-                color: #fff;
-                font-size: 1.2em;
-                text-transform: none;
-                font-weight: bolder;
-                letter-spacing: 0.08em;
-                border-radius: 0px;
-                box-shadow: none;
-                text-align: center;
+            /*#search_button{*/
+            /*padding: 1.24em;*/
+            /*margin: 0;*/
+            /*background-color: #01478B;*/
+            /*color: #fff;*/
+            /*font-size: 1.2em;*/
+            /*text-transform: none;*/
+            /*font-weight: bolder;*/
+            /*letter-spacing: 0.08em;*/
+            /*border-radius: 0px;*/
+            /*box-shadow: none;*/
+            /*text-align: center;*/
 
-                -webkit-transition: all .25s ease;
-                -moz-transition: all .25s ease;
-                -ms-transition: all .25s ease;
-                -o-transition: all .25s ease;
-                transition: all .25s ease;
-            }
+            /*-webkit-transition: all .25s ease;*/
+            /*-moz-transition: all .25s ease;*/
+            /*-ms-transition: all .25s ease;*/
+            /*-o-transition: all .25s ease;*/
+            /*transition: all .25s ease;*/
+            /*}*/
 
-            #search_button:hover {
-                background-color: #00357a;
-            }
+            /*#search_button:hover {*/
+            /*background-color: #00357a;*/
+            /*}*/
 
+            /*@media only screen and (max-width: 1020px) {*/
 
-            @media only screen and (max-width: 1020px) {
+            /*header {*/
+            /*padding-top: 80px;*/
+            /*}*/
+            /*header div {*/
+            /*width: 90%;*/
+            /*}*/
 
-                header {
-                    padding-top: 80px;
-                }
-                header div {
-                    width: 90%;
-                }
+            /*#search_input_doctor,  #search_input_place {*/
+            /*width: 49%;*/
+            /*}*/
 
-                #search_input_doctor,  #search_input_place {
-                    width: 49%;
-                }
+            /*#search_button{*/
+            /*margin-top: 0.5em;*/
+            /*width: 49%;*/
+            /*}*/
+            /*}*/
 
-                #search_button{
-                    margin-top: 0.5em;
-                    width: 49%;
-                }
-            }
+            /*@media only screen and (max-width: 520px) {*/
 
-            @media only screen and (max-width: 520px) {
+            /*header {*/
+            /*padding-top: 50px;*/
+            /*}*/
 
-                header {
-                    padding-top: 50px;
-                }
+            /*#search_input_doctor,  #search_input_place {*/
+            /*width: 100%;*/
+            /*float: none;*/
+            /*display: block;*/
+            /*margin: 0 auto 1em auto;*/
+            /*}*/
 
-                #search_input_doctor,  #search_input_place {
-                    width: 100%;
-                    float: none;
-                    display: block;
-                    margin: 0 auto 1em auto;
-                }
+            /*#search_button{*/
+            /*width: 100%;*/
+            /*margin: 2em auto 0 auto;*/
+            /*display: block;*/
+            /*}*/
+            /*}*/
 
-                #search_button{
-                    width: 100%;
-                    margin: 2em auto 0 auto;
-                    display: block;
-                }
+            section > paper-input{
+                margin-top: 20px;
             }
 
         </style>
 
-        <header>
-            <div>
-                <h1>Najděte lékaře a my vás objednáme</h1>
-                <paper-input  id="search_input_doctor" label="Jméno nebo specializace" type="search">
-                </paper-input>
+        <div id="head">
+            <header class="subsection">
+                <h1 style="
+                    font-size: 30px;
+                    font-weight: bolder;
+                    color: #fff;
 
-                <paper-input  id="search_input_place" label="Město nebo ZIP" type="search">
-                </paper-input>
+                    /*text-align: left;*/
 
-                <paper-button raised id="search_button" >Hledat</paper-button>
+                ">Objednejte se online a bez čekání</h1>
+            </header>
+
+            <div class="subsection grid" style="
+            background-color: white;
+            max-width: 1100px;
+            margin: 60px auto 0 auto;
+            padding: 50px 50px;
+            box-shadow: 0px 0px 5px #727273;
+            ">
+                <section>
+                    <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search">
+                    </paper-input>
+                </section>
+
+                <section>
+                    <paper-input id="search_input_place" label="Město nebo ZIP" type="search">
+                    </paper-input>
+                </section>
+
+                <section>
+                    <custom-button style="
+                        width: 100%;
+                       ;
+                    ">
+                        <button id="search_button" type="button" style="
+                        width: 100%;
+                        height: 54px;
+                        ">
+                            Hledat</button>
+                    </custom-button>
+                </section>
 
             </div>
-        </header>
+
+        </div>
 
         <div id="content" style="height: 100vh"></div>
-
 
 
     </template>
