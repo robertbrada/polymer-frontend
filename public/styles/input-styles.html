@@ -10,6 +10,7 @@
 
             h2 {
                 font-size: 18px;
+                margin-top: 40px;
             }
 
             custom-button {
@@ -28,6 +29,40 @@
             paper-checkbox {
                 margin-top: 20px;
                 --primary-color: var(--app-primary-color);
+            }
+
+            paper-input, gold-email-input {
+                --paper-input-container-label: {
+                    font-weight: lighter;
+                };
+
+                --paper-input-container:{
+                    margin-top: 9px;
+                    margin-bottom: 9px;
+                };
+
+                --paper-input-container-underline: {
+                    background-color: #ccc;
+                    height: 1px;
+                };
+
+                --paper-input-container-underline-focus: {
+                    background-color: var(--app-accent-color);
+                    height: 3px;
+                };
+
+                --paper-input-container-label-focus: {
+                    color: var(--app-accent-color);
+                    padding-bottom: 5px;
+                };
+
+                --paper-input-container-label-floating: {
+                    padding-bottom: 5px;
+                };
+
+                --paper-input-container-input: {
+                    margin-bottom: 7px;
+                }
             }
         </style>
     </template>
