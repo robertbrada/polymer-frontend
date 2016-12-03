@@ -102,7 +102,7 @@
                                 Zpráva není povinná.</p>
                             <paper-textarea label="Zpráva pro pacienty" char-counter maxlength="400"></paper-textarea>
                             <custom-button responsive>
-                                <button type="button" on-tap="nextStep">Dokončit</button>
+                                <a href="/office/registration/confirm">Dokončit</a>
                             </custom-button>
                         </section>
                     </div>
@@ -165,10 +165,6 @@
                 if (value) {
                     this.$.phone_id.$.input.focus();
                 }
-            },
-
-            nextStep: function () {
-                this.domHost.nextStep("confirm");
             },
 
             toggleChange: function () {

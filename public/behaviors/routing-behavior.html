@@ -22,12 +22,13 @@
         _pageChanged: function (page) {
             var resolvedPageUrl = this.resolveUrl(this.viewPath + page + '-view.html');
             this.importHref(resolvedPageUrl, null, this._show404, true);
-            if(!!this.drawerOpened) {
+            if (!!this.drawerOpened) {
                 this.drawerOpened = false;
             }
         },
 
         _show404: function () {
+            this.fire('hit-404');
         },
 
 

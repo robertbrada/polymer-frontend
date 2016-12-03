@@ -3,10 +3,17 @@
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/views/office_views/registration_steps/data-view.html">
 
+<link rel="import" href="/behaviors/routing-behavior.html">
+
 <dom-module id="office-registration-view">
     <template>
+        <app-route
+                route="{{tail}}"
+                pattern="/:page"
+                data="{{routeData}}"
+                tail="{{subroute}}"></app-route>
         <iron-pages
-                selected="[[viewSelected]]"
+                selected="[[page]]"
                 attr-for-selected="name"
                 selected-attribute="visible"
                 role="main">
@@ -21,17 +28,11 @@
         Polymer({
             is: 'office-registration-view',
 
-            properties: {
-                viewSelected: {
-                    type: String,
-                    value: "data"
-                }
-            },
+            behaviors: [RoutingBehavior],
 
-            nextStep: function (viewName) {
-                this.importHref("/views/office_views/registration_steps/" + viewName + "-view.html");
-                this.viewSelected = viewName;
-            }
+            defaultPage: 'data',
+            viewPath: '/views/office_views/registration_steps/',
+
         });
     </script>
 </dom-module>
