@@ -31,54 +31,30 @@
 
             }
 
+
+            /* prepsane nektere vlastnosti naimportovane z input styles - specificke pro home-view input */
             paper-input {
                 --paper-input-container-label: {
-                    font-size: 19px;
                     font-weight: lighter;
-                };
-
-                --paper-input-container-underline: {
-                    /*display: none;*/
-                    background-color: #ccc;
-                    height: 1px;
+                    font-size: 18px;
                 };
 
                 --paper-input-container-underline-focus: {
-                    /*display: none;*/
                     background-color: var(--app-accent-color);
-                    height: 3px;
-                };
-
-                --paper-input-container-label-focus: {
-                    color: var(--app-accent-color);
+                    height: 4px;
                 };
 
                 --paper-input-container-input: {
                     margin-bottom: 7px;
-                }
+                };
             }
-
-
-
-
-            /*-webkit-transition: all .25s ease;*/
-            /*-moz-transition: all .25s ease;*/
-            /*-ms-transition: all .25s ease;*/
-            /*-o-transition: all .25s ease;*/
-            /*transition: all .25s ease;*/
-            /*}*/
 
             h1 {
                 text-align: center;
                 margin: 0 20px;
                 letter-spacing: 0.03em;
                 font-size: 30px;
-                font-weight: bolder;
                 color: #fff;
-            }
-
-            section > paper-input {
-                margin-top: 21px;
             }
 
             #search-div {
@@ -96,10 +72,16 @@
             }
 
             #search_button button {
-                height: 54px;
+                height: 64px;
                 /*width: 100px%;*/
             }
 
+            /* aby bly inputy stejne zarovnany s tlacitkem */
+            .grid > section:not(:last-child) {
+                margin-top: 12px;
+            }
+
+            /* aby mezi sekcema nebyly puvodní 80px mezery naimporotvane z layout-styles */
             .grid > section:not(:first-child) {
                 margin-left: 30px;
             }
@@ -141,8 +123,7 @@
 
             <div id="search-div" class="subsection grid">
                 <section>
-                    <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search"
-                                 focused="{{focused}}" always-float-label="[[focused]]">
+                    <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search">
                     </paper-input>
                 </section>
 
