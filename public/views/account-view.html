@@ -3,18 +3,19 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="/custom_components/custom-button.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/header-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 
 
 <dom-module id="account-view">
     <template>
-        <style include="custom-button layout-styles input-styles header-styles">
+        <style include="button-styles layout-styles input-styles header-styles">
         </style>
 
         <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
@@ -47,18 +48,14 @@
                     </paper-input>
                     <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
                                  value="[[addressData.street]]"></paper-input>
-                    <custom-button>
-                        <button id="confirm_button" type="button" on-tap="saveChanges">Uložit změny</button>
-                    </custom-button>
+                    <paper-button id="confirm_button" on-tap="saveChanges">Uložit změny</paper-button>
                 </section>
 
                 <section>
                     <h2>Změna hesla</h2>
                     <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
                         změnit.</p>
-                    <custom-button>
-                        <button type="button" on-tap="passChange">Poslat email</button>
-                    </custom-button>
+                    <paper-button on-tap="passChange">Poslat email</paper-button>
                 </section>
             </div>
         </div>

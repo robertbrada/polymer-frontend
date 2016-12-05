@@ -1,24 +1,23 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/custom_components/custom-button.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/styles/dialog-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="actionerror-view">
     <template>
-        <style include="custom-button dialog-styles">
+        <style include="button-styles dialog-styles">
         </style>
 
         <p class="main_text">Nepodařilo se potvrdit emailovou adresu. <br>
             Potvrzení je vyžadováno pro povolení obědnávání.<br>
             Můžeme Vám znovu poslat potvrzovací email.
         </p>
-        <custom-button responsive>
-            <button dialog-confirm autofocus on-tap="resendVerification">
-                Registrovat
-            </button>
-        </custom-button>
+        <paper-button responsive dialog-confirm autofocus on-tap="resendVerification">
+            Registrovat
+        </paper-button>
 
         <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>

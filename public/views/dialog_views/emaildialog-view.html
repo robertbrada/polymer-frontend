@@ -5,19 +5,18 @@
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/dialog-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="emaildialog-view">
     <template>
-        <style include="custom-button dialog-styles input-styles">
+        <style include="button-styles dialog-styles input-styles">
         </style>
 
         <p class="main_text">Na Vaší emailovou adresu byl poslán potvrzovací email.<br>
             Jakmile jej potvrdíte, budete se moci objednat.</p>
-        <custom-button responsive>
-            <button type="button" dialog-confirm autofocus>
-                Zavřít
-            </button>
-        </custom-button>
+        <button responsive dialog-confirm autofocus>
+            Zavřít
+        </button>
 
         <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>

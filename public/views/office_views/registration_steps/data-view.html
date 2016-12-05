@@ -10,16 +10,16 @@
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
-
-<link rel="import" href="/custom_components/custom-button.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/header-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="data-view">
     <template>
-        <style include="custom-button layout-styles input-styles header-styles">
+        <style include="button-styles layout-styles input-styles header-styles">
             :host {
                 --iron-collapse-transition-duration: 600ms;
             }
@@ -30,9 +30,7 @@
                 <span>Tyto údaje můžete později změnit v nastavení</span>
             </header>
 
-            <custom-button>
-                <button id="step1_button" type="button" on-tap="toggleChange">Krok 1</button>
-            </custom-button>
+            <paper-button id="step1_button" type="button" on-tap="toggleChange">Krok 1</paper-button>
             <hr>
 
             <iron-collapse opened="[[collapse]]">
@@ -69,9 +67,7 @@
                     </section>
                 </div>
             </iron-collapse>
-            <custom-button>
-                <button id="step2_button" type="button" on-tap="toggleChange">Další krok</button>
-            </custom-button>
+            <paper-button id="step2_button" on-tap="toggleChange">Další krok</paper-button>
             <hr>
             <iron-collapse opened="[[!collapse]]">
                 <template is="dom-if" if="[[renderStep2]]">
@@ -104,9 +100,10 @@
                                 pacientům.
                                 Zpráva není povinná.</p>
                             <paper-textarea label="Zpráva pro pacienty" char-counter maxlength="400"></paper-textarea>
-                            <custom-button responsive>
-                                <a href="/office/registration/confirm">Dokončit</a>
-                            </custom-button>
+                            <paper-button responsive>
+                                Dokončit
+                            </paper-button>
+                            <!--<a href="/office/registration/confirm">Dokončit</a>-->
                         </section>
                     </div>
                 </template>
@@ -155,18 +152,6 @@
                 renderStep2: {
                     type: Boolean,
                     value: false
-                }
-            },
-
-            _onDevChecked: function (value) {
-                if (value) {
-                    this.$.id_input_id.$.input.focus();
-                }
-            },
-
-            _onPhoneChecked: function (value) {
-                if (value) {
-                    this.$.phone_id.$.input.focus();
                 }
             },
 

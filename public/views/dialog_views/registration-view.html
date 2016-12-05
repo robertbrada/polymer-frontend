@@ -7,17 +7,18 @@
 <!--TODO: shouldn't be necessary-->
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
-<link rel="import" href="/custom_components/custom-button.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/behaviors/input-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 <link rel="import" href="/styles/dialog-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 
 <dom-module id="registration-view">
     <template>
-        <style include="custom-button dialog-styles input-styles">
+        <style include="button-styles dialog-styles input-styles">
         </style>
         <firebase-document id="document" app-name="doctor-appointment-system">
         </firebase-document>
@@ -40,12 +41,10 @@
             <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
         </paper-input>
 
-        <custom-button responsive>
-            <button id="confirm_button" type="button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword"
-                    disabled>
-                Registrovat
-            </button>
-        </custom-button>
+        <paper-button responsive id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword"
+                      disabled>
+            Registrovat
+        </paper-button>
 
         <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>

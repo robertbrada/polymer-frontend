@@ -2,8 +2,7 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
-
-<link rel="import" href="/custom_components/custom-button.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <!--icons-->
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
@@ -12,10 +11,11 @@
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/header-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="home-view">
     <template>
-        <style include="custom-button input-styles layout-styles header-styles">
+        <style include="button-styles input-styles layout-styles header-styles">
             :host {
                 display: block;
             }
@@ -135,12 +135,10 @@
                 </section>
 
                 <section>
-                    <custom-button id="search_button">
-                        <button type="button">
-                            <iron-icon icon="search"></iron-icon>
-                            Hledat
-                        </button>
-                    </custom-button>
+                    <paper-button id="search_button">
+                        <iron-icon icon="search"></iron-icon>
+                        Hledat
+                    </paper-button>
                 </section>
 
             </div>
