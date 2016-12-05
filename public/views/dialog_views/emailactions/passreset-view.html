@@ -6,7 +6,7 @@
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
-<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/behaviors/dialog-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 <link rel="import" href="/styles/dialog-styles.html">
@@ -24,8 +24,7 @@
                      minlength="6" maxlength="48" error-message="Moc krátké" on-blur="checkIfValid">
             <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
         </paper-input>
-        <paper-button responsive id="confirm_button" dialog-confirm autofocus on-tap="resetPassword"
-                      disabled>
+        <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
             Změnit heslo
         </paper-button>
 
@@ -36,13 +35,18 @@
         Polymer({
             is: 'passreset-view',
 
-            behaviors: [InputValidationBehavior, PassVisibilityBehavior],
+            behaviors: [DialogValidationBehavior, PassVisibilityBehavior],
 
             validationIDs: ["passID"],
+
+            confirmFunction: function () {
+                return this.resetPassword.bind(this);
+            },
 
             resetPassword: function () {
                 var auth = document.getElementById('appID').app.auth();
                 auth.confirmPasswordReset(this.$.meta.byKey('actionCode'), this.password).then(function () {
+                    // TODO: bug fix. Following toast doesn't show.
                     this.fire("show-toast", {text: "Heslo změněno"});
                 }.bind(this)).catch(function (error) {
                     console.log(error);

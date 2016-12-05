@@ -2,7 +2,7 @@
 
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/behaviors/dialog-validation-behavior.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/styles/input-styles.html">
@@ -22,8 +22,7 @@
                           on-blur="checkIfValid">
         </gold-email-input>
 
-        <paper-button responsive id="confirm_button" dialog-confirm autofocus on-tap="sendEmail"
-                      disabled>
+        <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
             Poslat
         </paper-button>
 
@@ -34,9 +33,13 @@
         Polymer({
             is: 'emailinput-view',
 
-            behaviors: [InputValidationBehavior],
+            behaviors: [DialogValidationBehavior],
 
             validationIDs: ["emailID"],
+
+            confirmFunction: function () {
+                this.sendEmail();
+            },
 
             sendEmail: function () {
                 var app = document.getElementById('appID').app;
@@ -46,7 +49,6 @@
                     this.errorMessage = "Účet s touto emailovou adresou neexistuje";
                     this.fire("show-dialog", {path: "", viewName: "emailinput", open: true});
                 }.bind(this))
-
             }
         });
     </script>

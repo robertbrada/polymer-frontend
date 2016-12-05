@@ -36,11 +36,11 @@
                 <section>
                     <h2>Základní informace</h2>
                     <paper-input id="fninput" label="Jméno" minlength="1" maxlength="20"
-                                 error-message="Nelze ponechat prázdné" auto-validate required
-                                 on-input="checkIfValid" value="[[nameData.firstName]]"></paper-input>
-                    <paper-input id="lninput" label="Příjmení" minlength="1"
-                                 maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
-                                 required on-input="checkIfValid" value="[[nameData.lastName]]"></paper-input>
+                                 error-message="Nelze ponechat prázdné" required auto-validate
+                                 value="[[nameData.firstName]]"></paper-input>
+                    <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
+                                 maxlength="80" error-message="Nelze ponechat prázdné"
+                                 required value="[[nameData.lastName]]"></paper-input>
                     <h2>Adresa</h2>
                     <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
                         V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
@@ -48,7 +48,7 @@
                     </paper-input>
                     <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
                                  value="[[addressData.street]]"></paper-input>
-                    <paper-button id="confirm_button" on-tap="saveChanges">Uložit změny</paper-button>
+                    <paper-button id="confirm_button" on-tap="confirm">Uložit změny</paper-button>
                 </section>
 
                 <section>
@@ -83,6 +83,12 @@
                     type: Object,
                     observer: 'checkIfValid'
                 },
+            },
+
+            confirm: function () {
+                if (this.checkIfValid()) {
+                    this.saveChanges();
+                }
             },
 
             passChange: function () {

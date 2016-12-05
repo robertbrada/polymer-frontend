@@ -9,7 +9,7 @@
 
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
-<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/behaviors/dialog-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 <link rel="import" href="/styles/dialog-styles.html">
@@ -25,24 +25,19 @@
 
         <p class="error">{{errorMessage}}</p>
         <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
-                     error-message="Nelze ponechat prázdné" auto-validate required
-                     on-input="checkIfValid"></paper-input>
+                     error-message="Nelze ponechat prázdné" auto-validate required></paper-input>
         <paper-input id="lninput" label="Příjmení" minlength="1"
-                     maxlength="80" error-message="Nelze ponechat prázdné" auto-validate
-                     required on-input="checkIfValid"></paper-input>
+                     maxlength="80" error-message="Nelze ponechat prázdné" auto-validate required></paper-input>
         <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                          label="Vaše emailová adresa" auto-validate required
-                          on-input="checkIfValid"></gold-email-input>
+                          label="Vaše emailová adresa" auto-validate required></gold-email-input>
 
         <!--TODO: remove inconsistent space above the input-->
         <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate
-                     type="password"
-                     minlength="6" maxlength="48" error-message="Moc krátké" on-input="checkIfValid">
+                     type="password" minlength="6" maxlength="48" error-message="Moc krátké">
             <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
         </paper-input>
 
-        <paper-button responsive id="confirm_button" dialog-confirm autofocus on-tap="createUserWithEmailAndPassword"
-                      disabled>
+        <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
             Registrovat
         </paper-button>
 
@@ -53,9 +48,13 @@
         Polymer({
             is: 'registration-view',
 
-            behaviors: [InputValidationBehavior, PassVisibilityBehavior],
+            behaviors: [DialogValidationBehavior, PassVisibilityBehavior],
 
             validationIDs: ["fninput", "lninput", "emailID", "passID"],
+
+            confirmFunction: function () {
+                this.createUserWithEmailAndPassword();
+            },
 
             createUserWithEmailAndPassword: function () {
                 var app = document.getElementById('appID').app;

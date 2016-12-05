@@ -9,7 +9,7 @@
 <link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
-<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/behaviors/dialog-validation-behavior.html">
 
 
 <dom-module id="login-view">
@@ -35,32 +35,26 @@
             }
 
         </style>
-        <div>
-            <p class="error">{{errorMessage}}</p>
+        <p class="error">{{errorMessage}}</p>
 
-            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                              label="Vaše emailová adresa" on-blur="checkIfValid">
-            </gold-email-input>
-            <paper-input id="passID" value="{{password}}" label="Heslo" type="password" on-blur="checkIfValid"
-                         error-message="Neplatné heslo" minlength="6" maxlength="48">
-            </paper-input>
+        <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                          label="Vaše emailová adresa" required>
+        </gold-email-input>
+        <paper-input id="passID" value="{{password}}" label="Heslo" type="password"
+                     error-message="Neplatné heslo" minlength="6" maxlength="48" required>
+        </paper-input>
 
-        </div>
-        <div class="buttons">
+        <button id="lost_pass" on-tap="passReset">
+            <span>Zapomněli jste heslo?</span>
+        </button>
 
-            <button id="lost_pass" on-tap="passReset" class="nostyle">
-                <span>Zapomněli jste heslo?</span>
-            </button>
+        <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
+            Přihlásit
+        </paper-button>
 
-            <paper-button responsive id="confirm_button" dialog-confirm autofocus
-                          on-tap="signInWithEmailAndPassword" disabled>
-                Přihlásit
-            </paper-button>
-
-            <button id="reg_button" on-tap="showRegistration" class="nostyle">
-                <span>Ještě nemáte účet? <b>Zaregistrujte se!</b></span>
-            </button>
-        </div>
+        <button id="reg_button" on-tap="showRegistration">
+            <span>Ještě nemáte účet? <b>Zaregistrujte se!</b></span>
+        </button>
 
         <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
 
@@ -70,9 +64,14 @@
         Polymer({
             is: 'login-view',
 
-            behaviors: [InputValidationBehavior],
+            behaviors: [DialogValidationBehavior],
 
             validationIDs: ["emailID", "passID"],
+
+            // TODO: there should be a simpler way
+            confirmFunction: function () {
+                this.signInWithEmailAndPassword();
+            },
 
             signInWithEmailAndPassword: function () {
                 // TODO: find a way to get reference without avoding the shadow dom

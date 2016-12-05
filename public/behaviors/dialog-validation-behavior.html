@@ -1,0 +1,16 @@
+<link rel="import" href="input-validation-behavior.html">
+
+<script>
+    DialogValidationBehaviorImpl = {
+        confirmFunction: function () {},
+
+        confirm: function () {
+            if (this.checkIfValid()) {
+                this.domHost.$.dialogID.close();
+                this.confirmFunction();
+            }
+        }
+    }
+
+    DialogValidationBehavior = [InputValidationBehavior, DialogValidationBehaviorImpl];
+</script>
