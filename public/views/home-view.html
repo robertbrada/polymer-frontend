@@ -72,8 +72,8 @@
             }
 
             /*paper-button {*/
-                /*margin: 0 auto;*/
-                /*text-align: center;*/
+            /*margin: 0 auto;*/
+            /*text-align: center;*/
             /*}*/
 
             /* aby bly inputy stejne zarovnany s tlacitkem */
@@ -128,14 +128,13 @@
             <div id="search-div" class="subsection grid">
                 <section>
                     <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search"
-                                 autofocus on-focus="click" on-click="click" on-blur="blur">
+                                 autofocus focused="{{focused1}}" always-float-label="[[focused1]]">
                     </paper-input>
                 </section>
 
                 <section>
                     <paper-input id="search_input_place" label="Město nebo PSČ" type="search"
-                                 on-click="click1" on-blur="blur1"
-                    >
+                                 focused="{{focused2}}" always-float-label="[[focused2]]">
                     </paper-input>
                 </section>
 
@@ -154,29 +153,7 @@
     </template>
     <script>
         Polymer({
-            is: 'home-view',
-
-
-            /* TODO  Je to blbost, nedokázal jsem zjistit jak obecne zavolat "click" a "blur" pro ID zafocusovaneho inputu */
-
-//          document.activeElement
-
-            click: function () {
-                this.$.search_input_doctor.alwaysFloatLabel = true;
-            },
-
-            blur: function () {
-                this.$.search_input_doctor.alwaysFloatLabel = false;
-            },
-
-            click1: function () {
-                this.$.search_input_place.alwaysFloatLabel = true;
-            },
-
-            blur1: function () {
-                this.$.search_input_place.alwaysFloatLabel = false;
-            }
-
+            is: 'home-view'
         });
     </script>
 </dom-module>
