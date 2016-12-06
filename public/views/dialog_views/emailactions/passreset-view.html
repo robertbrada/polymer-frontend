@@ -20,11 +20,10 @@
 
         <p>Prosím zadejte nové heslo:</p>
         <paper-input id="passID" value="{{password}}" label="Nové heslo" required auto-validate
-                     type="password"
-                     minlength="6" maxlength="48" error-message="Moc krátké" on-blur="checkIfValid">
+                     type="password" autofocus minlength="6" maxlength="48" error-message="Moc krátké">
             <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
         </paper-input>
-        <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
+        <paper-button responsive id="confirm_button" on-tap="confirm">
             Změnit heslo
         </paper-button>
 

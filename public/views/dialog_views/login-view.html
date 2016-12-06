@@ -37,8 +37,9 @@
         </style>
         <p class="error">{{errorMessage}}</p>
 
+        <!--TODO: bug fix of faulty autofocus-->
         <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                          label="Vaše emailová adresa" required>
+                          label="Vaše emailová adresa" required autofocus>
         </gold-email-input>
         <paper-input id="passID" value="{{password}}" label="Heslo" type="password"
                      error-message="Neplatné heslo" minlength="6" maxlength="48" required>
@@ -48,7 +49,7 @@
             <span>Zapomněli jste heslo?</span>
         </button>
 
-        <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
+        <paper-button responsive id="confirm_button" on-tap="confirm">
             Přihlásit
         </paper-button>
 

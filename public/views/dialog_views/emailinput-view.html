@@ -18,8 +18,7 @@
         <p class="error">{{errorMessage}}</p>
         <p class="main_text">Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:</p>
         <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                          label="Vaše emailová adresa" auto-validate required
-                          on-blur="checkIfValid">
+                          label="Vaše emailová adresa" auto-validate required autofocus>
         </gold-email-input>
 
         <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
