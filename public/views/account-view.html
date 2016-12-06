@@ -36,9 +36,9 @@
                 <section>
                     <h2>Základní informace</h2>
                     <paper-input id="fninput" label="Jméno" minlength="1" maxlength="20"
-                                 error-message="Nelze ponechat prázdné" required auto-validate
+                                 error-message="Nelze ponechat prázdné" required
                                  value="[[nameData.firstName]]"></paper-input>
-                    <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
+                    <paper-input id="lninput" label="Příjmení" minlength="1"
                                  maxlength="80" error-message="Nelze ponechat prázdné"
                                  required value="[[nameData.lastName]]"></paper-input>
                     <h2>Adresa</h2>
@@ -71,18 +71,10 @@
 
             properties: {
 
-                user: {
-                    type: Object,
-                },
+                user: Object,
+                addressData: Object,
+                nameData: Object
 
-                addressData: {
-                    type: Object,
-                },
-
-                nameData: {
-                    type: Object,
-                    observer: 'checkIfValid'
-                },
             },
 
             confirm: function () {

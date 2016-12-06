@@ -30,7 +30,7 @@
                 <span>Tyto údaje můžete později změnit v nastavení</span>
             </header>
 
-            <paper-button id="step1_button" type="button" on-tap="toggleChange">Krok 1</paper-button>
+            <paper-button id="step1_button" type="button" on-tap="toggleChange" disabled>Krok 1</paper-button>
             <hr>
 
             <iron-collapse opened="[[collapse]]">
@@ -100,7 +100,7 @@
                                 pacientům.
                                 Zpráva není povinná.</p>
                             <paper-textarea label="Zpráva pro pacienty" char-counter maxlength="400"></paper-textarea>
-                            <paper-button responsive>
+                            <paper-button responsive on-tap="finish">
                                 Dokončit
                             </paper-button>
                             <!--<a href="/office/registration/confirm">Dokončit</a>-->
@@ -155,10 +155,23 @@
                 }
             },
 
+            finish: function () {
+                console.log("finish");
+            },
+
             toggleChange: function () {
                 this.renderStep2 = true;
-                this.$.step2_button.innerHTML = (this.collapse) ? "Krok2" : "Další krok";
-                this.$.step1_button.innerHTML = (this.collapse) ? "Upravit krok 1" : "Krok1";
+                if (this.collapse) {
+                    this.$.step2_button.innerHTML = "Krok2";
+                    this.$.step2_button.disabled = true;
+                    this.$.step1_button.innerHTML = "Upravit krok 1";
+                    this.$.step1_button.disabled = false;
+                } else {
+                    this.$.step2_button.innerHTML = "Další krok";
+                    this.$.step2_button.disabled = false;
+                    this.$.step1_button.innerHTML = "Krok1";
+                    this.$.step1_button.disabled = true;
+                }
                 this.collapse = !this.collapse;
             }
         });
