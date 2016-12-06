@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-dialog-behavior/paper-dialog-common.css">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/dialog-styles.html">
@@ -65,9 +66,22 @@
         Polymer({
             is: 'login-view',
 
-            behaviors: [DialogValidationBehavior],
+            behaviors: [DialogValidationBehavior, Polymer.IronA11yKeysBehavior],
 
             validationIDs: ["emailID", "passID"],
+
+            properties: {
+                keyEventTarget: {
+                    type: Object,
+                    value: function () {
+                        return document.body;
+                    }
+                }
+            },
+
+            keyBindings: {
+                'enter:keypress': 'confirm',
+            },
 
             // TODO: there should be a simpler way
             confirmFunction: function () {
