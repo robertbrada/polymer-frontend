@@ -30,7 +30,9 @@
                 <span>Tyto údaje můžete později změnit v nastavení</span>
             </header>
 
-            <paper-button id="step1_button" type="button" on-tap="toggleChange" disabled>Krok 1</paper-button>
+            <paper-button id="step1_button" type="button" on-tap="toggleChange" disabled="[[collapse]]">
+                [[_computeButtonText(collapse, 1)]]
+            </paper-button>
             <hr>
 
             <iron-collapse opened="[[collapse]]">
@@ -67,7 +69,9 @@
                     </section>
                 </div>
             </iron-collapse>
-            <paper-button id="step2_button" on-tap="toggleChange">Další krok</paper-button>
+            <paper-button id="step2_button" on-tap="toggleChange" disabled="[[!collapse]]">
+                [[_computeButtonText(collapse, 2)]]
+            </paper-button>
             <hr>
             <iron-collapse opened="[[!collapse]]">
                 <template is="dom-if" if="[[renderStep2]]">
@@ -159,19 +163,16 @@
                 console.log("finish");
             },
 
+            _computeButtonText: function (collapse, index) {
+                if (collapse) {
+                    return (index == 1) ? "Krok1" : "Další krok";
+                } else {
+                    return (index == 1) ? "Upravit krok 1" : "Krok2";
+                }
+            },
+
             toggleChange: function () {
                 this.renderStep2 = true;
-                if (this.collapse) {
-                    this.$.step2_button.innerHTML = "Krok2";
-                    this.$.step2_button.disabled = true;
-                    this.$.step1_button.innerHTML = "Upravit krok 1";
-                    this.$.step1_button.disabled = false;
-                } else {
-                    this.$.step2_button.innerHTML = "Další krok";
-                    this.$.step2_button.disabled = false;
-                    this.$.step1_button.innerHTML = "Krok1";
-                    this.$.step1_button.disabled = true;
-                }
                 this.collapse = !this.collapse;
             }
         });
