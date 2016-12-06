@@ -40,13 +40,12 @@
             validationIDs: ["passID"],
 
             confirmFunction: function () {
-                return this.resetPassword.bind(this);
+                this.resetPassword();
             },
 
             resetPassword: function () {
                 var auth = document.getElementById('appID').app.auth();
                 auth.confirmPasswordReset(this.$.meta.byKey('actionCode'), this.password).then(function () {
-                    // TODO: bug fix. Following toast doesn't show.
                     this.fire("show-toast", {text: "Heslo změněno"});
                 }.bind(this)).catch(function (error) {
                     console.log(error);
