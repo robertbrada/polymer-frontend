@@ -40,13 +40,14 @@
 
                     <section>
                         <h2>Adresa</h2>
-                        <paper-input id="cinput" label="Město" minlength="1" maxlength="20">
+                        <paper-input id="cinput" label="Město" value="{{officeData.address.city}}"
+                                     minlength="1" maxlength="20">
                         </paper-input>
-                        <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1"
-                                     maxlength="80"></paper-input>
+                        <paper-input id="sinput" label="Ulice a číslo popisné" value="{{officeData.address.street}}"
+                                     minlength="1" maxlength="80"></paper-input>
                         <h2>Vaše specializace</h2>
                         <paper-dropdown-menu label="Specializace">
-                            <paper-listbox class="dropdown-content">
+                            <paper-listbox class="dropdown-content" selected="{{officeData.specialization}}">
                                 <template is="dom-repeat" items="[[specializations]]" as="entry">
                                     <paper-item>[[entry]]</paper-item>
                                 </template>
@@ -55,17 +56,21 @@
                         <h2>Délka návštěvy</h2>
                         <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních hodin
                             určíme objednávací časy.</p>
-                        <paper-input type="number" label="Délka návštěvy" min="1" max="360" value="20">
+                        <paper-input type="number" label="Délka návštěvy" min="1" max="360"
+                                     value="{{officeData.visitLength}}">
                             <div suffix>min</div>
                         </paper-input>
                     </section>
                     <section>
                         <h2>Ordinační hodiny</h2>
-                        <template is="dom-repeat" items="[[days]]" as="entry">
+                        <template is="dom-repeat" items="[[officeData.officeHours]]" as="entry">
                             <div class="row">
-                                <paper-checkbox checked="{{entry.checked}}">[[entry.name]]</paper-checkbox>
+                                <paper-checkbox checked="{{entry.checked}}">[[_getDayName(entry.dayIndex)]]
+                                </paper-checkbox>
                             </div>
-                            <paper-input hidden="[[!entry.checked]]" prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
+                            <paper-input hidden="[[!entry.checked]]" value="{{entry.hours}}"
+                                         placeholder="07:30-12:30,13:30-15:30"
+                                         prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
                         </template>
                     </section>
                 </div>
@@ -82,29 +87,47 @@
                             <p>Zaškrtněte, pokud si přejete přidat zařízení v čekárně, které slouží k zařazení pacientů,
                                 kteří se neobjednali online případně po telefonu.
                             </p>
-                            <paper-checkbox checked="{{device_checked}}">Přidat zařízení</paper-checkbox>
-                            <p hidden="[[!device_checked]]">V krabičce u zařízení jsme Vám poslali papírek
+                            <paper-checkbox checked="{{officeData.device.enabled}}">Přidat zařízení</paper-checkbox>
+                            <p hidden="[[!officeData.device.enabled]]">V krabičce u zařízení jsme Vám poslali papírek
                                 na kterém je napsán identifikátor. Tuto sekvenci znaků prosím opište do políčka
                                 níže:</p>
-                            <paper-input id="id_input_id" label="Identifikátor"
-                                         hidden="[[!device_checked]]"></paper-input>
+                            <paper-input id="id_input_id" label="Identifikátor" value="{{officeData.device.deviceID}}"
+                                         hidden="[[!officeData.device.enabled]]"></paper-input>
                             <h2>Vřejné informace profilu</h2>
                             <p>Zaškrtněte prosím, které informace si přejete zobrazit u Vašeho profilu.</p>
                             <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím zaškrtněte tuto
                                 možnost:</p>
-                            <paper-checkbox checked="{{phone_number_checked}}">Telefonní číslo</paper-checkbox>
-                            <paper-input id="phone_id" label="Telefonní číslo" hidden="[[!phone_number_checked]]">
+                            <div class="row">
+                                <paper-checkbox checked="{{officeData.phoneNumber.visible}}">Telefonní číslo
+                                </paper-checkbox>
+                            </div>
+                            <paper-input id="phone_id" label="Telefonní číslo" value="{{officeData.phoneNumber.number}}"
+                                         hidden="[[!officeData.phoneNumber.visible]]">
                             </paper-input>
-                            <paper-checkbox checked="{{email_checked}}">Email</paper-checkbox>
-                            <gold-email-input id="email_id" label="Email"
-                                              hidden="[[!email_checked]]"></gold-email-input>
+                            <div class="row">
+                                <paper-checkbox checked="{{officeData.email.visible}}">Email</paper-checkbox>
+                            </div>
+                            <gold-email-input id="email_id" label="Email" value="{{officeData.email.address}}"
+                                              hidden="[[!officeData.email.visible]]"></gold-email-input>
                         </section>
                         <section>
+                            <h2>Klientela</h2>
+                            <p>Checkbox níže zaškrtněte pokud máte omezenou klientelu.</p>
+                            <paper-checkbox checked="{{officeData.limitedClientele}}">Omezená klientela</paper-checkbox>
+                            <p hidden="[[!officeData.limitedClientele]]">Při zaškrtnutí omezené klientely si pacient
+                                před
+                                prvním objednáním
+                                v našem systému zažádá o potvrzení. Vám poté přijde zpráva s žádostí o potvrzení. Ve
+                                zprávě
+                                uvidíte pacientovi osobní údaje (jméno, adresa), na základě kterých umožníte pacientovi
+                                objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
+                            </p>
                             <h2>Text pro pacienty</h2>
                             <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu
                                 pacientům.
                                 Zpráva není povinná.</p>
-                            <paper-textarea label="Zpráva pro pacienty" char-counter maxlength="400"></paper-textarea>
+                            <paper-textarea label="Zpráva pro pacienty" value="{{officeData.patientText}}"
+                                            char-counter maxlength="400"></paper-textarea>
                             <paper-button responsive on-tap="finish">
                                 Dokončit
                             </paper-button>
@@ -125,18 +148,6 @@
                     type: Boolean,
                     value: true
                 },
-                days: {
-                    type: Array,
-                    value: [
-                        {'name': 'Pondělí', 'checked': true},
-                        {'name': 'Úterý', 'checked': true},
-                        {'name': 'Středa', 'checked': true},
-                        {'name': 'Čtvrtek', 'checked': true},
-                        {'name': 'Pátek', 'checked': true},
-                        {'name': 'Sobota', 'checked': false},
-                        {'name': 'Neděle', 'checked': false}
-                    ]
-                },
 
                 specializations: {
                     type: Array,
@@ -144,24 +155,58 @@
                     value: ['Zubař', 'Rektálník', 'Gynekolog']
                 },
 
-                device_checked: {
-                    type: Boolean,
-                    observer: '_onDevChecked'
-                },
-
-                phone_number_checked: {
-                    type: Boolean,
-                    observer: '_onPhoneChecked'
-                },
-
                 renderStep2: {
                     type: Boolean,
                     value: false
+                },
+
+                officeData: {
+                    type: Object,
+                    value: {
+                        address: {
+                            city: "",
+                            street: ""
+                        },
+                        specialization: -1,
+                        visitLength: 20,
+                        device: {
+                            enabled: false,
+                            deviceID: ""
+                        },
+                        phoneNumber: {
+                            visible: false,
+                            number: ""
+                        },
+                        email: {
+                            visible: false,
+                            address: ""
+                        },
+                        limitedClientele: false,
+                        patientText: "",
+                        officeHours: [
+                            {dayIndex: 0, 'checked': true, hours: ''},
+                            {dayIndex: 1, 'checked': true, hours: ''},
+                            {dayIndex: 2, 'checked': true, hours: ''},
+                            {dayIndex: 3, 'checked': true, hours: ''},
+                            {dayIndex: 4, 'checked': true, hours: ''},
+                            {dayIndex: 5, 'checked': false, hours: ''},
+                            {dayIndex: 6, 'checked': false, hours: ''}
+                        ]
+                    }
+                },
+
+                days: {
+                    type: Array,
+                    value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
                 }
             },
 
+            _getDayName: function (dayIndex) {
+                return (this.days[dayIndex]);
+            },
+
             finish: function () {
-                console.log("finish");
+                console.log(this.officeData);
             },
 
             _computeButtonText: function (collapse, index) {
