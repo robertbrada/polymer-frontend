@@ -65,6 +65,7 @@
                             <div class="row">
                                 <paper-checkbox checked="{{entry.checked}}">[[entry.name]]</paper-checkbox>
                             </div>
+                            <paper-input hidden="[[!entry.checked]]" prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
                         </template>
                     </section>
                 </div>
