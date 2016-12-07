@@ -1,18 +1,173 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+
+
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/device-icons.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
+<link rel="import" href="/styles/button-styles.html">
+
 <dom-module id="docinfo-view">
     <template>
-        <style>
+        <style include="button-styles layout-styles input-styles header-styles">
             :host {
                 display: block;
 
                 padding: 10px 20px;
             }
 
+            .grid {
+                text-align: center;
+            }
+
+            .main-frame {
+                max-width: 1350px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .grid > section p {
+                padding: 0 60px 40px 60px;
+            }
+
+
+            .grid > section {
+                text-align: center;
+                margin: 20px 0 30px 0;
+            }
+
+            section h1 {
+                padding-left: 60px;
+            }
+
+
+            .grid > section:not(:first-child) {
+                margin-left: 0;
+                border-left: 1px solid #ccc;
+            }
+
+            @media (max-width: 767px) {
+
+                .grid {
+                    display: block;
+                    margin-top: 0;
+                }
+
+                .grid > section:not(:first-child) {
+                    margin-left: 0;
+                    border-left: none;
+                }
+
+                section h1 {
+                    padding-left: 0;
+                }
+
+                .grid > section p {
+                    padding: 0 0px 40px 0px;
+                }
+            }
+
+            iron-icon {
+                height: 50px;
+                width: 50px;
+                color: var(--app-accent-color);
+            }
+
+            .grid section > p {
+                text-align: left;
+                font-size: 16px;
+            }
+
+            #presentation section {
+                min-height: 350px;
+                /*background-color: #eee;*/
+            }
+
+
         </style>
 
-        TODO: informace pro doktory<br>
-        <a href="/office/registration/data">Přidat ordinaci</a>
+        <div class="main-frame">
+            <!--style="border-bottom: 1px solid #ddd"-->
+
+            <section class="grid">
+                <section>
+                    <iron-icon icon="device:dvr"></iron-icon>
+                    <h2>Mějte přehled</h2>
+                    <p>
+                        S naším řešením budete mít dokonalý přehled o svých pacientech. Uvidíte, kdo čeká ve frontě, kdo
+                        je
+                        objednaný,...
+                    </p>
+                </section>
+
+                <section>
+                    <iron-icon icon="device:access-time"></iron-icon>
+                    <h2>Šetřete čas</h2>
+                    <p>
+                        Díky našemu objednávacímu systému nemusíte vyřizovat objednávky. Vaši pacienti se objednají sami
+                        a
+                        vy tak máte čas na...
+                    </p>
+                </section>
+
+                <section>
+                    <iron-icon icon="face"></iron-icon>
+                    <h2>Komunikace</h2>
+                    <p>
+                        S naším řešením budete mít dokonalý přehled o svých pacientech. Uvidíte, kdo čeká ve frontě, kdo
+                        je
+                        objednaný,...
+                    </p>
+                </section>
+            </section>
+        </div>
+
+        <div id="presentation">
+            <section class="main-frame grid" style="background-color: #172C50; color: white;  margin-top: 0; padding-top: 50px; padding-bottom: 30px">
+                <section style="text-align: left;  padding-bottom: 0">
+                    <h1 style="font-size: 24px;">Online objednání a pořadník v čekárně</h1>
+                    <p>Ačkoli finanční podmínky služby v Arnstadtu byly dobré, Bach se často dostával do konfliktu s
+                        tamní konzistoří. Kromě zmíněného svévolného prodloužení studijního pobytu u Buxtehuda nebo
+                        stížnosti na to, že Bach dovolil přístup na kůr „cizí dívce“, snad své budoucí ženě, šlo
+                        především o to, že Bachova novátorská a emotivní hudba působila na místní posluchače rušivě a
+                        rozptylovala je při bohoslužbě.</p>
+                </section>
+                <section style="border: none;">
+                    <img src="../images/mac.png" style="max-width: 350px; height: auto; width: 85%">
+                </section>
+            </section>
+
+            <h1 style="text-align: center; margin-top: 50px">Zaregitrujte se se využívejte naše služby</h1>
+
+            <div style="max-width: 450px; margin: 50px auto">
+
+                <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
+                             ></paper-input>
+                <paper-input id="lninput" label="Příjmení" minlength="1"
+                            ></paper-input>
+                <gold-email-input id="emailID"
+                                  label="Vaše emailová adresa" ></gold-email-input>
+
+                <paper-input id="passID" value="{{password}}" label="Heslo"
+                             type="password" minlength="6" maxlength="48" >
+                    <paper-icon-button icon="[[eyeIcon]]" suffix></paper-icon-button>
+                </paper-input>
+
+                <a href="/office/registration/data" style="text-decoration: none; ">
+                    <paper-button
+                            style="background-color: #172C50; border-color: #172C50; color: white; margin-top: 40px; height: 62px; width: 100%">Zaregistrovat
+                    </paper-button>
+                </a>
+            </div>
+        </div>
     </template>
 
     <script>
