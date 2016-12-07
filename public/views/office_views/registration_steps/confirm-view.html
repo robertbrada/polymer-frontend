@@ -1,13 +1,43 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="../../docprofile-view.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="confirm-view">
     <template>
-        TODO: zobrazit profil
+        <style include="button-styles layout-styles header-styles">
+        </style>
+        <div class="main-frame">
+            <header class="subsection">
+                <h1>Výsledná podoba profilu</h1>
+                <span>Dole můžete potvrdit registraci</span>
+            </header>
+            <docprofile-view office-data="[[officeData]]"></docprofile-view>
+            <div class="subsection grid">
+                <section>
+                    <paper-button on-tap="modifyOffice">Upravit</paper-button>
+                </section>
+                <section>
+                    <paper-button on-tap="registerOffice">Registrovat</paper-button>
+                </section>
+            </div>
+        </div>
     </template>
 
     <script>
         Polymer({
             is: 'confirm-view',
+
+            registerOffice: function () {
+                console.log("Registrovat");
+            },
+
+            modifyOffice: function () {
+                this.fire('change-route', {url: '/office/registration/data'});
+            }
         });
     </script>
 </dom-module>

@@ -3,12 +3,12 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 
 <!--icons-->
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../bower_components/google-map/google-map.html">
-<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -157,6 +157,9 @@
 
         </style>
 
+        <!--TODO: app wide vairables-->
+        <iron-media-query query="max-width: 767px" query-matches="{{smallScreen}}"></iron-media-query>
+
         <div class="main-frame">
 
             <header class="subsection">
@@ -164,38 +167,34 @@
                     <section>
                         <ul>
                             <li><img id="profile-photo"></li>
-                            <li><h2 id="name">Jaromír Nohavica</h2>
-                                <span>Dermatolog, Stomatolog</span></li>
+                            <li><h2 id="name">[[_formatName(officeData.name)]]</h2>
+                                <span>[[_getSpecialization(officeData.specialization)]]</span></li>
                         </ul>
                     </section>
 
                     <section id="info-section">
                         <p>
                             <iron-icon icon="maps:place"></iron-icon>
-                            Kardinála Berana 19
-                        <p id="address-city">Brandýs nad Labem</p>
+                            [[officeData.address.street]]
+                        <p id="address-city">[[officeData.address.city]]</p>
                         </p>
 
-                        <p>
+                        <p hidden="[[!officeData.phoneNumber.visible]]">
                             <iron-icon icon="communication:phone"></iron-icon>
-                            726 984 557
+                            [[officeData.phoneNumber.number]]
                         </p>
 
-                        <p>
+                        <p hidden="[[!officeData.email.visible]]">
                             <iron-icon icon="communication:email"></iron-icon>
-                            lekaruvmail@gmail.com
+                            [[officeData.email.address]]
                         </p>
 
                         <!--TODO: Objevení dialogu s popisem po najetí myší nad text. -->
 
-                        <p id="order-info">
+                        <p id="order-info" hidden="[[!officeData.limitedClientele]]">
                             <iron-icon icon="info"></iron-icon>
                             Lékař má omezenou klientelu
                         </p>
-                        <!--Takhle se řeší ty vysvětlivky v polymeru.-->
-                        <!--Asi to nebude potřeba, když nebudou potvrzení, tak se místo kalendáře zobrazí-->
-                        <!--tlačítko potvrdit + vysvětlivky.-->
-                        <paper-tooltip for="order-info">vysvetleni potvrzeni</paper-tooltip>
                     </section>
                 </div>
             </header>
@@ -207,19 +206,16 @@
             <span>Pro objednání klikněte v kalendáři na čas, který vám vyhovuje</span>
         </div>
 
-        <div class="main-frame">
-            <div class="subsection grid">
-                <section id="for-patient">
-                    <h4>Informace pro pacienty</h4>
-                    <p>individuální, párové i rodinné poradenství, krátkodobé i systematické
-                        dlouhodobé
-                        psychoterapeutické poradenství
-                        Vystudoval vychovatelství se zaměřením na etopedii. Absolvoval pětiletý sebezkušenostní
-                        výcvik v integrativní psychoterapii. Více jak deset let se věnuje péči o klienty s
-                        rozličnými problémy a z různých věkových skupin. </p>
-                </section>
+        <template is="dom-if" if="[[_computeTextAvailability(officeData.patientText)]]">
+            <div class="main-frame">
+                <div class="subsection grid">
+                    <section id="for-patient">
+                        <h4>Informace pro pacienty</h4>
+                        <p>[[officeData.patientText]]</p>
+                    </section>
+                </div>
             </div>
-        </div>
+        </template>
 
         <!--TODO: Na mobilu zobrazit jenom odkaz do mapy je lepší když se to zobrazí v externí aplikaci-->
         <section id="map" hidden="[[smallScreen]]">
@@ -233,7 +229,31 @@
 
     <script>
         Polymer({
-            is: 'docprofile-view'
+            is: 'docprofile-view',
+
+            properties: {
+                specializations: {
+                    type: Array,
+                    value: ['Zubař', 'Rektálník', 'Gynekolog']
+                },
+
+            },
+
+            ready: function () {
+                console.log(this.officeData)
+            },
+
+            _formatName: function (name) {
+                return (name.firstName + " " + name.lastName);
+            },
+
+            _getSpecialization: function (specialization) {
+                return (this.specializations[specialization]);
+            },
+
+            _computeTextAvailability: function (text) {
+                return (this.officeData.patientText.length != 0);
+            }
         });
     </script>
 </dom-module>

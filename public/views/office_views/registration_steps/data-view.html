@@ -39,20 +39,19 @@
                 <div class="subsection grid">
 
                     <section>
+                        <h2>Vaše jméno</h2>
+                        <paper-input label="Jméno" minlength="1" maxlength="20"
+                                     error-message="Nelze ponechat prázdné" required
+                                     value="{{officeData.name.firstName}}"></paper-input>
+                        <paper-input label="Příjmení" minlength="1"
+                                     maxlength="80" error-message="Nelze ponechat prázdné"
+                                     required value="{{officeData.name.lastName}}"></paper-input>
                         <h2>Adresa</h2>
                         <paper-input id="cinput" label="Město" value="{{officeData.address.city}}"
                                      minlength="1" maxlength="20">
                         </paper-input>
                         <paper-input id="sinput" label="Ulice a číslo popisné" value="{{officeData.address.street}}"
                                      minlength="1" maxlength="80"></paper-input>
-                        <h2>Vaše specializace</h2>
-                        <paper-dropdown-menu label="Specializace">
-                            <paper-listbox class="dropdown-content" selected="{{officeData.specialization}}">
-                                <template is="dom-repeat" items="[[specializations]]" as="entry">
-                                    <paper-item>[[entry]]</paper-item>
-                                </template>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
                         <h2>Délka návštěvy</h2>
                         <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních hodin
                             určíme objednávací časy.</p>
@@ -83,6 +82,14 @@
                 <template is="dom-if" if="[[renderStep2]]">
                     <div class="subsection grid">
                         <section>
+                            <h2>Vaše specializace</h2>
+                            <paper-dropdown-menu label="Specializace">
+                                <paper-listbox class="dropdown-content" selected="{{officeData.specialization}}">
+                                    <template is="dom-repeat" items="[[specializations]]" as="entry">
+                                        <paper-item>[[entry]]</paper-item>
+                                    </template>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
                             <h2>Zařízení v čekárně</h2>
                             <p>Zaškrtněte, pokud si přejete přidat zařízení v čekárně, které slouží k zařazení pacientů,
                                 kteří se neobjednali online případně po telefonu.
@@ -151,48 +158,12 @@
 
                 specializations: {
                     type: Array,
-//                    TODO: načíst z DB
                     value: ['Zubař', 'Rektálník', 'Gynekolog']
                 },
 
                 renderStep2: {
                     type: Boolean,
                     value: false
-                },
-
-                officeData: {
-                    type: Object,
-                    value: {
-                        address: {
-                            city: "",
-                            street: ""
-                        },
-                        specialization: -1,
-                        visitLength: 20,
-                        device: {
-                            enabled: false,
-                            deviceID: ""
-                        },
-                        phoneNumber: {
-                            visible: false,
-                            number: ""
-                        },
-                        email: {
-                            visible: false,
-                            address: ""
-                        },
-                        limitedClientele: false,
-                        patientText: "",
-                        officeHours: [
-                            {dayIndex: 0, 'checked': true, hours: ''},
-                            {dayIndex: 1, 'checked': true, hours: ''},
-                            {dayIndex: 2, 'checked': true, hours: ''},
-                            {dayIndex: 3, 'checked': true, hours: ''},
-                            {dayIndex: 4, 'checked': true, hours: ''},
-                            {dayIndex: 5, 'checked': false, hours: ''},
-                            {dayIndex: 6, 'checked': false, hours: ''}
-                        ]
-                    }
                 },
 
                 days: {
@@ -206,7 +177,14 @@
             },
 
             finish: function () {
-                console.log(this.officeData);
+                if (this.validateData(this.officeData)) {
+                    this.fire('change-route', {url: '/office/registration/confirm'});
+                }
+            },
+
+            validateData: function (data) {
+                console.log("TODO: validation");
+                return true;
             },
 
             _computeButtonText: function (collapse, index) {

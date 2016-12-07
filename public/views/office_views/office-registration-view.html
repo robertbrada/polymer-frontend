@@ -17,8 +17,8 @@
                 attr-for-selected="name"
                 selected-attribute="visible"
                 role="main">
-            <data-view name="data"></data-view>
-            <confirm-view name="confirm"></confirm-view>
+            <data-view name="data" office-data="{{officeData}}"></data-view>
+            <confirm-view name="confirm" office-data="[[officeData]]"></confirm-view>
         </iron-pages>
 
 
@@ -32,6 +32,46 @@
 
             viewPath: '/views/office_views/registration_steps/',
 
+            properties: {
+                officeData: {
+                    type: Object,
+                    value: {
+                        name: {
+                            firstName: "",
+                            lastName: ""
+                        },
+                        address: {
+                            city: "",
+                            street: ""
+                        },
+                        specialization: -1,
+                        visitLength: 20,
+                        device: {
+                            enabled: false,
+                            deviceID: ""
+                        },
+                        phoneNumber: {
+                            visible: false,
+                            number: ""
+                        },
+                        email: {
+                            visible: false,
+                            address: ""
+                        },
+                        limitedClientele: false,
+                        patientText: "",
+                        officeHours: [
+                            {dayIndex: 0, 'checked': true, hours: ''},
+                            {dayIndex: 1, 'checked': true, hours: ''},
+                            {dayIndex: 2, 'checked': true, hours: ''},
+                            {dayIndex: 3, 'checked': true, hours: ''},
+                            {dayIndex: 4, 'checked': true, hours: ''},
+                            {dayIndex: 5, 'checked': false, hours: ''},
+                            {dayIndex: 6, 'checked': false, hours: ''}
+                        ]
+                    }
+                }
+            }
         });
     </script>
 </dom-module>
