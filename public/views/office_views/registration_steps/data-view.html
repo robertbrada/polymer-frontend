@@ -67,8 +67,9 @@
                                 <paper-checkbox checked="{{entry.checked}}">[[_getDayName(entry.dayIndex)]]
                                 </paper-checkbox>
                             </div>
-                            <paper-input hidden="[[!entry.checked]]" value="{{entry.hours}}"
+                            <paper-input hidden="[[!entry.checked]]" value="{{entry.hours}}" auto-validate
                                          placeholder="07:30-12:30,13:30-15:30"
+                                         pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](,([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])*"
                                          prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
                         </template>
                     </section>
@@ -108,6 +109,7 @@
                                 <paper-checkbox checked="{{officeData.phoneNumber.visible}}">Telefonní číslo
                                 </paper-checkbox>
                             </div>
+                            <!--TODO: gold phone input-->
                             <paper-input id="phone_id" label="Telefonní číslo" value="{{officeData.phoneNumber.number}}"
                                          hidden="[[!officeData.phoneNumber.visible]]">
                             </paper-input>
@@ -138,7 +140,6 @@
                             <paper-button responsive on-tap="finish">
                                 Dokončit
                             </paper-button>
-                            <!--<a href="/office/registration/confirm">Dokončit</a>-->
                         </section>
                     </div>
                 </template>
