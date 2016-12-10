@@ -166,7 +166,9 @@
                 <div class="subsection grid">
                     <section>
                         <ul>
-                            <li><img id="profile-photo"></li>
+                            <template is="dom-if" if="[[_computePhotoAvailability(officeData.photoFile)]]">
+                                <li><img id="profile-photo"></li>
+                            </template>
                             <li><h2 id="name">[[_formatName(officeData.name)]]</h2>
                                 <span>[[_getSpecialization(officeData.specialization)]]</span></li>
                         </ul>
@@ -239,9 +241,9 @@
 
             },
 
-            ready: function () {
+/*            ready: function () {
                 console.log(this.officeData)
-            },
+            },*/
 
             _formatName: function (name) {
                 return (name.firstName + " " + name.lastName);
@@ -253,6 +255,11 @@
 
             _computeTextAvailability: function (text) {
                 return (text.length != 0);
+            },
+
+            _computePhotoAvailability: function (photoFile) {
+                console.log(photoFile);
+                console.log(!photoFile);
             }
         });
     </script>

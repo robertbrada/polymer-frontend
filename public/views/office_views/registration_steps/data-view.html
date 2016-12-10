@@ -12,6 +12,7 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/file-input/file-input.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -103,8 +104,9 @@
                             <paper-input id="id_input_id" label="Identifikátor" value="{{officeData.device.deviceID}}"
                                          hidden="[[!officeData.device.enabled]]"></paper-input>
                             <h2>Vřejné informace profilu</h2>
-                            <p>Zaškrtněte prosím, které informace si přejete zobrazit u Vašeho profilu.</p>
-                            <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím zaškrtněte tuto
+                            <p>Zadejte prosím údaje, které si přejete zobrazit u Vašeho profilu. Tyto údaje jsou
+                                dobrovolné tudíž je nemusíte vyplňovat/nahrávat.</p>
+                            <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím vyplňte tuto
                                 možnost:</p>
                             <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
                                               phone-number-pattern="XXX-XXX-XXX" auto-validate
@@ -112,6 +114,9 @@
                             </gold-phone-input>
                             <gold-email-input id="email_id" label="Email" value="{{officeData.email}}"
                                               auto-validate></gold-email-input>
+                            <file-input id="photoUpload" type="file" accept="image/*" on-change="loadFile">
+                                Upload
+                            </file-input>
                         </section>
                         <section>
                             <h2>Klientela</h2>
@@ -164,6 +169,10 @@
                 }
             },
 
+            loadFile: function (e) {
+                this.officeData.photoFile = e.detail.valid[0];
+            },
+
             _getDayName: function (dayIndex) {
                 return (this.days[dayIndex]);
             },
@@ -180,13 +189,13 @@
                 return true;
             },
 
-/*            _validateForm: function (form) {
-                console.log(form);
-                console.log(form);
-                for (var el, i = 0; el = form.elements[i], i < form.elements.length; i++) {
-                    console.log(el);
-                }
-            },*/
+            /*            _validateForm: function (form) {
+             console.log(form);
+             console.log(form);
+             for (var el, i = 0; el = form.elements[i], i < form.elements.length; i++) {
+             console.log(el);
+             }
+             },*/
 
             _computeButtonText: function (collapse, index) {
                 if (collapse) {
