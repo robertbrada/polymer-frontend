@@ -106,20 +106,12 @@
                             <p>Zaškrtněte prosím, které informace si přejete zobrazit u Vašeho profilu.</p>
                             <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím zaškrtněte tuto
                                 možnost:</p>
-                            <div class="row">
-                                <paper-checkbox checked="{{officeData.phoneNumber.visible}}">Telefonní číslo
-                                </paper-checkbox>
-                            </div>
                             <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
                                               phone-number-pattern="XXX-XXX-XXX" auto-validate
-                                              value="{{officeData.phoneNumber.number}}"
-                                              hidden="[[!officeData.phoneNumber.visible]]">
+                                              value="{{officeData.phoneNumber}}">
                             </gold-phone-input>
-                            <div class="row">
-                                <paper-checkbox checked="{{officeData.email.visible}}">Email</paper-checkbox>
-                            </div>
-                            <gold-email-input id="email_id" label="Email" value="{{officeData.email.address}}"
-                                              hidden="[[!officeData.email.visible]]" auto-validate></gold-email-input>
+                            <gold-email-input id="email_id" label="Email" value="{{officeData.email}}"
+                                              auto-validate></gold-email-input>
                         </section>
                         <section>
                             <h2>Klientela</h2>

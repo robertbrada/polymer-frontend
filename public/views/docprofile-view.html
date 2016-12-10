@@ -179,14 +179,14 @@
                         <p id="address-city">[[officeData.address.city]]</p>
                         </p>
 
-                        <p hidden="[[!officeData.phoneNumber.visible]]">
+                        <p hidden="[[!_computeTextAvailability(officeData.phoneNumber)]]">
                             <iron-icon icon="communication:phone"></iron-icon>
-                            [[officeData.phoneNumber.number]]
+                            [[officeData.phoneNumber]]
                         </p>
 
-                        <p hidden="[[!officeData.email.visible]]">
+                        <p hidden="[[!_computeTextAvailability(officeData.email)]]">
                             <iron-icon icon="communication:email"></iron-icon>
-                            [[officeData.email.address]]
+                            [[officeData.email]]
                         </p>
 
                         <!--TODO: Objevení dialogu s popisem po najetí myší nad text. -->
@@ -252,7 +252,7 @@
             },
 
             _computeTextAvailability: function (text) {
-                return (this.officeData.patientText.length != 0);
+                return (text.length != 0);
             }
         });
     </script>
