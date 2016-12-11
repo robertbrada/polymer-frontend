@@ -167,7 +167,7 @@
                     <section>
                         <ul>
                             <template is="dom-if" if="[[_computePhotoAvailability(officeData.photoFile)]]">
-                                <li><img id="profile-photo"></li>
+                                <li><img id="profile-photo" src="[[officeData.photoURL]]"></li>
                             </template>
                             <li><h2 id="name">[[_formatName(officeData.name)]]</h2>
                                 <span>[[_getSpecialization(officeData.specialization)]]</span></li>
@@ -258,8 +258,7 @@
             },
 
             _computePhotoAvailability: function (photoFile) {
-                console.log(photoFile);
-                console.log(!photoFile);
+                return (photoFile instanceof File);
             }
         });
     </script>

@@ -13,6 +13,7 @@
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/file-input/file-input.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -25,6 +26,25 @@
             :host {
                 --iron-collapse-transition-duration: 600ms;
             }
+
+            /*BUG workaround: Without the following css, the whole area would activate on-change event.*/
+            file-input {
+                position: relative;
+            }
+
+            button {
+                margin-top: 9px;
+            }
+
+            .photo_input {
+                position:relative;
+                width: 80%;
+                white-space: nowrap;
+                overflow: hidden !important;
+                text-overflow: ellipsis;
+            }
+
+
         </style>
         <div class="main-frame">
             <header class="subsection">
@@ -85,14 +105,6 @@
                 <template is="dom-if" if="[[renderStep2]]">
                     <div class="subsection grid">
                         <section>
-                            <h2>Vaše specializace</h2>
-                            <paper-dropdown-menu label="Specializace">
-                                <paper-listbox class="dropdown-content" selected="{{officeData.specialization}}">
-                                    <template is="dom-repeat" items="[[specializations]]" as="entry">
-                                        <paper-item>[[entry]]</paper-item>
-                                    </template>
-                                </paper-listbox>
-                            </paper-dropdown-menu>
                             <h2>Zařízení v čekárně</h2>
                             <p>Zaškrtněte, pokud si přejete přidat zařízení v čekárně, které slouží k zařazení pacientů,
                                 kteří se neobjednali online případně po telefonu.
@@ -114,11 +126,26 @@
                             </gold-phone-input>
                             <gold-email-input id="email_id" label="Email" value="{{officeData.email}}"
                                               auto-validate></gold-email-input>
-                            <file-input id="photoUpload" type="file" accept="image/*" on-change="loadFile">
-                                Upload
-                            </file-input>
+                            <button hidden="[[_computeTextAvailability(photoText)]]">
+                                <file-input id="photoUpload" type="file" accept="image/*" on-change="loadFile">
+                                    <iron-icon icon="file-upload"></iron-icon>
+                                    Nahrát profilovou fotografii
+                                </file-input>
+                            </button>
+                            <div class="row" hidden="[[!_computeTextAvailability(photoText)]]">
+                                <span class="photo_input"><b>Fotografie:</b> [[photoText]]</span>
+                                <paper-icon-button icon="delete" on-tap="deletePhoto"></paper-icon-button>
+                            </div>
                         </section>
                         <section>
+                            <h2>Vaše specializace</h2>
+                            <paper-dropdown-menu label="Specializace">
+                                <paper-listbox class="dropdown-content" selected="{{officeData.specialization}}">
+                                    <template is="dom-repeat" items="[[specializations]]" as="entry">
+                                        <paper-item>[[entry]]</paper-item>
+                                    </template>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
                             <h2>Klientela</h2>
                             <p>Checkbox níže zaškrtněte pokud máte omezenou klientelu.</p>
                             <paper-checkbox checked="{{officeData.limitedClientele}}">Omezená klientela</paper-checkbox>
@@ -166,11 +193,30 @@
                 days: {
                     type: Array,
                     value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
+                },
+
+                photoText: {
+                    type: String,
+                    value: ""
                 }
             },
 
             loadFile: function (e) {
-                this.officeData.photoFile = e.detail.valid[0];
+                if (e.detail.valid.length > 0) {
+                    var file = e.detail.valid[0];
+                    this.officeData.photoFile = file;
+                    this.officeData.photoURL = URL.createObjectURL(file);
+                    this.photoText = file.name;
+                } else {
+                    console.log("No valid images");
+                }
+            },
+
+            deletePhoto: function () {
+                this.photoText = "";
+                this.officeData.photoFile = undefined;
+                this.officeData.photoURL = undefined;
+
             },
 
             _getDayName: function (dayIndex) {
@@ -208,6 +254,10 @@
             toggleChange: function () {
                 this.renderStep2 = true;
                 this.collapse = !this.collapse;
+            },
+
+            _computeTextAvailability: function (text) {
+                return (text.length != 0);
             }
         });
     </script>
