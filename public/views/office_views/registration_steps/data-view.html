@@ -63,22 +63,22 @@
 
                         <section>
                             <h2>Vaše jméno</h2>
-                            <paper-input label="Jméno" minlength="1" maxlength="20"
+                            <paper-input label="Jméno" minlength="1" maxlength="20" auto-validate
                                          error-message="Nelze ponechat prázdné" required
                                          value="{{officeData.name.firstName}}"></paper-input>
-                            <paper-input label="Příjmení" minlength="1"
+                            <paper-input label="Příjmení" minlength="1" auto-validate
                                          maxlength="80" error-message="Nelze ponechat prázdné"
                                          required value="{{officeData.name.lastName}}"></paper-input>
                             <h2>Adresa</h2>
                             <paper-input id="cinput" label="Město" value="{{officeData.address.city}}"
-                                         minlength="1" maxlength="20" required>
+                                         minlength="1" maxlength="20" required auto-validate>
                             </paper-input>
                             <paper-input id="sinput" label="Ulice a číslo popisné" value="{{officeData.address.street}}"
-                                         minlength="1" maxlength="80" required></paper-input>
+                                         minlength="1" maxlength="80" required auto-validate></paper-input>
                             <h2>Délka návštěvy</h2>
                             <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
                                 hodin určíme objednávací časy.</p>
-                            <paper-input type="number" label="Délka návštěvy" min="1" max="360" required
+                            <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
                                          value="{{officeData.visitLength}}">
                                 <div suffix>min</div>
                             </paper-input>
@@ -106,71 +106,83 @@
             </paper-button>
             <hr>
             <iron-collapse opened="[[!collapse]]">
-                <template is="dom-if" if="[[renderStep2]]">
-                    <div class="subsection grid">
-                        <section>
-                            <h2>Zařízení v čekárně</h2>
-                            <p>Zaškrtněte, pokud si přejete přidat zařízení v čekárně, které slouží k zařazení pacientů,
-                                kteří se neobjednali online případně po telefonu.
-                            </p>
-                            <paper-checkbox checked="{{officeData.device.enabled}}">Přidat zařízení</paper-checkbox>
-                            <p hidden="[[!officeData.device.enabled]]">V krabičce u zařízení jsme Vám poslali papírek
-                                na kterém je napsán identifikátor. Tuto sekvenci znaků prosím opište do políčka
-                                níže:</p>
-                            <paper-input id="id_input_id" label="Identifikátor" value="{{officeData.device.deviceID}}"
-                                         hidden="[[!officeData.device.enabled]]"></paper-input>
-                            <h2>Vřejné informace profilu</h2>
-                            <p>Zadejte prosím údaje, které si přejete zobrazit u Vašeho profilu. Tyto údaje jsou
-                                dobrovolné tudíž je nemusíte vyplňovat/nahrávat.</p>
-                            <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím vyplňte tuto
-                                možnost:</p>
-                            <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
-                                              phone-number-pattern="XXX-XXX-XXX" auto-validate
-                                              value="{{officeData.phoneNumber}}">
-                            </gold-phone-input>
-                            <gold-email-input id="email_id" label="Email" value="{{officeData.email}}"
-                                              auto-validate></gold-email-input>
-                            <button hidden="[[_computeTextAvailability(photoText)]]">
-                                <!--TODO: fix bug of photo readdition event call failure-->
-                                <file-input id="photoUpload" type="file" accept="image/*" on-change="loadFile">
-                                    <iron-icon icon="file-upload"></iron-icon>
-                                    Nahrát profilovou fotografii
-                                </file-input>
-                            </button>
-                            <div class="row" hidden="[[!_computeTextAvailability(photoText)]]">
-                                <span class="photo_input"><b>Fotografie:</b> [[photoText]]</span>
-                                <paper-icon-button icon="delete" on-tap="deletePhoto"></paper-icon-button>
-                            </div>
-                        </section>
-                        <section>
-                            <h2>Vaše specializace</h2>
-                            <paper-dropdown-menu label="Specializace">
-                                <paper-listbox class="dropdown-content" selected="{{officeData.specialization}}">
-                                    <template is="dom-repeat" items="[[specializations]]" as="entry">
-                                        <paper-item>[[entry]]</paper-item>
-                                    </template>
-                                </paper-listbox>
-                            </paper-dropdown-menu>
-                            <h2>Klientela</h2>
-                            <p>Checkbox níže zaškrtněte pokud máte omezenou klientelu.</p>
-                            <paper-checkbox checked="{{officeData.limitedClientele}}">Omezená klientela</paper-checkbox>
-                            <p hidden="[[!officeData.limitedClientele]]">Při zaškrtnutí omezené klientely si pacient
-                                předprvním objednáním v našem systému zažádá o potvrzení. Vám poté přijde zpráva s
-                                žádostí o potvrzení. Ve zprávě
-                                uvidíte pacientovi osobní údaje (jméno, adresa), na základě kterých umožníte pacientovi
-                                objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
-                            </p>
-                            <h2>Text pro pacienty</h2>
-                            <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu
-                                pacientům. Zpráva není povinná.</p>
-                            <paper-textarea label="Zpráva pro pacienty" value="{{officeData.patientText}}"
-                                            char-counter maxlength="400"></paper-textarea>
-                            <paper-button responsive on-tap="finish">
-                                Dokončit
-                            </paper-button>
-                        </section>
-                    </div>
-                </template>
+                <form id="step2Form" is="iron-form">
+                    <template is="dom-if" if="[[renderStep2]]">
+                        <div class="subsection grid">
+                            <section>
+                                <h2>Zařízení v čekárně</h2>
+                                <p>Zaškrtněte, pokud si přejete přidat zařízení v čekárně, které slouží k zařazení
+                                    pacientů,
+                                    kteří se neobjednali online případně po telefonu.
+                                </p>
+                                <paper-checkbox checked="{{officeData.device.enabled}}">Přidat zařízení</paper-checkbox>
+                                <p hidden="[[!officeData.device.enabled]]">V krabičce u zařízení jsme Vám poslali
+                                    papírek
+                                    na kterém je napsán identifikátor. Tuto sekvenci znaků prosím opište do políčka
+                                    níže:</p>
+                                <template is="dom-if" if="[[officeData.device.enabled]]" restamp="true">
+                                    <paper-input id="id_input_id" label="Identifikátor" required auto-validate
+                                                 value="{{officeData.device.deviceID}}"></paper-input>
+                                </template>
+                                <h2>Vřejné informace profilu</h2>
+                                <p>Zadejte prosím údaje, které si přejete zobrazit u Vašeho profilu. Tyto údaje jsou
+                                    dobrovolné tudíž je nemusíte vyplňovat/nahrávat.</p>
+                                <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím vyplňte tuto
+                                    možnost:</p>
+                                <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
+                                                  phone-number-pattern="XXX-XXX-XXX" auto-validate
+                                                  value="{{officeData.phoneNumber}}">
+                                </gold-phone-input>
+                                <gold-email-input id="email_id" label="Email" value="{{officeData.email}}"
+                                                  auto-validate></gold-email-input>
+                                <button hidden="[[_computePhotoAvailability(officeData.photoFile)]]">
+                                    <!--TODO: fix bug of photo readdition event call failure-->
+                                    <file-input id="photoUpload" type="file" accept="image/*" on-change="loadFile">
+                                        <iron-icon icon="file-upload"></iron-icon>
+                                        Nahrát profilovou fotografii
+                                    </file-input>
+                                </button>
+                                <template is="dom-if" if="[[_computePhotoAvailability(officeData.photoFile)]]"
+                                          restamp="true">
+                                    <div class="row">
+                                        <span class="photo_input"><b>Fotografie:</b> [[_computePhotoText(officeData.photoFile)]]</span>
+                                        <paper-icon-button icon="delete" on-tap="deletePhoto"></paper-icon-button>
+                                    </div>
+                                </template>
+                            </section>
+                            <section>
+                                <h2>Vaše specializace</h2>
+                                <!--TODO: check if something was selected-->
+                                <paper-dropdown-menu label="Specializace">
+                                    <paper-listbox class="dropdown-content" selected="{{officeData.specialization}}">
+                                        <template is="dom-repeat" items="[[specializations]]" as="entry">
+                                            <paper-item>[[entry]]</paper-item>
+                                        </template>
+                                    </paper-listbox>
+                                </paper-dropdown-menu>
+                                <h2>Klientela</h2>
+                                <p>Checkbox níže zaškrtněte pokud máte omezenou klientelu.</p>
+                                <paper-checkbox checked="{{officeData.limitedClientele}}">Omezená klientela
+                                </paper-checkbox>
+                                <p hidden="[[!officeData.limitedClientele]]">Při zaškrtnutí omezené klientely si pacient
+                                    předprvním objednáním v našem systému zažádá o potvrzení. Vám poté přijde zpráva s
+                                    žádostí o potvrzení. Ve zprávě
+                                    uvidíte pacientovi osobní údaje (jméno, adresa), na základě kterých umožníte
+                                    pacientovi
+                                    objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
+                                </p>
+                                <h2>Text pro pacienty</h2>
+                                <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu
+                                    pacientům. Zpráva není povinná.</p>
+                                <paper-textarea label="Zpráva pro pacienty" value="{{officeData.patientText}}"
+                                                char-counter maxlength="400"></paper-textarea>
+                                <paper-button responsive on-tap="finish">
+                                    Dokončit
+                                </paper-button>
+                            </section>
+                        </div>
+                    </template>
+                </form>
             </iron-collapse>
         </div>
     </template>
@@ -198,30 +210,20 @@
                 days: {
                     type: Array,
                     value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
-                },
-
-                photoText: {
-                    type: String,
-                    value: ""
                 }
             },
 
             loadFile: function (e) {
                 if (e.detail.valid.length > 0) {
                     var file = e.detail.valid[0];
-                    this.officeData.photoFile = file;
-                    this.officeData.photoURL = URL.createObjectURL(file);
-                    this.photoText = file.name;
+                    this.set('officeData.photoFile', file);
                 } else {
                     console.log("No valid images");
                 }
             },
 
             deletePhoto: function () {
-                this.photoText = "";
-                this.officeData.photoFile = undefined;
-                this.officeData.photoURL = undefined;
-
+                this.set('officeData.photoFile', undefined);
             },
 
             _getDayName: function (dayIndex) {
@@ -229,20 +231,29 @@
             },
 
             finish: function () {
-                if (this._validateData(this.officeData)) {
-//                    this.fire('change-route', {url: '/office/registration/confirm'});
+                if (this._validate(this.officeData)) {
+                    this.fire('change-route', {url: '/office/registration/confirm'});
+                } else {
+                    this.fire("show-toast", {text: "Prosím opravte chyby podtržené červeně"});
                 }
             },
 
-            _validateData: function (data) {
-                var toReturn = this._validateForm(this.$.step1Form);
+            _validate: function () {
+                var toReturn = true;
+                if (!this._validateForm(this.$.step1Form)) {
+                    this.collapse = true;
+                    toReturn = false;
+                }
+                if (!this._validateForm(this.$.step2Form)) {
+                    toReturn = false;
+                }
                 return toReturn;
             },
 
             _validateForm: function (form) {
                 var toReturn = true;
                 for (var el, i = 0; el = form.elements[i], i < form.elements.length; i++) {
-                    if (!el.validate()) toReturn = false;
+                    if (el.validate && !el.validate()) toReturn = false;
                 }
                 return toReturn;
             },
@@ -260,8 +271,12 @@
                 this.collapse = !this.collapse;
             },
 
-            _computeTextAvailability: function (text) {
-                return (text.length != 0);
+            _computePhotoAvailability: function (photoFile) {
+                return (photoFile instanceof File);
+            },
+
+            _computePhotoText: function (file) {
+                return file.name;
             }
         });
     </script>
