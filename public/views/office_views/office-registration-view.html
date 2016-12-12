@@ -66,6 +66,15 @@
                         photoFile: File
                     }
                 }
+            },
+
+            listeners: {
+                'save-office': '_saveOffice',
+            },
+
+            _saveOffice: function (event) {
+                console.log("Registrovat");
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
         });
     </script>
