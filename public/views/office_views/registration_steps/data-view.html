@@ -1,7 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
@@ -15,6 +14,7 @@
 <link rel="import" href="/bower_components/file-input/file-input.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/google-apis/google-maps-api.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -31,12 +31,9 @@
             }
 
             /*BUG workaround: Without the following css, the whole area would activate on-change event.*/
-            file-input {
+            .file_input {
                 position: relative;
-            }
-
-            button {
-                margin-top: 9px;
+                margin-top: 20px;
             }
 
             .photo_input {
@@ -47,7 +44,16 @@
                 text-overflow: ellipsis;
             }
 
+            .row {
+                margin-top: 20px;
+                @apply(--layout-horizontal);
+                @apply(--layout-end);
+            }
 
+            .row paper-icon-button {
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+            }
         </style>
 
         <google-maps-api id="map_api" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-maps-api>
@@ -92,7 +98,7 @@
                         <section>
                             <h2>Ordinační hodiny</h2>
                             <template is="dom-repeat" items="[[officeData.officeHours]]" as="entry">
-                                <div class="row">
+                                <div>
                                     <paper-checkbox checked="{{entry.checked}}">[[_getDayName(entry.dayIndex)]]
                                     </paper-checkbox>
                                 </div>
@@ -141,12 +147,12 @@
                                 </gold-phone-input>
                                 <gold-email-input id="email_id" label="Email" value="{{officeData.email}}"
                                                   auto-validate></gold-email-input>
-                                <button hidden="[[_computePhotoAvailability(officeData.photoFile)]]">
+                                <div class="file_input" hidden="[[_computePhotoAvailability(officeData.photoFile)]]">
                                     <file-input id="photoUpload" type="file" accept="image/*" on-change="_loadFile">
                                         <iron-icon icon="file-upload"></iron-icon>
                                         Nahrát profilovou fotografii
                                     </file-input>
-                                </button>
+                                </div>
                                 <template is="dom-if" if="[[_computePhotoAvailability(officeData.photoFile)]]"
                                           restamp="true">
                                     <div class="row">
