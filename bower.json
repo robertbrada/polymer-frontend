@@ -38,6 +38,7 @@
     "iron-form": "PolymerElements/iron-form#^1.1.4",
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6",
     "gold-phone-input": "PolymerElements/gold-phone-input#^1.1.0",
-    "file-input": "^2.0.0"
+    "file-input": "^2.0.0",
+    "google-apis": "^1.1.7"
   }
 }

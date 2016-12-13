@@ -6,15 +6,16 @@
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 
 <!--icons-->
-<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
-<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
-<link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="/bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="/bower_components/google-map/google-map.html">
+<link rel="import" href="/bower_components/google-map/google-map-marker.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/header-styles.html">
 
-<dom-module id="docprofile-view">
+<dom-module id="office-profile-view">
     <template>
         <style include="input-styles layout-styles header-styles">
             :host {
@@ -220,18 +221,24 @@
         </template>
 
         <!--TODO: Na mobilu zobrazit jenom odkaz do mapy je lepší když se to zobrazí v externí aplikaci-->
-        <section id="map" hidden="[[smallScreen]]">
-            <template is="dom-if" if="[[!smallScreen]]">
+        <template is="dom-if" if="[[_computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
+            <section id="map">
                 <!--TODO: restrict API key for our domain -->
-                <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-map>
-            </template>
-        </section>
+                <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker
+                            latitude="[[officeData.coordinates.latitude]]"
+                            longitude="[[officeData.coordinates.longitude]]">
+                    <google-map-marker latitude="[[officeData.coordinates.latitude]]"
+                                       longitude="[[officeData.coordinates.longitude]]">
+                    </google-map-marker>
+                </google-map>
+            </section>
+        </template>
 
     </template>
 
     <script>
         Polymer({
-            is: 'docprofile-view',
+            is: 'office-profile-view',
 
             properties: {
                 specializations: {
@@ -263,6 +270,11 @@
 
             _computePhotoURL: function (file) {
                 return URL.createObjectURL(file);
+            },
+
+            _computeMapAvailability: function (latitude, longitude, smallScreen) {
+                if (smallScreen || latitude.length == 0 || longitude.length == 0) return false;
+                return true;
             }
         });
     </script>

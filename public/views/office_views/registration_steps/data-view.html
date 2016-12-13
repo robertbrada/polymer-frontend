@@ -14,6 +14,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/file-input/file-input.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/google-apis/google-maps-api.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -48,13 +49,16 @@
 
 
         </style>
+
+        <google-maps-api id="map_api" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-maps-api>
+
         <div class="main-frame">
             <header class="subsection">
                 <h1>Registrace ordinace</h1>
                 <span>Tyto údaje můžete později změnit v nastavení</span>
             </header>
 
-            <paper-button id="step1_button" type="button" on-tap="toggleChange" disabled="[[collapse]]">
+            <paper-button id="step1_button" type="button" on-tap="_toggleChange" disabled="[[collapse]]">
                 [[_computeButtonText(collapse, 1)]]
             </paper-button>
             <hr>
@@ -103,7 +107,7 @@
                     </div>
                 </form>
             </iron-collapse>
-            <paper-button id="step2_button" on-tap="toggleChange" disabled="[[!collapse]]">
+            <paper-button id="step2_button" on-tap="_toggleChange" disabled="[[!collapse]]">
                 [[_computeButtonText(collapse, 2)]]
             </paper-button>
             <hr>
@@ -139,7 +143,7 @@
                                                   auto-validate></gold-email-input>
                                 <button hidden="[[_computePhotoAvailability(officeData.photoFile)]]">
                                     <!--TODO: fix bug of photo readdition event call failure-->
-                                    <file-input id="photoUpload" type="file" accept="image/*" on-change="loadFile">
+                                    <file-input id="photoUpload" type="file" accept="image/*" on-change="_loadFile">
                                         <iron-icon icon="file-upload"></iron-icon>
                                         Nahrát profilovou fotografii
                                     </file-input>
@@ -148,7 +152,7 @@
                                           restamp="true">
                                     <div class="row">
                                         <span class="photo_input"><b>Fotografie:</b> [[_computePhotoText(officeData.photoFile)]]</span>
-                                        <paper-icon-button icon="delete" on-tap="deletePhoto"></paper-icon-button>
+                                        <paper-icon-button icon="delete" on-tap="_deletePhoto"></paper-icon-button>
                                     </div>
                                 </template>
                             </section>
@@ -178,7 +182,7 @@
                                     pacientům. Zpráva není povinná.</p>
                                 <paper-textarea label="Zpráva pro pacienty" value="{{officeData.patientText}}"
                                                 char-counter maxlength="400"></paper-textarea>
-                                <paper-button responsive on-tap="finish">
+                                <paper-button responsive on-tap="confirm">
                                     Dokončit
                                 </paper-button>
                             </section>
@@ -217,7 +221,7 @@
                 }
             },
 
-            loadFile: function (e) {
+            _loadFile: function (e) {
                 if (e.detail.valid.length > 0) {
                     var file = e.detail.valid[0];
                     this.set('officeData.photoFile', file);
@@ -226,7 +230,7 @@
                 }
             },
 
-            deletePhoto: function () {
+            _deletePhoto: function () {
                 this.set('officeData.photoFile', undefined);
             },
 
@@ -234,9 +238,10 @@
                 return (this.days[dayIndex]);
             },
 
-            finish: function () {
+            confirm: function () {
                 if (this._validate(this.officeData)) {
                     this.fire('change-route', {url: '/office/registration/confirm'});
+                    this._setCoordinates(this.officeData.address);
                 } else {
                     this.fire("show-toast", {text: "Prosím opravte chyby podtržené červeně"});
                 }
@@ -254,6 +259,27 @@
                 return toReturn;
             },
 
+            _setCoordinates: function (addressObject) {
+                var address = addressObject.city + " " + addressObject.street;
+                var api = this.$.map_api.api;
+                var geocoder = new api.Geocoder();
+                if (geocoder) {
+                    geocoder.geocode({'address': address}, function (result, status) {
+                        if (status == api.GeocoderStatus.OK && status != api.GeocoderStatus.ZERO_RESULTS) {
+                            var location = result[0].geometry.location;
+                            this.set('officeData.coordinates.latitude', location.lat());
+                            this.set('officeData.coordinates.longitude', location.lng());
+                        } else {
+                            this.set('officeData.coordinates.latitude', "");
+                            this.set('officeData.coordinates.longitude', "");
+                            console.log("Coordinates not found or error occurrence"); //TODO: show dialog
+                        }
+                    }.bind(this));
+                } else {
+                    console.log("Geocoder initialization failed")
+                }
+            },
+
             _computeButtonText: function (collapse, index) {
                 if (collapse) {
                     return (index == 1) ? "Krok1" : "Další krok";
@@ -262,7 +288,7 @@
                 }
             },
 
-            toggleChange: function () {
+            _toggleChange: function () {
                 this.renderStep2 = true;
                 this.collapse = !this.collapse;
             },
