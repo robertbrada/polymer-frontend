@@ -142,7 +142,6 @@
                                 <gold-email-input id="email_id" label="Email" value="{{officeData.email}}"
                                                   auto-validate></gold-email-input>
                                 <button hidden="[[_computePhotoAvailability(officeData.photoFile)]]">
-                                    <!--TODO: fix bug of photo readdition event call failure-->
                                     <file-input id="photoUpload" type="file" accept="image/*" on-change="_loadFile">
                                         <iron-icon icon="file-upload"></iron-icon>
                                         Nahrát profilovou fotografii
@@ -225,13 +224,14 @@
                 if (e.detail.valid.length > 0) {
                     var file = e.detail.valid[0];
                     this.set('officeData.photoFile', file);
+                    e.target.reset();
                 } else {
                     console.log("No valid images");
                 }
             },
 
             _deletePhoto: function () {
-                this.set('officeData.photoFile', undefined);
+                this.set('officeData.photoFile', null);
             },
 
             _getDayName: function (dayIndex) {
@@ -282,9 +282,9 @@
 
             _computeButtonText: function (collapse, index) {
                 if (collapse) {
-                    return (index == 1) ? "Krok1" : "Další krok";
+                    return (index === 1) ? "Krok1" : "Další krok";
                 } else {
-                    return (index == 1) ? "Upravit krok 1" : "Krok2";
+                    return (index === 1) ? "Upravit krok 1" : "Krok2";
                 }
             },
 
@@ -298,7 +298,9 @@
             },
 
             _computePhotoText: function (file) {
-                return file.name;
+                if (file) {
+                    return file.name;
+                }
             }
         });
     </script>

@@ -248,10 +248,6 @@
 
             },
 
-/*            ready: function () {
-                console.log(this.officeData)
-            },*/
-
             _formatName: function (first, last) {
                 return (first + " " + last);
             },
@@ -261,7 +257,7 @@
             },
 
             _computeTextAvailability: function (text) {
-                return (text.length != 0);
+                return (text.length !== 0);
             },
 
             _computePhotoAvailability: function (photoFile) {
@@ -269,12 +265,11 @@
             },
 
             _computePhotoURL: function (file) {
-                return URL.createObjectURL(file);
+                if (file) return URL.createObjectURL(file);
             },
 
             _computeMapAvailability: function (latitude, longitude, smallScreen) {
-                if (smallScreen || latitude.length == 0 || longitude.length == 0) return false;
-                return true;
+                return !(smallScreen || latitude.length === 0 || longitude.length === 0);
             }
         });
     </script>
