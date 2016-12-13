@@ -2,8 +2,9 @@
 
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="/behaviors/dialog-validation-behavior.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="/behaviors/form-validation-behavior.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/dialog-styles.html">
@@ -17,13 +18,15 @@
 
         <p class="error">{{errorMessage}}</p>
         <p class="main_text">Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:</p>
-        <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                          label="Vaše emailová adresa" auto-validate required autofocus>
-        </gold-email-input>
+        <form id="main_form" is="iron-form">
+            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                              label="Vaše emailová adresa" auto-validate required autofocus>
+            </gold-email-input>
 
-        <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
-            Poslat
-        </paper-button>
+            <paper-button responsive id="confirm_button" autofocus on-tap="confirm">
+                Poslat
+            </paper-button>
+        </form>
 
         <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
@@ -32,12 +35,13 @@
         Polymer({
             is: 'emailinput-view',
 
-            behaviors: [DialogValidationBehavior],
+            behaviors: [FormValidationBehavior],
 
-            validationIDs: ["emailID"],
-
-            confirmFunction: function () {
-                this.sendEmail();
+            confirm: function () {
+                if (this._validateForm(this.$.main_form)) {
+                    this.sendEmail();
+                    this.fire('dialog-confirm');
+                }
             },
 
             sendEmail: function () {

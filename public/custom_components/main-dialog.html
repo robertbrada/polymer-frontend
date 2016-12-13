@@ -54,6 +54,10 @@
                 }
             },
 
+            listeners: {
+                'dialog-confirm': '_dialogConfirm',
+            },
+
             _showDialog: function (event) {
                 this.viewName = event.detail.viewName;
                 this.importHref("/views/dialog_views/" + event.detail.path + event.detail.viewName + "-view.html", function () {
@@ -61,6 +65,11 @@
                         this.$.dialogID.toggle();
                     }
                 }.bind(this), null, true);
+            },
+
+            _dialogConfirm: function (event) {
+                this.$.dialogID.close();
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
 
         });

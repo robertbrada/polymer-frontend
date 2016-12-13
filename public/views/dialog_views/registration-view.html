@@ -9,7 +9,7 @@
 
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
-<link rel="import" href="/behaviors/dialog-validation-behavior.html">
+<link rel="import" href="/behaviors/form-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 <link rel="import" href="/styles/dialog-styles.html">
@@ -24,22 +24,24 @@
         </firebase-document>
 
         <p class="error">{{errorMessage}}</p>
-        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80" autofocus
-                     error-message="Nelze ponechat prázdné" auto-validate required></paper-input>
-        <paper-input id="lninput" label="Příjmení" minlength="1"
-                     maxlength="80" error-message="Nelze ponechat prázdné" auto-validate required></paper-input>
-        <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                          label="Vaše emailová adresa" auto-validate required></gold-email-input>
+        <form id="main_form" is="iron-form">
+            <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80" autofocus
+                         error-message="Nelze ponechat prázdné" auto-validate required></paper-input>
+            <paper-input id="lninput" label="Příjmení" minlength="1"
+                         maxlength="80" error-message="Nelze ponechat prázdné" auto-validate required></paper-input>
+            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                              label="Vaše emailová adresa" auto-validate required></gold-email-input>
 
-        <!--TODO: remove inconsistent space above the input-->
-        <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate
-                     type="password" minlength="6" maxlength="48" error-message="Moc krátké">
-            <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
-        </paper-input>
+            <!--TODO: remove inconsistent space above the input-->
+            <paper-input id="passID" value="{{password}}" label="Heslo" required auto-validate
+                         type="password" minlength="6" maxlength="48" error-message="Moc krátké">
+                <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
+            </paper-input>
 
-        <paper-button responsive id="confirm_button" on-tap="confirm">
-            Registrovat
-        </paper-button>
+            <paper-button responsive id="confirm_button" on-tap="confirm">
+                Registrovat
+            </paper-button>
+        </form>
 
         <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
@@ -48,12 +50,13 @@
         Polymer({
             is: 'registration-view',
 
-            behaviors: [DialogValidationBehavior, PassVisibilityBehavior],
+            behaviors: [FormValidationBehavior, PassVisibilityBehavior],
 
-            validationIDs: ["fninput", "lninput", "emailID", "passID"],
-
-            confirmFunction: function () {
-                this.createUserWithEmailAndPassword();
+            confirm: function () {
+                if (this._validateForm(this.$.main_form)) {
+                    this.createUserWithEmailAndPassword();
+                    this.fire('dialog-confirm');
+                }
             },
 
             createUserWithEmailAndPassword: function () {

@@ -1,0 +1,11 @@
+<script>
+    FormValidationBehavior = {
+        _validateForm: function (form) {
+            var toReturn = true;
+            for (var el, i = 0; el = form.elements[i], i < form.elements.length; i++) {
+                if (el.validate && !el.validate()) toReturn = false;
+            }
+            return toReturn;
+        },
+    }
+</script>

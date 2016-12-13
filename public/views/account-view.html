@@ -10,7 +10,7 @@
 <link rel="import" href="/styles/header-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
-<link rel="import" href="/behaviors/input-validation-behavior.html">
+<link rel="import" href="/behaviors/form-validation-behavior.html">
 
 
 <dom-module id="account-view">
@@ -34,21 +34,24 @@
 
             <div class="subsection grid">
                 <section>
-                    <h2>Základní informace</h2>
-                    <paper-input id="fninput" label="Jméno" minlength="1" maxlength="20"
-                                 error-message="Nelze ponechat prázdné" required
-                                 value="[[nameData.firstName]]"></paper-input>
-                    <paper-input id="lninput" label="Příjmení" minlength="1"
-                                 maxlength="80" error-message="Nelze ponechat prázdné"
-                                 required value="[[nameData.lastName]]"></paper-input>
-                    <h2>Adresa</h2>
-                    <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
-                        V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
-                    <paper-input id="cinput" label="Město" minlength="1" maxlength="20" value="[[addressData.city]]">
-                    </paper-input>
-                    <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
-                                 value="[[addressData.street]]"></paper-input>
-                    <paper-button id="confirm_button" on-tap="confirm">Uložit změny</paper-button>
+                    <form id="main_form" is="iron-form">
+                        <h2>Základní informace</h2>
+                        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="20"
+                                     error-message="Nelze ponechat prázdné" required
+                                     value="[[nameData.firstName]]"></paper-input>
+                        <paper-input id="lninput" label="Příjmení" minlength="1"
+                                     maxlength="80" error-message="Nelze ponechat prázdné"
+                                     required value="[[nameData.lastName]]"></paper-input>
+                        <h2>Adresa</h2>
+                        <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
+                            V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
+                        <paper-input id="cinput" label="Město" minlength="1" maxlength="20"
+                                     value="[[addressData.city]]">
+                        </paper-input>
+                        <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
+                                     value="[[addressData.street]]"></paper-input>
+                        <paper-button id="confirm_button" on-tap="confirm">Uložit změny</paper-button>
+                    </form>
                 </section>
 
                 <section>
@@ -65,12 +68,9 @@
         Polymer({
             is: 'account-view',
 
-            behaviors: [InputValidationBehavior],
-
-            validationIDs: ["fninput", "lninput"],
+            behaviors: [FormValidationBehavior],
 
             properties: {
-
                 user: Object,
                 addressData: Object,
                 nameData: Object
@@ -78,7 +78,7 @@
             },
 
             confirm: function () {
-                if (this.checkIfValid()) {
+                if (this._validateForm(this.$.main_form)) {
                     this.saveChanges();
                 }
             },

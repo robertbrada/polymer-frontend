@@ -10,7 +10,7 @@
 <link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
-<link rel="import" href="/behaviors/dialog-validation-behavior.html">
+<link rel="import" href="/behaviors/form-validation-behavior.html">
 
 
 <dom-module id="login-view">
@@ -39,12 +39,14 @@
         <p class="error">{{errorMessage}}</p>
 
         <!--TODO: bug fix of faulty autofocus-->
-        <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                          label="Vaše emailová adresa" required autofocus auto-validate>
-        </gold-email-input>
-        <paper-input id="passID" value="{{password}}" label="Heslo" type="password" auto-validate
-                     error-message="Neplatné heslo" minlength="6" maxlength="48" required>
-        </paper-input>
+        <form id="main_form" is="iron-form">
+            <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
+                              label="Vaše emailová adresa" required autofocus auto-validate>
+            </gold-email-input>
+            <paper-input id="passID" value="{{password}}" label="Heslo" type="password" auto-validate
+                         error-message="Neplatné heslo" minlength="6" maxlength="48" required>
+            </paper-input>
+        </form>
 
         <button id="lost_pass" on-tap="passReset">
             <span>Zapomněli jste heslo?</span>
@@ -66,9 +68,7 @@
         Polymer({
             is: 'login-view',
 
-            behaviors: [DialogValidationBehavior, Polymer.IronA11yKeysBehavior],
-
-            validationIDs: ["emailID", "passID"],
+            behaviors: [FormValidationBehavior, Polymer.IronA11yKeysBehavior],
 
             properties: {
                 keyEventTarget: {
@@ -83,9 +83,11 @@
                 'enter:keypress': 'confirm',
             },
 
-            // TODO: there should be a simpler way
-            confirmFunction: function () {
-                this.signInWithEmailAndPassword();
+            confirm: function () {
+                if (this._validateForm(this.$.main_form)) {
+                    this.signInWithEmailAndPassword();
+                    this.fire('dialog-confirm');
+                }
             },
 
             signInWithEmailAndPassword: function () {

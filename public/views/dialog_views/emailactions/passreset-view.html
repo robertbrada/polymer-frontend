@@ -6,7 +6,7 @@
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
-<link rel="import" href="/behaviors/dialog-validation-behavior.html">
+<link rel="import" href="/behaviors/form-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 <link rel="import" href="/styles/dialog-styles.html">
@@ -18,11 +18,14 @@
         </style>
         <iron-meta id="meta"></iron-meta>
 
-        <p>Prosím zadejte nové heslo:</p>
-        <paper-input id="passID" value="{{password}}" label="Nové heslo" required auto-validate
-                     type="password" autofocus minlength="6" maxlength="48" error-message="Moc krátké">
-            <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
-        </paper-input>
+        <form id="main_form" is="iron-form">
+            <p>Prosím zadejte nové heslo:</p>
+            <paper-input id="passID" value="{{password}}" label="Nové heslo" required auto-validate
+                         type="password" autofocus minlength="6" maxlength="48" error-message="Moc krátké">
+                <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
+            </paper-input>
+        </form>
+
         <paper-button responsive id="confirm_button" on-tap="confirm">
             Změnit heslo
         </paper-button>
@@ -34,12 +37,13 @@
         Polymer({
             is: 'passreset-view',
 
-            behaviors: [DialogValidationBehavior, PassVisibilityBehavior],
+            behaviors: [FormValidationBehavior, PassVisibilityBehavior],
 
-            validationIDs: ["passID"],
-
-            confirmFunction: function () {
-                this.resetPassword();
+            confirm: function () {
+                if (this._validateForm(this.$.main_form)) {
+                    this.resetPassword();
+                    this.fire('dialog-confirm');
+                }
             },
 
             resetPassword: function () {
