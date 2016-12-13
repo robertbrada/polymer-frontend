@@ -14,7 +14,7 @@
 
         <p class="main_text">Na Vaší emailovou adresu byl poslán potvrzovací email.<br>
             Jakmile jej potvrdíte, budete se moci objednat.</p>
-        <paper-button responsive dialog-confirm autofocus>
+        <paper-button responsive id="confirm_button" on-tap="confirm">
             Zavřít
         </paper-button>
 
@@ -23,7 +23,11 @@
 
     <script>
         Polymer({
-            is: 'emaildialog-view'
+            is: 'emaildialog-view',
+
+            confirm: function () {
+                this.fire('change-route', {url: '/office/registration/data'});
+            }
         });
     </script>
 </dom-module>

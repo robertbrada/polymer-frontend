@@ -13,7 +13,7 @@
 
         <p class="main_text">Váš email byl úspěšně potvrzen. Nyní se můžete objednat. <br> V případě že jste doktor
             prosím pokračujte přidáním ordinace.</p>
-        <paper-button responsive dialog-confirm autofocus on-tap="redirectionFunction">
+        <paper-button responsive id="confirm_button" on-tap="confirm">
             Přidat ordinaci
         </paper-button>
 
@@ -24,8 +24,9 @@
         Polymer({
             is: 'actionconfirm-view',
 
-            redirectionFunction: function () {
+            confirm: function () {
                 this.fire('change-route', {url: '/office/registration/data'});
+                this.fire('dialog-confirm');
             }
         });
     </script>

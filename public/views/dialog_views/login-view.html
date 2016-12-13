@@ -4,7 +4,6 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-dialog-behavior/paper-dialog-common.css">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/dialog-styles.html">
@@ -68,20 +67,7 @@
         Polymer({
             is: 'login-view',
 
-            behaviors: [FormValidationBehavior, Polymer.IronA11yKeysBehavior],
-
-            properties: {
-                keyEventTarget: {
-                    type: Object,
-                    value: function () {
-                        return document.body;
-                    }
-                }
-            },
-
-            keyBindings: {
-                'enter:keypress': 'confirm',
-            },
+            behaviors: [FormValidationBehavior],
 
             confirm: function () {
                 if (this._validateForm(this.$.main_form)) {

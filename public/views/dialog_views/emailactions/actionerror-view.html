@@ -13,10 +13,10 @@
 
         <p class="main_text">Nepodařilo se potvrdit emailovou adresu. <br>
             Potvrzení je vyžadováno pro povolení obědnávání.<br>
-            Můžeme Vám znovu poslat potvrzovací email.
+            Níže klikněte pro opětovné poslání potvrzovacího emailu.
         </p>
-        <paper-button responsive dialog-confirm autofocus on-tap="resendVerification">
-            Registrovat
+        <paper-button responsive id="confirm_button" on-tap="confirm">
+            Poslat email
         </paper-button>
 
         <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
@@ -25,6 +25,12 @@
     <script>
         Polymer({
             is: 'actionerror-view',
+
+            confirm: function () {
+//                this.resendVerification();
+                console.log("fix user bug"); // TODO: get user reference
+                this.fire('dialog-confirm');
+            },
 
             resendVerification: function () {
                 var user = this.domHost.user;
