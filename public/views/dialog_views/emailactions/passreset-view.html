@@ -22,7 +22,7 @@
 
         <form id="main_form" is="iron-form">
             <p>Prosím zadejte nové heslo:</p>
-            <paper-input id="passID" value="{{password}}" label="Nové heslo" required auto-validate
+            <paper-input id="pass" value="{{password}}" label="Nové heslo" required auto-validate
                          type="password" autofocus minlength="6" maxlength="48" error-message="Moc krátké">
                 <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
             </paper-input>
@@ -52,7 +52,7 @@
                 this.$.auth.auth.confirmPasswordReset(this.$.meta.byKey('actionCode'), this.password).then(function () {
                     this.fire("show-toast", {text: "Heslo změněno"});
                 }.bind(this)).catch(function (error) {
-                    console.log(error);
+                    console.log(error); // TODO: error dialog
                 })
             }
         });

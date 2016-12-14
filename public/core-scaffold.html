@@ -1,4 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+
+<!--TODO: global imports-->
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="/bower_components/app-route/app-location.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
@@ -132,7 +134,7 @@
 
         </style>
 
-        <firebase-auth id="authID" user="{{user}}" app-name="doctor-appointment-system" provider="password"
+        <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
 
         <app-location route="{{route}}"></app-location>
@@ -159,7 +161,7 @@
                 </div>
                 <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">bezcekani.cz</a></div>
                 <div class="icon-bar-item">
-                    <paper-icon-button icon="[[computeLockIcon(signedIn)]]" on-tap="_loginButtonHandler">
+                    <paper-icon-button icon="[[_computeLockIcon(signedIn)]]" on-tap="_loginButtonHandler">
                     </paper-icon-button>
                 </div>
                 <div class="icon-bar-item" hidden="[[!signedIn]]">
@@ -194,7 +196,7 @@
             <account-view name="account" user="[[user]]"></account-view>
         </iron-pages>
 
-        <main-dialog id="dialogID"></main-dialog>
+        <main-dialog id="main_dialog"></main-dialog>
 
         <paper-toast id="main_toast"></paper-toast>
 
@@ -207,12 +209,6 @@
 
             defaultPage: 'home',
             viewPath: '/views/',
-
-            properties: {
-                signedIn: {
-                    type: Boolean,
-                }
-            },
 
             observers: [
                 '_routePageChanged(routeData.page)'
@@ -227,7 +223,7 @@
 
             _loginButtonHandler: function () {
                 if (this.signedIn) {
-                    this.$.authID.signOut().then(function () {
+                    this.$.auth.signOut().then(function () {
                         this.fire('change-route', {url: '/home'});
                         this.fire("show-toast", {text: "Odhlášeno"});
                     }.bind(this));
@@ -237,7 +233,7 @@
                 this.drawerOpened = false;
             },
 
-            computeLockIcon: function (signedIn) {
+            _computeLockIcon: function (signedIn) {
                 return signedIn ? 'lock-open' : 'lock';
             },
 
@@ -249,7 +245,7 @@
 
             _showDialog: function (event) {
                 // TODO: proper event redirection
-                this.$.dialogID._showDialog(event);
+                this.$.main_dialog._showDialog(event);
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 

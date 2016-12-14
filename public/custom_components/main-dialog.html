@@ -9,14 +9,14 @@
     <template>
         <style>
             @media only screen and (min-width: 767px) {
-                #dialogID {
+                #dialog {
                     max-width: 500px;
                     padding: 30px 50px 0 50px;
                 }
             }
 
             @media only screen and (max-width: 767px) {
-                #dialogID {
+                #dialog {
                     position: fixed;
                     margin: 0;
                     top: 0;
@@ -29,7 +29,7 @@
             }
         </style>
 
-        <paper-dialog id="dialogID" with-backdrop entry-animation="scale-up-animation"
+        <paper-dialog id="dialog" with-backdrop entry-animation="scale-up-animation"
                       exit-animation="fade-out-animation">
             <iron-pages id="main_pages" selected="{{viewName}}" attr-for-selected="name">
                 <login-view name="login"></login-view>
@@ -62,13 +62,15 @@
                 this.viewName = event.detail.viewName;
                 this.importHref("/views/dialog_views/" + event.detail.path + event.detail.viewName + "-view.html", function () {
                     if (event.detail.open) {
-                        this.$.dialogID.toggle();
+                        this.$.dialog.toggle();
+                    } else {
+                        this.$.dialog.notifyResize();
                     }
                 }.bind(this), null, true);
             },
 
             _dialogConfirm: function (event) {
-                this.$.dialogID.close();
+                this.$.dialog.close();
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
 

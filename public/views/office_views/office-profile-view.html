@@ -224,7 +224,7 @@
         <template is="dom-if" if="[[_computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
             <section id="map">
                 <!--TODO: restrict API key for our domain -->
-                <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker
+                <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="16"
                             latitude="[[officeData.coordinates.latitude]]"
                             longitude="[[officeData.coordinates.longitude]]">
                     <google-map-marker latitude="[[officeData.coordinates.latitude]]"
