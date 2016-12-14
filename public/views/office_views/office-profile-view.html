@@ -257,7 +257,7 @@
             },
 
             _computeTextAvailability: function (text) {
-                return (text.length !== 0);
+                return (!!text);
             },
 
             _computePhotoAvailability: function (photoFile) {
@@ -269,7 +269,7 @@
             },
 
             _computeMapAvailability: function (latitude, longitude, smallScreen) {
-                return !(smallScreen || latitude.length === 0 || longitude.length === 0);
+                return (!smallScreen && !!latitude && !!longitude);
             }
         });
     </script>

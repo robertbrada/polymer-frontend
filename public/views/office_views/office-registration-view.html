@@ -4,6 +4,8 @@
 <link rel="import" href="/views/office_views/registration_steps/data-view.html">
 <link rel="import" href="/custom_components/login-required-element.html">
 
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
 <link rel="import" href="/behaviors/routing-behavior.html">
 
 <dom-module id="office-registration-view">
@@ -13,6 +15,10 @@
                 pattern="/:page"
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
+
+        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
+                           data="{{nameData}}">
+        </firebase-document>
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
 
@@ -42,27 +48,27 @@
                     type: Object,
                     value: {
                         name: {
-                            firstName: "",
-                            lastName: ""
+                            firstName: null,
+                            lastName: null
                         },
                         address: {
-                            city: "",
-                            street: ""
+                            city: null,
+                            street: null
                         },
                         coordinates: {
-                            longitude: "",
-                            latitude: ""
+                            longitude: null,
+                            latitude: null
                         },
                         specialization: 0, // TODO: disable default and create paper-listbox validation
                         visitLength: 20,
                         device: {
                             enabled: false,
-                            deviceID: ""
+                            deviceID: null
                         },
-                        phoneNumber: "",
-                        email: "",
+                        phoneNumber: null,
+                        email: null,
                         limitedClientele: false,
-                        patientText: "",
+                        patientText: null,
                         officeHours: [
                             {dayIndex: 0, 'checked': true, hours: ''},
                             {dayIndex: 1, 'checked': true, hours: ''},
@@ -74,11 +80,25 @@
                         ],
                         photoFile: File
                     }
+                },
+
+                nameData: {
+                    type: Object,
+                    observer: '_userChange'
                 }
             },
 
             listeners: {
                 'save-office': '_saveOffice',
+            },
+
+            _userChange: function (data) {
+                if (!!data.firstName && this.officeData.name.firstName === null) {
+                    this.set('officeData.name.firstName', data.firstName);
+                }
+                if (!!data.lastName && this.officeData.name.lastName === null) {
+                    this.set('officeData.name.lastName', data.lastName);
+                }
             },
 
             _saveOffice: function (event) {

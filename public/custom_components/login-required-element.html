@@ -21,8 +21,8 @@
 
         <div class="main-frame" hidden="[[loggedIn]]">
             <header class="subsection">
-                <h1>Přihlášení vyžadováno</h1>
-                <span>Pro vstup na tuto stránku je nutné se přihlásit.</span>
+                <h1>Vyžadováno přihlášení</h1>
+                <span>Pro vstup na následující stránku je nutné se přihlásit.</span>
             </header>
             <div class="subsection grid">
                 <section>
@@ -56,6 +56,10 @@
                 loggedIn: {
                     type: Boolean,
                     computed: 'computeLoginStatus(statusKnown, user)',
+                    notify: true
+                },
+
+                user: {
                     notify: true
                 }
             },
