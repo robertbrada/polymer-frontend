@@ -2,6 +2,7 @@
 
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/views/office_views/registration_steps/data-view.html">
+<link rel="import" href="/custom_components/login-required-element.html">
 
 <link rel="import" href="/behaviors/routing-behavior.html">
 
@@ -12,7 +13,11 @@
                 pattern="/:page"
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
+
+        <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
+
         <iron-pages
+                hidden="[[!loggedIn]]"
                 selected="[[page]]"
                 attr-for-selected="name"
                 selected-attribute="visible"

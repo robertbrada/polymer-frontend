@@ -10,6 +10,7 @@
 <link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
+<link rel="import" href="/custom_components/login-required-element.html">
 
 
 <dom-module id="account-view">
@@ -25,7 +26,9 @@
                            data="{{addressData}}">
         </firebase-document>
 
-        <div class="main-frame">
+        <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
+
+        <div class="main-frame" hidden="[[!loggedIn]]">
             <header class="subsection">
                 <h1>Nastavení účtu</h1>
                 <span>Údaje níže můžete kdykoliv změnit.</span>
@@ -72,8 +75,7 @@
             properties: {
                 user: Object,
                 addressData: Object,
-                nameData: Object
-
+                nameData: Object,
             },
 
             confirm: function () {

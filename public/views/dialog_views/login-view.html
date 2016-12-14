@@ -2,8 +2,7 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/paper-dialog-behavior/paper-dialog-common.css">
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/dialog-styles.html">
@@ -35,6 +34,9 @@
             }
 
         </style>
+
+        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
+
         <p class="error">{{errorMessage}}</p>
 
         <!--TODO: bug fix of faulty autofocus-->
@@ -77,9 +79,7 @@
             },
 
             signInWithEmailAndPassword: function () {
-                // TODO: find a way to get reference without avoding the shadow dom
-                var app = document.getElementById('appID').app;
-                app.auth().signInWithEmailAndPassword(this.email, this.password).then(function () {
+                this.$.auth.signInWithEmailAndPassword(this.email, this.password).then(function () {
                     this.fire("show-toast", {text: "Přihlášeno"});
                 }.bind(this)).catch(function (error) {
                     switch (error["code"]) {
