@@ -4,6 +4,8 @@
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
+
 <!--TODO: shouldn't be necessary-->
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
@@ -20,6 +22,8 @@
     <template>
         <style include="button-styles dialog-styles input-styles">
         </style>
+        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
+
         <firebase-document id="document" app-name="doctor-appointment-system">
         </firebase-document>
 
@@ -60,8 +64,7 @@
             },
 
             createUserWithEmailAndPassword: function () {
-                var app = document.getElementById('appID').app;
-                app.auth().createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
+                this.$.auth.createUserWithEmailAndPassword(this.email, this.password).then(function (user) {
                     user.sendEmailVerification();
 
                     this.fire('change-route', {url: '/home'});

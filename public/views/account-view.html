@@ -3,6 +3,7 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -17,6 +18,8 @@
     <template>
         <style include="button-styles layout-styles input-styles header-styles">
         </style>
+
+        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
         <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
                            data="{{nameData}}">
@@ -85,8 +88,7 @@
             },
 
             passChange: function () {
-                var app = document.getElementById('appID').app;
-                app.auth().sendPasswordResetEmail(this.user.email).then(function () {
+                this.$.auth.auth.sendPasswordResetEmail(this.user.email).then(function () {
                     this.fire("show-toast", {text: "Email odeslán"});
                 }.bind(this)).catch(function () {
                     console.log("email sending error");

@@ -5,6 +5,7 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
@@ -17,6 +18,7 @@
         <style include="dialog-styles button-styles">
         </style>
         <iron-meta id="meta"></iron-meta>
+        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
         <form id="main_form" is="iron-form">
             <p>Prosím zadejte nové heslo:</p>
@@ -47,8 +49,7 @@
             },
 
             resetPassword: function () {
-                var auth = document.getElementById('appID').app.auth();
-                auth.confirmPasswordReset(this.$.meta.byKey('actionCode'), this.password).then(function () {
+                this.$.auth.auth.confirmPasswordReset(this.$.meta.byKey('actionCode'), this.password).then(function () {
                     this.fire("show-toast", {text: "Heslo změněno"});
                 }.bind(this)).catch(function (error) {
                     console.log(error);

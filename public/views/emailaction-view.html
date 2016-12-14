@@ -1,8 +1,11 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <dom-module id="emailaction-view">
     <template>
+        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
         <iron-meta key="actionCode" value$="{{actionCode}}"></iron-meta>
     </template>
 
@@ -14,7 +17,7 @@
 
                 var actionCode = this.route.__queryParams["oobCode"];
 
-                var auth = document.getElementById('appID').app.auth();
+                var auth = this.$.auth.auth;
 
                 switch (this.route.__queryParams["mode"]) {
                     case 'resetPassword':

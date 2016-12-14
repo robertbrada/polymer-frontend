@@ -3,6 +3,8 @@
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
+
 <link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
@@ -10,6 +12,8 @@
     <template>
         <style include="button-styles dialog-styles">
         </style>
+
+        <firebase-auth id="auth" app-name="doctor-appointment-system" user="{{user}}"></firebase-auth>
 
         <p class="main_text">Nepodařilo se potvrdit emailovou adresu. <br>
             Potvrzení je vyžadováno pro povolení obědnávání.<br>
@@ -27,15 +31,13 @@
             is: 'actionerror-view',
 
             confirm: function () {
-//                this.resendVerification();
-                console.log("fix user bug"); // TODO: get user reference
+                this.resendVerification();
                 this.fire('dialog-confirm');
             },
 
             resendVerification: function () {
-                var user = this.domHost.user;
-                if (!!user) {
-                    user.sendEmailVerification();
+                if (!!this.user) {
+                    this.user.sendEmailVerification();
                     this.fire("show-dialog", {path: "", viewName: "emaildialog", open: false});
                 } else {
                     console.log("Not logged in error");

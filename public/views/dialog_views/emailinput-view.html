@@ -3,6 +3,7 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 
@@ -14,7 +15,7 @@
     <template>
         <style include="button-styles dialog-styles input-styles">
         </style>
-        <iron-meta id="meta"></iron-meta>
+        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
         <p class="error">{{errorMessage}}</p>
         <p class="main_text">Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:</p>
@@ -45,8 +46,7 @@
             },
 
             sendEmail: function () {
-                var app = document.getElementById('appID').app;
-                app.auth().sendPasswordResetEmail(this.email).then(function () {
+                this.$.auth.auth.sendPasswordResetEmail(this.email).then(function () {
                     this.fire("show-toast", {text: "Email odeslán"});
                 }.bind(this)).catch(function (error) {
                     this.errorMessage = "Účet s touto emailovou adresou neexistuje";
