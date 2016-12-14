@@ -1,9 +1,12 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="/bower_components/neon-animation/animations/fade-out-animation.html">
+
 
 <dom-module id="main-dialog">
     <template>
@@ -27,6 +30,12 @@
                     width: 100%;
                 }
             }
+
+            #closeBtn {
+                position: absolute;
+                right: 5px;
+                top: 5px;
+            }
         </style>
 
         <paper-dialog id="dialogID" with-backdrop entry-animation="scale-up-animation"
@@ -40,6 +49,8 @@
                 <passreset-view name="passreset"></passreset-view>
                 <emailinput-view name="emailinput"></emailinput-view>
             </iron-pages>
+            <iron-icon icon="close"></iron-icon>
+            <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
         </paper-dialog>
     </template>
 
