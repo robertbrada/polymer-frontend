@@ -16,8 +16,14 @@
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
 
-        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
+        <firebase-document id="user_document" app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
                            data="{{nameData}}">
+        </firebase-document>
+
+        <firebase-document id="user_office_document" app-name="doctor-appointment-system" path="/users/{{user.uid}}/offices">
+        </firebase-document>
+
+        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/offices">
         </firebase-document>
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
@@ -47,37 +53,39 @@
                 officeData: {
                     type: Object,
                     value: {
-                        name: {
-                            firstName: null,
-                            lastName: null
+                        information: {
+                            name: {
+                                firstName: null,
+                                lastName: null
+                            },
+                            address: {
+                                city: null,
+                                street: null
+                            },
+                            coordinates: {
+                                longitude: null,
+                                latitude: null
+                            },
+                            specialization: 0, // TODO: disable default and create paper-listbox validation
+                            visitLength: 20,
+                            device: {
+                                enabled: false,
+                                deviceID: null
+                            },
+                            phoneNumber: null,
+                            email: null,
+                            limitedClientele: false,
+                            patientText: null,
+                            officeHours: [
+                                {dayIndex: 0, 'checked': true, hours: ''},
+                                {dayIndex: 1, 'checked': true, hours: ''},
+                                {dayIndex: 2, 'checked': true, hours: ''},
+                                {dayIndex: 3, 'checked': true, hours: ''},
+                                {dayIndex: 4, 'checked': true, hours: ''},
+                                {dayIndex: 5, 'checked': false, hours: ''},
+                                {dayIndex: 6, 'checked': false, hours: ''}
+                            ]
                         },
-                        address: {
-                            city: null,
-                            street: null
-                        },
-                        coordinates: {
-                            longitude: null,
-                            latitude: null
-                        },
-                        specialization: 0, // TODO: disable default and create paper-listbox validation
-                        visitLength: 20,
-                        device: {
-                            enabled: false,
-                            deviceID: null
-                        },
-                        phoneNumber: null,
-                        email: null,
-                        limitedClientele: false,
-                        patientText: null,
-                        officeHours: [
-                            {dayIndex: 0, 'checked': true, hours: ''},
-                            {dayIndex: 1, 'checked': true, hours: ''},
-                            {dayIndex: 2, 'checked': true, hours: ''},
-                            {dayIndex: 3, 'checked': true, hours: ''},
-                            {dayIndex: 4, 'checked': true, hours: ''},
-                            {dayIndex: 5, 'checked': false, hours: ''},
-                            {dayIndex: 6, 'checked': false, hours: ''}
-                        ],
                         photoFile: File
                     }
                 },
@@ -93,16 +101,21 @@
             },
 
             _userChange: function (data) {
-                if (!!data.firstName && this.officeData.name.firstName === null) {
-                    this.set('officeData.name.firstName', data.firstName);
+                if (!!data.firstName && this.officeData.information.name.firstName === null) {
+                    this.set('officeData.information.name.firstName', data.firstName);
                 }
-                if (!!data.lastName && this.officeData.name.lastName === null) {
-                    this.set('officeData.name.lastName', data.lastName);
+                if (!!data.lastName && this.officeData.information.name.lastName === null) {
+                    this.set('officeData.information.name.lastName', data.lastName);
                 }
             },
 
             _saveOffice: function (event) {
-                console.log("Registrovat");
+                var officeID = this.$.office_document.ref.push(this.officeData.information).key;
+                var objectToSave = {};
+                objectToSave[officeID] = true;
+                this.$.user_office_document.ref.update(objectToSave);
+//                console.log(this.$.office_document.app.storage())
+
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
         });

@@ -170,31 +170,31 @@
                             <template is="dom-if" if="[[_computePhotoAvailability(officeData.photoFile)]]">
                                 <li><img id="profile-photo" src$="[[_computePhotoURL(officeData.photoFile)]]"></li>
                             </template>
-                            <li><h2 id="name">[[_formatName(officeData.name.firstName, officeData.name.lastName)]]</h2>
-                                <span>[[_getSpecialization(officeData.specialization)]]</span></li>
+                            <li><h2 id="name">[[_formatName(officeData.information.name.firstName, officeData.information.name.lastName)]]</h2>
+                                <span>[[_getSpecialization(officeData.information.specialization)]]</span></li>
                         </ul>
                     </section>
 
                     <section id="info-section">
                         <p>
                             <iron-icon icon="maps:place"></iron-icon>
-                            [[officeData.address.street]]
-                        <p id="address-city">[[officeData.address.city]]</p>
+                            [[officeData.information.address.street]]
+                        <p id="address-city">[[officeData.information.address.city]]</p>
                         </p>
 
-                        <p hidden="[[!_computeTextAvailability(officeData.phoneNumber)]]">
+                        <p hidden="[[!_computeTextAvailability(officeData.information.phoneNumber)]]">
                             <iron-icon icon="communication:phone"></iron-icon>
-                            [[officeData.phoneNumber]]
+                            [[officeData.information.phoneNumber]]
                         </p>
 
-                        <p hidden="[[!_computeTextAvailability(officeData.email)]]">
+                        <p hidden="[[!_computeTextAvailability(officeData.information.email)]]">
                             <iron-icon icon="communication:email"></iron-icon>
-                            [[officeData.email]]
+                            [[officeData.information.email]]
                         </p>
 
                         <!--TODO: Objevení dialogu s popisem po najetí myší nad text. -->
 
-                        <p id="order-info" hidden="[[!officeData.limitedClientele]]">
+                        <p id="order-info" hidden="[[!officeData.information.limitedClientele]]">
                             <iron-icon icon="info"></iron-icon>
                             Lékař má omezenou klientelu
                         </p>
@@ -209,26 +209,26 @@
             <span>Pro objednání klikněte v kalendáři na čas, který vám vyhovuje</span>
         </div>
 
-        <template is="dom-if" if="[[_computeTextAvailability(officeData.patientText)]]">
+        <template is="dom-if" if="[[_computeTextAvailability(officeData.information.patientText)]]">
             <div class="main-frame">
                 <div class="subsection grid">
                     <section id="for-patient">
                         <h4>Informace pro pacienty</h4>
-                        <p>[[officeData.patientText]]</p>
+                        <p>[[officeData.information.patientText]]</p>
                     </section>
                 </div>
             </div>
         </template>
 
         <!--TODO: Na mobilu zobrazit jenom odkaz do mapy je lepší když se to zobrazí v externí aplikaci-->
-        <template is="dom-if" if="[[_computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
+        <template is="dom-if" if="[[_computeMapAvailability(officeData.information.coordinates.latitude, officeData.information.coordinates.longitude, smallScreen)]]">
             <section id="map">
                 <!--TODO: restrict API key for our domain -->
                 <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="16"
-                            latitude="[[officeData.coordinates.latitude]]"
-                            longitude="[[officeData.coordinates.longitude]]">
-                    <google-map-marker latitude="[[officeData.coordinates.latitude]]"
-                                       longitude="[[officeData.coordinates.longitude]]">
+                            latitude="[[officeData.information.coordinates.latitude]]"
+                            longitude="[[officeData.information.coordinates.longitude]]">
+                    <google-map-marker latitude="[[officeData.information.coordinates.latitude]]"
+                                       longitude="[[officeData.information.coordinates.longitude]]">
                     </google-map-marker>
                 </google-map>
             </section>

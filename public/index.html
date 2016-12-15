@@ -54,23 +54,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
 
         // Load webcomponentsjs polyfill if browser does not support native Web Components
-        (function() {
+        (function () {
             'use strict';
 
-            var onload = function() {
+            var onload = function () {
                 // For native Imports, manually fire WebComponentsReady so user code
                 // can use the same code path for native and polyfill'd imports.
                 if (!window.HTMLImports) {
                     document.dispatchEvent(
-                            new CustomEvent('WebComponentsReady', {bubbles: true})
+                        new CustomEvent('WebComponentsReady', {bubbles: true})
                     );
                 }
             };
 
             var webComponentsSupported = (
-                    'registerElement' in document
-                    && 'import' in document.createElement('link')
-                    && 'content' in document.createElement('template')
+                'registerElement' in document
+                && 'import' in document.createElement('link')
+                && 'content' in document.createElement('template')
             );
 
             if (!webComponentsSupported) {
@@ -86,7 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         // Load pre-caching Service Worker
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 navigator.serviceWorker.register('/service-worker.js');
             });
         }
@@ -106,11 +106,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 </head>
 <body>
-<firebase-app id="appID"
-              name="doctor-appointment-system"
+<firebase-app name="doctor-appointment-system"
               api-key="AIzaSyAGllVgFQns9sv__I2MjU0WzWttC-5c4Cc"
               auth-domain="doctor-appointment-system.firebaseapp.com"
-              database-url="https://doctor-appointment-system.firebaseio.com">
+              database-url="https://doctor-appointment-system.firebaseio.com"
+              storage-bucket="doctor-appointment-system.appspot.com">
 </firebase-app>
 <core-scaffold></core-scaffold>
 </body>
