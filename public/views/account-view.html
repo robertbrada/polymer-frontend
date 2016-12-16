@@ -21,12 +21,8 @@
 
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
-        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
-                           data="{{nameData}}">
-        </firebase-document>
-
-        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/address"
-                           data="{{addressData}}">
+        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/information"
+                           data="{{userInformation}}">
         </firebase-document>
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
@@ -41,20 +37,20 @@
                 <section>
                     <form id="main_form" is="iron-form">
                         <h2>Základní informace</h2>
-                        <paper-input label="Jméno" minlength="1" maxlength="20"
+                        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="30"
                                      error-message="Nelze ponechat prázdné" required
-                                     value="[[nameData.firstName]]"></paper-input>
-                        <paper-input label="Příjmení" minlength="1"
-                                     maxlength="80" error-message="Nelze ponechat prázdné"
-                                     required value="[[nameData.lastName]]"></paper-input>
+                                     value="[[userInformation.name.firstName]]"></paper-input>
+                        <paper-input id="lninput" label="Příjmení" minlength="1"
+                                     maxlength="30" error-message="Nelze ponechat prázdné"
+                                     required value="[[userInformation.name.lastName]]"></paper-input>
                         <h2>Adresa</h2>
                         <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
                             V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
                         <paper-input id="cinput" label="Město" minlength="1" maxlength="20"
-                                     value="[[addressData.city]]">
+                                     value="[[userInformation.address.city]]">
                         </paper-input>
                         <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
-                                     value="[[addressData.street]]"></paper-input>
+                                     value="[[userInformation.address.street]]"></paper-input>
                         <paper-button id="confirm_button" on-tap="confirm">Uložit změny</paper-button>
                     </form>
                 </section>
@@ -75,12 +71,6 @@
 
             behaviors: [FormValidationBehavior],
 
-            properties: {
-                user: Object,
-                addressData: Object,
-                nameData: Object,
-            },
-
             confirm: function () {
                 if (this._validateForm(this.$.main_form)) {
                     this.saveChanges();
@@ -96,10 +86,10 @@
             },
 
             saveChanges: function () {
-                this.set('nameData.firstName', this.$.fninput.value);
-                this.set('nameData.lastName', this.$.lninput.value);
-                this.set('addressData.city', this.$.cinput.value);
-                this.set('addressData.street', this.$.sinput.value);
+                this.set('userInformation.name.firstName', this.$.fninput.value);
+                this.set('userInformation.name.lastName', this.$.lninput.value);
+                this.set('userInformation.address.city', this.$.cinput.value);
+                this.set('userInformation.address.street', this.$.sinput.value);
                 this.fire("show-toast", {text: "Změny uloženy"});
             }
         });

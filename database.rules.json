@@ -1,6 +1,22 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    ".read": true,
+    ".write": "auth != null",
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        "information": {
+          "name": {
+            "firstName": {
+              ".validate": "newData.isString() && newData.val().length <= 30"
+            },
+            "lastName": {
+              ".validate": "newData.isString() && newData.val().length <= 30"
+            }
+          }
+        }
+      }
+    }
   }
 }

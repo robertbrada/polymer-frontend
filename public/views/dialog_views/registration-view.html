@@ -29,9 +29,9 @@
 
         <p class="error">{{errorMessage}}</p>
         <form id="main_form" is="iron-form">
-            <paper-input label="Jméno" minlength="1" maxlength="80" autofocus
+            <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80" autofocus
                          error-message="Nelze ponechat prázdné" auto-validate required></paper-input>
-            <paper-input label="Příjmení" minlength="1" maxlength="80"
+            <paper-input id="lninput" label="Příjmení" minlength="1" maxlength="80"
                          error-message="Nelze ponechat prázdné" auto-validate required></paper-input>
             <gold-email-input error-message="Špatný formát" value="{{email}}"
                               label="Vaše emailová adresa" auto-validate required></gold-email-input>
@@ -88,9 +88,15 @@
             saveUserData: function (user) {
                 this.$.document.path = null;
                 this.$.document.data = {
-                    name: {
-                        'firstName': this.$.fninput.value,
-                        'lastName': this.$.lninput.value
+                    information: {
+                        name: {
+                            'firstName': this.$.fninput.value,
+                            'lastName': this.$.lninput.value
+                        },
+                        address: {
+                            'city': '',
+                            'street': ''
+                        }
                     }
                 };
                 this.$.document.save('users', user.uid);

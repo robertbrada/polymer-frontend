@@ -16,7 +16,7 @@
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
 
-        <firebase-document id="user_document" app-name="doctor-appointment-system" path="/users/{{user.uid}}/name"
+        <firebase-document id="user_document" app-name="doctor-appointment-system" path="/users/{{user.uid}}/information/name"
                            data="{{nameData}}">
         </firebase-document>
 
@@ -110,11 +110,12 @@
             },
 
             _saveOffice: function (event) {
+                this.officeData.information['owner'] = this.user.uid;
                 var officeID = this.$.office_document.ref.push(this.officeData.information).key;
                 var objectToSave = {};
                 objectToSave[officeID] = true;
                 this.$.user_office_document.ref.update(objectToSave);
-//                console.log(this.$.office_document.app.storage())
+//                console.log(this.$.office_document.app.storage());
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
