@@ -15,6 +15,10 @@
           }
         }
       }
+    },
+    "offices": {
+      ".read": true, // TODO: proper rules
+      ".write": true
     }
   }
 }

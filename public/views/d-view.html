@@ -1,11 +1,17 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/custom_components/office-element.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <dom-module id="d-view">
     <template>
         <style>
         </style>
-        TODO: show public office profile<br>
-        ID profilu: [[profileID]]
+
+        <firebase-document app-name="doctor-appointment-system" path="/offices/{{profileID}}" data="{{officeData}}">
+        </firebase-document>
+
+        <office-element office-data="[[officeData]]"></office-element>
     </template>
 
     <script>

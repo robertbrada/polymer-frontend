@@ -21,7 +21,7 @@
                 <h1>Výsledná podoba profilu</h1>
                 <span>Dole můžete potvrdit registraci</span>
             </header>
-            <office-element office-data="[[officeData]]"></office-element>
+            <office-element office-data="[[officeData.information]]" photo-file="[[officeData.photoFile]]"></office-element>
             <div class="subsection grid">
                 <section>
                     <paper-button on-tap="modifyOffice">Upravit</paper-button>
@@ -38,7 +38,7 @@
             is: 'confirm-view',
 
             registerOffice: function () {
-                this.fire('save-office');
+                this.fire('register-office');
             },
 
             modifyOffice: function () {

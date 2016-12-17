@@ -93,7 +93,7 @@
             },
 
             listeners: {
-                'save-office': '_saveOffice',
+                'register-office': '_registerOffice',
             },
 
             _userChange: function (data) {
@@ -105,20 +105,39 @@
                 }
             },
 
-            _saveOffice: function (event) {
-                this.officeData.information['owner'] = this.user.uid;
-                var officeID = this.$.office_document.ref.push(this.officeData.information).key;
-                var objectToSave = {};
-                objectToSave[officeID] = true;
-                this.$.user_office_document.ref.update(objectToSave);
-//                console.log(this.$.office_document.app.storage()); // TODO: photo upload
+            _registerOffice: function (event) {
+                var normalizedString = this.normalizeText(this.officeData.information.name.lastName) + "_" + this.normalizeText(this.officeData.information.address.city);
 
-//                this.generateID(); // TODO: generate custom rememberable ID
+                this.officeData.information['owner'] = this.user.uid;
+
+                this.saveOffice(this.officeData, normalizedString, this.$.office_document.ref, this.$.user_office_document.ref, 0);
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
-            generateID: function () {
+            saveOffice: function (data, normalizedString, officeRef, userOfficeRef, increment) {
+                var officeID = (increment === 0) ? normalizedString : normalizedString + "_" + increment;
+
+                officeRef.child(officeID).transaction(function (currentOfficeData) {
+                    if (currentOfficeData === null) {
+                        this.savePhoto(data, officeID);
+                        this.saveIdToUser(officeID, userOfficeRef);
+                        return data.information;
+                    } else {
+                        this.saveOffice(data, normalizedString, officeRef, userOfficeRef, increment + 1);
+                    }
+                }.bind(this));
+            },
+
+            saveIdToUser: function (officeID, userOfficeRef) {
+                var objectToSave = {};
+                objectToSave[officeID] = true;
+                userOfficeRef.update(objectToSave);
+            },
+
+            savePhoto: function (data, officeID) {
+//                this.$.office_document.app.storage();
+                console.log('TODO: save photo');
             },
 
             normalizeText: function (text) {
@@ -270,14 +289,15 @@
                     }
                 }
 
-                // "what?" version ... http://jsperf.com/diacritics/12
                 function removeDiacritics(str) {
                     return str.replace(/[^\u0000-\u007E]/g, function (a) {
                         return diacriticsMap[a] || a;
                     });
                 }
 
-                return (removeDiacritics(text));
+                var toReturn = removeDiacritics(text).replace(/[^a-z0-9]/gi, '_').toLowerCase(); // TODO: check if necessary
+
+                return (toReturn);
             }
         });
     </script>
