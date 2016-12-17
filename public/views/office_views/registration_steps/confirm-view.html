@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-<link rel="import" href="../office-profile-view.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="/custom_components/office-element.html">
 
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/header-styles.html">
@@ -20,7 +21,7 @@
                 <h1>Výsledná podoba profilu</h1>
                 <span>Dole můžete potvrdit registraci</span>
             </header>
-            <office-profile-view office-data="[[officeData]]"></office-profile-view>
+            <office-element office-data="[[officeData]]"></office-element>
             <div class="subsection grid">
                 <section>
                     <paper-button on-tap="modifyOffice">Upravit</paper-button>

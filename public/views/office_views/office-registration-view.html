@@ -2,7 +2,6 @@
 
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/views/office_views/registration_steps/data-view.html">
-<link rel="import" href="/custom_components/login-required-element.html">
 
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
@@ -26,10 +25,7 @@
         <firebase-document id="office_document" app-name="doctor-appointment-system" path="/offices">
         </firebase-document>
 
-        <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
-
         <iron-pages
-                hidden="[[!loggedIn]]"
                 selected="[[page]]"
                 attr-for-selected="name"
                 selected-attribute="visible"
@@ -115,7 +111,7 @@
                 var objectToSave = {};
                 objectToSave[officeID] = true;
                 this.$.user_office_document.ref.update(objectToSave);
-//                console.log(this.$.office_document.app.storage());
+//                console.log(this.$.office_document.app.storage()); // TODO: photo upload
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }

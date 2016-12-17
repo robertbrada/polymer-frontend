@@ -15,7 +15,7 @@
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/header-styles.html">
 
-<dom-module id="office-profile-view">
+<dom-module id="office-element">
     <template>
         <style include="input-styles layout-styles header-styles">
             :host {
@@ -221,7 +221,8 @@
         </template>
 
         <!--TODO: Na mobilu zobrazit jenom odkaz do mapy je lepší když se to zobrazí v externí aplikaci-->
-        <template is="dom-if" if="[[_computeMapAvailability(officeData.information.coordinates.latitude, officeData.information.coordinates.longitude, smallScreen)]]">
+        <template is="dom-if"
+                  if="[[_computeMapAvailability(officeData.information.coordinates.latitude, officeData.information.coordinates.longitude, smallScreen)]]">
             <section id="map">
                 <!--TODO: restrict API key for our domain -->
                 <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="16"
@@ -238,7 +239,7 @@
 
     <script>
         Polymer({
-            is: 'office-profile-view',
+            is: 'office-element',
 
             properties: {
                 specializations: {

@@ -1,0 +1,28 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="d-view">
+    <template>
+        <style>
+        </style>
+        TODO: show public office profile<br>
+        ID profilu: [[profileID]]
+    </template>
+
+    <script>
+        Polymer({
+            is: 'd-view',
+
+            properties: {
+                profileID: {
+                    type: String,
+                    computed: 'computeID(route.path)'
+                }
+            },
+
+            computeID: function (path) {
+                if (path.length < 2) return null;
+                return (path.substring(1));
+            }
+        });
+    </script>
+</dom-module>

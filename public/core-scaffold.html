@@ -17,7 +17,7 @@
 <link rel="import" href="/bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="custom_components/main-dialog.html">
+<link rel="import" href="custom_components/main-dialog-element.html">
 <!--Shouldn't be necessary-->
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
 
@@ -189,14 +189,15 @@
                 selected-attribute="visible"
                 role="main">
             <home-view name="home"></home-view>
+            <d-view name="d" route="{{subroute}}"></d-view>
+            <office-view name="office" route="{{subroute}}"></office-view>
             <e404-view name="e404"></e404-view>
             <emailaction-view name="emailaction" route="{{subroute}}"></emailaction-view>
-            <office-view name="office" route="{{subroute}}"></office-view>
             <docinfo-view name="docinfo"></docinfo-view>
             <account-view name="account" user="[[user]]"></account-view>
         </iron-pages>
 
-        <main-dialog id="main_dialog"></main-dialog>
+        <main-dialog-element id="main_dialog"></main-dialog-element>
 
         <paper-toast id="main_toast"></paper-toast>
 
