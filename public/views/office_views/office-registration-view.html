@@ -88,7 +88,7 @@
 
                 nameData: {
                     type: Object,
-                    observer: '_userChange'
+                    observer: 'userChange'
                 }
             },
 
@@ -96,7 +96,7 @@
                 'register-office': '_registerOffice'
             },
 
-            _userChange: function (data) {
+            userChange: function (data) {
                 if (!!data.firstName && this.officeData.information.name.firstName === null) {
                     this.set('officeData.information.name.firstName', data.firstName);
                 }
@@ -111,6 +111,8 @@
                 this.officeData.information['owner'] = this.user.uid;
 
                 this.saveOffice(this.officeData, normalizedString, this.$.office_document.ref, this.$.user_office_document.ref, 0);
+
+                this.fire('change-route', {url: '/office/list'});
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },

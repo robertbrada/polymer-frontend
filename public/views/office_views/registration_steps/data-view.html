@@ -64,8 +64,8 @@
                 <span>Tyto údaje můžete později změnit v nastavení</span>
             </header>
 
-            <paper-button id="step1_button" type="button" on-tap="_toggleChange" disabled="[[collapse]]">
-                [[_computeButtonText(collapse, 1)]]
+            <paper-button id="step1_button" type="button" on-tap="toggleChange" disabled="[[collapse]]">
+                [[computeButtonText(collapse, 1)]]
             </paper-button>
             <hr>
 
@@ -99,7 +99,7 @@
                             <h2>Ordinační hodiny</h2>
                             <template is="dom-repeat" items="[[officeData.information.officeHours]]" as="entry">
                                 <div>
-                                    <paper-checkbox checked="{{entry.available}}">[[_getDayName(index)]]
+                                    <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]
                                     </paper-checkbox>
                                 </div>
                                 <template is="dom-if" if="[[entry.available]]" restamp="true">
@@ -113,8 +113,8 @@
                     </div>
                 </form>
             </iron-collapse>
-            <paper-button id="step2_button" on-tap="_toggleChange" disabled="[[!collapse]]">
-                [[_computeButtonText(collapse, 2)]]
+            <paper-button id="step2_button" on-tap="toggleChange" disabled="[[!collapse]]">
+                [[computeButtonText(collapse, 2)]]
             </paper-button>
             <hr>
             <iron-collapse opened="[[!collapse]]">
@@ -147,17 +147,17 @@
                                 </gold-phone-input>
                                 <gold-email-input id="email_id" label="Email" value="{{officeData.information.email}}"
                                                   auto-validate></gold-email-input>
-                                <div class="file_input" hidden="[[_computePhotoAvailability(officeData.photoFile)]]">
-                                    <file-input id="photoUpload" type="file" accept="image/*" on-change="_loadFile">
+                                <div class="file_input" hidden="[[computePhotoAvailability(officeData.photoFile)]]">
+                                    <file-input id="photoUpload" type="file" accept="image/*" on-change="loadFile">
                                         <iron-icon icon="file-upload"></iron-icon>
                                         Nahrát profilovou fotografii
                                     </file-input>
                                 </div>
-                                <template is="dom-if" if="[[_computePhotoAvailability(officeData.photoFile)]]"
+                                <template is="dom-if" if="[[computePhotoAvailability(officeData.photoFile)]]"
                                           restamp="true">
                                     <div class="row">
-                                        <span class="photo_input"><b>Fotografie:</b> [[_computePhotoText(officeData.photoFile)]]</span>
-                                        <paper-icon-button icon="delete" on-tap="_deletePhoto"></paper-icon-button>
+                                        <span class="photo_input"><b>Fotografie:</b> [[computePhotoText(officeData.photoFile)]]</span>
+                                        <paper-icon-button icon="delete" on-tap="deletePhoto"></paper-icon-button>
                                     </div>
                                 </template>
                             </section>
@@ -226,7 +226,7 @@
                 }
             },
 
-            _loadFile: function (e) {
+            loadFile: function (e) {
                 if (e.detail.valid.length > 0) {
                     var file = e.detail.valid[0];
                     this.set('officeData.photoFile', file);
@@ -236,24 +236,24 @@
                 }
             },
 
-            _deletePhoto: function () {
+            deletePhoto: function () {
                 this.set('officeData.photoFile', null);
             },
 
-            _getDayName: function (dayIndex) {
+            getDayName: function (dayIndex) {
                 return (this.days[dayIndex]);
             },
 
             confirm: function () {
-                if (this._validate()) {
+                if (this.validate()) {
                     this.fire('change-route', {url: '/office/registration/confirm'});
-                    this._setCoordinates(this.officeData.information.address);
+                    this.setCoordinates(this.officeData.information.address);
                 } else {
                     this.fire("show-toast", {text: "Prosím opravte chyby podtržené červeně"});
                 }
             },
 
-            _validate: function () {
+            validate: function () {
                 var toReturn = true;
                 if (!this._validateForm(this.$.step1Form)) {
                     this.collapse = true;
@@ -265,7 +265,7 @@
                 return toReturn;
             },
 
-            _setCoordinates: function (addressObject) {
+            setCoordinates: function (addressObject) {
                 var address = addressObject.city + " " + addressObject.street;
                 var api = this.$.map_api.api;
                 var geocoder = new api.Geocoder();
@@ -286,7 +286,7 @@
                 }
             },
 
-            _computeButtonText: function (collapse, index) {
+            computeButtonText: function (collapse, index) {
                 if (collapse) {
                     return (index === 1) ? "Krok1" : "Další krok";
                 } else {
@@ -294,16 +294,16 @@
                 }
             },
 
-            _toggleChange: function () {
+            toggleChange: function () {
                 this.renderStep2 = true;
                 this.collapse = !this.collapse;
             },
 
-            _computePhotoAvailability: function (photoFile) {
+            computePhotoAvailability: function (photoFile) {
                 return (photoFile instanceof File);
             },
 
-            _computePhotoText: function (file) {
+            computePhotoText: function (file) {
                 if (!!file) {
                     return file.name;
                 }
