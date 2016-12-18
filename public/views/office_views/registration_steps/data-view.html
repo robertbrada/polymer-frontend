@@ -99,10 +99,10 @@
                             <h2>Ordinační hodiny</h2>
                             <template is="dom-repeat" items="[[officeData.information.officeHours]]" as="entry">
                                 <div>
-                                    <paper-checkbox checked="{{entry.checked}}">[[_getDayName(entry.dayIndex)]]
+                                    <paper-checkbox checked="{{entry.available}}">[[_getDayName(index)]]
                                     </paper-checkbox>
                                 </div>
-                                <template is="dom-if" if="[[entry.checked]]" restamp="true">
+                                <template is="dom-if" if="[[entry.available]]" restamp="true">
                                     <paper-input value="{{entry.hours}}" auto-validate required
                                                  placeholder="07:30-12:30,13:30-15:30"
                                                  pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](,([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])*"

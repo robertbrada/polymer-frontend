@@ -73,13 +73,13 @@
                             limitedClientele: false,
                             patientText: null,
                             officeHours: [
-                                {dayIndex: 0, 'checked': true, hours: ''},
-                                {dayIndex: 1, 'checked': true, hours: ''},
-                                {dayIndex: 2, 'checked': true, hours: ''},
-                                {dayIndex: 3, 'checked': true, hours: ''},
-                                {dayIndex: 4, 'checked': true, hours: ''},
-                                {dayIndex: 5, 'checked': false, hours: ''},
-                                {dayIndex: 6, 'checked': false, hours: ''}
+                                {'available': true, hours: null}, // Monday
+                                {'available': true, hours: null},
+                                {'available': true, hours: null},
+                                {'available': true, hours: null},
+                                {'available': true, hours: null},
+                                {'available': false, hours: null},
+                                {'available': false, hours: null}
                             ]
                         },
                         photoFile: File
@@ -93,7 +93,7 @@
             },
 
             listeners: {
-                'register-office': '_registerOffice',
+                'register-office': '_registerOffice'
             },
 
             _userChange: function (data) {
