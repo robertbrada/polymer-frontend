@@ -5,36 +5,21 @@
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 
+<link rel="import" href="/custom_components/calendar-element.html">
+
 <!--icons-->
 <link rel="import" href="/bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="/bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="/bower_components/google-map/google-map.html">
 <link rel="import" href="/bower_components/google-map/google-map-marker.html">
 
-<link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
-<link rel="import" href="/styles/header-styles.html">
 
 <dom-module id="office-element">
     <template>
-        <style include="input-styles layout-styles header-styles">
+        <style include="layout-styles">
             :host {
-                display: block;
-
-                padding: 10px 20px;
-            }
-
-            /*TODO zpřehlednit a zjednodušit CSS*/
-
-            #name {
-                margin: 20px 0 0;
-            }
-
-            #profile-photo {
-                width: 140px;
-                height: 140px;
-                border-radius: 50%;
-                border: 1px solid black;
+                font-size: 15px;
             }
 
             ul li {
@@ -46,12 +31,33 @@
                 margin-top: 8px;
             }
 
-            section > p {
+            section > div {
                 text-align: left;
+                margin-top: 8px;
             }
 
-            #info-section > p:first-child {
+            .photo-name-section {
+                text-align: center;
+            }
+
+            .photo-name-section img {
+                width: 140px;
+                height: 140px;
+                border-radius: 50%;
+                border: 1px solid black;
+            }
+
+            .photo-name-section h3 {
+                margin: 20px 0 0;
+            }
+
+            .info-section > div:first-child {
                 margin-top: 0;
+            }
+
+            .info-section a {
+                color: blue;
+                text-decoration: none;
             }
 
             #order-info > iron-icon {
@@ -63,70 +69,24 @@
                 margin-top: 0;
             }
 
-            #for-patient {
+            .patient-container {
                 max-width: 600px;
                 margin: 0 auto;
             }
 
-            #calendar, #map {
-                text-align: center;
-                border: 1px solid #e5e5e6;
+            .wide-container {
                 margin: 30px auto;
-                background-color: #fbfbfc;
-                color: #ababac;
                 max-width: 900px;
             }
 
-            #calendar {
-                height: 350px;
-            }
-
-            #map {
-                min-height: 200px;
-            }
-
-            #map p {
-                text-align: center;
-                margin-top: 70px;
-            }
-
-            /*********** MEDIA **************/
-
-            @media only screen and (max-width: 767px) {
+            @media only screen and (max-width: 717px) {
                 :host {
                     padding: 64px 0 0 0;
                 }
 
-                #profile-photo {
+                .photo-name-section img {
                     width: 100px;
                     height: 100px;
-                }
-            }
-
-            /* prepsany FLEX layout. Tady se hodi se aby sekce daly pod sebe az pri mensim rozliseni, jinak je tam zbytecne prazdneho mista*/
-
-            .grid {
-                margin-top: 40px;
-                @apply(--layout-horizontal);
-            }
-
-            .grid > section {
-                @apply(--layout-flex);
-            }
-
-            .grid > section:not(:first-child) {
-                margin-left: 80px;
-            }
-
-            @media (max-width: 667px) {
-
-                .grid {
-                    display: block;
-                    margin-top: 0;
-                }
-
-                .grid > section:not(:first-child) {
-                    margin-left: 0;
                 }
 
                 ul {
@@ -135,15 +95,11 @@
                     border-bottom: 1px solid #c5c5c6;
                 }
 
-                #calendar {
-                    margin: 0;
-                }
-
-                #info-section {
+                .info-section {
                     margin-top: 30px;
                 }
 
-                #for-patient {
+                .patient-container {
                     margin-top: 30px;
                 }
             }
@@ -159,81 +115,73 @@
         </style>
 
         <!--TODO: app wide vairables-->
-        <iron-media-query query="max-width: 767px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 717px" query-matches="{{smallScreen}}"></iron-media-query>
 
         <div class="main-frame">
 
-            <header class="subsection">
-                <div class="subsection grid">
-                    <section>
-                        <ul>
-                            <template is="dom-if" if="[[_computePhotoAvailability(photoFile)]]">
-                                <li><img id="profile-photo" src$="[[_computePhotoURL(photoFile)]]"></li>
-                            </template>
-                            <li><h2 id="name">[[_formatName(officeData.name.firstName, officeData.name.lastName)]]</h2>
-                                <span>[[_getSpecialization(officeData.specialization)]]</span></li>
-                        </ul>
-                    </section>
+            <div class="subsection grid">
+                <section class="photo-name-section">
+                    <ul>
+                        <template is="dom-if" if="[[computePhotoAvailability(photoFile)]]">
+                            <li><img src$="[[computePhotoURL(photoFile)]]"></li>
+                        </template>
+                        <li><h3>[[formatName(officeData.name.firstName, officeData.name.lastName)]]</h3>
+                            <span>[[getSpecialization(officeData.specialization)]]</span></li>
+                    </ul>
+                </section>
 
-                    <section id="info-section">
-                        <p>
+                <section class="info-section">
+                    <div>
+                        <a target="_blank" title="Zobrazit mapu v novém okně" href="[[computeMapLink(officeData.address)]]">
                             <iron-icon icon="maps:place"></iron-icon>
-                            [[officeData.address.street]]
-                        <p id="address-city">[[officeData.address.city]]</p>
-                        </p>
+                        </a>
+                        [[officeData.address.street]]<br>
+                        <span id="address-city">[[officeData.address.city]]</span>
+                    </div>
 
-                        <p hidden="[[!_computeTextAvailability(officeData.phoneNumber)]]">
-                            <iron-icon icon="communication:phone"></iron-icon>
-                            [[officeData.phoneNumber]]
-                        </p>
+                    <div hidden="[[!computeTextAvailability(officeData.phoneNumber)]]">
+                        <iron-icon icon="communication:phone"></iron-icon>
+                        [[officeData.phoneNumber]]
+                    </div>
 
-                        <p hidden="[[!_computeTextAvailability(officeData.email)]]">
-                            <iron-icon icon="communication:email"></iron-icon>
-                            [[officeData.email]]
-                        </p>
+                    <div hidden="[[!computeTextAvailability(officeData.email)]]">
+                        <iron-icon icon="communication:email"></iron-icon>
+                        [[officeData.email]]
+                    </div>
 
-                        <!--TODO: Objevení dialogu s popisem po najetí myší nad text. -->
-
-                        <p id="order-info" hidden="[[!officeData.limitedClientele]]">
-                            <iron-icon icon="info"></iron-icon>
-                            Lékař má omezenou klientelu
-                        </p>
-                    </section>
-                </div>
-            </header>
-
-        </div>
-
-        <div id="calendar">
-            <h2>Kalendář</h2>
-            <span>Pro objednání klikněte v kalendáři na čas, který vám vyhovuje</span>
-        </div>
-
-        <template is="dom-if" if="[[_computeTextAvailability(officeData.patientText)]]">
-            <div class="main-frame">
-                <div class="subsection grid">
-                    <section id="for-patient">
-                        <h4>Informace pro pacienty</h4>
-                        <p>[[officeData.patientText]]</p>
-                    </section>
-                </div>
+                    <div id="order-info" hidden="[[!officeData.limitedClientele]]">
+                        <iron-icon icon="info"></iron-icon>
+                        Lékař má omezenou klientelu
+                    </div>
+                </section>
             </div>
-        </template>
 
-        <!--TODO: Na mobilu zobrazit jenom odkaz do mapy je lepší když se to zobrazí v externí aplikaci-->
-        <template is="dom-if"
-                  if="[[_computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
-            <section id="map">
-                <!--TODO: restrict API key for our domain -->
-                <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="16"
-                            latitude="[[officeData.coordinates.latitude]]"
-                            longitude="[[officeData.coordinates.longitude]]">
-                    <google-map-marker latitude="[[officeData.coordinates.latitude]]"
-                                       longitude="[[officeData.coordinates.longitude]]">
-                    </google-map-marker>
-                </google-map>
-            </section>
-        </template>
+            <div class="wide-container">
+                <calendar-element office-hours="[[officeData.officeHours]]" visit-length="[[officeData.visitLength]]">
+                </calendar-element>
+            </div>
+
+            <template is="dom-if" if="[[computeTextAvailability(officeData.patientText)]]">
+                <div class="patient-container">
+                    <h4>Informace pro pacienty</h4>
+                    <p>[[officeData.patientText]]</p>
+                </div>
+            </template>
+
+            <template is="dom-if"
+                      if="[[computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
+                <div class="wide-container">
+                    <!--TODO: restrict API key for our domain -->
+                    <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="16"
+                                latitude="[[officeData.coordinates.latitude]]"
+                                longitude="[[officeData.coordinates.longitude]]">
+                        <google-map-marker latitude="[[officeData.coordinates.latitude]]"
+                                           longitude="[[officeData.coordinates.longitude]]">
+                        </google-map-marker>
+                    </google-map>
+                </div>
+            </template>
+        </div>
 
     </template>
 
@@ -245,31 +193,35 @@
                 specializations: {
                     type: Array,
                     value: ['Zubař', 'Rektálník', 'Gynekolog']
-                }
+                },
             },
 
-            _formatName: function (first, last) {
+            formatName: function (first, last) {
                 return (first + " " + last);
             },
 
-            _getSpecialization: function (specialization) {
+            getSpecialization: function (specialization) {
                 return (this.specializations[specialization]);
             },
 
-            _computeTextAvailability: function (text) {
+            computeTextAvailability: function (text) {
                 return (!!text);
             },
 
-            _computePhotoAvailability: function (photoFile) {
+            computePhotoAvailability: function (photoFile) {
                 return (photoFile instanceof File);
             },
 
-            _computePhotoURL: function (file) {
+            computePhotoURL: function (file) {
                 if (file) return URL.createObjectURL(file);
             },
 
-            _computeMapAvailability: function (latitude, longitude, smallScreen) {
+            computeMapAvailability: function (latitude, longitude, smallScreen) {
                 return (!smallScreen && !!latitude && !!longitude);
+            },
+
+            computeMapLink: function (address) {
+                    return (!!address) ? "http://maps.google.com/maps?q=" + address.city + "," + address.street : null;
             }
         });
     </script>
