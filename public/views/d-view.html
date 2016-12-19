@@ -2,16 +2,25 @@
 
 <link rel="import" href="/custom_components/office-element.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/paper-spinner/paper-spinner-lite.html">
 
 <dom-module id="d-view">
     <template>
         <style>
+            div {
+                display: flex;
+                justify-content: center;
+            }
         </style>
 
         <firebase-document app-name="doctor-appointment-system" path="/offices/{{profileID}}" data="{{officeData}}">
         </firebase-document>
 
-        <office-element office-data="[[officeData]]"></office-element>
+        <div hidden="[[!dataNotLoaded]]">
+            <paper-spinner-lite active="[[dataNotLoaded]]"></paper-spinner-lite>
+        </div>
+
+        <office-element hidden="[[dataNotLoaded]]" office-data="[[officeData]]"></office-element>
     </template>
 
     <script>
@@ -22,12 +31,21 @@
                 profileID: {
                     type: String,
                     computed: 'computeID(route.path)'
+                },
+
+                dataNotLoaded: {
+                    type: Boolean,
+                    computed: "computeDataAvailability(officeData)"
                 }
             },
 
             computeID: function (path) {
                 if (path.length < 2) return null;
                 return (path.substring(1));
+            },
+
+            computeDataAvailability: function (data) {
+                return Object.keys(data).length === 0;
             }
         });
     </script>
