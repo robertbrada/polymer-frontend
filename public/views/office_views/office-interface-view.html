@@ -1,0 +1,31 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="office-interface-view">
+    <template>
+        <style>
+        </style>
+
+        TODO: office interface from doctor POV
+        <br>
+        [[profileID]]
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'office-interface-view',
+
+            properties: {
+                profileID: {
+                    type: String,
+                    computed: 'computeID(route.path)'
+                }
+            },
+
+            computeID: function (path) {
+                if (path.length < 2) return null;
+                return (path.substring(1));
+            }
+        });
+    </script>
+</dom-module>

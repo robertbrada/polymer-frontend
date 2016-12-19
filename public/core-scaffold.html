@@ -143,7 +143,7 @@
                 route="{{route}}"
                 pattern="/:page"
                 data="{{routeData}}"
-                tail="{{subroute}}"></app-route>
+                tail="{{subRoute}}"></app-route>
 
         <iron-media-query query="max-width: 767px" query-matches="{{smallScreen}}"></iron-media-query>
 
@@ -189,10 +189,10 @@
                 selected-attribute="visible"
                 role="main">
             <home-view name="home"></home-view>
-            <d-view name="d" route="{{subroute}}"></d-view>
-            <office-view name="office" route="{{subroute}}"></office-view>
+            <d-view name="d" route="{{subRoute}}"></d-view>
+            <office-view name="office" route="{{subRoute}}"></office-view>
             <e404-view name="e404"></e404-view>
-            <emailaction-view name="emailaction" route="{{subroute}}"></emailaction-view>
+            <emailaction-view name="emailaction" route="{{subRoute}}"></emailaction-view>
             <docinfo-view name="docinfo"></docinfo-view>
             <account-view name="account" user="[[user]]"></account-view>
         </iron-pages>

@@ -12,7 +12,7 @@
                 route="{{route}}"
                 pattern="/:page"
                 data="{{routeData}}"
-                tail="{{subroute}}"></app-route>
+                tail="{{subRoute}}"></app-route>
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
 
@@ -23,7 +23,8 @@
                 selected-attribute="visible"
                 role="main">
             <office-list-view name="list"></office-list-view>
-            <office-registration-view name="registration" route="{{subroute}}" user="[[user]]"></office-registration-view>
+            <office-interface-view name="interface" route="{{subRoute}}"></office-interface-view>
+            <office-registration-view name="registration" route="{{subRoute}}" user="[[user]]"></office-registration-view>
         </iron-pages>
     </template>
 
