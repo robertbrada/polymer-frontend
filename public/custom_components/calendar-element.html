@@ -1,28 +1,54 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/custom_components/time-prototype.html">
 
 <dom-module id="calendar-element">
     <template>
         <style>
             :host {
-                height: 350px;
                 text-align: left;
+                background-color: gray;
             }
 
-            .grid > section {
-                @apply(--layout-flex);
+            .wrapper {
+                display: flex;
+                flex: 0;
+                /*background-color: gray;*/
+            }
+
+            .wrapper > div:not(:first-child) {
+                margin-left: 3%;
+            }
+
+            .column {
+                /*display: flex;*/
+                /*float: left;*/
+            }
+
+            button {
+                background-color: var(--app-accent-color);
+                border: none;
+                color: white;
+                /*padding: 10% 1%;*/
+                text-align: center;
+                text-decoration: none;
+                /*display: inline-block;*/
+                font-size: 16px;
+                /*width: 100%;*/
+                cursor: pointer;
             }
         </style>
         <h3>Kalendář</h3>
-        <template is="dom-repeat" items="[[officeHours]]" as="hours">
-            Day:
-            <template is="dom-repeat" items="{{computeBookTimes(hours, visitLength)}}" as="entry">
-                [[entry]]
+        <div class="wrapper">
+            <template is="dom-repeat" items="[[officeHours]]" as="hours">
+                <div class="column">
+                    Day:
+                    <template is="dom-repeat" items="{{computeBookTimes(hours, visitLength)}}" as="entry">
+                        <button>[[entry]]</button>
+                    </template>
+                </div>
             </template>
-            <br>
-        </template>
+        </div>
 
     </template>
 

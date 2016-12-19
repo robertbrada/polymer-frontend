@@ -16,10 +16,10 @@
 <!--Lazy load in the future-->
 <link rel="import" href="/bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="custom_components/main-dialog-element.html">
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="/custom_components/main-dialog-element.html">
 <!--Shouldn't be necessary-->
-<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
 <!-- Since 'home' is the default route, eagerly load it. -->
 <link rel="import" href="views/home-view.html">
@@ -155,7 +155,7 @@
                 <div class="text-bar-item" hidden="[[smallScreen]]">
                     <a href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
                 </div>
-                <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">bezcekani.cz</a></div>
+                <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">Docta.cz</a></div>
                 <div class="icon-bar-item">
                     <paper-icon-button icon="[[_computeLockIcon(signedIn)]]" on-tap="_loginButtonHandler">
                     </paper-icon-button>
