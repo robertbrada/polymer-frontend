@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/custom_components/time-prototype.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="calendar-element">
     <template>
@@ -11,42 +12,48 @@
             }
 
             .wrapper {
-                display: flex;
-                flex: 0;
-                /*background-color: gray;*/
+                @apply(--layout-horizontal);
             }
 
-            .wrapper > div:not(:first-child) {
-                margin-left: 3%;
+            .wrapper > section {
+                @apply(--layout-flex);
             }
 
-            .column {
-                /*display: flex;*/
-                /*float: left;*/
+            .wrapper > section:not(:first-child) {
+                border-left: 1px solid black;
+            }
+
+            .row {
+                @apply(--layout);
+                @apply(--layout-center-center);
+                padding-top: 0.2em;
+                /*border-bottom: 1px solid #9090D9;*/
             }
 
             button {
-                background-color: var(--app-accent-color);
+                background-color: white;
+                color: black;
                 border: none;
-                color: white;
-                /*padding: 10% 1%;*/
+                margin-top: 0.1em;
+                margin-bottom: 0.1em;
                 text-align: center;
                 text-decoration: none;
-                /*display: inline-block;*/
-                font-size: 16px;
-                /*width: 100%;*/
+                font-size: 1.2em;
+                width: 100%;
+                height: 1.3em;
                 cursor: pointer;
             }
         </style>
         <h3>Kalendář</h3>
         <div class="wrapper">
             <template is="dom-repeat" items="[[officeHours]]" as="hours">
-                <div class="column">
-                    Day:
+                <section>
                     <template is="dom-repeat" items="{{computeBookTimes(hours, visitLength)}}" as="entry">
-                        <button>[[entry]]</button>
+                        <div class="row">
+                            <button>[[entry]]</button>
+                        </div>
                     </template>
-                </div>
+                </section>
             </template>
         </div>
 
