@@ -1,0 +1,14 @@
+<script>
+    function CustomTime() {
+        this.hours = null;
+        this.minutes = null;
+    }
+
+    function CustomTimeBuilder(timeString) {
+        var time = new CustomTime();
+        var values = timeString.split(':');
+        time.hours = Number(values[0]);
+        time.minutes = Number(values[1]);
+        return time;
+    }
+</script>

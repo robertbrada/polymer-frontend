@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/custom_components/time-prototype.html">
 
 <dom-module id="calendar-element">
     <template>
@@ -9,19 +10,53 @@
                 height: 350px;
                 text-align: left;
             }
+
             .grid > section {
                 @apply(--layout-flex);
             }
         </style>
         <h3>Kalendář</h3>
-
-        TODO: calendar
+        <template is="dom-repeat" items="[[officeHours]]" as="hours">
+            <template is="dom-repeat" items="{{computeItems(hours)}}" as="entry">
+                [[entry]]
+            </template>
+            <br>
+        </template>
 
     </template>
 
     <script>
         Polymer({
-            is: 'calendar-element'
+            is: 'calendar-element',
+
+            properties: {
+                officeHours: {
+                    type: Object
+                },
+
+                visitLength: {
+                    type: Number
+                }
+            },
+
+            computeItems: function (officeHours) {
+                var bookTimes = [];
+                if (officeHours.available) {
+                    var intervals = this.computeIntervals(officeHours.hours);
+                    console.log(intervals);
+                }
+                return bookTimes;
+            },
+
+            computeIntervals: function (hours) {
+                var splittedHours = hours.split(',');
+                var intervals = [];
+                for (var i = 0; i < splittedHours.length; i++) {
+                    var timeVals = splittedHours[i].split('-');
+                    intervals.push({"from": CustomTimeBuilder(timeVals[0]), "to": CustomTimeBuilder(timeVals[1])});
+                }
+                return intervals;
+            }
         });
     </script>
 </dom-module>

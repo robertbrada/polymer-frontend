@@ -21,9 +21,6 @@
 <!--Shouldn't be necessary-->
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
 
-<!--Imported in order to fix the weird bug-->
-<link rel="import" href="bower_components/polymerfire/firebase-document.html">
-
 <!-- Since 'home' is the default route, eagerly load it. -->
 <link rel="import" href="views/home-view.html">
 
@@ -33,8 +30,7 @@
             :host {
                 display: block;
                 position: relative;
-                padding-top: 130px;
-                padding-bottom: 64px;
+                padding-top: 90px;
                 min-height: 100vh;
                 --app-primary-color: #202020;
                 --app-secondary-color: #757575;
@@ -125,9 +121,9 @@
                 margin: 0 auto;
             }
 
-            @media only screen and (max-width: 767px) {
+            @media only screen and (max-width: 717px) {
                 :host {
-                    padding-top: 64px;
+                    padding-top: 20px;
                 }
             }
 

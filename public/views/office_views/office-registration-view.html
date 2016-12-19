@@ -63,7 +63,7 @@
                                 latitude: null
                             },
                             specialization: 0, // TODO: disable default and create paper-listbox validation
-                            visitLength: 20,
+                            visitLength: 20, // TODO: bug fix paper-input doesn't convert value to Int
                             device: {
                                 enabled: false,
                                 deviceID: null
@@ -124,6 +124,7 @@
                     if (currentOfficeData === null) {
                         this.savePhoto(data, officeID);
                         this.saveIdToUser(officeID, userOfficeRef);
+                        this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         return data.information;
                     } else {
                         this.saveOffice(data, normalizedString, officeRef, userOfficeRef, increment + 1);
