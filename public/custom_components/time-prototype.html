@@ -1,14 +1,30 @@
 <script>
-    function CustomTime() {
-        this.hours = null;
-        this.minutes = null;
+    function CustomTime(hours, minutes) {
+        this.hours = hours;
+        this.minutes = minutes;
+        this.isValidBookTime = function (interval, endTime) {
+            var lowerBound = (this.hours > interval.from.hours || (this.hours === interval.from.hours && this.minutes >= interval.from.minutes));
+            var upperBound = (endTime.hours < interval.to.hours || (endTime.hours == interval.to.hours && endTime.minutes <= interval.to.minutes));
+            return lowerBound && upperBound;
+        };
+        this.toString = function () {
+            return this.hours + ":" + ((this.minutes > 9) ? this.minutes : "0" + this.minutes);
+        }
     }
 
     function CustomTimeBuilder(timeString) {
-        var time = new CustomTime();
         var values = timeString.split(':');
-        time.hours = Number(values[0]);
-        time.minutes = Number(values[1]);
-        return time;
+        return new CustomTime(Number(values[0]), Number(values[1]));
+    }
+
+    function generateIncrementedTime(originalTime, increment) {
+        var hours = originalTime.hours;
+        var minutes = originalTime.minutes + increment;
+        if (minutes >= 60) {
+            var hourDifference = minutes / 60 >> 0;
+            hours += hourDifference;
+            minutes = minutes - hourDifference * 60;
+        }
+        return new CustomTime(hours, minutes);
     }
 </script>

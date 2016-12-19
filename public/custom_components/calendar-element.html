@@ -17,7 +17,8 @@
         </style>
         <h3>Kalendář</h3>
         <template is="dom-repeat" items="[[officeHours]]" as="hours">
-            <template is="dom-repeat" items="{{computeItems(hours)}}" as="entry">
+            Day:
+            <template is="dom-repeat" items="{{computeBookTimes(hours, visitLength)}}" as="entry">
                 [[entry]]
             </template>
             <br>
@@ -39,11 +40,20 @@
                 }
             },
 
-            computeItems: function (officeHours) {
+            computeBookTimes: function (officeHours, visitLength) {
                 var bookTimes = [];
+                visitLength = Number(visitLength);
                 if (officeHours.available) {
                     var intervals = this.computeIntervals(officeHours.hours);
-                    console.log(intervals);
+                    for (var i = 0; i < intervals.length; i++) {
+                        var interval = intervals[i];
+                        var currentTime = interval.from;
+                        var nextTime;
+                        while (currentTime.isValidBookTime(interval, nextTime = generateIncrementedTime(currentTime, visitLength))) {
+                            bookTimes.push(currentTime.toString());
+                            currentTime = nextTime;
+                        }
+                    }
                 }
                 return bookTimes;
             },
