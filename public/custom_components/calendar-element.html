@@ -86,7 +86,6 @@
 
             computeBookTimes: function (officeHours, visitLength) {
                 var bookTimes = [];
-                visitLength = Number(visitLength);
                 if (officeHours.available) {
                     var intervals = this.computeIntervals(officeHours.hours);
                     for (var i = 0; i < intervals.length; i++) {
