@@ -246,7 +246,6 @@
 
             confirm: function () {
                 if (this.validate()) {
-                    this.fire('change-route', {url: '/office/registration/confirm'});
                     this.setCoordinates(this.officeData.information.address);
                 } else {
                     this.fire("show-toast", {text: "Prosím opravte chyby podtržené červeně"});
@@ -275,14 +274,13 @@
                             var location = result[0].geometry.location;
                             this.set('officeData.information.coordinates.latitude', location.lat());
                             this.set('officeData.information.coordinates.longitude', location.lng());
+                            this.fire('change-route', {url: '/office/registration/confirm'});
                         } else {
-                            this.set('officeData.information.coordinates.latitude', "");
-                            this.set('officeData.information.coordinates.longitude', "");
-                            console.log("Coordinates not found or error occurrence"); //TODO: show dialog
+                            this.fire('change-route', {url: '/office/registration/coordinates'});
                         }
                     }.bind(this));
                 } else {
-                    console.log("Geocoder initialization failed")
+                    this.fire('change-route', {url: '/office/registration/coordinates'});
                 }
             },
 

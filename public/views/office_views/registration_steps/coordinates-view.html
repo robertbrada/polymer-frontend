@@ -1,0 +1,85 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/google-map/google-map.html">
+<link rel="import" href="/bower_components/google-map/google-map-marker.html">
+<link rel="import" href="/bower_components/geo-location/geo-location.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/button-styles.html">
+
+<dom-module id="coordinates-view">
+    <template>
+        <style include="button-styles layout-styles">
+            .wide-container {
+                margin: 30px auto;
+                max-width: 900px;
+            }
+
+            section {
+                @apply(--layout);
+                @apply(--layout-center-center);
+            }
+
+            google-map {
+                height: 600px;
+            }
+
+        </style>
+
+        <geo-location latitude="{{information.coordinates.latitude}}"
+                      longitude="{{information.coordinates.longitude}}"></geo-location>
+
+        <div class="wide-container">
+            <h3>Vyberte polohu ordinace na mapě</h3>
+            <p>Bohužel se nám nepodařilo najít umístění ordinace na mapě podle adresy,
+                proto prosím přetáhněte červený špendlík na místo Vaší ordinace. Tyto údaje potřebujeme k určení časové zóny,
+                jež je potřeba pro správné zobrazení objednávacích časů.</p>
+        </div>
+
+        <div class="subsection grid">
+            <section>
+                <span>Zeměpisná šířka: [[information.coordinates.latitude]]</span>
+            </section>
+            <section>
+                <span>Zeměpisná délka: [[information.coordinates.longitude]]</span>
+            </section>
+        </div>
+
+        <div class="wide-container">
+            <!--TODO: restrict API key for our domain -->
+            <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="15"
+                        latitude="[[information.coordinates.latitude]]"
+                        longitude="[[information.coordinates.longitude]]">
+                <google-map-marker latitude="{{information.coordinates.latitude}}"
+                                   longitude="{{information.coordinates.longitude}}" draggable="true">
+                </google-map-marker>
+            </google-map>
+        </div>
+
+        <div class="subsection grid">
+            <section>
+                <paper-button on-tap="modifyOffice">Upravit</paper-button>
+            </section>
+            <section>
+                <paper-button on-tap="finish">Dokončit</paper-button>
+            </section>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'coordinates-view',
+
+            finish: function () {
+                this.fire('change-route', {url: '/office/registration/confirm'});
+            },
+
+            modifyOffice: function () {
+                this.fire('change-route', {url: '/office/registration/data'});
+            }
+        });
+    </script>
+</dom-module>

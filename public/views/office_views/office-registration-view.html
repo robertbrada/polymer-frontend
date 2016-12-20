@@ -31,6 +31,7 @@
                 selected-attribute="visible"
                 role="main">
             <data-view name="data" office-data="{{officeData}}"></data-view>
+            <coordinates-view name="coordinates" information="{{officeData.information}}"></coordinates-view>
             <confirm-view name="confirm" office-data="[[officeData]]"></confirm-view>
         </iron-pages>
 
@@ -125,6 +126,7 @@
                         this.savePhoto(data, officeID);
                         this.saveIdToUser(officeID, userOfficeRef);
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
+                        data.information.visitLength = Number(data.information.visitLength); // Workaround for object serialization bug in paper-input
                         return data.information;
                     } else {
                         this.saveOffice(data, normalizedString, officeRef, userOfficeRef, increment + 1);
