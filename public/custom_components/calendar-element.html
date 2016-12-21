@@ -302,7 +302,7 @@
             },
 
             computeID: function (date, bookTime) {
-                return "" + date.getYear() + (date.getMonth() + 1) + date.getDate() + bookTime.hours + bookTime.minutes;
+                return "" + date.getYear() + "," + date.getMonth() + "," + date.getDate() + "," + bookTime.hours + "," + bookTime.minutes;
             }
         });
     </script>

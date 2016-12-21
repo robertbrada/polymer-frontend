@@ -51,7 +51,15 @@
             },
 
             _onHandleAppointment: function (event) {
-                console.log(event.detail['appointmentID']);
+                var i, id, idString = "",
+                    idArray = event.detail['appointmentID'].split(',');
+
+                for (i = 0; i < idArray.length; i++) {
+                    idString += ((idArray[i].length === 1) ? "0" : "") + idArray[i];
+                }
+
+                id = Number(idString) + 1000000; // Offset to actually represent month, not the index of month
+                console.log(id);
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
