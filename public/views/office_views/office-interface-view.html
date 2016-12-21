@@ -1,57 +1,118 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
 <link rel="import" href="/bower_components/neon-animation/animations/slide-left-animation.html">
 
+<link rel="import" href="/bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="/bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="/bower_components/iron-selector/iron-selectable.html">
+<link rel="import" href="/bower_components/iron-selector/iron-selection.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="office-interface-view">
     <template>
         <style>
+
+
+            paper-drawer-panel {
+
+                overflow: scroll;
+                margin-top: 64px;
+
+                --paper-drawer-panel-main-container: {
+                    background-color: #eeeff2;
+                    padding: 2em 3em 0 3em;
+                };
+
+                --paper-drawer-panel-left-drawer-container: {
+                    border-right: 1px solid #ddddde;
+                };
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 1em;
+                margin: 2em 0;
+            }
+
+
+            paper-header-panel paper-button {
+                /*background-color: red;*/
+                width: 100%;
+                display: block;
+                margin: 0;
+                border: none;
+                font-size: 1em;
+                border-radius: 0;
+                border-top: 1px solid #ccc;
+                padding: 1.2em 0 1.2em 2.5em;
+            }
+
+            .iron-selected {
+                background: #ddd;
+                /*color: white;*/
+            }
+
         </style>
 
-        <paper-tabs selected="{{selected}}" attr-for-selected="name">
-            <paper-tab name="calendar">Kalendář</paper-tab>
-            <paper-tab name="waiting-list">Pořadník</paper-tab>
-            <paper-tab name="settings">Nastavení</paper-tab>
-        </paper-tabs>
 
-        <neon-animated-pages selected="[[selected]]" attr-for-selected="name" entry-animation="slide-from-right-animation"
-                             exit-animation="slide-left-animation">
-            <interface-calendar-view name="calendar"></interface-calendar-view>
-            <interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>
-            <interface-settings-view name="settings"></interface-settings-view>
-        </neon-animated-pages>
+        <paper-drawer-panel>
+            <paper-header-panel drawer>
+                <paper-toolbar>
+                    <h1>Ordinace Plzeň, Klatovská 32</h1>
+                </paper-toolbar>
+                <iron-selector attr-for-selected="name" selected="calendar">
+                    <paper-button name="calendar">Kalendář</paper-button>
+                    <paper-button name="waiting-list">Pořadník</paper-button>
+                    <paper-button name="settings">Nastavení</paper-button>
+                </iron-selector>
 
+            </paper-header-panel>
+
+
+            <paper-header-panel main>
+                <paper-toolbar>
+                    <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                </paper-toolbar>
+
+                <!--<iron-pages attr-for-selected="name">-->
+                <!--<interface-calendar-view name="calendar"></interface-calendar-view>-->
+                <!--<interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>-->
+                <!--<interface-settings-view name="settings"></interface-settings-view>-->
+                <!--</iron-pages>-->
+
+            </paper-header-panel>
+        </paper-drawer-panel>
     </template>
 
     <script>
         Polymer({
             is: 'office-interface-view',
 
-            properties: {
-                profileID: {
-                    type: String,
-                    computed: 'computeID(route.path)'
-                },
 
-                selected: {
-                    type: String,
-                    value: "calendar", // First selected view
-                    observer: "loadView"
-                }
-            },
-
-            loadView: function (viewName) {
-                this.importHref("/views/office_views/interface_views/interface-" + viewName + "-view.html", null, null, false);
-            },
-
-            computeID: function (path) {
-                if (path.length < 2) return null;
-                return (path.substring(1));
-            }
+            // ***** POZUSTATEK Z TOHO KDYŽ TAM BYLY TABY, TREBA TO JESTE POUZIJES ****/
+//            properties: {
+//                profileID: {
+//                    type: String,
+//                    computed: 'computeID(route.path)'
+//                },
+//
+//                selected: {
+//                    type: String,
+//                    value: "waiting-list", // First selected view
+//                    observer: "loadView"
+//                }
+//            },
+//
+//            loadView: function (viewName) {
+//                this.importHref("/views/office_views/interface_views/interface-" + viewName + "-view.html", null, null, false);
+//            },
+//
+//            computeID: function (path) {
+//                if (path.length < 2) return null;
+//                return (path.substring(1));
+//            }
         });
     </script>
 </dom-module>

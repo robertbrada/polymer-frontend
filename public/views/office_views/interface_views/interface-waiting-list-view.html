@@ -1,15 +1,177 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+
+
 <dom-module id="interface-waiting-list-view">
     <template>
         <style>
+
+            iron-collapse {
+                box-shadow: 0 0 3px #ccc;
+            }
+
+            .patient_div {
+                background-color: #fff;
+                border: 1px solid #d5d9da;
+                cursor: pointer;
+                font-size: 1.2em;
+                margin: 1.2em 0 0 0;
+                text-align: left;
+                padding: 1.7em 1em;
+            }
+
+            .collapse-content {
+                font-size: 1.2em;
+                background-color: #fff;
+                padding: 1.2em 2.4em;
+                border-left: 1px solid #d5d9da;
+                border-right: 1px solid #d5d9da;
+                border-bottom: 1px solid #d5d9da;
+            }
+
+            .buttons {
+                float: right;
+            }
+
+            .buttons paper-button {
+                font-size: 0.9em;
+                padding: 0.9em 1.8em;
+                margin-left: 0.9em;
+                background-color: #fff !important;
+                border: 1px solid #ddd;
+                color: #455A64 !important;
+            }
+
+            ul {
+                margin: 0;
+                padding: 0;
+                display: inline-block;
+            }
+
+            ul li {
+                display: block;
+                padding: 0.3em 1.5em;
+            }
+
+            /* FIRST PATIENT CSS DIFFERENCES */
+            .patient_div:first-child #confirm_button{
+                background-color: var(--app-accent-color) !important;
+                color: #fff !important;
+                border: none;
+            }
+
+            /* RESPONSIVE */
+            @media only screen and (max-width: 1400px) {
+
+                .buttons {
+                    border-top: 1px solid #ddddde;
+                    float: none;
+                    display: block;
+                    margin: 1em 0 0 0;
+                    padding-top: 1.5em;
+                }
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                .buttons paper-button{
+                    font-size: 0.9em;
+                }
+            }
+
         </style>
-        TODO: waiting list view
+
+
+        <template is="dom-repeat" items="{{patients}}" as="patient">
+
+            <div class="patient_div" on-click="toggle">
+                <ul>
+                    <li>{{patient.time}}</li>
+                    <li>{{patient.firstname}} {{patient.lastname}}</li>
+                    <li>{{patient.address}}</li>
+                    <li>
+                        <paper-checkbox checked="{{patient.opened}}">Podrobnosti
+                        </paper-checkbox>
+                    </li>
+                </ul>
+                <div class="buttons">
+                    <paper-button id="confirm_button">Vyřízen</paper-button>
+                    <paper-button id="dismiss_button">Nedorazil</paper-button>
+                </div>
+            </div>
+
+
+            <iron-collapse opened="{{patient.opened}}">
+                <div class="collapse-content">
+                    <div class="text">{{patient.text}}</div>
+                </div>
+            </iron-collapse>
+        </template>
+
     </template>
 
     <script>
         Polymer({
-            is: 'interface-waiting-list-view'
+            is: 'interface-waiting-list-view',
+
+            properties: {
+                patients: {
+                    type: Array,
+                    value: function () {
+                        return [
+                            {
+                                firstname: "Robert",
+                                lastname: "Brada",
+                                address: "Kardinála Berana 13, Plzeň",
+                                time: "7:30",
+                                text: "Je mi špatně a teče mi hnis z oka.",
+                                opened: false
+                            },
+                            {
+                                firstname: "Jack",
+                                lastname: "Aubrey",
+                                address: "St. Church 123, London",
+                                time: "8:00",
+                                text: "Mám problém, že mi rostou kly. Přidju se synem, zdědil to po mně.",
+                                opened: false
+                            },
+                            {
+                                firstname: "Anne",
+                                lastname: "Elliot",
+                                time: "8:30",
+                                address: "Kolbeníkova 123, Hradec Králové",
+                                text: "Dobrý pane doktore, jsem paní Nováková.",
+                                opened: false
+                            },
+                            {
+                                firstname: "Stephen",
+                                lastname: "Maturin",
+                                time: "9:00",
+                                address: "Franz Joseph Sp. Strase 15, Wangen",
+                                text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
+                                opened: false
+                            },
+                            {
+                                firstname: "Stephen",
+                                lastname: "Maturin",
+                                time: "9:00",
+                                address: "Franz Joseph Sp. Strase 15, Wangen",
+                                text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
+                                opened: false
+                            },
+                            {
+                                firstname: "Emma", lastname: "Woodhouse", time: "9:30",
+                                address: "St. Church 123, London", text: null,
+                                opened: false
+                            }
+                        ]
+                    }
+                }
+            },
+
         });
     </script>
 </dom-module>
