@@ -40,6 +40,10 @@
                 @apply(--layout-center-center);
             }
 
+            .date {
+                font-size: 0.8em;
+            }
+
             button {
                 color: black;
                 text-align: center;
@@ -72,11 +76,18 @@
         <paper-icon-button icon="chevron-left" on-tap="previous"></paper-icon-button>
         <paper-icon-button icon="chevron-right" on-tap="next"></paper-icon-button>
         <div id="animated_calendar" class="wrapper">
-            <template is="dom-repeat" items="[[officeHours]]" as="hours">
+            <template is="dom-repeat" items="{{computeDates(firstVisibleDate, numberOfColumns, officeHours)}}" as="date">
                 <section>
-                    <template is="dom-repeat" items="{{computeBookTimes(hours, visitLength)}}" as="entry">
+                    <div class="row">
+                        [[date.nameOfTheDay]]
+                    </div>
+                    <div class="row date">
+                        [[computeDate(date)]]
+                    </div>
+
+                    <template is="dom-repeat" items="{{computeBookTimes(date, visitLength, officeHours)}}" as="bookTime">
                         <div class="row">
-                            <button>[[entry]]</button>
+                            <button>[[bookTime]]</button>
                         </div>
                     </template>
                 </section>
@@ -105,8 +116,19 @@
                     value: new Date() // TODO: set local time based on office time zone
                 },
 
+                firstVisibleDate: {
+                    type: Date,
+                    value: new Date()
+                },
+
                 numberOfColumns: {
-                    type: Number
+                    type: Number,
+                    value: 1
+                },
+
+                days: {
+                    type: Array,
+                    value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
                 },
 
                 // Animation properties follow
@@ -166,14 +188,14 @@
                 this.hideCalendar = true;
                 this.animationNext = true;
                 this.playAnimation('slideLeft');
-                this.reloadData();
+                this.reloadData(1);
             },
 
             previous: function () {
                 this.hideCalendar = true;
                 this.animationNext = false;
                 this.playAnimation('slideRight');
-                this.reloadData();
+                this.reloadData(-1);
             },
 
             _onNeonAnimationFinish: function () {
@@ -185,11 +207,12 @@
             },
 
             _onWidthChange: function () {
-                var w = this.$.animated_calendar.offsetWidth;
+                var numberOfColumns,
+                    w = this.$.animated_calendar.offsetWidth;
                 if (w > 0) {
-                    var numberOfColumns = w / 100 >> 0;
-                    if(numberOfColumns > 7) numberOfColumns = 7;
-                    else if(numberOfColumns === 0) numberOfColumns = 1;
+                    numberOfColumns = w / 100 >> 0;
+                    if (numberOfColumns > 7) numberOfColumns = 7;
+                    else if (numberOfColumns === 0) numberOfColumns = 1;
                     this.numberOfColumns = numberOfColumns;
                 }
             },
@@ -207,19 +230,43 @@
                 }
             },
 
-            reloadData: function () {
-                console.log("TODO: reload days, then set dataReloadFinished to true");
+            // If clicked next, next = 1. Otherwise -1
+            reloadData: function (next) {
+                var i = next * this.numberOfColumns;
+                this.firstVisibleDate = new Date(this.firstVisibleDate.valueOf() + i * 86400000);
+                console.log("TODO: Firebase data fetch + wait for them to reload");
                 this.dataReloadFinished = true;
             },
 
-            computeBookTimes: function (officeHours, visitLength) {
-                var bookTimes = [];
-                if (officeHours.available) {
-                    var intervals = this.computeIntervals(officeHours.hours);
-                    for (var i = 0; i < intervals.length; i++) {
-                        var interval = intervals[i];
-                        var currentTime = interval.from;
-                        var nextTime;
+            computeDates: function (firstVisibleDate, numberOfColumns, officeHours) {
+                var date, i, dayIndex,
+                    dates = [],
+                    valOfFirstVisibleDate = firstVisibleDate.valueOf();
+
+                for (i = 0; i < numberOfColumns; i++) {
+                    date = new Date(valOfFirstVisibleDate + i * 86400000);
+                    dayIndex = this.getDayIndex(date);
+                    date["officeHours"] = officeHours[dayIndex];
+                    date["nameOfTheDay"] = this.days[dayIndex];
+                    dates.push(date);
+                }
+                return dates;
+            },
+
+            getDayIndex: function (date) {
+                var day = date.getDay() - 1;
+                return (day < 0) ? 6 : day;
+            },
+
+            computeBookTimes: function (date, visitLength) {
+                var intervals, i, interval, currentTime, nextTime,
+                    bookTimes = [];
+
+                if (date.officeHours.available) {
+                    intervals = this.computeIntervals(date.officeHours.hours);
+                    for (i = 0; i < intervals.length; i++) {
+                        interval = intervals[i];
+                        currentTime = interval.from;
                         while (currentTime.isValidBookTime(interval, nextTime = generateIncrementedTime(currentTime, visitLength))) {
                             bookTimes.push(currentTime.toString());
                             currentTime = nextTime;
@@ -230,13 +277,19 @@
             },
 
             computeIntervals: function (hours) {
-                var splittedHours = hours.split(',');
-                var intervals = [];
-                for (var i = 0; i < splittedHours.length; i++) {
-                    var timeVals = splittedHours[i].split('-');
+                var i, timeVals,
+                    intervals = [],
+                    splittedHours = hours.split(',');
+
+                for (i = 0; i < splittedHours.length; i++) {
+                    timeVals = splittedHours[i].split('-');
                     intervals.push({"from": CustomTimeBuilder(timeVals[0]), "to": CustomTimeBuilder(timeVals[1])});
                 }
                 return intervals;
+            },
+
+            computeDate: function (date) {
+                return date.getDate() + "." + (date.getMonth() + 1) + ".";
             }
         });
     </script>
