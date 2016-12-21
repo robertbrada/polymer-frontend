@@ -10,8 +10,6 @@
 <!--icons-->
 <link rel="import" href="/bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="/bower_components/iron-icons/maps-icons.html">
-<link rel="import" href="/bower_components/google-map/google-map.html">
-<link rel="import" href="/bower_components/google-map/google-map-marker.html">
 
 <link rel="import" href="/styles/layout-styles.html">
 
@@ -192,6 +190,44 @@
                     type: Array,
                     value: ['Zubař', 'Rektálník', 'Gynekolog']
                 },
+
+                showMap: {
+                    value: false
+                },
+
+                resourcesImported: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+
+            observers: [
+                '_screenSizeChanged(smallScreen)'
+            ],
+
+            _screenSizeChanged: function (smallScreen) {
+                if (smallScreen) {
+                    this.showMap = false;
+                } else if (this.resourcesImported) {
+                    this.showMap = true;
+                } else {
+                    var markerLoaded = false;
+                    var mapLoaded = false;
+                    this.importHref("/bower_components/google-map/google-map-marker.html", function () {
+                        markerLoaded = true;
+                        if (mapLoaded) {
+                            this.resourcesImported = true;
+                            this.showMap = true;
+                        }
+                    }.bind(this), null, false);
+                    this.importHref("/bower_components/google-map/google-map.html", function () {
+                        mapLoaded = true;
+                        if (markerLoaded) {
+                            this.resourcesImported = true;
+                            this.showMap = true;
+                        }
+                    }.bind(this), null, false);
+                }
             },
 
             formatName: function (first, last) {
@@ -219,7 +255,7 @@
             },
 
             computeMapLink: function (address) {
-                    return (!!address) ? "http://maps.google.com/maps?q=" + address.city + "," + address.street : null;
+                return (!!address) ? "http://maps.google.com/maps?q=" + address.city + "," + address.street : null;
             }
         });
     </script>
