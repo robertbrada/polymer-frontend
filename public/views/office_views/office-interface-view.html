@@ -1,22 +1,13 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
-<link rel="import" href="/bower_components/neon-animation/animations/slide-left-animation.html">
-
 <link rel="import" href="/bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="/bower_components/iron-selector/iron-selectable.html">
-<link rel="import" href="/bower_components/iron-selector/iron-selection.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="office-interface-view">
     <template>
         <style>
-
-
             paper-drawer-panel {
-
                 overflow: scroll;
                 margin-top: 64px;
 
@@ -35,7 +26,6 @@
                 font-size: 1em;
                 margin: 2em 0;
             }
-
 
             paper-header-panel paper-button {
                 /*background-color: red;*/
@@ -62,7 +52,7 @@
                 <paper-toolbar>
                     <h1>Ordinace Plzeň, Klatovská 32</h1>
                 </paper-toolbar>
-                <iron-selector attr-for-selected="name" selected="calendar">
+                <iron-selector attr-for-selected="name" selected="{{selected}}">
                     <paper-button name="calendar">Kalendář</paper-button>
                     <paper-button name="waiting-list">Pořadník</paper-button>
                     <paper-button name="settings">Nastavení</paper-button>
@@ -76,11 +66,12 @@
                     <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
                 </paper-toolbar>
 
-                <!--<iron-pages attr-for-selected="name">-->
-                <!--<interface-calendar-view name="calendar"></interface-calendar-view>-->
-                <!--<interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>-->
-                <!--<interface-settings-view name="settings"></interface-settings-view>-->
-                <!--</iron-pages>-->
+                <iron-pages attr-for-selected="name" selected="[[selected]]" entry-animation="slide-from-top-animation"
+                            exit-animation="slide-down-animation">
+                    <interface-calendar-view name="calendar"></interface-calendar-view>
+                    <interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>
+                    <interface-settings-view name="settings"></interface-settings-view>
+                </iron-pages>
 
             </paper-header-panel>
         </paper-drawer-panel>
@@ -90,29 +81,27 @@
         Polymer({
             is: 'office-interface-view',
 
+            properties: {
+                profileID: {
+                    type: String,
+                    computed: 'computeID(route.path)'
+                },
 
-            // ***** POZUSTATEK Z TOHO KDYŽ TAM BYLY TABY, TREBA TO JESTE POUZIJES ****/
-//            properties: {
-//                profileID: {
-//                    type: String,
-//                    computed: 'computeID(route.path)'
-//                },
-//
-//                selected: {
-//                    type: String,
-//                    value: "waiting-list", // First selected view
-//                    observer: "loadView"
-//                }
-//            },
-//
-//            loadView: function (viewName) {
-//                this.importHref("/views/office_views/interface_views/interface-" + viewName + "-view.html", null, null, false);
-//            },
-//
-//            computeID: function (path) {
-//                if (path.length < 2) return null;
-//                return (path.substring(1));
-//            }
+                selected: {
+                    type: String,
+                    value: "waiting-list", // First selected view
+                    observer: "loadView"
+                }
+            },
+
+            loadView: function (viewName) {
+                this.importHref("/views/office_views/interface_views/interface-" + viewName + "-view.html", null, null, false);
+            },
+
+            computeID: function (path) {
+                if (path.length < 2) return null;
+                return (path.substring(1));
+            }
         });
     </script>
 </dom-module>
