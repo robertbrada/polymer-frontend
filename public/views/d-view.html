@@ -13,7 +13,7 @@
             }
         </style>
 
-        <firebase-document app-name="doctor-appointment-system" path="/offices/{{profileID}}" data="{{officeData}}">
+        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/offices/{{profileID}}" data="{{officeData}}">
         </firebase-document>
 
         <div hidden="[[!dataNotLoaded]]">
@@ -35,12 +35,19 @@
 
                 dataNotLoaded: {
                     type: Boolean,
-                    computed: "computeDataAvailability(officeData)"
+                    computed: 'computeDataAvailability(officeData)',
+                    observer: 'disableReference'
                 }
             },
 
             listeners: {
                 'handle-appointment': '_onHandleAppointment'
+            },
+
+            disableReference: function (dataNotLoaded) {
+                if (!dataNotLoaded) {
+                    this.$.office_document.ref.off();
+                }
             },
 
             _onHandleAppointment: function (event) {
