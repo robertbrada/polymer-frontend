@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 
 <link rel="import" href="/bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
@@ -88,7 +89,7 @@
         Polymer({
             is: 'calendar-element',
 
-            behaviors: [Polymer.NeonAnimationRunnerBehavior],
+            behaviors: [Polymer.NeonAnimationRunnerBehavior, Polymer.IronResizableBehavior],
 
             properties: {
                 officeHours: {
@@ -103,6 +104,12 @@
                     type: Date,
                     value: new Date() // TODO: set local time based on office time zone
                 },
+
+                numberOfColumns: {
+                    type: Number
+                },
+
+                // Animation properties follow
 
                 animationConfig: {
                     value: function () {
@@ -147,7 +154,8 @@
             },
 
             listeners: {
-                'neon-animation-finish': '_onNeonAnimationFinish'
+                'neon-animation-finish': '_onNeonAnimationFinish',
+                'iron-resize': '_onWidthChange'
             },
 
             observers: [
@@ -173,6 +181,16 @@
                     this.$.animated_calendar.style.visibility = 'hidden';
                     this.hideCalendar = false;
                     this.animationFinished = true;
+                }
+            },
+
+            _onWidthChange: function () {
+                var w = this.$.animated_calendar.offsetWidth;
+                if (w > 0) {
+                    var numberOfColumns = w / 100 >> 0;
+                    if(numberOfColumns > 7) numberOfColumns = 7;
+                    else if(numberOfColumns === 0) numberOfColumns = 1;
+                    this.numberOfColumns = numberOfColumns;
                 }
             },
 
