@@ -7,13 +7,15 @@
 <dom-module id="office-interface-view">
     <template>
         <style>
+
+
             paper-drawer-panel {
-                overflow: scroll;
                 margin-top: 64px;
 
                 --paper-drawer-panel-main-container: {
                     background-color: #eeeff2;
                     padding: 2em 3em 0 3em;
+                    overflow: auto;
                 };
 
                 --paper-drawer-panel-left-drawer-container: {
@@ -28,7 +30,6 @@
             }
 
             paper-header-panel paper-button {
-                /*background-color: red;*/
                 width: 100%;
                 display: block;
                 margin: 0;
@@ -39,9 +40,9 @@
                 padding: 1.2em 0 1.2em 2.5em;
             }
 
-            .iron-selected {
-                background: #ddd;
-                /*color: white;*/
+            .iron-selected.nav {
+                background-color: var(--app-accent-color);
+                color: white;
             }
 
         </style>
@@ -53,9 +54,9 @@
                     <h1>Ordinace Plzeň, Klatovská 32</h1>
                 </paper-toolbar>
                 <iron-selector attr-for-selected="name" selected="{{selected}}">
-                    <paper-button name="calendar">Kalendář</paper-button>
-                    <paper-button name="waiting-list">Pořadník</paper-button>
-                    <paper-button name="settings">Nastavení</paper-button>
+                    <paper-button name="calendar" class="nav">Kalendář</paper-button>
+                    <paper-button name="waiting-list" class="nav">Pořadník</paper-button>
+                    <paper-button name="settings" class="nav">Nastavení</paper-button>
                 </iron-selector>
 
             </paper-header-panel>
