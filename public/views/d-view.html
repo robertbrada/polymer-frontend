@@ -39,6 +39,15 @@
                 }
             },
 
+            listeners: {
+                'handle-appointment': '_onHandleAppointment'
+            },
+
+            _onHandleAppointment: function (event) {
+                console.log(event.detail['appointmentID']);
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+            },
+
             computeID: function (path) {
                 if (path.length < 2) return null;
                 return (path.substring(1));

@@ -7,9 +7,6 @@
             var upperBound = (endTime.hours < interval.to.hours || (endTime.hours == interval.to.hours && endTime.minutes <= interval.to.minutes));
             return lowerBound && upperBound;
         };
-        this.toString = function () {
-            return this.hours + ":" + ((this.minutes > 9) ? this.minutes : "0" + this.minutes);
-        }
     }
 
     function CustomTimeBuilder(timeString) {

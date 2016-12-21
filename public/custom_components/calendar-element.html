@@ -87,7 +87,8 @@
 
                     <template is="dom-repeat" items="{{computeBookTimes(date, visitLength, officeHours)}}" as="bookTime">
                         <div class="row">
-                            <button>[[bookTime]]</button>
+                            <button on-tap="handleAppointment" data-args$="{{computeID(date, bookTime)}}">[[computeButtonText(bookTime)]]
+                            </button>
                         </div>
                     </template>
                 </section>
@@ -184,6 +185,10 @@
                 '_stateChanged(dataReloadFinished, animationFinished)'
             ],
 
+            handleAppointment: function (event) {
+                this.fire('handle-appointment', {"appointmentID": event.target.dataset.args})
+            },
+
             next: function () {
                 this.hideCalendar = true;
                 this.animationNext = true;
@@ -268,7 +273,7 @@
                         interval = intervals[i];
                         currentTime = interval.from;
                         while (currentTime.isValidBookTime(interval, nextTime = generateIncrementedTime(currentTime, visitLength))) {
-                            bookTimes.push(currentTime.toString());
+                            bookTimes.push(currentTime);
                             currentTime = nextTime;
                         }
                     }
@@ -290,6 +295,14 @@
 
             computeDate: function (date) {
                 return date.getDate() + "." + (date.getMonth() + 1) + ".";
+            },
+
+            computeButtonText: function (bookTime) {
+                return bookTime.hours + ":" + ((bookTime.minutes > 9) ? bookTime.minutes : "0" + bookTime.minutes);
+            },
+
+            computeID: function (date, bookTime) {
+                return "" + date.getYear() + (date.getMonth() + 1) + date.getDate() + bookTime.hours + bookTime.minutes;
             }
         });
     </script>
