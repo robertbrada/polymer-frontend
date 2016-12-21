@@ -2,12 +2,24 @@
 
 <link rel="import" href="/custom_components/time-prototype.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="/bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-right-animation.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-left-animation.html">
 
 <dom-module id="calendar-element">
     <template>
         <style>
             :host {
                 text-align: left;
+            }
+
+            paper-icon-button {
+                color: green;
             }
 
             .wrapper {
@@ -56,7 +68,9 @@
 
         </style>
         <h3>Kalendář</h3>
-        <div class="wrapper">
+        <paper-icon-button icon="chevron-left" on-tap="previous"></paper-icon-button>
+        <paper-icon-button icon="chevron-right" on-tap="next"></paper-icon-button>
+        <div id="animated_calendar" class="wrapper">
             <template is="dom-repeat" items="[[officeHours]]" as="hours">
                 <section>
                     <template is="dom-repeat" items="{{computeBookTimes(hours, visitLength)}}" as="entry">
@@ -74,6 +88,8 @@
         Polymer({
             is: 'calendar-element',
 
+            behaviors: [Polymer.NeonAnimationRunnerBehavior],
+
             properties: {
                 officeHours: {
                     type: Object
@@ -81,7 +97,101 @@
 
                 visitLength: {
                     type: Number
+                },
+
+                officeLocalTime: {
+                    type: Date,
+                    value: new Date() // TODO: set local time based on office time zone
+                },
+
+                animationConfig: {
+                    value: function () {
+                        return {
+                            'slideLeft': {
+                                name: 'slide-left-animation',
+                                node: this.$.animated_calendar
+                            },
+                            'slideFromRight': {
+                                name: 'slide-from-right-animation',
+                                node: this.$.animated_calendar
+                            },
+                            'slideRight': {
+                                name: 'slide-right-animation',
+                                node: this.$.animated_calendar
+                            },
+                            'slideFromLeft': {
+                                name: 'slide-from-left-animation',
+                                node: this.$.animated_calendar
+                            }
+                        }
+                    }
+                },
+
+                hideCalendar: {
+                    type: Boolean
+                },
+
+                animationNext: {
+                    type: Boolean
+                },
+
+                dataReloadFinished: {
+                    type: Boolean,
+                    value: false
+                },
+
+                animationFinished: {
+                    type: Boolean,
+                    value: false
                 }
+            },
+
+            listeners: {
+                'neon-animation-finish': '_onNeonAnimationFinish'
+            },
+
+            observers: [
+                '_stateChanged(dataReloadFinished, animationFinished)'
+            ],
+
+            next: function () {
+                this.hideCalendar = true;
+                this.animationNext = true;
+                this.playAnimation('slideLeft');
+                this.reloadData();
+            },
+
+            previous: function () {
+                this.hideCalendar = true;
+                this.animationNext = false;
+                this.playAnimation('slideRight');
+                this.reloadData();
+            },
+
+            _onNeonAnimationFinish: function () {
+                if (this.hideCalendar) {
+                    this.$.animated_calendar.style.visibility = 'hidden';
+                    this.hideCalendar = false;
+                    this.animationFinished = true;
+                }
+            },
+
+            _stateChanged: function (dataReloadState, animationFinishState) {
+                if (dataReloadState && animationFinishState) {
+                    this.$.animated_calendar.style.visibility = 'visible';
+                    if (this.animationNext) {
+                        this.playAnimation('slideFromRight');
+                    } else {
+                        this.playAnimation('slideFromLeft');
+                    }
+                    this.dataReloadFinished = false;
+                    this.animationFinished = false;
+                }
+            },
+
+            reloadData: function () {
+                console.log("TODO: reload days, then set dataReloadFinished to true");
+                this.dataReloadFinished = true;
             },
 
             computeBookTimes: function (officeHours, visitLength) {
