@@ -120,7 +120,7 @@
                     <li>[[patient.address]]</li>
                     <!--pokud neni zprava, tak nezobrazi tlacitko podrobnosti-->
                     <li hidden="[[!patient.text]]">
-                        <button on-tap="handleDetail" id="show_detail">[[detailText]] podrobnosti</button>
+                        <button on-tap="handleDetail" id="show_detail">[[computeText(patient.opened)]] podrobnosti</button>
                     </li>
                 </ul>
                 <div class="buttons">
@@ -189,44 +189,16 @@
 
                         }
                     ]
-                },
-
-                detailText: {
-                    type: String,
-                    value: 'Zobrazit'
                 }
             },
 
-            changeText: function (event) {
-
-//                var opened = event.model.patient.opened;
-//
-//                if (!opened) {
-////                    document.ge("show_detail").innerHTML = "Skrýt podrobnosti"
-//                } else {
-////                    document.getElementById("show_detail").innerHTML = "Zobrazit podrobnosti"
-//                }
-//                event.model.patient.opened = !opened;
-
-
-                //TODO meni text u vsech vygenerovanych, ne jen u toho jednoho, na ktery jsem kliknul
-                if (!this.patients.opened) {
-                    this.detailText = 'Skrýt';
-                } else {
-                    this.detailText = 'Zobrazit';
-                }
-
-                this.patients.opened = !this.patients.opened
+            computeText: function (opened) {
+                return (opened) ? "Skrýt" : "Zobrazit";
             },
 
-            toggle: function (event) {
+            handleDetail: function (event) {
                 var opened = event.model.patient.opened;
                 event.model.set('patient.opened', !opened);
-            },
-
-            handleDetail: function () {
-                this.changeText();
-                this.toggle(event)
             }
 
         });

@@ -88,18 +88,16 @@
             saveUserData: function (user) {
                 this.$.document.path = null;
                 this.$.document.data = {
-                    information: {
-                        name: {
-                            'firstName': this.$.fninput.value,
-                            'lastName': this.$.lninput.value
-                        },
-                        address: {
-                            'city': '',
-                            'street': ''
-                        }
+                    name: {
+                        'firstName': this.$.fninput.value,
+                        'lastName': this.$.lninput.value
+                    },
+                    address: {
+                        'city': '',
+                        'street': ''
                     }
                 };
-                this.$.document.save('users', user.uid);
+                this.$.document.save('user_info', user.uid);
             }
         });
 

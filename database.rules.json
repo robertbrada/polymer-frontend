@@ -1,6 +1,6 @@
 {
   "rules": {
-    "users": {
+    "user_info": {
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
