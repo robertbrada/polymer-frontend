@@ -58,7 +58,10 @@
                                 latitude: null
                             },
                             specialization: 0, // TODO: disable default and create paper-listbox validation
-                            visitLength: 20, // TODO: bug fix paper-input doesn't convert value to Int
+                            visitLength: {
+                                type: Number,
+                                value: 20
+                            },
                             phoneNumber: null,
                             email: null,
                             limitedClientele: false,
@@ -123,7 +126,6 @@
                         this.saveAdminInfo(data, officeID, rootRef);
                         this.savePhoto(data, officeID);
                         this.saveIdToUser(officeID, rootRef);
-                        data.information.visitLength = Number(data.information.visitLength); // Workaround for object serialization bug in paper-input
                         this.saveSearchInfo(data.information, officeID, rootRef);
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         return data.information;
