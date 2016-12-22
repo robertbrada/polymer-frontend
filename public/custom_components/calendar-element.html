@@ -302,7 +302,17 @@
             },
 
             computeID: function (date, bookTime) {
-                return "" + date.getYear() + "," + date.getMonth() + "," + date.getDate() + "," + bookTime.hours + "," + bookTime.minutes;
+                var month = date.getMonth() + 1,
+                    dayDate = date.getDate(),
+                    hours = bookTime.hours,
+                    minutes = bookTime.minutes;
+
+                if (month < 10) month = "0" + month;
+                if (dayDate < 10) dayDate = "0" + dayDate;
+                if (hours < 10) hours = "0" + hours;
+                if (minutes < 10) minutes = "0" + minutes;
+
+                return "" + date.getFullYear() + month + dayDate + hours + minutes;
             }
         });
     </script>
