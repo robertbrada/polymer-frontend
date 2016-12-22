@@ -23,11 +23,10 @@
             .patient_div {
                 background-color: #fff;
                 border: 1px solid #d5d9da;
-                cursor: pointer;
                 font-size: 1.2em;
                 margin: 1.2em 0 0 0;
                 text-align: left;
-                padding: 1.7em 1em;
+                padding: 1.2em 1em;
             }
 
             .collapse-content {
@@ -44,8 +43,8 @@
             }
 
             .buttons paper-button {
-                font-size: 0.9em;
-                padding: 0.9em 1.8em;
+                font-size: 0.8em;
+                padding: 0.8em 1.7em;
                 margin-left: 0.9em;
                 background-color: #fff !important;
                 border: 1px solid #ddd;
@@ -60,7 +59,20 @@
 
             ul li {
                 display: block;
-                padding: 0.3em 1.5em;
+                padding: 0.3em 1em;
+            }
+
+            #show_detail {
+                font-size: 0.7em;
+                padding: 0.9em 1.8em;
+                background-color: #f8f8f9;
+                border: 1px solid #ddd;
+                color: #455A64;
+                cursor: pointer;
+            }
+
+            #show_detail:hover {
+                background-color: #ddd;
             }
 
             /* FIRST PATIENT CSS DIFFERENCES */
@@ -101,11 +113,15 @@
 
         <template is="dom-repeat" items="[[patients]]" as="patient">
 
-            <div class="patient_div" on-tap="toggle">
+            <div class="patient_div">
                 <ul>
                     <li>[[patient.time]]</li>
                     <li>[[patient.firstName]] [[patient.lastName]]</li>
                     <li>[[patient.address]]</li>
+                    <!--pokud neni zprava, tak nezobrazi tlacitko podrobnosti-->
+                    <li hidden="[[!patient.text]]">
+                        <button on-tap="handleDetail" id="show_detail">[[detailText]] podrobnosti</button>
+                    </li>
                 </ul>
                 <div class="buttons">
                     <paper-button id="confirm_button">Vyřízen</paper-button>
@@ -144,48 +160,73 @@
                             lastName: "Aubrey",
                             address: "St. Church 123, London",
                             time: "8:00",
-                            text: "Mám problém, že mi rostou kly. Přijdu se synem, zdědil to po mně.",
-                            opened: false
-                        },
-                        {
-                            firstName: "Anne",
-                            lastName: "Elliot",
-                            time: "8:30",
-                            address: "Kolbeníkova 123, Hradec Králové",
-                            text: "Dobrý pane doktore, jsem paní Nováková.",
-                            opened: false
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-                        },
-                        {
-                            firstName: "Emma",
-                            lastName: "Woodhouse",
-                            time: "9:30",
-                            address: "St. Church 123, London",
                             text: null,
                             opened: false
+                        },
+                        {
+                            firstName: null,
+                            lastName: "Elliot",
+                            time: "8:30",
+                            address: null,
+                            text: null,
+                            opened: false
+                        },
+                        {
+                            firstName: "Stephen",
+                            lastName: "Maturin",
+                            time: "9:00",
+                            address: "Franz Joseph Sp. Strase 15, Wangen",
+                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
+                            opened: false
+                        },
+                        {
+                            firstName: "Stephen",
+                            lastName: "Maturin",
+                            time: "9:00",
+                            address: "Franz Joseph Sp. Strase 15, Wangen",
+                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
+                            opened: false
+
                         }
                     ]
+                },
+
+                detailText: {
+                    type: String,
+                    value: 'Zobrazit'
                 }
+            },
+
+            changeText: function (event) {
+
+//                var opened = event.model.patient.opened;
+//
+//                if (!opened) {
+////                    document.ge("show_detail").innerHTML = "Skrýt podrobnosti"
+//                } else {
+////                    document.getElementById("show_detail").innerHTML = "Zobrazit podrobnosti"
+//                }
+//                event.model.patient.opened = !opened;
+
+
+                //TODO meni text u vsech vygenerovanych, ne jen u toho jednoho, na ktery jsem kliknul
+                if (!this.patients.opened) {
+                    this.detailText = 'Skrýt';
+                } else {
+                    this.detailText = 'Zobrazit';
+                }
+
+                this.patients.opened = !this.patients.opened
             },
 
             toggle: function (event) {
                 var opened = event.model.patient.opened;
                 event.model.set('patient.opened', !opened);
+            },
+
+            handleDetail: function () {
+                this.changeText();
+                this.toggle(event)
             }
 
         });
