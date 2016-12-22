@@ -93,11 +93,12 @@
             },
 
             userChange: function (data) {
-                if (!!data.firstName && this.officeData.information.name.firstName === null) {
+                var name = this.officeData.information.name;
+
+                if(name.firstName === null && name.lastName === null && !!data.firstName && !!data.lastName) {
                     this.set('officeData.information.name.firstName', data.firstName);
-                }
-                if (!!data.lastName && this.officeData.information.name.lastName === null) {
                     this.set('officeData.information.name.lastName', data.lastName);
+                    this.$.user_document.ref.off();
                 }
             },
 
