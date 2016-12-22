@@ -13,7 +13,6 @@
     <template>
         <style include="input-styles">
 
-
             paper-drawer-panel {
                 margin-top: 64px;
 
@@ -72,6 +71,14 @@
                 margin-bottom: 1em;
             }
 
+            #help-tab {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                border-top: none;
+                width: 256px;
+            }
+
 
         </style>
 
@@ -85,6 +92,7 @@
                         <paper-button name="calendar" class="nav">Kalendář</paper-button>
                         <paper-button name="waiting-list" class="nav">Pořadník</paper-button>
                         <paper-button name="settings" class="nav">Nastavení</paper-button>
+                        <paper-button name="help" id="help-tab" class="nav">Nahlásit problém</paper-button>
                     </iron-selector>
                 </paper-toolbar>
             </paper-header-panel>
@@ -112,6 +120,7 @@
                     <interface-calendar-view name="calendar"></interface-calendar-view>
                     <interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>
                     <interface-settings-view name="settings"></interface-settings-view>
+                    <interface-help-view name="help"></interface-help-view>
                 </iron-pages>
 
             </paper-header-panel>
