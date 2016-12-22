@@ -15,14 +15,8 @@
                 data="{{routeData}}"
                 tail="{{subRoute}}"></app-route>
 
-        <firebase-document id="user_document" app-name="doctor-appointment-system" path="/users/{{user.uid}}/information/name"
+        <firebase-document id="user_document" app-name="doctor-appointment-system" path="/user_info/{{user.uid}}/name"
                            data="{{nameData}}">
-        </firebase-document>
-
-        <firebase-document id="user_office_document" app-name="doctor-appointment-system" path="/users/{{user.uid}}/offices">
-        </firebase-document>
-
-        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/offices">
         </firebase-document>
 
         <iron-pages
@@ -65,10 +59,6 @@
                             },
                             specialization: 0, // TODO: disable default and create paper-listbox validation
                             visitLength: 20, // TODO: bug fix paper-input doesn't convert value to Int
-                            device: {
-                                enabled: false,
-                                deviceID: null
-                            },
                             phoneNumber: null,
                             email: null,
                             limitedClientele: false,
@@ -81,9 +71,14 @@
                                 {'available': true, hours: null},
                                 {'available': false, hours: null},
                                 {'available': false, hours: null}
-                            ]
+                            ],
+                            photoAvailability: false
                         },
-                        photoFile: File
+                        photoFile: File,
+                        device: {
+                            enabled: false,
+                            deviceID: null
+                        }
                     }
                 },
 
@@ -107,37 +102,63 @@
             },
 
             _registerOffice: function (event) {
-                var normalizedString = this.normalizeText(this.officeData.information.name.lastName) + "_" + this.normalizeText(this.officeData.information.address.city);
+                var normalizedString = this.normalizeText(this.officeData.information.name.lastName) + "_" + this.normalizeText(this.officeData.information.address.city),
+                    rootRef = this.$.user_document.ref.root;
 
                 this.officeData.information['owner'] = this.user.uid;
 
-                this.saveOffice(this.officeData, normalizedString, this.$.office_document.ref, this.$.user_office_document.ref, 0);
+                this.saveOffice(this.officeData, normalizedString, rootRef, 0);
 
                 this.fire('change-route', {url: '/office/list'});
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
-            saveOffice: function (data, normalizedString, officeRef, userOfficeRef, increment) {
+            saveOffice: function (data, normalizedString, rootRef, increment) {
                 var officeID = (increment === 0) ? normalizedString : normalizedString + "_" + increment;
 
-                officeRef.child(officeID).transaction(function (currentOfficeData) {
+                rootRef.child('office_full_info' + '/' + officeID).transaction(function (currentOfficeData) {
                     if (currentOfficeData === null) {
+                        this.saveAdminInfo(data, officeID, rootRef);
                         this.savePhoto(data, officeID);
-                        this.saveIdToUser(officeID, userOfficeRef);
-                        this.fire("show-toast", {text: "Ordinace zaregistrována"});
+                        this.saveIdToUser(officeID, rootRef);
                         data.information.visitLength = Number(data.information.visitLength); // Workaround for object serialization bug in paper-input
+                        this.saveSearchInfo(data.information, officeID, rootRef);
+                        this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         return data.information;
                     } else {
-                        this.saveOffice(data, normalizedString, officeRef, userOfficeRef, increment + 1);
+                        this.saveOffice(data, normalizedString, increment + 1);
                     }
                 }.bind(this));
             },
 
-            saveIdToUser: function (officeID, userOfficeRef) {
+            saveAdminInfo: function (data, officeID, rootRef) {
+                var objectToSave = {'users': {},
+                    'bookDevice': data.device
+                };
+
+                objectToSave['users'][this.user.uid] = 'admin';
+                rootRef.child('/office_admin_info/' + officeID).update(objectToSave);
+            },
+
+            saveSearchInfo: function (data, officeID, rootRef) {
                 var objectToSave = {};
-                objectToSave[officeID] = true;
-                userOfficeRef.update(objectToSave);
+                objectToSave[officeID] = {
+                    'name': data.name,
+                    'address': data.address,
+                    'coordinates': data.coordinates,
+                    'limitedClientele': data.limitedClientele,
+                    'specialization': data.specialization,
+                    'photoAvailability': data.photoAvailability
+                };
+                rootRef.child('/office_search_info').update(objectToSave);
+            },
+
+            saveIdToUser: function (officeID, rootRef) {
+                var objectToSave = {};
+
+                objectToSave[officeID] = 'admin';
+                rootRef.child('/user_offices/' + this.user.uid).update(objectToSave);
             },
 
             savePhoto: function (data, officeID) {

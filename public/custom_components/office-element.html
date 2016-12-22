@@ -120,7 +120,7 @@
             <div class="subsection grid">
                 <section class="photo-name-section">
                     <ul>
-                        <template is="dom-if" if="[[computePhotoAvailability(photoFile)]]">
+                        <template is="dom-if" if="[[officeData.photoAvailability]]">
                             <li><img src$="[[computePhotoURL(photoFile)]]"></li>
                         </template>
                         <li><h3>[[formatName(officeData.name.firstName, officeData.name.lastName)]]</h3>
@@ -204,10 +204,6 @@
 
             computeTextAvailability: function (text) {
                 return (!!text);
-            },
-
-            computePhotoAvailability: function (photoFile) {
-                return (photoFile instanceof File);
             },
 
             computePhotoURL: function (file) {

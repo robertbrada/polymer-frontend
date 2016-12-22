@@ -127,14 +127,14 @@
                                     pacientů,
                                     kteří se neobjednali online případně po telefonu.
                                 </p>
-                                <paper-checkbox checked="{{officeData.information.device.enabled}}">Přidat zařízení</paper-checkbox>
-                                <p hidden="[[!officeData.information.device.enabled]]">V krabičce u zařízení jsme Vám poslali
+                                <paper-checkbox checked="{{officeData.device.enabled}}">Přidat zařízení</paper-checkbox>
+                                <p hidden="[[!officeData.device.enabled]]">V krabičce u zařízení jsme Vám poslali
                                     papírek
                                     na kterém je napsán identifikátor. Tuto sekvenci znaků prosím opište do políčka
                                     níže:</p>
-                                <template is="dom-if" if="[[officeData.information.device.enabled]]" restamp="true">
+                                <template is="dom-if" if="[[officeData.device.enabled]]" restamp="true">
                                     <paper-input id="id_input_id" label="Identifikátor" required auto-validate
-                                                 value="{{officeData.information.device.deviceID}}"></paper-input>
+                                                 value="{{officeData.device.deviceID}}"></paper-input>
                                 </template>
                                 <h2>Vřejné informace profilu</h2>
                                 <p>Zadejte prosím údaje, které si přejete zobrazit u Vašeho profilu. Tyto údaje jsou
@@ -163,7 +163,6 @@
                             </section>
                             <section>
                                 <h2>Vaše specializace</h2>
-                                <!--TODO: check if something was selected-->
                                 <paper-dropdown-menu label="Specializace">
                                     <paper-listbox class="dropdown-content" selected="{{officeData.information.specialization}}">
                                         <template is="dom-repeat" items="[[specializations]]" as="entry">
@@ -230,6 +229,7 @@
                 if (e.detail.valid.length > 0) {
                     var file = e.detail.valid[0];
                     this.set('officeData.photoFile', file);
+                    this.set('officeData.information.photoAvailability', true);
                     e.target.reset();
                 } else {
                     console.log("No valid images");
@@ -237,6 +237,7 @@
             },
 
             deletePhoto: function () {
+                this.set('officeData.information.photoAvailability', false);
                 this.set('officeData.photoFile', null);
             },
 

@@ -16,8 +16,21 @@
         }
       }
     },
-    "offices": {
-      ".read": true, // TODO: proper rules
+    // TODO: proper rules
+    "office_full_info": {
+      ".read": true,
+      ".write": true
+    },
+    "office_search_info": {
+      ".read": true,
+      ".write": true
+    },
+    "office_admin_info": {
+      ".read": true,
+      ".write": true
+    },
+    "user_offices": {
+      ".read": true,
       ".write": true
     }
   }

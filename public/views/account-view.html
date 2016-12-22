@@ -21,7 +21,7 @@
 
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
-        <firebase-document app-name="doctor-appointment-system" path="/users/{{user.uid}}/information"
+        <firebase-document app-name="doctor-appointment-system" path="/user_info/{{user.uid}}"
                            data="{{userInformation}}">
         </firebase-document>
 
