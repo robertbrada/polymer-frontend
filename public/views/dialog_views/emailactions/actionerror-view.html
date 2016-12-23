@@ -1,29 +1,27 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
-<link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="actionerror-view">
     <template>
-        <style include="button-styles dialog-styles">
+        <style include="button-styles">
+            .main-text {
+                font-size: 1.2em;
+            }
         </style>
 
         <firebase-auth id="auth" app-name="doctor-appointment-system" user="{{user}}"></firebase-auth>
 
-        <p class="main_text">Nepodařilo se potvrdit emailovou adresu. <br>
+        <p class="main-text">Nepodařilo se potvrdit emailovou adresu. <br>
             Potvrzení je vyžadováno pro povolení obědnávání.<br>
             Níže klikněte pro opětovné poslání potvrzovacího emailu.
         </p>
-        <paper-button responsive id="confirm_button" on-tap="confirm">
+        <paper-button responsive id="dialog-button" on-tap="confirm">
             Poslat email
         </paper-button>
-
-        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
 
     <script>

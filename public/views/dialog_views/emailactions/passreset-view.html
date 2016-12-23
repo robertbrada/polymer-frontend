@@ -10,12 +10,11 @@
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
-<link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="passreset-view">
     <template>
-        <style include="dialog-styles button-styles">
+        <style include="button-styles">
         </style>
         <iron-meta id="meta"></iron-meta>
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
@@ -28,11 +27,9 @@
             </paper-input>
         </form>
 
-        <paper-button responsive id="confirm_button" on-tap="confirm">
+        <paper-button responsive id="dialog-button" on-tap="confirm">
             Změnit heslo
         </paper-button>
-
-        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
 
     <script>

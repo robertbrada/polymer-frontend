@@ -17,7 +17,7 @@
 <link rel="import" href="/bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="/custom_components/main-dialog-element.html">
+<link rel="import" href="/custom_components/custom-dialog.html">
 <!--Shouldn't be necessary-->
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
@@ -187,7 +187,8 @@
             <account-view name="account" user="[[user]]"></account-view>
         </iron-pages>
 
-        <main-dialog-element id="main_dialog"></main-dialog-element>
+        <custom-dialog id="main_dialog" with-backdrop entry-animation="scale-up-animation"
+                             exit-animation="fade-out-animation"></custom-dialog>
 
         <paper-toast id="main_toast"></paper-toast>
 

@@ -14,13 +14,12 @@
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
-<link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 
 <dom-module id="registration-view">
     <template>
-        <style include="button-styles dialog-styles input-styles">
+        <style include="button-styles input-styles">
         </style>
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
@@ -42,12 +41,10 @@
                 <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
             </paper-input>
 
-            <paper-button responsive id="confirm_button" on-tap="confirm">
+            <paper-button responsive id="dialog-button" on-tap="confirm">
                 Registrovat
             </paper-button>
         </form>
-
-        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
 
     <script>

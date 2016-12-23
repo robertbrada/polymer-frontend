@@ -1,24 +1,22 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 
-<link rel="import" href="/styles/input-styles.html">
-<link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="emaildialog-view">
     <template>
-        <style include="button-styles dialog-styles input-styles">
+        <style include="button-styles">
+            .main-text {
+                font-size: 1.2em;
+            }
         </style>
 
-        <p class="main_text">Na Vaší emailovou adresu byl poslán potvrzovací email.<br>
+        <p class="main-text">Na Vaší emailovou adresu byl poslán potvrzovací email.<br>
             Jakmile jej potvrdíte, budete se moci objednat.</p>
-        <paper-button responsive id="confirm_button" dialog-dismiss>
+        <paper-button responsive id="dialog-button" dialog-dismiss>
             Zavřít
         </paper-button>
-
-        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
 
     <script>

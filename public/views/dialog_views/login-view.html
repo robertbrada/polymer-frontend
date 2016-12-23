@@ -5,7 +5,6 @@
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <link rel="import" href="/styles/input-styles.html">
-<link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
@@ -13,7 +12,7 @@
 
 <dom-module id="login-view">
     <template>
-        <style include="input-styles dialog-styles button-styles">
+        <style include="input-styles button-styles">
 
             #lost_pass {
                 float: right;
@@ -53,15 +52,13 @@
             <span>Zapomněli jste heslo?</span>
         </button>
 
-        <paper-button responsive id="confirm_button" on-tap="confirm">
+        <paper-button responsive id="dialog-button" on-tap="confirm">
             Přihlásit
         </paper-button>
 
         <button id="reg_button" on-tap="showRegistration">
             <span>Ještě nemáte účet? <b>Zaregistrujte se!</b></span>
         </button>
-
-        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
 
     </template>
 

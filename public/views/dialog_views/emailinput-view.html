@@ -1,35 +1,34 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 
 <link rel="import" href="/styles/input-styles.html">
-<link rel="import" href="/styles/dialog-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="emailinput-view">
     <template>
-        <style include="button-styles dialog-styles input-styles">
+        <style include="button-styles input-styles">
+            .main-text {
+                font-size: 1.2em;
+            }
         </style>
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
         <p class="error">{{errorMessage}}</p>
-        <p class="main_text">Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:</p>
+        <p class="main-text">Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:</p>
         <form id="main_form" is="iron-form">
             <gold-email-input error-message="Špatný formát" value="{{email}}"
                               label="Vaše emailová adresa" auto-validate required autofocus>
             </gold-email-input>
 
-            <paper-button responsive id="confirm_button" on-tap="confirm">
+            <paper-button responsive id="dialog-button" on-tap="confirm">
                 Poslat
             </paper-button>
         </form>
-
-        <paper-icon-button dialog-dismiss icon="close" id="closeBtn"></paper-icon-button>
     </template>
 
     <script>
