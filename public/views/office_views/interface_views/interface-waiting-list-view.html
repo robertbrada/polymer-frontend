@@ -2,77 +2,54 @@
 
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="interface-waiting-list-view">
     <template>
         <style>
 
+            :host {
+                --border-color: #d5d9da;
+            }
+
             #current_patient {
                 background-color: #26A69A;
                 color: #fff;
-                font-size: 1em;
-                padding: 0.8em 2.7em;
+                padding: 0.8em 1.5em;
                 display: inline-block;
                 margin-bottom: -1px; /*to cover border od patient_div */
             }
 
-            iron-collapse {
-                box-shadow: 0 0 3px #ccc;
-            }
-
             .patient_div {
                 background-color: #fff;
-                border: 1px solid #d5d9da;
-                font-size: 1.2em;
+                border: 1px solid var(--border-color);
                 margin: 1.2em 0 0 0;
-                text-align: left;
-                padding: 1.2em 1em;
+                padding: 1.2em;
             }
 
             .collapse-content {
-                font-size: 1.2em;
                 background-color: #fff;
-                padding: 1.2em 2.4em;
-                border-left: 1px solid #d5d9da;
-                border-right: 1px solid #d5d9da;
-                border-bottom: 1px solid #d5d9da;
-            }
-
-            .buttons {
-                float: right;
+                padding: 1.2em;
+                border-left: 1px solid var(--border-color);
+                border-right: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
             }
 
             .buttons paper-button {
                 font-size: 0.8em;
-                padding: 0.8em 1.7em;
-                margin-left: 0.9em;
-                background-color: #fff !important;
-                border: 1px solid #ddd;
-                color: #455A64 !important;
-            }
-
-            ul {
-                margin: 0;
-                padding: 0;
-                display: inline-block;
-            }
-
-            ul li {
-                display: block;
-                padding: 0.3em 1em;
-            }
-
-            #show_detail {
-                font-size: 0.7em;
-                padding: 0.9em 1.8em;
-                background-color: #f8f8f9;
-                border: 1px solid #ddd;
+                padding: 0.7em 1.6em;
+                margin-left: 0.5em;
+                border: 1px solid var(--border-color);;
                 color: #455A64;
-                cursor: pointer;
             }
 
-            #show_detail:hover {
-                background-color: #ddd;
+            .time {
+                margin-right: 1em;
+                font-weight: bold;
+            }
+
+            #dismiss_button {
+                background-color: #f6f6f7;
             }
 
             /* FIRST PATIENT CSS DIFFERENCES */
@@ -87,48 +64,84 @@
                 margin-top: 0;
             }
 
-            /* RESPONSIVE */
-            @media only screen and (max-width: 1400px) {
+            /* FLEX LAYOUT */
+            .flex-horizontal-with-ratios {
+                @apply(--layout-horizontal);
+            }
 
-                .buttons {
-                    border-top: 1px solid #ddddde;
-                    float: none;
-                    display: block;
-                    margin: 1em 0 0 0;
-                    padding-top: 1.5em;
+            .flexchild {
+                @apply(--layout-flex);
+                margin-right: 2em;
+            }
+
+            .flex2child {
+                @apply(--layout-flex);
+            }
+
+            .flex3child {
+                @apply(--layout-flex-2);
+                text-align: right;
+            }
+
+
+            /*RESPONSIVE ADDITIONS*/
+            @media only screen and (max-width: 1180px) {
+
+                .flex-horizontal-with-ratios {
+                    @apply(--layout-vertical);
+                }
+
+                .flex-horizontal-with-ratios > div {
+                    margin: 0.2em 0;
+                }
+
+                .flex3child {
+                    border-top: 1px solid #ddd;
+                    padding-top: 0.6em;
+                }
+
+                .patient_div {
+                    padding-bottom: 0.5em;
                 }
             }
 
             @media only screen and (max-width: 767px) {
 
-                .buttons paper-button {
+                .buttons {
                     font-size: 0.9em;
                 }
             }
 
-        </style>
+            @media only screen and (max-width: 360px) {
 
+                .buttons > paper-button {
+                    display: block;
+                    margin: 0.5em 0;
+                    text-align: center;
+                    padding: 1em;
+                }
+            }
+
+
+        </style>
 
         <div id="current_patient">Pacient na řadě</div>
 
         <template is="dom-repeat" items="[[patients]]" as="patient">
 
-            <div class="patient_div">
-                <ul>
-                    <li>[[patient.time]]</li>
-                    <li>[[patient.firstName]] [[patient.lastName]]</li>
-                    <li>[[patient.address]]</li>
-                    <!--pokud neni zprava, tak nezobrazi tlacitko podrobnosti-->
-                    <li hidden="[[!patient.text]]">
-                        <button on-tap="handleDetail" id="show_detail">[[computeText(patient.opened)]] podrobnosti</button>
-                    </li>
-                </ul>
-                <div class="buttons">
+            <div class="container flex-horizontal-with-ratios patient_div">
+                <div class="time">[[patient.time]]</div>
+                <div class="flexchild">[[patient.firstName]] [[patient.lastName]]</div>
+                <div class="flex2child">[[patient.address]]</div>
+                <div class="flex3child buttons">
+
+                    <paper-button hidden="[[!patient.text]]" on-tap="handleDetail">
+                        [[computeText(patient.opened)]] detail
+                    </paper-button>
                     <paper-button id="confirm_button">Vyřízen</paper-button>
                     <paper-button id="dismiss_button">Nedorazil</paper-button>
                 </div>
             </div>
-
 
             <iron-collapse opened="[[patient.opened]]">
                 <div class="collapse-content">
@@ -156,8 +169,8 @@
                             opened: false
                         },
                         {
-                            firstName: "Jack",
-                            lastName: "Aubrey",
+                            firstName: "Michaelinsaknfdadc",
+                            lastName: "Aubreyisbaddmafdrf",
                             address: "St. Church 123, London",
                             time: "8:00",
                             text: null,
@@ -175,7 +188,7 @@
                             firstName: "Stephen",
                             lastName: "Maturin",
                             time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
+                            address: "Dvůr Králové nad Labem, Sady pětatřicátníků 28",
                             text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
                             opened: false
                         },
