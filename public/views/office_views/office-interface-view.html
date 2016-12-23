@@ -7,11 +7,10 @@
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/styles/input-styles.html">
 
 <dom-module id="office-interface-view">
     <template>
-        <style include="input-styles">
+        <style>
 
             paper-drawer-panel {
                 margin-top: 64px;
@@ -27,18 +26,12 @@
                 };
             }
 
-            h1 {
-                text-align: center;
-                font-size: 1em;
-                margin: 2em 0;
-            }
-
             paper-header-panel paper-button {
                 width: 100%;
                 display: block;
                 margin: 0;
                 border: none;
-                font-size: 1em;
+                font-size: 0.9em;
                 border-radius: 0;
                 border-top: 1px solid #ccc;
                 padding: 1.2em 0 1.2em 2.5em;
@@ -74,8 +67,6 @@
             #help-tab {
                 position: fixed;
                 bottom: 0;
-                left: 0;
-                border-top: none;
                 width: 256px;
             }
 

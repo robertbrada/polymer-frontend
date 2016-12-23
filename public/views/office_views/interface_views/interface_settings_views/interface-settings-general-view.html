@@ -1,0 +1,123 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="/bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-left-animation.html">
+
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/file-input/file-input.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/google-apis/google-maps-api.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
+<link rel="import" href="/styles/button-styles.html">
+
+<dom-module id="interface-settings-general-view">
+    <template>
+        <style include="button-styles layout-styles input-styles header-styles">
+
+
+            form {
+                background-color: #fff;
+                margin-top: 0;
+                border: 1px solid #ddddde;
+                border-top: none;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+
+            .main-frame{
+                max-width: 100%;
+            }
+
+
+        </style>
+
+        <form id="generalForm" is="iron-form" class="main-frame">
+            <div class="subsection grid">
+
+                <section>
+                    <h2>Adresa ordinace</h2>
+                    <paper-input id="cinput" label="Město" value="{{officeData.information.address.city}}"
+                                 minlength="1" maxlength="20" required auto-validate>
+                    </paper-input>
+                    <paper-input id="sinput" label="Ulice a číslo popisné" value="{{officeData.information.address.street}}"
+                                 minlength="1" maxlength="80" required auto-validate></paper-input>
+
+                    <h2>Vaše specializace</h2>
+                    <span>(Specializace v této ordinaci)</span>
+                    <paper-dropdown-menu label="Specializace">
+                        <paper-listbox class="dropdown-content" selected="{{officeData.information.specialization}}">
+                            <template is="dom-repeat" items="[[specializations]]" as="entry">
+                                <paper-item>[[entry]]</paper-item>
+                            </template>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+
+                    <h2>Klientela</h2>
+                    <p>Zaškrtněte, pokud máte omezenou klientelu.</p>
+                    <paper-checkbox checked="{{officeData.information.limitedClientele}}">Omezená klientela
+                    </paper-checkbox>
+                    <p hidden="[[!officeData.information.limitedClientele]]">Při zaškrtnutí omezené klientely si pacient
+                        před prvním objednáním v našem systému zažádá o potvrzení. Vám poté přijde zpráva s
+                        žádostí o potvrzení. Ve zprávě
+                        uvidíte pacientovi osobní údaje (jméno, adresa), na základě kterých umožníte
+                        pacientovi
+                        objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
+                    </p>
+                </section>
+                <section>
+
+                    <h2>Vřejné informace profilu</h2>
+                    <p>Zadejte prosím údaje, které si přejete zobrazit u Vašeho profilu. Tyto údaje jsou
+                        dobrovolné tudíž je nemusíte vyplňovat/nahrávat.</p>
+                    <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím vyplňte tuto
+                        možnost:</p>
+                    <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
+                                      phone-number-pattern="XXX-XXX-XXX" auto-validate
+                                      value="{{officeData.information.phoneNumber}}">
+                    </gold-phone-input>
+                    <gold-email-input id="email_id" label="Email" value="{{officeData.information.email}}"
+                                      auto-validate></gold-email-input>
+
+                    <h2>Text pro pacienty</h2>
+                    <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu
+                        pacientům. Zpráva není povinná.</p>
+                    <paper-textarea label="Zpráva pro pacienty" value="{{officeData.information.patientText}}"
+                                    char-counter maxlength="800"></paper-textarea>
+
+
+                </section>
+            </div>
+
+            <paper-button on-tap="confirm" responsive>
+                Uložit změny
+            </paper-button>
+        </form>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'interface-settings-general-view'
+        });
+    </script>
+</dom-module>

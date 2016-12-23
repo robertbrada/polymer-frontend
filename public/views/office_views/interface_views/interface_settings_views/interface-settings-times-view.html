@@ -1,0 +1,90 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
+<link rel="import" href="/styles/button-styles.html">
+
+<dom-module id="interface-settings-times-view">
+    <template>
+        <style include="button-styles layout-styles input-styles header-styles">
+
+            form {
+                background-color: #fff;
+                margin-top: 0;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+            .main-frame {
+                max-width: 100%;
+            }
+
+        </style>
+        <form id="generalForm" is="iron-form" class="main-frame">
+            <div class="subsection grid">
+
+                <section>
+                    <h2>Délka návštěvy</h2>
+                    <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
+                        hodin určíme objednávací časy.</p>
+                    <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
+                                 value="{{officeData.information.visitLength}}">
+                        <div suffix>min</div>
+                    </paper-input>
+
+                    <h2>Ordinační hodiny</h2>
+
+                    <template is="dom-repeat" items="[[days]]" as="entry">
+                        <div>
+                            <paper-checkbox checked={{checked}}>[[entry]]</paper-checkbox>
+
+                            <template is="dom-if" if="[[checked]]">
+                                <paper-input value="{{entry.hours}}" auto-validate required
+                                             placeholder="07:30-12:30,13:30-15:30"
+                                             pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](,([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])*"
+                                             prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
+                            </template>
+                        </div>
+                    </template>
+
+                </section>
+
+                <section>
+        <h2>Dočasná změna ordinačních hodin</h2>
+                    <span>Proveďte změny, pokud si chcete vzít dovolenou a nebo potřebujete dočasně změnit ordinační hodiny.</span>
+                </section>
+            </div>
+
+            <paper-button on-tap="confirm" responsive>
+                Uložit změny
+            </paper-button>
+
+        </form>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'interface-settings-times-view',
+
+            properties: {
+                days: {
+                    type: Array,
+                    value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
+                },
+
+            },
+
+
+
+        });
+    </script>
+</dom-module>
