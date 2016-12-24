@@ -30,7 +30,6 @@
             :host {
                 display: block;
                 position: relative;
-                padding-top: 64px;
                 min-height: 100vh;
                 --app-primary-color: #202020;
                 --app-secondary-color: #757575;
@@ -137,7 +136,7 @@
 
         <iron-media-query query="max-width: 767px" query-matches="{{smallScreen}}"></iron-media-query>
 
-        <app-header role="navigation" id="header" effects="waterfall" condenses reveals>
+        <app-header role="navigation" id="header" fixed>
             <app-toolbar>
                 <div class="icon-bar-item" hidden="[[!smallScreen]]">
                     <paper-icon-button
@@ -188,7 +187,7 @@
         </iron-pages>
 
         <custom-dialog id="main_dialog" with-backdrop entry-animation="scale-up-animation"
-                             exit-animation="fade-out-animation"></custom-dialog>
+                       exit-animation="fade-out-animation"></custom-dialog>
 
         <paper-toast id="main_toast"></paper-toast>
 
