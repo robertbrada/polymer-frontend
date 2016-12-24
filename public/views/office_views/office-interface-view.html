@@ -7,23 +7,30 @@
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-icons/image-icons.html">
+<link rel="import" href="/bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 
 <dom-module id="office-interface-view">
     <template>
         <style>
+
+            :host {
+                --scroll-main: auto;
+            }
 
             paper-drawer-panel {
 
                 --paper-drawer-panel-main-container: {
                     background-color: #eeeff2;
                     padding: 1em 2em;
-                    overflow: auto;
+                    overflow: var(--scroll-main);
                     margin-top: 64px;
                 };
 
                 --paper-drawer-panel-left-drawer-container: {
                     border-right: 1px solid #ddddde;
                     margin-top: 64px;
+                    box-shadow: none !important;
                     z-index: 2;
                 };
             }
@@ -36,7 +43,7 @@
                 font-size: 0.9em;
                 border-radius: 0;
                 border-top: 1px solid #ccc;
-                padding: 1.2em 0 1.2em 2.5em;
+                padding: 1.2em 0 1.2em 2em;
             }
 
             .iron-selected.nav {
@@ -59,6 +66,10 @@
                 };
             }
 
+            paper-item {
+                cursor: pointer;
+            }
+
             #mobile_toolbar {
                 background-color: var(--app-accent-color);
                 color: #fff;
@@ -73,16 +84,33 @@
                 width: 256px;
             }
 
+            #add-office {
+                color: #26A69A;
+                border-top: 1px solid #ddddde;
+                padding-top: 8px;
+            }
+
+            #notification {
+                color: #26A69A;
+                height: 15px;
+                width: 15px;
+                margin-left: 0.5em;
+            }
+
             @media only screen and (max-width: 767px) {
 
                 #help-tab {
                     bottom: 64px;
                 }
+
             }
 
+            /* zabrani tomu, aby element s atributem paper-drawer-toggle mizel na wide-screen. Default hodnota je display:none*/
+            iron-selector:not(.narrow-layout) ::content [paper-drawer-toggle] {
+                display: block !important
+            }
 
         </style>
-
 
         <paper-drawer-panel>
             <paper-header-panel drawer>
@@ -90,10 +118,16 @@
                 <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
                 <paper-toolbar>
                     <iron-selector attr-for-selected="name" selected="{{selected}}">
-                        <paper-button name="calendar" class="nav">Kalendář</paper-button>
-                        <paper-button name="waiting-list" class="nav">Pořadník</paper-button>
-                        <paper-button name="settings" class="nav">Nastavení</paper-button>
-                        <paper-button name="help" id="help-tab" class="nav">Nahlásit problém</paper-button>
+                        <!--paper-drawer-toggle closes drawer on tap-->
+                        <paper-button paper-drawer-toggle name="notifications" class="nav">Upozornění
+                            <!--visible when new notification -->
+                            <iron-icon id="notification" icon="image:lens"></iron-icon>
+                        </paper-button>
+                        <paper-button paper-drawer-toggle name="calendar" class="nav">Kalendář</paper-button>
+                        <paper-button paper-drawer-toggle name="waiting-list" class="nav">Pořadník</paper-button>
+                        <paper-button paper-drawer-toggle name="settings" class="nav">Nastavení</paper-button>
+                        <paper-button paper-drawer-toggle name="help" id="help-tab" class="nav">Nahlásit problém
+                        </paper-button>
                     </iron-selector>
                 </paper-toolbar>
             </paper-header-panel>
@@ -103,7 +137,7 @@
 
                 <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
                 <paper-toolbar>
-                    <div id="mobile_toolbar" paper-drawer-toggle>
+                    <div id="mobile_toolbar" on-tap="handleOpenDrawer" paper-drawer-toggle>
                         <iron-icon icon="icons:chevron-right" paper-drawer-toggle></iron-icon>
                         Menu ordinace
                     </div>
@@ -114,10 +148,15 @@
                         <template is="dom-repeat" items="[[offices]]" as="entry">
                             <paper-item>[[entry]]</paper-item>
                         </template>
+                        <paper-item id="add-office">
+                            <iron-icon icon="add"></iron-icon>
+                            Přidat ordinaci
+                        </paper-item>
                     </paper-listbox>
                 </paper-dropdown-menu>
 
                 <iron-pages attr-for-selected="name" selected="[[selected]]">
+                    <interface-notifications-view name="notifications"></interface-notifications-view>
                     <interface-calendar-view name="calendar"></interface-calendar-view>
                     <interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>
                     <interface-settings-view name="settings"></interface-settings-view>
@@ -131,6 +170,8 @@
     <script>
         Polymer({
             is: 'office-interface-view',
+
+            behaviors: [RoutingBehavior],
 
             properties: {
                 profileID: {
@@ -147,7 +188,13 @@
                 offices: {
                     type: Array,
                     value: ['Plzeň, Klatovská 32', 'Londýn, Spring Gardens 100', 'Dvůr Králové nad Labem, Sady pětatřicátníků 28']
+                },
+                open: {
+                    type: Boolean,
+                    value: true
                 }
+
+
             },
 
             loadView: function (viewName) {
@@ -158,6 +205,7 @@
                 if (path.length < 2) return null;
                 return (path.substring(1));
             }
+
         });
     </script>
 </dom-module>
