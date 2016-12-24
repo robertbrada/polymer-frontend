@@ -43,11 +43,11 @@
                 color: #455A64;
             }
 
-            .buttons paper-button:first-child{
+            .buttons paper-button:first-child {
                 margin-left: 0;
             }
 
-            .buttons paper-button:last-child{
+            .buttons paper-button:last-child {
                 margin-right: 0;
             }
 
@@ -56,13 +56,13 @@
                 font-weight: bold;
             }
 
-            #dismiss_button {
+            .dismiss-button {
                 background-color: #f6f6f7;
             }
 
             /* FIRST PATIENT CSS DIFFERENCES */
             /*zjistit - proc to funguje ay na second child, a ne prvni?*/
-            .patient_div:nth-child(2) #confirm_button {
+            .patient_div:nth-child(2) .confirm-button {
                 background-color: var(--app-accent-color) !important;
                 color: #fff !important;
                 border: none;
@@ -70,6 +70,9 @@
 
             .patient_div:nth-child(2) {
                 margin-top: 0;
+                -webkit-box-shadow: 0px 2px 15px 2px rgba(219,219,220,1);
+                -moz-box-shadow: 0px 2px 15px 2px rgba(219,219,220,1);
+                box-shadow: 0px 2px 15px 2px rgba(219,219,220,1);
             }
 
             /* FLEX LAYOUT */
@@ -91,7 +94,6 @@
                 text-align: right;
             }
 
-
             /*RESPONSIVE ADDITIONS*/
             @media only screen and (max-width: 1180px) {
 
@@ -106,6 +108,8 @@
                 .flex3child {
                     border-top: 1px solid #ddd;
                     padding-top: 0.6em;
+                    text-align: left;
+
                 }
 
                 .patient_div {
@@ -115,7 +119,7 @@
 
             @media only screen and (max-width: 767px) {
 
-                .buttons paper-button:not(:first-child){
+                .buttons paper-button:not(:first-child) {
                     margin-left: 0.0em;
                 }
 
@@ -147,8 +151,8 @@
                     <paper-button hidden="[[!patient.text]]" on-tap="handleDetail">
                         [[computeText(patient.opened)]] detail
                     </paper-button>
-                    <paper-button id="confirm_button">Vyřízen</paper-button>
-                    <paper-button id="dismiss_button">Nedorazil</paper-button>
+                    <paper-button class="confirm-button">Vyřízen</paper-button>
+                    <paper-button class="dismiss-button">Nedorazil</paper-button>
                 </div>
             </div>
 
@@ -200,114 +204,6 @@
                             address: "Dvůr Králové nad Labem, Sady pětatřicátníků 28",
                             text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
                             opened: false
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-
                         },
                         {
                             firstName: "Stephen",

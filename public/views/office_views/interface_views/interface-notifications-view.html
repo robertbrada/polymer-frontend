@@ -1,0 +1,91 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/header-styles.html">
+<link rel="import" href="/styles/button-styles.html">
+
+<dom-module id="interface-notifications-view">
+    <template>
+        <style include="button-styles layout-styles input-styles header-styles">
+
+            :host {
+                --border-color: #dadbdd;
+            }
+
+            paper-tabs {
+                height: 3.2em;
+
+                --paper-tabs-selection-bar: {
+                    display: none;
+                };
+
+                --paper-tabs-content: {
+                    background-color: #26A69A;
+                    color: #fff;
+                }
+            }
+
+            paper-tab {
+                padding: 0;
+                --paper-tab-ink: #fff;
+
+                --paper-tab-content-unselected: {
+                    opacity: 1;
+                    background-color: #f8f9fa;
+                    color: #9a9a9a;
+                    font-weight: lighter;
+                    /*-webkit-box-shadow: inset 0px -5px 20px 0px rgba(238,238,238,1);*/
+                    /*-moz-box-shadow: inset 0px -5px 20px 0px rgba(238,238,238,1);*/
+                    /*box-shadow: inset 0px -5px 20px 0px rgba(238,238,238,1);*/
+                };
+            }
+
+
+        </style>
+
+        <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
+            <paper-tab name="confirm">Žádosti o přijetí</paper-tab>
+            <paper-tab name="general">Ostatní upozornění</paper-tab>
+        </paper-tabs>
+
+        <iron-pages selected="[[selected]]" attr-for-selected="name">
+            <interface-notifications-confirm-view name="confirm"></interface-notifications-confirm-view>
+            <interface-notifications-general-view name="general"></interface-notifications-general-view>
+        </iron-pages>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'interface-notifications-view',
+
+            properties: {
+                profileID: {
+                    type: String,
+                    computed: 'computeID(route.path)'
+                },
+
+                selected: {
+                    type: String,
+                    value: "confirm", // First selected view
+                    observer: "loadView"
+                },
+
+
+            },
+
+            loadView: function (viewName) {
+                this.importHref("/views/office_views/interface_views/interface_notifications_views/interface-notifications-" + viewName + "-view.html", null, false);
+            },
+
+            computeID: function (path) {
+                if (path.length < 2) return null;
+                return (path.substring(1));
+            }
+        });
+    </script>
+</dom-module>
