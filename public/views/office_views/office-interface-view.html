@@ -13,16 +13,18 @@
         <style>
 
             paper-drawer-panel {
-                margin-top: 64px;
 
                 --paper-drawer-panel-main-container: {
                     background-color: #eeeff2;
                     padding: 1em 2em;
                     overflow: auto;
+                    margin-top: 64px;
                 };
 
                 --paper-drawer-panel-left-drawer-container: {
                     border-right: 1px solid #ddddde;
+                    margin-top: 64px;
+                    z-index: 2;
                 };
             }
 
@@ -62,12 +64,20 @@
                 color: #fff;
                 padding: 1.2em 1.5em;
                 margin-bottom: 1em;
+                margin-top: 0;
             }
 
             #help-tab {
                 position: fixed;
                 bottom: 0;
                 width: 256px;
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                #help-tab {
+                    bottom: 64px;
+                }
             }
 
 
