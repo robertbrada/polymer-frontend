@@ -186,7 +186,7 @@
             ],
 
             handleAppointment: function (event) {
-                this.fire('handle-appointment', {"appointmentID": event.target.dataset.args})
+                this.fire('appointment-request', {"appointmentID": event.target.dataset.args})
             },
 
             next: function () {

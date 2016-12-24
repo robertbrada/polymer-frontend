@@ -1,23 +1,33 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="/bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-up-animation.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-from-top-animation.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-from-bottom-animation.html">
+<link rel="import" href="/bower_components/neon-animation/animations/slide-down-animation.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/custom_components/calendar-element.html">
 
 <!--icons-->
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="/bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="/bower_components/google-map/google-map.html">
 <link rel="import" href="/bower_components/google-map/google-map-marker.html">
 
 <link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="office-element">
     <template>
-        <style include="layout-styles">
+        <style include="layout-styles input-styles button-styles">
             :host {
                 font-size: 15px;
             }
@@ -110,7 +120,6 @@
             iron-icon {
                 margin-right: 15px;
             }
-
         </style>
 
         <iron-media-query query="max-width: 717px" query-matches="{{smallScreen}}"></iron-media-query>
@@ -154,10 +163,24 @@
                 </section>
             </div>
 
-            <div class="wide-container">
-                <calendar-element office-hours="[[officeData.officeHours]]" visit-length="[[officeData.visitLength]]">
-                </calendar-element>
+            <hr>
+
+            <div class="wide-container" id="main_container">
+                <div id="calendar_container">
+                    <calendar-element hidden="[[!calendarVisibility]]" office-hours="[[officeData.officeHours]]"
+                                      visit-length="[[officeData.visitLength]]">
+                    </calendar-element>
+                </div>
+                <div hidden="[[calendarVisibility]]" id="appointment_form">
+                    <h3>Objednat se</h3>
+                    <span>Datum objednání: <b>[[_computeAppointmentDate(appointmentId)]]</b></span>
+                    <paper-textarea id="patient_message" label="Dobrovolná zpráva pro lékaře" char-counter maxlength="200"></paper-textarea>
+                    <paper-button on-tap="_confirmAppointment">Potvrdit objednání</paper-button>
+                    <paper-icon-button icon="expand-more" on-tap="_showCalendar"></paper-icon-button>
+                </div>
             </div>
+
+            <hr>
 
             <template is="dom-if" if="[[computeTextAvailability(officeData.patientText)]]">
                 <div class="patient-container">
@@ -187,11 +210,99 @@
         Polymer({
             is: 'office-element',
 
+            behaviors: [Polymer.NeonAnimationRunnerBehavior],
+
             properties: {
                 specializations: {
                     type: Array,
                     value: ['Zubař', 'Rektálník', 'Gynekolog']
                 },
+
+                appointmentId: {
+                    type: Number
+                },
+
+                calendarVisibility: {
+                    type: Boolean,
+                    value: true
+                },
+
+                actionAfterAnimation: {
+                    type: Boolean,
+                    value: false
+                },
+
+                animationConfig: {
+                    value: function () {
+                        return {
+                            'slideUp': {
+                                name: 'slide-up-animation',
+                                node: this.$.calendar_container
+                            },
+                            'slideFromTop': {
+                                name: 'slide-from-top-animation',
+                                node: this.$.calendar_container
+                            },
+                            'slideDown': {
+                                name: 'slide-down-animation',
+                                node: this.$.appointment_form
+                            },
+                            'slideFromBottom': {
+                                name: 'slide-from-bottom-animation',
+                                node: this.$.appointment_form
+                            }
+                        }
+                    }
+                }
+            },
+
+            listeners: {
+                'neon-animation-finish': '_onNeonAnimationFinish',
+                'appointment-request': '_onAppointmentRequest'
+            },
+
+            _onNeonAnimationFinish: function () {
+                if (this.actionAfterAnimation) {
+                    if (this.calendarVisibility) {
+                        this.calendarVisibility = false;
+                        this.playAnimation('slideFromBottom');
+                    } else {
+                        this.calendarVisibility = true;
+                        this.playAnimation('slideFromTop');
+                    }
+                    this.actionAfterAnimation = false;
+                }
+            },
+
+            _onAppointmentRequest: function (event) {
+                this.actionAfterAnimation = true;
+                this.playAnimation('slideUp');
+
+                this.appointmentId = Number(event.detail['appointmentID']);
+
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+            },
+
+            _confirmAppointment: function () {
+                this.fire('handle-appointment', {"appointmentID": this.appointmentId, "patientMessage": this.$.patient_message.value})
+            },
+
+            _showCalendar: function () {
+                this.actionAfterAnimation = true;
+                this.playAnimation('slideDown');
+            },
+
+            _computeAppointmentDate: function (appointmentId) {
+                var date, year, month, hours, minutes,
+                    stringId = "" + appointmentId;
+
+                date = Number(stringId.substring(6, 8));
+                year = stringId.substring(0, 4);
+                month = Number(stringId.substring(4, 6));
+                hours = Number(stringId.substring(8, 10));
+                minutes = stringId.substring(10, 12);
+
+                return "" + date + "." + month + "." + year + " v " + hours + ":" + minutes;
             },
 
             formatName: function (first, last) {

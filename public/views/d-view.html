@@ -51,8 +51,10 @@
             },
 
             _onHandleAppointment: function (event) {
-                var id = Number(event.detail['appointmentID']);
+                var id = event.detail['appointmentID'],
+                    patientMessage = event.detail['patientMessage'];
                 console.log(id);
+                console.log(patientMessage);
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
