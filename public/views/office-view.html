@@ -22,7 +22,6 @@
                 attr-for-selected="name"
                 selected-attribute="visible"
                 role="main">
-            <office-list-view name="list"></office-list-view>
             <office-interface-view name="interface" route="{{subRoute}}"></office-interface-view>
             <office-registration-view name="registration" route="{{subRoute}}" user="[[user]]"></office-registration-view>
         </iron-pages>
@@ -34,7 +33,7 @@
 
             behaviors: [RoutingBehavior],
 
-            defaultPage: 'list',
+            defaultPage: 'interface',
             viewPath: '/views/office_views/office-'
 
         });

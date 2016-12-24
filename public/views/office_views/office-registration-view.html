@@ -58,10 +58,7 @@
                                 latitude: null
                             },
                             specialization: 0, // TODO: disable default and create paper-listbox validation
-                            visitLength: {
-                                type: Number,
-                                value: 20
-                            },
+                            visitLength: 30,
                             phoneNumber: null,
                             email: null,
                             limitedClientele: false,
@@ -98,7 +95,7 @@
             userChange: function (data) {
                 var name = this.officeData.information.name;
 
-                if(name.firstName === null && name.lastName === null && !!data.firstName && !!data.lastName) {
+                if (name.firstName === null && name.lastName === null && !!data.firstName && !!data.lastName) {
                     this.set('officeData.information.name.firstName', data.firstName);
                     this.set('officeData.information.name.lastName', data.lastName);
                     this.$.user_document.ref.off();
@@ -113,8 +110,6 @@
 
                 this.saveOffice(this.officeData, normalizedString, rootRef, 0);
 
-                this.fire('change-route', {url: '/office/list'});
-
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
@@ -128,6 +123,7 @@
                         this.saveIdToUser(officeID, rootRef);
                         this.saveSearchInfo(data.information, officeID, rootRef);
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
+                        this.fire('change-route', {url: '/office/interface/' + officeID}); // TODO: fix route bug
                         return data.information;
                     } else {
                         this.saveOffice(data, normalizedString, increment + 1);
@@ -136,7 +132,8 @@
             },
 
             saveAdminInfo: function (data, officeID, rootRef) {
-                var objectToSave = {'users': {},
+                var objectToSave = {
+                    'users': {},
                     'bookDevice': data.device
                 };
 

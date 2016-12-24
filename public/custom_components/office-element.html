@@ -88,6 +88,11 @@
                 max-width: 900px;
             }
 
+            .centered {
+                @apply(--layout);
+                @apply(--layout-center-justified);
+            }
+
             @media only screen and (max-width: 717px) {
                 :host {
                     padding: 64px 0 0 0;
@@ -176,7 +181,9 @@
                     <span>Datum objednání: <b>[[_computeAppointmentDate(appointmentId)]]</b></span>
                     <paper-textarea id="patient_message" label="Dobrovolná zpráva pro lékaře" char-counter maxlength="200"></paper-textarea>
                     <paper-button on-tap="_confirmAppointment">Potvrdit objednání</paper-button>
-                    <paper-icon-button icon="expand-more" on-tap="_showCalendar"></paper-icon-button>
+                    <div class="centered">
+                        <paper-icon-button icon="expand-more" on-tap="_showCalendar"></paper-icon-button>
+                    </div>
                 </div>
             </div>
 
