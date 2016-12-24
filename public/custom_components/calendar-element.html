@@ -23,16 +23,25 @@
                 color: green;
             }
 
-            .wrapper {
+            #animated_calendar {
                 @apply(--layout-horizontal);
+                width: 90%;
             }
 
-            .wrapper > section {
+            #animated_calendar > section {
                 @apply(--layout-flex);
             }
 
-            .wrapper > section:not(:first-child) {
+            #animated_calendar > section:not(:first-child) {
                 border-left: 2px solid #ededee;
+            }
+
+            .wrapper {
+                @apply(--layout);
+            }
+
+            .controls {
+                padding-top: 2em;
             }
 
             .row {
@@ -73,26 +82,32 @@
 
         </style>
         <h3>Kalendář</h3>
-        <paper-icon-button icon="chevron-left" on-tap="previous"></paper-icon-button>
-        <paper-icon-button icon="chevron-right" on-tap="next"></paper-icon-button>
-        <div id="animated_calendar" class="wrapper">
-            <template is="dom-repeat" items="{{computeDates(firstVisibleDate, numberOfColumns, officeHours)}}" as="date">
-                <section>
-                    <div class="row">
-                        [[date.nameOfTheDay]]
-                    </div>
-                    <div class="row date">
-                        [[computeDate(date)]]
-                    </div>
-
-                    <template is="dom-repeat" items="{{computeBookTimes(date, visitLength, officeHours)}}" as="bookTime">
+        <div class="wrapper">
+            <div class="controls">
+                <paper-icon-button icon="chevron-left" on-tap="previous"></paper-icon-button>
+            </div>
+            <div id="animated_calendar">
+                <template is="dom-repeat" items="{{computeDates(firstVisibleDate, numberOfColumns, officeHours)}}" as="date">
+                    <section>
                         <div class="row">
-                            <button on-tap="handleAppointment" data-args$="{{computeID(date, bookTime)}}">[[computeButtonText(bookTime)]]
-                            </button>
+                            [[date.nameOfTheDay]]
                         </div>
-                    </template>
-                </section>
-            </template>
+                        <div class="row date">
+                            [[computeDate(date)]]
+                        </div>
+
+                        <template is="dom-repeat" items="{{computeBookTimes(date, visitLength, officeHours)}}" as="bookTime">
+                            <div class="row">
+                                <button on-tap="handleAppointment" data-args$="{{computeID(date, bookTime)}}">[[computeButtonText(bookTime)]]
+                                </button>
+                            </div>
+                        </template>
+                    </section>
+                </template>
+            </div>
+            <div class="controls">
+                <paper-icon-button icon="chevron-right" on-tap="next"></paper-icon-button>
+            </div>
         </div>
 
     </template>
