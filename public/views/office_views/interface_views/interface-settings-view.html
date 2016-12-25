@@ -2,62 +2,29 @@
 
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="/bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
-<link rel="import" href="/bower_components/neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
 
-<link rel="import" href="/styles/input-styles.html">
-<link rel="import" href="/styles/layout-styles.html">
-<link rel="import" href="/styles/header-styles.html">
-<link rel="import" href="/styles/button-styles.html">
+
+<link rel="import" href="/styles/tab-styles.html">
 
 <dom-module id="interface-settings-view">
     <template>
-        <style include="button-styles layout-styles input-styles header-styles">
-
-            :host {
-                --border-color: #dadbdd;
-            }
-
-            paper-tabs {
-                height: 3.2em;
-
-                --paper-tabs-selection-bar: {
-                    display: none;
-                };
-
-                --paper-tabs-content: {
-                    background-color: #26A69A;
-                    color: #fff;
-                }
-            }
-
-            paper-tab {
-                padding: 0;
-                --paper-tab-ink: #fff;
-
-                --paper-tab-content-unselected: {
-                    opacity: 1;
-                    background-color: #fafbfc;
-                    color: #999;
-                    -webkit-box-shadow: inset 0px -5px 20px 0px rgba(238,238,238,1);
-                    -moz-box-shadow: inset 0px -5px 20px 0px rgba(238,238,238,1);
-                    box-shadow: inset 0px -5px 20px 0px rgba(238,238,238,1);
-                };
-            }
-
+        <style include="tab-styles">
 
         </style>
 
-        <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
-            <paper-tab name="general">Obecné</paper-tab>
-            <paper-tab name="times">Ordinační hodiny</paper-tab>
-        </paper-tabs>
+        <paper-material elevation="1">
+            <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
+                <paper-tab name="general">Obecné</paper-tab>
+                <paper-tab name="times">Ordinační hodiny</paper-tab>
+            </paper-tabs>
 
-        <iron-pages selected="[[selected]]" attr-for-selected="name">
-            <interface-settings-general-view name="general"></interface-settings-general-view>
-            <interface-settings-times-view name="times"></interface-settings-times-view>
-        </iron-pages>
+
+            <iron-pages selected="[[selected]]" attr-for-selected="name">
+                <interface-settings-general-view name="general"></interface-settings-general-view>
+                <interface-settings-times-view name="times"></interface-settings-times-view>
+            </iron-pages>
+        </paper-material>
     </template>
 
     <script>
@@ -74,8 +41,7 @@
                     type: String,
                     value: "general", // First selected view
                     observer: "loadView"
-                },
-
+                }
 
             },
 
