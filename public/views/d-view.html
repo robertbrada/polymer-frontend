@@ -78,7 +78,7 @@
                 rootRef.child('/user_appointments/' + this.user.uid + '/' + appointmentId).set(userAppointmentObject);
 
 
-                this.fire('change-route', {url: '/appointments'});
+                this.fire('change-route', {url: '/user/appointments'});
                 this.fire("show-toast", {text: "Návštěva zaregistrována"});
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },

@@ -3,7 +3,6 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -11,23 +10,17 @@
 <link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
-<link rel="import" href="/custom_components/login-required-element.html">
-
 
 <dom-module id="account-view">
     <template>
         <style include="button-styles layout-styles input-styles header-styles">
         </style>
 
-        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
-
         <firebase-document app-name="doctor-appointment-system" path="/user_info/{{user.uid}}"
                            data="{{userInformation}}">
         </firebase-document>
 
-        <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
-
-        <div class="main-frame" hidden="[[!loggedIn]]">
+        <div class="main-frame">
             <header class="subsection">
                 <h1>Nastavení účtu</h1>
                 <span>Údaje níže můžete kdykoliv změnit.</span>

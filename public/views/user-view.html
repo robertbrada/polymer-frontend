@@ -1,0 +1,40 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/custom_components/login-required-element.html">
+<link rel="import" href="/behaviors/routing-behavior.html">
+
+<dom-module id="user-view">
+    <template>
+        <app-route
+                route="{{route}}"
+                pattern="/:page"
+                data="{{routeData}}"
+                tail="{{subRoute}}"></app-route>
+
+        <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
+
+        <iron-pages
+                hidden="[[!loggedIn]]"
+                selected="[[page]]"
+                attr-for-selected="name"
+                selected-attribute="visible"
+                role="main">
+            <account-view name="account" user="[[user]]"></account-view>
+            <appointments-view name="appointments"></appointments-view>
+            <notifications-view name="notifications"></notifications-view>
+        </iron-pages>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'user-view',
+
+            behaviors: [RoutingBehavior],
+
+            defaultPage: 'notifications',
+            viewPath: '/views/user_views/'
+        });
+    </script>
+</dom-module>
