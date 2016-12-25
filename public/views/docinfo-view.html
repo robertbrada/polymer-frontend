@@ -5,7 +5,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/device-icons.html">
@@ -37,7 +37,6 @@
                 padding: 0 60px 40px 60px;
             }
 
-
             .grid > section {
                 text-align: center;
                 margin: 20px 0 30px 0;
@@ -46,7 +45,6 @@
             section h1 {
                 padding-left: 60px;
             }
-
 
             .grid > section:not(:first-child) {
                 margin-left: 0;
@@ -90,11 +88,71 @@
                 /*background-color: #eee;*/
             }
 
+            /**** SEARCH BAR EXAMPLE */
+
+            .flex-horizontal-with-ratios {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+                margin: 0 0.3em;
+                text-align: right;
+            }
+
+            .flex2child {
+                @apply(--layout-flex);
+                margin: 0 0.3em;
+            }
+
+            #search-head {
+                width: 100%;
+                height: 64px;
+                position: fixed;
+                left: 0;
+                top: 64px;
+                z-index: 1;
+                background-color: #eeeff2;
+                border-top: 1px solid #dcdce5;
+                border-bottom: 1px solid #dcdce5;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                font-size: 0.8em;
+                display: inline-block;
+            }
+
+            #search-head input {
+                min-width: 60%;
+                max-width: 300em;
+                height: 1.8em;
+                margin-top: 0.45em;
+                border: 1px solid #dcdce5;
+                padding: 0.5em 0.8em;
+                font-size: 1.4em;
+            }
+
+            #search-head input::-webkit-input-placeholder {
+                color: #aaa;
+                font-weight: lighter;
+                letter-spacing: 0.02em;
+            }
+
+            #search-head iron-icon {
+                margin-left: 1em;
+                cursor: pointer;
+            }
 
         </style>
 
+        <iron-media-query query="(max-width: 767px)" query-matches="{{smallScreen}}"></iron-media-query>
+
+        <div id="search-head" class="container flex-horizontal-with-ratios" hidden="[[smallScreen]]">
+            <div class="container flex-horizontal-with-ratios interface-div">
+                <div class="flexchild"><input placeholder="Jméno nebo specializace"></div>
+                <div class="flex2child"><input placeholder="Město nebo PSČ"><iron-icon icon="icons:search"></iron-icon></div>
+            </div>
+        </div>
+
         <div class="main-frame">
-            <!--style="border-bottom: 1px solid #ddd"-->
             <section class="grid">
                 <section>
                     <iron-icon icon="device:dvr"></iron-icon>
@@ -128,7 +186,8 @@
         </div>
 
         <div id="presentation">
-            <section class="main-frame grid" style="background-color: #172C50; color: white;  margin-top: 0; padding-top: 50px; padding-bottom: 30px">
+            <section class="main-frame grid"
+                     style="background-color: #172C50; color: white;  margin-top: 0; padding-top: 50px; padding-bottom: 30px">
                 <section style="text-align: left;  padding-bottom: 0">
                     <h1 style="font-size: 24px;">Online objednání a pořadník v čekárně</h1>
                     <p>Ačkoli finanční podmínky služby v Arnstadtu byly dobré, Bach se často dostával do konfliktu s
@@ -147,20 +206,21 @@
             <div style="max-width: 450px; margin: 50px auto">
 
                 <paper-input id="fninput" label="Jméno" minlength="1" maxlength="80"
-                             ></paper-input>
+                ></paper-input>
                 <paper-input id="lninput" label="Příjmení" minlength="1"
-                            ></paper-input>
+                ></paper-input>
                 <gold-email-input id="emailID"
-                                  label="Vaše emailová adresa" ></gold-email-input>
+                                  label="Vaše emailová adresa"></gold-email-input>
 
                 <paper-input id="passID" value="{{password}}" label="Heslo"
-                             type="password" minlength="6" maxlength="48" >
+                             type="password" minlength="6" maxlength="48">
                     <paper-icon-button icon="[[eyeIcon]]" suffix></paper-icon-button>
                 </paper-input>
 
                 <a href="/office/registration/data" style="text-decoration: none; ">
                     <paper-button
-                            style="background-color: #172C50; border-color: #172C50; color: white; margin-top: 40px; height: 62px; width: 100%">Zaregistrovat
+                            style="background-color: #172C50; border-color: #172C50; color: white; margin-top: 40px; height: 62px; width: 100%">
+                        Zaregistrovat
                     </paper-button>
                 </a>
             </div>
