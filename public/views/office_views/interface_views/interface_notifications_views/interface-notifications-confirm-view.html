@@ -11,7 +11,7 @@
     <template>
         <style include="interface-styles">
 
-            #triangle-topleft {
+            .triangle-topleft {
                 margin: 0;
                 width: 0;
                 height: 0;
@@ -77,7 +77,7 @@
 
         <template is="dom-repeat" items="[[notifications]]" as="entry">
             <div class="container flex-horizontal-with-ratios interface-div">
-                <div id="triangle-topleft"></div>
+                <div class="triangle-topleft"></div>
                 <div class="flexchild">[[entry.firstName]] [[entry.lastName]]</div>
                 <div class="flex2child">[[entry.address]]</div>
                 <div class="flex3child buttons">
