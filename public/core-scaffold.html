@@ -42,9 +42,11 @@
 
             app-header {
                 @apply(--layout-fixed-top);
-                z-index: 1;
+                z-index: 10;
                 background-color: rgba(255, 255, 255, 1);
                 border-bottom: 1px solid #dcdce5;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
                 --app-header-shadow: {
                     box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
                     height: 10px;
@@ -154,7 +156,7 @@
                     </paper-icon-button>
                 </div>
                 <div class="icon-bar-item" hidden="[[!signedIn]]">
-                    <a href="user/account/" tabindex="-1">
+                    <a href="account/" tabindex="-1">
                         <paper-icon-button icon="account-circle">
                         </paper-icon-button>
                     </a>
@@ -177,13 +179,14 @@
                 fallback-selection="e404"
                 selected-attribute="visible"
                 role="main">
-            <user-view name="user" route="{{subRoute}}"></user-view>
-            <office-view name="office" route="{{subRoute}}"></office-view>
             <home-view name="home"></home-view>
             <d-view name="d" route="{{subRoute}}"></d-view>
+            <office-view name="office" route="{{subRoute}}"></office-view>
             <e404-view name="e404"></e404-view>
             <emailaction-view name="emailaction" route="{{subRoute}}"></emailaction-view>
             <docinfo-view name="docinfo"></docinfo-view>
+            <account-view name="account" user="[[user]]"></account-view>
+            <appointments-view name="appointments"></appointments-view>
         </iron-pages>
 
         <custom-dialog id="main_dialog" with-backdrop entry-animation="scale-up-animation"

@@ -15,7 +15,8 @@
         <style>
 
             :host {
-                --scroll-main: auto;
+                --overflow-main-drawer: auto;
+                --border-color: #d5d9da;
             }
 
             paper-drawer-panel {
@@ -23,15 +24,15 @@
                 --paper-drawer-panel-main-container: {
                     background-color: #eeeff2;
                     padding: 1em 2em;
-                    overflow: var(--scroll-main);
+                    overflow: var(--overflow-main-drawer);
                     margin-top: 64px;
                 };
 
                 --paper-drawer-panel-left-drawer-container: {
-                    border-right: 1px solid #ddddde;
+                    border-right: 1px solid var(--border-color);
                     margin-top: 64px;
-                    box-shadow: none !important;
                     z-index: 2;
+                    box-shadow: 2px 0 8px var(--border-color);
                 };
             }
 
@@ -39,11 +40,18 @@
                 width: 100%;
                 display: block;
                 margin: 0;
-                border: none;
                 font-size: 0.9em;
                 border-radius: 0;
-                border-top: 1px solid #ccc;
+                border-bottom: 1px solid var(--border-color);
                 padding: 1.2em 0 1.2em 2em;
+            }
+
+            paper-header-panel paper-button:first-child {
+                border-top: 1px solid var(--border-color);
+            }
+
+            paper-header-panel paper-button:hover:not(.iron-selected) {
+                background-color: #f6f6f6;
             }
 
             .iron-selected.nav {
@@ -56,7 +64,7 @@
                 display: block;
                 background-color: #fff;
                 padding: 0 1em;
-                border: 1px solid #d5d9da;
+                border: 1px solid var(--border-color);
 
                 --paper-input-container-input: {
                     font-size: 0.9em;
@@ -81,16 +89,17 @@
             #help-tab {
                 position: fixed;
                 bottom: 0;
-                width: 256px;
+                width: 255px;
+                border-top: 1px solid var(--border-color);
             }
 
             #add-office {
                 color: #26A69A;
-                border-top: 1px solid #ddddde;
+                border-top: 1px solid var(--border-color);
                 padding-top: 8px;
             }
 
-            #notification {
+            #notification-icon {
                 color: #26A69A;
                 height: 15px;
                 width: 15px;
@@ -101,6 +110,15 @@
 
                 #help-tab {
                     bottom: 64px;
+                }
+
+                paper-drawer-panel {
+                    --paper-drawer-panel-left-drawer-container: {
+                        border: none;
+                        margin-top: 64px;
+                        z-index: 2;
+                        box-shadow: none;
+                    };
                 }
 
             }
@@ -121,7 +139,7 @@
                         <!--paper-drawer-toggle closes drawer on tap-->
                         <paper-button paper-drawer-toggle name="notifications" class="nav">Upozornění
                             <!--visible when new notification -->
-                            <iron-icon id="notification" icon="image:lens"></iron-icon>
+                            <iron-icon id="notification-icon" icon="image:lens"></iron-icon>
                         </paper-button>
                         <paper-button paper-drawer-toggle name="calendar" class="nav">Kalendář</paper-button>
                         <paper-button paper-drawer-toggle name="waiting-list" class="nav">Pořadník</paper-button>
@@ -137,7 +155,7 @@
 
                 <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
                 <paper-toolbar>
-                    <div id="mobile_toolbar" on-tap="handleOpenDrawer" paper-drawer-toggle>
+                    <div id="mobile_toolbar" paper-drawer-toggle>
                         <iron-icon icon="icons:chevron-right" paper-drawer-toggle></iron-icon>
                         Menu ordinace
                     </div>
@@ -171,8 +189,6 @@
         Polymer({
             is: 'office-interface-view',
 
-            behaviors: [RoutingBehavior],
-
             properties: {
                 profileID: {
                     type: String,
@@ -193,8 +209,6 @@
                     type: Boolean,
                     value: true
                 }
-
-
             },
 
             loadView: function (viewName) {
@@ -204,7 +218,19 @@
             computeID: function (path) {
                 if (path.length < 2) return null;
                 return (path.substring(1));
-            }
+            },
+
+
+//            to disable/enable scroll of main header when drawer is opened on small screen. Still not sure how to use it
+//            disableScroll: function() {
+//                this.customStyle['--overflow-main-drawer'] = 'hidden';
+//                this.updateStyles();
+//            },
+//
+//            enableScroll: function() {
+//                this.customStyle['--overflow-main-drawer'] = 'auto';
+//                this.updateStyles();
+//            }
 
         });
     </script>

@@ -1,0 +1,58 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+
+<dom-module id="interface-styles">
+    <template>
+        <style>
+
+            paper-material {
+                background-color: #fff;
+            }
+
+            :host {
+                --border-color: #dadbdd;
+            }
+
+            .interface-div {
+                background-color: #fff;
+                padding: 1.5em;
+            }
+
+            .interface-div paper-button {
+                font-size: 0.8em;
+                padding: 0.7em 1.6em;
+                margin-left: 0.5em;
+                margin-top: 0;
+                margin-bottom: 0;
+                border: 1px solid var(--border-color);;
+                color: #455A64;
+            }
+
+            .interface-div paper-button:first-child{
+                margin-left: 0;
+            }
+
+
+            .interface-div .dismiss-button {
+                background-color: #f6f6f7;
+            }
+
+            .interface-div .confirm-button, .interface-div .details-button {
+                background-color: #fff;
+            }
+
+            .interface-div:hover {
+                background-color: #fafafa;
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                .buttons paper-button:not(:first-child) {
+                    margin-left: 0.0em;
+                }
+
+            }
+
+        </style>
+    </template>
+</dom-module>
