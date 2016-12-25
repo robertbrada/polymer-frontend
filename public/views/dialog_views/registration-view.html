@@ -2,8 +2,6 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
-
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <!--TODO: shouldn't be necessary-->
@@ -22,9 +20,6 @@
         <style include="button-styles input-styles">
         </style>
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
-
-        <firebase-document id="document" app-name="doctor-appointment-system">
-        </firebase-document>
 
         <p class="error">{{errorMessage}}</p>
         <form id="main_form" is="iron-form">
@@ -83,8 +78,9 @@
             },
 
             saveUserData: function (user) {
-                this.$.document.path = null;
-                this.$.document.data = {
+                var db = this.$.auth.app.database();
+
+                db.ref('/user_info/' + user.uid).set({
                     name: {
                         'firstName': this.$.fninput.value,
                         'lastName': this.$.lninput.value
@@ -93,8 +89,12 @@
                         'city': '',
                         'street': ''
                     }
-                };
-                this.$.document.save('user_info', user.uid);
+                });
+
+                db.ref('/user_initial_info/' + user.uid).set({
+                    'number_of_notifications': 0,
+                    'doctor': false
+                });
             }
         });
 

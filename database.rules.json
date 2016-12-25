@@ -44,6 +44,10 @@
     "user_appointments": {
       ".read": true,
       ".write": true
+    },
+    "user_initial_info": {
+      ".read": true,
+      ".write": true
     }
   }
 }
