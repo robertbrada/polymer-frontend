@@ -98,7 +98,7 @@
 
                         <template is="dom-repeat" items="{{computeBookTimes(date, visitLength, officeHours)}}" as="bookTime">
                             <div class="row">
-                                <button on-tap="handleAppointment" data-args$="{{computeID(date, bookTime)}}">[[computeButtonText(bookTime)]]
+                                <button on-tap="handleAppointment" data-args$="{{computeId(date, bookTime)}}">[[computeButtonText(bookTime)]]
                                 </button>
                             </div>
                         </template>
@@ -201,7 +201,7 @@
             ],
 
             handleAppointment: function (event) {
-                this.fire('appointment-request', {"appointmentID": event.target.dataset.args})
+                this.fire('appointment-request', {"appointmentId": event.target.dataset.args})
             },
 
             next: function () {
@@ -316,7 +316,7 @@
                 return bookTime.hours + ":" + ((bookTime.minutes > 9) ? bookTime.minutes : "0" + bookTime.minutes);
             },
 
-            computeID: function (date, bookTime) {
+            computeId: function (date, bookTime) {
                 var month = date.getMonth() + 1,
                     dayDate = date.getDate(),
                     hours = bookTime.hours,

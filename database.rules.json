@@ -32,6 +32,18 @@
     "user_offices": {
       ".read": true,
       ".write": true
+    },
+    "appointments_public": {
+      ".read": true,
+      ".write": true
+    },
+    "appointments_private": {
+      ".read": true,
+      ".write": true
+    },
+    "user_appointments": {
+      ".read": true,
+      ".write": true
     }
   }
 }

@@ -285,13 +285,13 @@
                 this.actionAfterAnimation = true;
                 this.playAnimation('slideUp');
 
-                this.appointmentId = Number(event.detail['appointmentID']);
+                this.appointmentId = Number(event.detail['appointmentId']);
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
             _confirmAppointment: function () {
-                this.fire('handle-appointment', {"appointmentID": this.appointmentId, "patientMessage": this.$.patient_message.value})
+                this.fire('handle-appointment', {"appointmentId": this.appointmentId, "patientMessage": this.$.patient_message.value})
             },
 
             _showCalendar: function () {
