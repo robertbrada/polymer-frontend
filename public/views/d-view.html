@@ -15,6 +15,8 @@
             }
         </style>
 
+        <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}" user="{{user}}"></firebase-auth>
+
         <firebase-document id="office_document" app-name="doctor-appointment-system" path="/office_full_info/{{officeId}}" data="{{officeData}}">
         </firebase-document>
 
@@ -22,7 +24,7 @@
             <paper-spinner-lite active="[[dataNotLoaded]]"></paper-spinner-lite>
         </div>
 
-        <office-element hidden="[[dataNotLoaded]]" office-data="[[officeData]]"></office-element>
+        <office-element hidden="[[dataNotLoaded]]" office-data="[[officeData]]" logged-in="[[loggedIn]]"></office-element>
     </template>
 
     <script>
@@ -33,6 +35,11 @@
                 officeId: {
                     type: String,
                     computed: 'computeID(route.path)'
+                },
+
+                loggedIn: {
+                    type: Boolean,
+                    computed: 'computeLoginStatus(statusKnown, user)',
                 },
 
                 dataNotLoaded: {
@@ -83,6 +90,10 @@
 
             computeDataAvailability: function (data) {
                 return Object.keys(data).length === 0;
+            },
+
+            computeLoginStatus: function (statusKnown, user) {
+                return (statusKnown && !!user);
             }
         });
     </script>

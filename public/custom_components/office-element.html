@@ -171,9 +171,14 @@
             <hr>
 
             <div class="wide-container" id="main_container">
+                <div hidden="[[loggedIn]]">
+                    <h3>Vyžadováno přihlášení</h3>
+                    <p>Pro objednání je vyžadováno přihlášení. Můžete se přihlásit kliknutím na tlačítko níže.</p>
+                    <paper-button on-tap="_logIn">Přihlásit</paper-button>
+                </div>
                 <div id="calendar_container">
                     <calendar-element hidden="[[!calendarVisibility]]" office-hours="[[officeData.officeHours]]"
-                                      visit-length="[[officeData.visitLength]]">
+                                      visit-length="[[officeData.visitLength]]" disabled="[[disabledCalendar]]">
                     </calendar-element>
                 </div>
                 <div hidden="[[calendarVisibility]]" id="appointment_form">
@@ -223,6 +228,11 @@
                 specializations: {
                     type: Array,
                     value: ['Zubař', 'Rektálník', 'Gynekolog']
+                },
+
+                disabledCalendar: {
+                    type: Boolean,
+                    computed: '_computeIfDisabled(loggedIn)'
                 },
 
                 appointmentId: {
@@ -299,6 +309,10 @@
                 this.playAnimation('slideDown');
             },
 
+            _logIn: function () {
+                this.fire("show-dialog", {path: "", viewName: "login", open: true});
+            },
+
             _computeAppointmentDate: function (appointmentId) {
                 var date, year, month, hours, minutes,
                     stringId = "" + appointmentId;
@@ -310,6 +324,11 @@
                 minutes = stringId.substring(10, 12);
 
                 return "" + date + "." + month + "." + year + " v " + hours + ":" + minutes;
+            },
+
+            _computeIfDisabled: function (loggedIn) {
+                // TODO: limited clientele check
+                return !loggedIn;
             },
 
             formatName: function (first, last) {

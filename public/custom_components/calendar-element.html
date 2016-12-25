@@ -80,6 +80,12 @@
                 outline: none;
             }
 
+            button[disabled] {
+                background-color: inherit;
+                border: none;
+                cursor: auto;
+            }
+
         </style>
         <h3>Kalendář</h3>
         <div class="wrapper">
@@ -98,7 +104,8 @@
 
                         <template is="dom-repeat" items="{{computeBookTimes(date, visitLength, officeHours)}}" as="bookTime">
                             <div class="row">
-                                <button on-tap="handleAppointment" data-args$="{{computeId(date, bookTime)}}">[[computeButtonText(bookTime)]]
+                                <button on-tap="handleAppointment" data-args$="{{computeId(date, bookTime)}}" disabled="[[disabled]]">
+                                    [[computeButtonText(bookTime)]]
                                 </button>
                             </div>
                         </template>
