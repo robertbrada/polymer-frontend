@@ -120,7 +120,7 @@
                     if (currentOfficeData === null) {
                         this.saveAdminInfo(data, officeID, rootRef);
                         this.savePhoto(data, officeID);
-                        this.saveIdToUser(officeID, rootRef);
+                        this.saveOfficeToUser(officeID, rootRef, data.information.address);
                         this.saveSearchInfo(data.information, officeID, rootRef);
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/' + officeID}); // TODO: fix route bug
@@ -154,11 +154,14 @@
                 rootRef.child('/office_search_info').update(objectToSave);
             },
 
-            saveIdToUser: function (officeID, rootRef) {
-                var objectToSave = {};
+            saveOfficeToUser: function (officeID, rootRef, address) {
+                var objectToSave = {
+                    'role': 'admin',
+                    'number_of_notifications': 0,
+                    'name': address.city + ', ' + address.street
+                };
 
-                objectToSave[officeID] = 'admin';
-                rootRef.child('/user_offices/' + this.user.uid).update(objectToSave);
+                rootRef.child('/user_offices/' + this.user.uid + '/' + officeID).set(objectToSave);
             },
 
             savePhoto: function (data, officeID) {
