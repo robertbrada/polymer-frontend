@@ -10,22 +10,24 @@
 
         defaultPage: '',
         viewPath: '',
+        validPrefix: '',
 
         observers: [
             '_routePageChanged(routeData.page)'
         ],
 
         _routePageChanged: function (page) {
+//            console.log(this.route);
             this.page = page || this.defaultPage;
         },
 
         _pageChanged: function (page) {
-            // Due to the following line, non-url induced page change is reflected in the route
-            if(this.routeData.page !== page) this.set('routeData.page', page);
-            var resolvedPageUrl = this.resolveUrl(this.viewPath + page + '-view.html');
-            this.importHref(resolvedPageUrl, null, this._show404, true);
-            if (!!this.drawerOpened) {
-                this.drawerOpened = false;
+            if (this.route.prefix === this.validPrefix) {
+                // Due to the following line, non-url induced page change is reflected in the route
+                if (this.routeData.page !== page) this.set('routeData.page', page);
+                var resolvedPageUrl = this.resolveUrl(this.viewPath + page + '-view.html');
+                this.importHref(resolvedPageUrl, null, this._show404, true);
+                this.fire('close-dialog');
             }
         },
 

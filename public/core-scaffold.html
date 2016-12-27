@@ -222,6 +222,7 @@
                 'show-dialog': '_showDialog',
                 'show-toast': '_showToast',
                 'change-route': '_changeRoute',
+                'close-dialog': '_closeDialog'
             },
 
             _loginButtonHandler: function () {
@@ -245,6 +246,10 @@
             },
 
             // Event handlers follow
+
+            _closeDialog: function () {
+                this.drawerOpened = false;
+            },
 
             _showDialog: function (event) {
                 // TODO: proper event redirection

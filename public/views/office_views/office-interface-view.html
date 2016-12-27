@@ -136,6 +136,8 @@
                 <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
                 <paper-toolbar>
                     <iron-selector attr-for-selected="name" selected="{{selected}}">
+                        <!--TODO: Tady by bylo lepší použít prostě paper-item. Tlačítka na tohle nejsou dělaný.-->
+                        <!--Mělo by na to případně jít použít paper-ripple, aby to bylo sexy animovaný.-->
                         <!--paper-drawer-toggle closes drawer on tap-->
                         <paper-button paper-drawer-toggle name="notifications" class="nav">Upozornění
                             <!--visible when new notification -->
