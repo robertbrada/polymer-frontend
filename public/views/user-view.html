@@ -2,11 +2,22 @@
 
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
+
 <link rel="import" href="/custom_components/login-required-element.html">
 <link rel="import" href="/behaviors/routing-behavior.html">
+<link rel="import" href="/styles/tab-styles.html">
 
 <dom-module id="user-view">
     <template>
+        <style include="tab-styles">
+            div {
+                margin-top: 64px;
+            }
+        </style>
+
         <app-route
                 route="{{route}}"
                 pattern="/:page"
@@ -15,16 +26,19 @@
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
 
-        <iron-pages
-                hidden="[[!loggedIn]]"
-                selected="[[page]]"
-                attr-for-selected="name"
-                selected-attribute="visible"
-                role="main">
-            <account-view name="account" user="[[user]]"></account-view>
-            <appointments-view name="appointments"></appointments-view>
-            <notifications-view name="notifications"></notifications-view>
-        </iron-pages>
+        <div hidden="[[!loggedIn]]">
+            <paper-tabs focused selected="{{page}}" attr-for-selected="name" hidden="[[smallScreen]]">
+                <paper-tab name="notifications">Notifikace</paper-tab>
+                <paper-tab name="appointments">Návštěvy</paper-tab>
+                <paper-tab name="settings">Nastavení</paper-tab>
+            </paper-tabs>
+
+            <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+                <notifications-view name="notifications"></notifications-view>
+                <appointments-view name="appointments"></appointments-view>
+                <settings-view name="settings" user="[[user]]"></settings-view>
+            </iron-pages>
+        </div>
     </template>
 
     <script>

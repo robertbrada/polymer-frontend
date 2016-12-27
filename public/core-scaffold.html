@@ -1,6 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<!--TODO: global imports-->
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="/bower_components/app-route/app-location.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
@@ -11,8 +10,9 @@
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="/behaviors/routing-behavior.html">
+<link rel="import" href="/bower_components/paper-badge/paper-badge.html">
 
+<link rel="import" href="/behaviors/routing-behavior.html">
 <!--Lazy load in the future-->
 <link rel="import" href="/bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
@@ -105,6 +105,7 @@
                 padding: 0 25px;
                 line-height: 40px;
                 text-decoration: none;
+                cursor: pointer;
                 color: var(--app-secondary-color);
             }
 
@@ -127,6 +128,10 @@
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
 
+        <firebase-document app-name="doctor-appointment-system" path="/userInitialInfo/[[user.uid]]"
+                           data="{{userInitialInfo}}">
+        </firebase-document>
+
         <app-location route="{{route}}"></app-location>
 
         <app-route
@@ -147,7 +152,8 @@
                     </paper-icon-button>
                 </div>
                 <div class="text-bar-item" hidden="[[smallScreen]]">
-                    <a href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
+                    <a hidden="[[userInitialInfo.showOfficeInterface]]" href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
+                    <a hidden="[[!userInitialInfo.showOfficeInterface]]" href="office/interface/" aria-label="Informace pro lékaře">Mé ordinace</a>
                 </div>
                 <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">Docta.cz</a></div>
                 <div class="icon-bar-item">
@@ -155,8 +161,9 @@
                     </paper-icon-button>
                 </div>
                 <div class="icon-bar-item" hidden="[[!signedIn]]">
-                    <a href="user/account/" tabindex="-1">
-                        <paper-icon-button icon="account-circle">
+                    <a href="user/notifications/" tabindex="-1">
+                        <paper-badge for="account_icon" label="1" hidden="[[!userInitialInfo.numberOfNotifications]]"></paper-badge>
+                        <paper-icon-button id="account_icon" icon="account-circle">
                         </paper-icon-button>
                     </a>
                 </div>
@@ -166,8 +173,12 @@
         <template is="dom-if" if="[[smallScreen]]">
             <!-- Two-way bind `drawerOpened` since app-drawer can update `opened` itself. -->
             <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
-                <iron-selector role="navigation" class="drawer-list" selected="[[page]]" attr-for-selected="name">
-                    <a name="docinfo" href="docinfo/">Pro lékaře</a>
+                <iron-selector role="navigation" class="drawer-list">
+                    <a href="docinfo/" hidden="[[userInitialInfo.showOfficeInterface]]">Pro lékaře</a>
+                    <a href="office/interface/" hidden="[[!userInitialInfo.showOfficeInterface]]">Mé ordinace</a>
+                    <a href="user/notifications/" hidden="[[!signedIn]]">Notifikace</a>
+                    <a href="user/appointments/" hidden="[[!signedIn]]">Návštěvy</a>
+                    <a href="user/settings/" hidden="[[!signedIn]]">Nastavení</a>
                 </iron-selector>
             </app-drawer>
         </template>
@@ -178,7 +189,7 @@
                 fallback-selection="e404"
                 selected-attribute="visible"
                 role="main">
-            <user-view name="user" route="{{subRoute}}"></user-view>
+            <user-view name="user" route="{{subRoute}}" small-screen="[[smallScreen]]"></user-view>
             <office-view name="office" route="{{subRoute}}"></office-view>
             <home-view name="home"></home-view>
             <d-view name="d" route="{{subRoute}}"></d-view>
