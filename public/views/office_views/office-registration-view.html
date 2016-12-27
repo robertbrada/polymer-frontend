@@ -15,7 +15,7 @@
                 data="{{routeData}}"
                 tail="{{subRoute}}"></app-route>
 
-        <firebase-document id="user_document" app-name="doctor-appointment-system" path="/user_info/{{user.uid}}/name"
+        <firebase-document id="user_document" app-name="doctor-appointment-system" path="/userInfo/[[userId]]/name"
                            data="{{nameData}}">
         </firebase-document>
 
@@ -61,7 +61,7 @@
                             visitLength: 30,
                             phoneNumber: null,
                             email: null,
-                            limitedClientele: false,
+                            manualConfirmation: false,
                             patientText: null,
                             officeHours: [
                                 {'available': true, hours: null}, // Monday
@@ -72,7 +72,8 @@
                                 {'available': false, hours: null},
                                 {'available': false, hours: null}
                             ],
-                            photoAvailability: false
+                            photoAvailability: false,
+                            acceptingNewPatients: false
                         },
                         photoFile: File,
                         device: {
@@ -106,7 +107,7 @@
                 var normalizedString = this.normalizeText(this.officeData.information.name.lastName) + "_" + this.normalizeText(this.officeData.information.address.city),
                     rootRef = this.$.user_document.ref.root;
 
-                this.officeData.information['owner'] = this.user.uid;
+                this.officeData.information['owner'] = this.userId;
 
                 this.saveOffice(this.officeData, normalizedString, rootRef, 0);
 
@@ -116,12 +117,14 @@
             saveOffice: function (data, normalizedString, rootRef, increment) {
                 var officeID = (increment === 0) ? normalizedString : normalizedString + "_" + increment;
 
-                rootRef.child('office_full_info' + '/' + officeID).transaction(function (currentOfficeData) {
+                rootRef.child('officeFullInfo' + '/' + officeID).transaction(function (currentOfficeData) {
                     if (currentOfficeData === null) {
                         this.saveAdminInfo(data, officeID, rootRef);
                         this.savePhoto(data, officeID);
                         this.saveOfficeToUser(officeID, rootRef, data.information.address);
                         this.saveSearchInfo(data.information, officeID, rootRef);
+                        this.saveNumberOfNotifications(officeID, rootRef);
+                        this.saveShowUserInterface(rootRef);
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/' + officeID}); // TODO: fix route bug
                         return data.information;
@@ -131,14 +134,22 @@
                 }.bind(this));
             },
 
+            saveShowUserInterface: function (rootRef) {
+                rootRef.child('/userInitialInfo/' + this.userId + '/showOfficeInterface').set(true);
+            },
+
+            saveNumberOfNotifications: function (officeID, rootRef) {
+                rootRef.child('/officeNumberOfNotifications/' + officeID).set(0);
+            },
+
             saveAdminInfo: function (data, officeID, rootRef) {
                 var objectToSave = {
                     'users': {},
                     'bookDevice': data.device
                 };
 
-                objectToSave['users'][this.user.uid] = 'admin';
-                rootRef.child('/office_admin_info/' + officeID).update(objectToSave);
+                objectToSave['users'][this.userId] = 'admin';
+                rootRef.child('/officeAdminInfo/' + officeID).update(objectToSave);
             },
 
             saveSearchInfo: function (data, officeID, rootRef) {
@@ -147,21 +158,20 @@
                     'name': data.name,
                     'address': data.address,
                     'coordinates': data.coordinates,
-                    'limitedClientele': data.limitedClientele,
+                    'acceptingNewPatients': data.acceptingNewPatients,
                     'specialization': data.specialization,
                     'photoAvailability': data.photoAvailability
                 };
-                rootRef.child('/office_search_info').update(objectToSave);
+                rootRef.child('/officeSearchInfo').update(objectToSave);
             },
 
             saveOfficeToUser: function (officeID, rootRef, address) {
                 var objectToSave = {
                     'role': 'admin',
-                    'number_of_notifications': 0,
                     'name': address.city + ', ' + address.street
                 };
 
-                rootRef.child('/user_offices/' + this.user.uid + '/' + officeID).set(objectToSave);
+                rootRef.child('/userOffices/' + this.userId + '/' + officeID).set(objectToSave);
             },
 
             savePhoto: function (data, officeID) {

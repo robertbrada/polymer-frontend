@@ -80,7 +80,7 @@
             saveUserData: function (user) {
                 var db = this.$.auth.app.database();
 
-                db.ref('/user_info/' + user.uid).set({
+                db.ref('/userInfo/' + user.uid).set({
                     name: {
                         'firstName': this.$.fninput.value,
                         'lastName': this.$.lninput.value
@@ -91,9 +91,9 @@
                     }
                 });
 
-                db.ref('/user_initial_info/' + user.uid).set({
-                    'number_of_notifications': 0,
-                    'doctor': false
+                db.ref('/userInitialInfo/' + user.uid).set({
+                    'showOfficeInterface': false,
+                    'numberOfNotifications': 0
                 });
             }
         });

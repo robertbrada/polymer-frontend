@@ -1,6 +1,6 @@
 {
   "rules": {
-    "user_info": {
+    "userInfo": {
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
@@ -17,35 +17,39 @@
       }
     },
     // TODO: proper rules
-    "office_full_info": {
+    "officeFullInfo": {
       ".read": true,
       ".write": true
     },
-    "office_search_info": {
+    "officeSearchInfo": {
       ".read": true,
       ".write": true
     },
-    "office_admin_info": {
+    "officeAdminInfo": {
       ".read": true,
       ".write": true
     },
-    "user_offices": {
+    "userOffices": {
       ".read": true,
       ".write": true
     },
-    "appointments_public": {
+    "appointmentsPublic": {
       ".read": true,
       ".write": true
     },
-    "appointments_private": {
+    "appointmentsPrivate": {
       ".read": true,
       ".write": true
     },
-    "user_appointments": {
+    "userAppointments": {
       ".read": true,
       ".write": true
     },
-    "user_initial_info": {
+    "userInitialInfo": {
+      ".read": true,
+      ".write": true
+    },
+    "officeNumberOfNotifications": {
       ".read": true,
       ".write": true
     }

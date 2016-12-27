@@ -161,9 +161,9 @@
                         [[officeData.email]]
                     </div>
 
-                    <div id="order-info" hidden="[[!officeData.limitedClientele]]">
+                    <div id="order-info" hidden="[[!officeData.acceptingNewPatients]]">
                         <iron-icon icon="info"></iron-icon>
-                        Lékař má omezenou klientelu
+                        Lékař přijímá nové pacienty
                     </div>
                 </section>
             </div>
@@ -327,7 +327,7 @@
             },
 
             _computeIfDisabled: function (loggedIn) {
-                // TODO: limited clientele check
+                // TODO: manualConfirmation check
                 return !loggedIn;
             },
 
