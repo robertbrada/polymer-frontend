@@ -1,5 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
@@ -8,7 +9,8 @@
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-icons/image-icons.html">
-<link rel="import" href="/bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+
+<link rel="import" href="/behaviors/routing-behavior.html">
 
 <dom-module id="office-interface-view">
     <template>
@@ -130,12 +132,18 @@
 
         </style>
 
+        <app-route
+                route="{{route}}"
+                pattern="/:page/:profileId"
+                data="{{routeData}}"
+                tail="{{subRoute}}"></app-route>
+
         <paper-drawer-panel>
             <paper-header-panel drawer>
 
                 <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
                 <paper-toolbar>
-                    <iron-selector attr-for-selected="name" selected="{{selected}}">
+                    <iron-selector attr-for-selected="name" selected="{{page}}">
                         <!--TODO: Tady by bylo lepší použít prostě paper-item. Tlačítka na tohle nejsou dělaný.-->
                         <!--Mělo by na to případně jít použít paper-ripple, aby to bylo sexy animovaný.-->
                         <!--paper-drawer-toggle closes drawer on tap-->
@@ -175,7 +183,7 @@
                     </paper-listbox>
                 </paper-dropdown-menu>
 
-                <iron-pages attr-for-selected="name" selected="[[selected]]">
+                <iron-pages attr-for-selected="name" selected="[[page]]">
                     <interface-notifications-view name="notifications"></interface-notifications-view>
                     <interface-calendar-view name="calendar"></interface-calendar-view>
                     <interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>
@@ -191,16 +199,16 @@
         Polymer({
             is: 'office-interface-view',
 
-            properties: {
-                profileID: {
-                    type: String,
-                    computed: 'computeID(route.path)'
-                },
+            behaviors: [RoutingBehavior],
 
-                selected: {
+            defaultPage: 'waiting-list',
+            viewPath: '/views/office_views/interface_views/interface-',
+            validPrefix: '/office/interface',
+
+            properties: {
+                profileId: {
                     type: String,
-                    value: "waiting-list", // First selected view
-                    observer: "loadView"
+                    observer: 'iidChanged'
                 },
 
                 offices: {
@@ -213,14 +221,14 @@
                 }
             },
 
-            loadView: function (viewName) {
-                this.importHref("/views/office_views/interface_views/interface-" + viewName + "-view.html", null, null, false);
+            idChanged: function (data) {
+                console.log(data);
+                console.log("called");
             },
 
-            computeID: function (path) {
-                if (path.length < 2) return null;
-                return (path.substring(1));
-            },
+            ready: function () {
+                console.log(this.routeData);
+            }
 
 
 //            to disable/enable scroll of main header when drawer is opened on small screen. Still not sure how to use it
