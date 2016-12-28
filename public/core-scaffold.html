@@ -162,7 +162,7 @@
                 </div>
                 <div class="icon-bar-item" hidden="[[!signedIn]]">
                     <a href="user/notifications/" tabindex="-1">
-                        <paper-badge for="account_icon" label="1" hidden="[[!userInitialInfo.numberOfNotifications]]"></paper-badge>
+                        <paper-badge for="account_icon" label="[[userInitialInfo.numberOfNotifications]]" hidden="[[!userInitialInfo.numberOfNotifications]]"></paper-badge>
                         <paper-icon-button id="account_icon" icon="account-circle">
                         </paper-icon-button>
                     </a>
@@ -247,8 +247,9 @@
 
             // Event handlers follow
 
-            _closeDialog: function () {
+            _closeDialog: function (event) {
                 this.drawerOpened = false;
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
             _showDialog: function (event) {
