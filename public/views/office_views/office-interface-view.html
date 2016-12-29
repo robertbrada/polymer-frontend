@@ -4,11 +4,12 @@
 <link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="/bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-icons/image-icons.html">
+<link rel="import" href="/bower_components/app-layout/app-layout.html">
 
 <link rel="import" href="/behaviors/routing-behavior.html">
 
@@ -21,39 +22,8 @@
                 --border-color: #d5d9da;
             }
 
-            paper-drawer-panel {
-
-                --paper-drawer-panel-main-container: {
-                    background-color: #eeeff2;
-                    padding: 1em 2em;
-                    overflow: var(--overflow-main-drawer);
-                    margin-top: 64px;
-                };
-
-                --paper-drawer-panel-left-drawer-container: {
-                    border-right: 1px solid var(--border-color);
-                    margin-top: 64px;
-                    z-index: 2;
-                    box-shadow: 2px 0 8px var(--border-color);
-                };
-            }
-
-            paper-header-panel paper-button {
-                width: 100%;
-                display: block;
-                margin: 0;
-                font-size: 0.9em;
-                border-radius: 0;
+            .nav {
                 border-bottom: 1px solid var(--border-color);
-                padding: 1.2em 0 1.2em 2em;
-            }
-
-            paper-header-panel paper-button:first-child {
-                border-top: 1px solid var(--border-color);
-            }
-
-            paper-header-panel paper-button:hover:not(.iron-selected) {
-                background-color: #f6f6f6;
             }
 
             .iron-selected.nav {
@@ -80,14 +50,6 @@
                 cursor: pointer;
             }
 
-            #mobile_toolbar {
-                background-color: var(--app-accent-color);
-                color: #fff;
-                padding: 1.2em 1.5em;
-                margin-bottom: 1em;
-                margin-top: 0;
-            }
-
             #help-tab {
                 position: fixed;
                 bottom: 0;
@@ -109,27 +71,43 @@
             }
 
             @media only screen and (max-width: 767px) {
-
                 #help-tab {
                     bottom: 64px;
                 }
+            }
 
-                paper-drawer-panel {
-                    --paper-drawer-panel-left-drawer-container: {
-                        border: none;
-                        margin-top: 64px;
-                        z-index: 2;
-                        box-shadow: none;
-                    };
+            @media only screen and (min-width: 767px) {
+                #main-content {
+                    margin-top: 64px;
                 }
+            }
+
+            app-drawer {
+                margin-top: 64px;
+                box-shadow: 2px 0 8px var(--border-color);
+                /*--app-drawer-scrim-background: red;*/
+                z-index: 2;
 
             }
 
-            /* zabrani tomu, aby element s atributem paper-drawer-toggle mizel na wide-screen. Default hodnota je display:none*/
-            iron-selector:not(.narrow-layout) ::content [paper-drawer-toggle] {
-                display: block !important
+            #main-content {
+                /*background-color: #eeeff2;*/
+                padding: 2em;
             }
 
+            app-drawer-layout {
+                background-color: #eeeff2;
+            }
+
+            app-toolbar {
+                background-color: var(--app-accent-color);
+                color: #fff;
+                margin-top: 64px;
+            }
+
+            #toolbar {
+                cursor: pointer;
+            }
         </style>
 
         <app-route
@@ -138,39 +116,29 @@
                 data="{{routeData}}"
                 tail="{{subRoute}}"></app-route>
 
-        <paper-drawer-panel>
-            <paper-header-panel drawer>
+        <app-drawer-layout fullbleed responsive-width="767px" narrow="{{narrow}}">
+            <div id="toolbar" on-tap="toggleDrawer" hidden="[[!narrow]]">
+                <app-toolbar>
+                    <paper-icon-button icon="chevron-right"></paper-icon-button>
+                    Menu ordinace
+                </app-toolbar>
+            </div>
 
-                <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
-                <paper-toolbar>
-                    <iron-selector attr-for-selected="name" selected="{{page}}">
-                        <!--TODO: Tady by bylo lepší použít prostě paper-item. Tlačítka na tohle nejsou dělaný.-->
-                        <!--Mělo by na to případně jít použít paper-ripple, aby to bylo sexy animovaný.-->
-                        <!--paper-drawer-toggle closes drawer on tap-->
-                        <paper-button paper-drawer-toggle name="notifications" class="nav">Upozornění
-                            <!--visible when new notification -->
-                            <iron-icon id="notification-icon" icon="image:lens"></iron-icon>
-                        </paper-button>
-                        <paper-button paper-drawer-toggle name="calendar" class="nav">Kalendář</paper-button>
-                        <paper-button paper-drawer-toggle name="waiting-list" class="nav">Pořadník</paper-button>
-                        <paper-button paper-drawer-toggle name="settings" class="nav">Nastavení</paper-button>
-                        <paper-button paper-drawer-toggle name="help" id="help-tab" class="nav">Nahlásit problém
-                        </paper-button>
-                    </iron-selector>
-                </paper-toolbar>
-            </paper-header-panel>
+            <app-drawer id="drawer" position="left">
+                <iron-selector attr-for-selected="name" selected="{{page}}" on-iron-activate="toggleDrawer">
+                    <paper-item name="notifications" class="nav">Upozornění
+                        <!--visible when new notification -->
+                        <iron-icon id="notification-icon" icon="image:lens"></iron-icon>
+                    </paper-item>
+                    <paper-item name="calendar" class="nav">Kalendář</paper-item>
+                    <paper-item name="waiting-list" class="nav">Pořadník</paper-item>
+                    <paper-item name="settings" class="nav">Nastavení</paper-item>
+                    <paper-item name="help" id="help-tab" class="nav">Nahlásit problém
+                    </paper-item>
+                </iron-selector>
+            </app-drawer>
 
-
-            <paper-header-panel main>
-
-                <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
-                <paper-toolbar>
-                    <div id="mobile_toolbar" paper-drawer-toggle>
-                        <iron-icon icon="icons:chevron-right" paper-drawer-toggle></iron-icon>
-                        Menu ordinace
-                    </div>
-                </paper-toolbar>
-
+            <div id="main-content">
                 <paper-dropdown-menu label="Ordinace">
                     <paper-listbox class="dropdown-content" selected="1">
                         <template is="dom-repeat" items="[[offices]]" as="entry">
@@ -190,9 +158,8 @@
                     <interface-settings-view name="settings"></interface-settings-view>
                     <interface-help-view name="help"></interface-help-view>
                 </iron-pages>
-
-            </paper-header-panel>
-        </paper-drawer-panel>
+            </div>
+        </app-drawer-layout>
     </template>
 
     <script>
@@ -214,10 +181,6 @@
                 offices: {
                     type: Array,
                     value: ['Plzeň, Klatovská 32', 'Londýn, Spring Gardens 100', 'Dvůr Králové nad Labem, Sady pětatřicátníků 28']
-                },
-                open: {
-                    type: Boolean,
-                    value: true
                 }
             },
 
@@ -226,22 +189,11 @@
                 console.log("called");
             },
 
-            ready: function () {
-                console.log(this.routeData);
+            toggleDrawer: function () {
+                if (this.narrow) {
+                    this.$.drawer.toggle();
+                }
             }
-
-
-//            to disable/enable scroll of main header when drawer is opened on small screen. Still not sure how to use it
-//            disableScroll: function() {
-//                this.customStyle['--overflow-main-drawer'] = 'hidden';
-//                this.updateStyles();
-//            },
-//
-//            enableScroll: function() {
-//                this.customStyle['--overflow-main-drawer'] = 'auto';
-//                this.updateStyles();
-//            }
-
         });
     </script>
 </dom-module>
