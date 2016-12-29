@@ -10,7 +10,6 @@
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="/bower_components/paper-badge/paper-badge.html">
 
 <link rel="import" href="/behaviors/routing-behavior.html">
 <!--Lazy load in the future-->
@@ -35,6 +34,7 @@
                 --app-primary-color: #202020;
                 --app-secondary-color: #757575;
                 --app-accent-color: #172C50;
+                --app-green-color: #26A69A;
                 --paper-button-ink-color: var(--app-accent-color);
                 --paper-icon-button-ink-color: var(--app-accent-color);
                 -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -136,7 +136,7 @@
                 top: -15px;
                 right: -5px;
 
-                background-color: #26A69A;
+                background-color: var(--app-green-color);
                 border-radius: 12px; /* one half of ( (border * 2) + height + padding ) */
                 color: white;
                 font-size: 12px;
@@ -188,7 +188,6 @@
                 </div>
                 <div class="icon-bar-item" hidden="[[!signedIn]]">
                     <a href="user/notifications/" tabindex="-1" id="notification-link">
-                        <!--<paper-badge for="account_icon" label="[[userInitialInfo.numberOfNotifications]]" hidden="[[!userInitialInfo.numberOfNotifications]]"></paper-badge>-->
                         <div id="badge">[[userInitialInfo.numberOfNotifications]]</div>
                         <paper-icon-button id="account_icon" icon="account-circle">
                         </paper-icon-button>

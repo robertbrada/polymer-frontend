@@ -8,7 +8,6 @@
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/bower_components/iron-icons/image-icons.html">
 <link rel="import" href="/bower_components/app-layout/app-layout.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
@@ -134,8 +133,7 @@
             <app-drawer id="drawer" position="left">
                 <iron-selector attr-for-selected="name" selected="{{page}}" on-iron-activate="toggleDrawer">
                     <paper-item name="notifications" class="nav">Upozornění
-                        <iron-icon id="notification-icon" icon="image:lens" hidden="[[!numberOfNotifications]]"></iron-icon>
-                        [[numberOfNotifications]]
+                        <span hidden="[[!numberOfNotifications]]">[[numberOfNotifications]]</span>
                     </paper-item>
                     <paper-item name="calendar" class="nav">Kalendář</paper-item>
                     <paper-item name="waiting-list" class="nav">Pořadník</paper-item>
@@ -194,26 +192,17 @@
                 selectedItem: {
                     type: String,
                     observer: 'observeSelected'
-                },
-
-                numberOfNotifications: {
-                    observer: 'fuu'
                 }
             },
 
-            fuu: function (val) {
-                console.log(!!val)
-                console.log(val)
-            },
-
             observeSelected: function (selected) {
-                if(selected === '_add_office') {
+                if (selected === '_add_office') {
                     this.fire('change-route', {url: '/office/registration/data'});
                 }
             },
 
             setSelected: function (officeId) {
-                if(officeId) this.selectedItem = officeId;
+                if (officeId) this.selectedItem = officeId;
             },
 
             computeIds: function (offices) {
