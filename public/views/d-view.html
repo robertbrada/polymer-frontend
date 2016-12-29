@@ -17,7 +17,7 @@
 
         <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}" user="{{user}}"></firebase-auth>
 
-        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/officeFullInfo/{{officeId}}" data="{{officeData}}">
+        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]" data="{{officeData}}">
         </firebase-document>
 
         <div hidden="[[!dataNotLoaded]]">

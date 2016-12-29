@@ -127,7 +127,7 @@
                         this.saveNumberOfNotifications(officeID, rootRef);
                         this.saveShowUserInterface(rootRef);
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
-                        this.fire('change-route', {url: '/office/interface/' + officeID}); // TODO: fix route bug
+                        this.fire('change-route', {url: '/office/interface/' + officeID});
                         return data.information;
                     } else {
                         this.saveOffice(data, normalizedString, increment + 1);
