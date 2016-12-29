@@ -223,7 +223,7 @@
                 'show-dialog': '_showDialog',
                 'show-toast': '_showToast',
                 'change-route': '_changeRoute',
-                'close-dialog': '_closeDialog'
+                'close-drawer': '_closeDrawer'
             },
 
             _loginButtonHandler: function () {
@@ -248,7 +248,7 @@
 
             // Event handlers follow
 
-            _closeDialog: function (event) {
+            _closeDrawer: function (event) {
                 this.drawerOpened = false;
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
