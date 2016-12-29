@@ -124,6 +124,31 @@
                 margin: 0 auto;
             }
 
+
+            /*** notification-badge ***/
+
+            #notification-link{
+                position: relative;
+            }
+
+            #badge {
+                position: absolute;
+                top: -15px;
+                right: -5px;
+
+                background-color: #26A69A;
+                border-radius: 12px; /* one half of ( (border * 2) + height + padding ) */
+                color: white;
+                font-size: 12px;
+                line-height: 13px;
+                font-weight: bold;
+                height: 16px;
+                padding: 4px 3px 0 3px;
+                text-align: center;
+                min-width: 14px;
+            }
+
+
         </style>
 
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
@@ -162,8 +187,9 @@
                     </paper-icon-button>
                 </div>
                 <div class="icon-bar-item" hidden="[[!signedIn]]">
-                    <a href="user/notifications/" tabindex="-1">
-                        <paper-badge for="account_icon" label="[[userInitialInfo.numberOfNotifications]]" hidden="[[!userInitialInfo.numberOfNotifications]]"></paper-badge>
+                    <a href="user/notifications/" tabindex="-1" id="notification-link">
+                        <!--<paper-badge for="account_icon" label="[[userInitialInfo.numberOfNotifications]]" hidden="[[!userInitialInfo.numberOfNotifications]]"></paper-badge>-->
+                        <div id="badge">[[userInitialInfo.numberOfNotifications]]</div>
                         <paper-icon-button id="account_icon" icon="account-circle">
                         </paper-icon-button>
                     </a>
