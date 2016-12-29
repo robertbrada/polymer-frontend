@@ -16,15 +16,16 @@
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
 
-        <iron-pages
-                hidden="[[!loggedIn]]"
-                selected="[[page]]"
-                attr-for-selected="name"
-                selected-attribute="visible"
-                role="main">
-            <office-interface-view name="interface" route="{{subRoute}}"></office-interface-view>
-            <office-registration-view name="registration" route="{{subRoute}}" user-id="[[user.uid]]"></office-registration-view>
-        </iron-pages>
+        <template is="dom-if" if="[[loggedIn]]" restamp="true">
+            <iron-pages
+                    selected="[[page]]"
+                    attr-for-selected="name"
+                    selected-attribute="visible"
+                    role="main">
+                <office-interface-view name="interface" route="{{subRoute}}"></office-interface-view>
+                <office-registration-view name="registration" route="{{subRoute}}" user-id="[[user.uid]]"></office-registration-view>
+            </iron-pages>
+        </template>
     </template>
 
     <script>
