@@ -3,6 +3,7 @@
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="/bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
@@ -22,7 +23,6 @@
             }
 
             paper-drawer-panel {
-
                 --paper-drawer-panel-main-container: {
                     background-color: #eeeff2;
                     padding: 1em 2em;
@@ -38,21 +38,20 @@
                 };
             }
 
-            paper-header-panel paper-button {
-                width: 100%;
+            .nav {
+                cursor: pointer;
                 display: block;
-                margin: 0;
-                font-size: 0.9em;
+                font-size: 1.2em;
                 border-radius: 0;
                 border-bottom: 1px solid var(--border-color);
-                padding: 1.2em 0 1.2em 2em;
+                padding: 0.2em 0 0.2em 1em;
             }
 
-            paper-header-panel paper-button:first-child {
+            paper-header-panel paper-item:first-child {
                 border-top: 1px solid var(--border-color);
             }
 
-            paper-header-panel paper-button:hover:not(.iron-selected) {
+            paper-header-panel paper-item:hover:not(.iron-selected) {
                 background-color: #f6f6f6;
             }
 
@@ -76,12 +75,9 @@
                 };
             }
 
-            paper-item {
-                cursor: pointer;
-            }
-
             #mobile_toolbar {
                 background-color: var(--app-accent-color);
+                cursor: pointer;
                 color: #fff;
                 padding: 1.2em 1.5em;
                 margin-bottom: 1em;
@@ -91,7 +87,6 @@
             #help-tab {
                 position: fixed;
                 bottom: 0;
-                width: 255px;
                 border-top: 1px solid var(--border-color);
             }
 
@@ -140,36 +135,25 @@
 
         <paper-drawer-panel>
             <paper-header-panel drawer>
-
-                <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
-                <paper-toolbar>
-                    <iron-selector attr-for-selected="name" selected="{{page}}">
-                        <!--TODO: Tady by bylo lepší použít prostě paper-item. Tlačítka na tohle nejsou dělaný.-->
-                        <!--Mělo by na to případně jít použít paper-ripple, aby to bylo sexy animovaný.-->
-                        <!--paper-drawer-toggle closes drawer on tap-->
-                        <paper-button paper-drawer-toggle name="notifications" class="nav">Upozornění
-                            <!--visible when new notification -->
-                            <iron-icon id="notification-icon" icon="image:lens"></iron-icon>
-                        </paper-button>
-                        <paper-button paper-drawer-toggle name="calendar" class="nav">Kalendář</paper-button>
-                        <paper-button paper-drawer-toggle name="waiting-list" class="nav">Pořadník</paper-button>
-                        <paper-button paper-drawer-toggle name="settings" class="nav">Nastavení</paper-button>
-                        <paper-button paper-drawer-toggle name="help" id="help-tab" class="nav">Nahlásit problém
-                        </paper-button>
-                    </iron-selector>
-                </paper-toolbar>
+                <iron-selector attr-for-selected="name" selected="{{page}}">
+                    <paper-icon-item name="notifications" class="nav">Upozornění
+                        <iron-icon id="notification-icon" icon="image:lens"></iron-icon>
+                    </paper-icon-item>
+                    <paper-item name="calendar" class="nav">Kalendář</paper-item>
+                    <paper-item name="waiting-list" class="nav">Pořadník</paper-item>
+                    <paper-item name="settings" class="nav">Nastavení</paper-item>
+                    <paper-item name="help" id="help-tab" class="nav">Nahlásit problém
+                    </paper-item>
+                </iron-selector>
             </paper-header-panel>
 
 
             <paper-header-panel main>
 
-                <!--paper-toolbar nema vliv na vzhled (nemusi tam byt), ale mozna prohlizec lip pozan co je tam za data?-->
-                <paper-toolbar>
-                    <div id="mobile_toolbar" paper-drawer-toggle>
-                        <iron-icon icon="icons:chevron-right" paper-drawer-toggle></iron-icon>
-                        Menu ordinace
-                    </div>
-                </paper-toolbar>
+                <div id="mobile_toolbar" paper-drawer-toggle>
+                    <iron-icon icon="icons:chevron-right" paper-drawer-toggle></iron-icon>
+                    Menu ordinace
+                </div>
 
                 <paper-dropdown-menu label="Ordinace">
                     <paper-listbox class="dropdown-content" selected="1">
@@ -207,8 +191,7 @@
 
             properties: {
                 profileId: {
-                    type: String,
-                    observer: 'iidChanged'
+                    type: String
                 },
 
                 offices: {
@@ -221,27 +204,14 @@
                 }
             },
 
-            idChanged: function (data) {
-                console.log(data);
-                console.log("called");
+            listeners: {
+                'close-drawer': 'toggleDrawer'
             },
 
-            ready: function () {
-                console.log(this.routeData);
+            toggleDrawer: function (event) {
+                this.fire('paper-drawer-toggle');
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
-
-
-//            to disable/enable scroll of main header when drawer is opened on small screen. Still not sure how to use it
-//            disableScroll: function() {
-//                this.customStyle['--overflow-main-drawer'] = 'hidden';
-//                this.updateStyles();
-//            },
-//
-//            enableScroll: function() {
-//                this.customStyle['--overflow-main-drawer'] = 'auto';
-//                this.updateStyles();
-//            }
-
         });
     </script>
 </dom-module>
