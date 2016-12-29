@@ -105,20 +105,20 @@
             },
 
             _registerOffice: function (event) {
-                var normalizedString = this.normalizeText(this.officeData.information.name.lastName) + "_" + this.normalizeText(this.officeData.information.address.city),
-                    database = this.$.user_document.app.database();
+                var normalizedString = this.normalizeText(this.officeData.information.name.lastName) + "_" + this.normalizeText(this.officeData.information.address.city);
 
-                this.generateOfficeId(this.officeData, normalizedString, database, 0);
+                this.generateOfficeId(this.officeData, normalizedString, 0);
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
-            generateOfficeId: function (data, normalizedString, database, increment) {
+            generateOfficeId: function (data, normalizedString, increment) {
                 var officeId = (increment === 0) ? normalizedString : normalizedString + "_" + increment;
 
-                database.ref('/officeFullInfo' + '/' + officeId).once('value', function (snapshot) {
+                // I am initializing the reference multiple times because it somehow converted to number in recursive calls
+                this.$.user_document.app.database().ref('/officeSearchInfo/' + officeId).once('value', function (snapshot) {
                     if (snapshot.val() === null) {
-                        this.saveOffice(data, officeId, this.userId, database.ref('/'));
+                        this.saveOffice(data, officeId, this.userId);
                         this.savePhoto(data, officeId);
                     } else {
                         this.generateOfficeId(data, normalizedString, increment + 1);
@@ -126,9 +126,11 @@
                 }.bind(this));
             },
 
-            saveOffice: function (data, officeId, userId, rootRef) {
-                var objectToSave = {};
+            saveOffice: function (data, officeId, userId) {
+                var objectToSave = {},
+                    rootRef = this.$.user_document.app.database().ref('/');
 
+                objectToSave['/officeFullInfo' + '/' + officeId] = data.information;
                 objectToSave['/userInitialInfo/' + userId + '/showOfficeInterface'] = true;
                 objectToSave['/officeNumberOfNotifications/' + officeId] = 0;
                 objectToSave['/officeAdminInfo/' + officeId] = {
