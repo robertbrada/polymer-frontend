@@ -157,7 +157,7 @@
                         console.log("Error updating data:", error);
                     } else {
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
-                        this.fire('change-route', {url: '/office/interface/' + officeId});
+                        this.fire('change-route', {url: '/office/interface/waiting-list/' + officeId});
                     }
                 }.bind(this));
             },

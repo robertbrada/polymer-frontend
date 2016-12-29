@@ -147,7 +147,7 @@
                     <interface-notifications-view name="notifications"></interface-notifications-view>
                     <interface-calendar-view name="calendar"></interface-calendar-view>
                     <interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>
-                    <interface-settings-view name="settings"></interface-settings-view>
+                    <interface-settings-view name="settings" office-id="[[officeId]]"></interface-settings-view>
                     <interface-help-view name="help"></interface-help-view>
                 </iron-pages>
             </div>
@@ -160,7 +160,6 @@
 
             behaviors: [RoutingBehavior],
 
-            defaultPage: 'waiting-list',
             viewPath: '/views/office_views/interface_views/interface-',
             validPrefix: '/office/interface',
 
@@ -185,6 +184,8 @@
             observeSelected: function (selected) {
                 if (selected === '_add_office') {
                     this.fire('change-route', {url: '/office/registration/data'});
+                } else {
+                    this.set('routeData.officeId', selected);
                 }
             },
 
@@ -196,7 +197,7 @@
                 return Object.keys(offices);
             },
 
-            computeId: function (id, officeIds) {
+            computeId: function (id, officeIds, selectedItem) {
                 if (!!id) return id;
                 return (officeIds.length === 0) ? null : officeIds[0];
             },

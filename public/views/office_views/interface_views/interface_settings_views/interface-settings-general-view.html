@@ -46,10 +46,10 @@
 
                 <section>
                     <h2>Adresa ordinace</h2>
-                    <paper-input id="cinput" label="Město" value="{{officeData.information.address.city}}"
-                                 minlength="1" maxlength="20" required auto-validate>
+                    <paper-input id="cinput" label="Město" value="[[officeData.address.city]]"
+                                 minlength="1" maxlength="20" auto-validate>
                     </paper-input>
-                    <paper-input id="sinput" label="Ulice a číslo popisné" value="{{officeData.information.address.street}}"
+                    <paper-input id="sinput" label="Ulice a číslo popisné" value="[[officeData.address.street]]"
                                  minlength="1" maxlength="80" required auto-validate></paper-input>
 
                     <h2>Vaše specializace</h2>

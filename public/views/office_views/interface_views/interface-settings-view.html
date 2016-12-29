@@ -3,15 +3,18 @@
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 
 <link rel="import" href="/styles/tab-styles.html">
 
 <dom-module id="interface-settings-view">
     <template>
-        <style include="tab-styles">
+        <style include="tab-styles"></style>
 
-        </style>
+        <firebase-document app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]"
+                           data="{{officeFullInfo}}">
+        </firebase-document>
 
         <paper-material elevation="1">
             <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
@@ -21,7 +24,7 @@
 
 
             <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <interface-settings-general-view name="general"></interface-settings-general-view>
+                <interface-settings-general-view name="general" office-data="{{officeFullInfo}}"></interface-settings-general-view>
                 <interface-settings-times-view name="times"></interface-settings-times-view>
             </iron-pages>
         </paper-material>
@@ -32,17 +35,11 @@
             is: 'interface-settings-view',
 
             properties: {
-                profileID: {
-                    type: String,
-                    computed: 'computeID(route.path)'
-                },
-
                 selected: {
                     type: String,
                     value: "general", // First selected view
                     observer: "loadView"
                 }
-
             },
 
             loadView: function (viewName) {
