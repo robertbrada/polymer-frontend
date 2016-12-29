@@ -18,17 +18,19 @@
         <style>
 
             :host {
-                --overflow-main-drawer: auto;
                 --border-color: #d5d9da;
             }
 
-            .nav {
-                border-bottom: 1px solid var(--border-color);
+            app-drawer {
+                margin-top: 64px;
+                box-shadow: 2px 0 8px var(--border-color);
+                z-index: 2;
             }
 
-            .iron-selected.nav {
+            app-toolbar {
                 background-color: var(--app-accent-color);
-                color: white;
+                color: #fff;
+                margin-top: 64px;
             }
 
             paper-dropdown-menu {
@@ -46,68 +48,46 @@
                 };
             }
 
-            paper-item {
+            paper-item, #toolbar {
                 cursor: pointer;
             }
 
-            #help-tab {
-                position: fixed;
-                bottom: 0;
-                width: 255px;
-                border-top: 1px solid var(--border-color);
+            .nav {
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .iron-selected.nav {
+                background-color: var(--app-accent-color);
+                color: white;
+            }
+
+            #main-content {
+                margin-top: 64px;
+                padding: 2em;
+                background-color: #eeeff2;
             }
 
             #add-office {
-                color: #26A69A;
+                color: var(--app-green-color);
                 border-top: 1px solid var(--border-color);
                 padding-top: 8px;
             }
 
-            #notification-icon {
-                color: #26A69A;
-                height: 15px;
-                width: 15px;
-                margin-left: 0.5em;
+            #help-tab {
+                position: fixed;
+                bottom: 120px; /* top padding of drawer */
+                width: 224px; /*calc(256px - 2*16px) -> 16px is padding of paper-item */
+                border-top: 1px solid var(--border-color);
             }
 
             @media only screen and (max-width: 767px) {
-                #help-tab {
-                    bottom: 64px;
-                }
-            }
 
-            @media only screen and (min-width: 767px) {
                 #main-content {
-                    margin-top: 64px;
+                    padding: 1em 0 0 0;
+                    margin-top: 0;
                 }
             }
 
-            app-drawer {
-                margin-top: 64px;
-                box-shadow: 2px 0 8px var(--border-color);
-                /*--app-drawer-scrim-background: red;*/
-                z-index: 2;
-
-            }
-
-            #main-content {
-                /*background-color: #eeeff2;*/
-                padding: 2em;
-            }
-
-            app-drawer-layout {
-                background-color: #eeeff2;
-            }
-
-            app-toolbar {
-                background-color: var(--app-accent-color);
-                color: #fff;
-                margin-top: 64px;
-            }
-
-            #toolbar {
-                cursor: pointer;
-            }
         </style>
 
         <app-route
