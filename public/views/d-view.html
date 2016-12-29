@@ -24,7 +24,8 @@
             <paper-spinner-lite active="[[dataNotLoaded]]"></paper-spinner-lite>
         </div>
 
-        <office-element hidden="[[dataNotLoaded]]" office-data="[[officeData]]" logged-in="[[loggedIn]]"></office-element>
+        <office-element hidden="[[dataNotLoaded]]" office-data="[[officeData]]" logged-in="[[loggedIn]]"
+                        verification-required="[[verificationRequired]]"></office-element>
     </template>
 
     <script>
@@ -46,11 +47,39 @@
                     type: Boolean,
                     computed: 'computeDataAvailability(officeData)',
                     observer: 'disableReference'
+                },
+
+                verificationRequired: {
+                    type: Boolean,
+                    value: true
                 }
             },
 
             listeners: {
-                'handle-appointment': '_onHandleAppointment'
+                'handle-appointment': '_onHandleAppointment',
+                'verify-user': '_onVerifyUser'
+            },
+
+            observers: [
+                'setVerificationRequired(officeData.manualConfirmation, user.uid)'
+            ],
+
+            setVerificationRequired: function (manualConfirmation, uid) {
+                if (manualConfirmation !== undefined) {
+                    if (manualConfirmation && uid != undefined) {
+                        var ref = this.$.auth.app.database().ref('/officeRegisteredPatients/' + uid);
+                        ref.on('value', function (snapshot) {
+                            if (snapshot.val() === null) {
+                                this.verificationRequired = true;
+                            } else {
+                                this.verificationRequired = false;
+                                ref.off();
+                            }
+                        }.bind(this));
+                    } else {
+                        this.verificationRequired = false;
+                    }
+                }
             },
 
             disableReference: function (dataNotLoaded) {
@@ -80,6 +109,17 @@
 
                 this.fire('change-route', {url: '/user/appointments'});
                 this.fire("show-toast", {text: "Návštěva zaregistrována"});
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+            },
+
+            _onVerifyUser: function () {
+                var uid = this.user.uid,
+                    objectToSave = {},
+                    ref = this.$.auth.app.database().ref('/officePatientsToVerify/' + this.officeId);
+
+                objectToSave[uid] = true;
+                ref.set(objectToSave);
+                this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 

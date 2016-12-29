@@ -176,6 +176,15 @@
                     <p>Pro objednání je vyžadováno přihlášení. Můžete se přihlásit kliknutím na tlačítko níže.</p>
                     <paper-button on-tap="_logIn">Přihlásit</paper-button>
                 </div>
+                <template is="dom-if" if="[[verificationRequired]]" restamp="true">
+                    <div>
+                        <h3>Vyžadováno potvrzení</h3>
+                        <p>Pro přihlášení je nutné ověření od doktora. Pro ověření prosím klikněte na tlačítko níže.
+                            Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté už se budete moci objednat.
+                        </p>
+                        <paper-button on-tap="_verifyUser">Požádat o potvrzení</paper-button>
+                    </div>
+                </template>
                 <div id="calendar_container">
                     <calendar-element hidden="[[!calendarVisibility]]" office-hours="[[officeData.officeHours]]"
                                       visit-length="[[officeData.visitLength]]" disabled="[[disabledCalendar]]">
@@ -232,7 +241,7 @@
 
                 disabledCalendar: {
                     type: Boolean,
-                    computed: '_computeIfDisabled(loggedIn)'
+                    computed: '_computeIfDisabled(loggedIn, verificationRequired)'
                 },
 
                 appointmentId: {
@@ -313,6 +322,10 @@
                 this.fire("show-dialog", {path: "", viewName: "login", open: true});
             },
 
+            _verifyUser: function () {
+                this.fire("verify-user");
+            },
+
             _computeAppointmentDate: function (appointmentId) {
                 var date, year, month, hours, minutes,
                     stringId = "" + appointmentId;
@@ -326,9 +339,8 @@
                 return "" + date + "." + month + "." + year + " v " + hours + ":" + minutes;
             },
 
-            _computeIfDisabled: function (loggedIn) {
-                // TODO: manualConfirmation check
-                return !loggedIn;
+            _computeIfDisabled: function (loggedIn, verificationRequired) {
+                return (!loggedIn || verificationRequired);
             },
 
             formatName: function (first, last) {

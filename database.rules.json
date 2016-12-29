@@ -52,6 +52,14 @@
     "officeNumberOfNotifications": {
       ".read": true,
       ".write": true
+    },
+    "officeRegisteredPatients": {
+      ".read": true,
+      ".write": true
+    },
+    "officePatientsToVerify": {
+      ".read": true,
+      ".write": true
     }
   }
 }
