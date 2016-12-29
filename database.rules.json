@@ -58,8 +58,12 @@
       ".write": true
     },
     "officePatientsToVerify": {
-      ".read": true,
-      ".write": true
+      "$oid": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      }
     }
   }
 }

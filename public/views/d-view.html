@@ -114,11 +114,9 @@
 
             _onVerifyUser: function () {
                 var uid = this.user.uid,
-                    objectToSave = {},
-                    ref = this.$.auth.app.database().ref('/officePatientsToVerify/' + this.officeId);
+                    ref = this.$.auth.app.database().ref('/officePatientsToVerify/' + this.officeId + '/' + uid);
 
-                objectToSave[uid] = true;
-                ref.set(objectToSave);
+                ref.set(true);
                 this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },

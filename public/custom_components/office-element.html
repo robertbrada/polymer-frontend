@@ -176,15 +176,13 @@
                     <p>Pro objednání je vyžadováno přihlášení. Můžete se přihlásit kliknutím na tlačítko níže.</p>
                     <paper-button on-tap="_logIn">Přihlásit</paper-button>
                 </div>
-                <template is="dom-if" if="[[verificationRequired]]" restamp="true">
-                    <div>
-                        <h3>Vyžadováno potvrzení</h3>
-                        <p>Pro přihlášení je nutné ověření od doktora. Pro ověření prosím klikněte na tlačítko níže.
-                            Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté už se budete moci objednat.
-                        </p>
-                        <paper-button on-tap="_verifyUser">Požádat o potvrzení</paper-button>
-                    </div>
-                </template>
+                <div hidden="[[!verificationRequired]]">
+                    <h3>Vyžadováno potvrzení</h3>
+                    <p>Pro přihlášení je nutné ověření od doktora. Doktor podle Vašich osobních údajů ověří, zda jste jeho pacient.Pro ověření prosím
+                        klikněte na tlačítko níže. Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté se budete moci objednat.
+                    </p>
+                    <paper-button on-tap="_verifyUser">Požádat o potvrzení</paper-button>
+                </div>
                 <div id="calendar_container">
                     <calendar-element hidden="[[!calendarVisibility]]" office-hours="[[officeData.officeHours]]"
                                       visit-length="[[officeData.visitLength]]" disabled="[[disabledCalendar]]">

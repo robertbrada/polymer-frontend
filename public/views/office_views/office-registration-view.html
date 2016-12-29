@@ -106,71 +106,58 @@
 
             _registerOffice: function (event) {
                 var normalizedString = this.normalizeText(this.officeData.information.name.lastName) + "_" + this.normalizeText(this.officeData.information.address.city),
-                    rootRef = this.$.user_document.ref.root;
+                    database = this.$.user_document.app.database();
 
-                this.saveOffice(this.officeData, normalizedString, rootRef, 0);
+                this.generateOfficeId(this.officeData, normalizedString, database, 0);
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
-            saveOffice: function (data, normalizedString, rootRef, increment) {
-                var officeID = (increment === 0) ? normalizedString : normalizedString + "_" + increment;
+            generateOfficeId: function (data, normalizedString, database, increment) {
+                var officeId = (increment === 0) ? normalizedString : normalizedString + "_" + increment;
 
-                rootRef.child('officeFullInfo' + '/' + officeID).transaction(function (currentOfficeData) {
-                    if (currentOfficeData === null) {
-                        this.saveAdminInfo(data, officeID, rootRef);
-                        this.savePhoto(data, officeID);
-                        this.saveOfficeToUser(officeID, rootRef, data.information.address);
-                        this.saveSearchInfo(data.information, officeID, rootRef);
-                        this.saveNumberOfNotifications(officeID, rootRef);
-                        this.saveShowUserInterface(rootRef);
-                        this.fire("show-toast", {text: "Ordinace zaregistrována"});
-                        this.fire('change-route', {url: '/office/interface/' + officeID});
-                        return data.information;
+                database.ref('/officeFullInfo' + '/' + officeId).once('value', function (snapshot) {
+                    if (snapshot.val() === null) {
+                        this.saveOffice(data, officeId, this.userId, database.ref('/'));
+                        this.savePhoto(data, officeId);
                     } else {
-                        this.saveOffice(data, normalizedString, increment + 1);
+                        this.generateOfficeId(data, normalizedString, increment + 1);
                     }
                 }.bind(this));
             },
 
-            saveShowUserInterface: function (rootRef) {
-                rootRef.child('/userInitialInfo/' + this.userId + '/showOfficeInterface').set(true);
-            },
+            saveOffice: function (data, officeId, userId, rootRef) {
+                var objectToSave = {};
 
-            saveNumberOfNotifications: function (officeID, rootRef) {
-                rootRef.child('/officeNumberOfNotifications/' + officeID).set(0);
-            },
-
-            saveAdminInfo: function (data, officeID, rootRef) {
-                var objectToSave = {
+                objectToSave['/userInitialInfo/' + userId + '/showOfficeInterface'] = true;
+                objectToSave['/officeNumberOfNotifications/' + officeId] = 0;
+                objectToSave['/officeAdminInfo/' + officeId] = {
                     'users': {},
                     'bookDevice': data.device
                 };
-
-                objectToSave['users'][this.userId] = 'admin';
-                rootRef.child('/officeAdminInfo/' + officeID).update(objectToSave);
-            },
-
-            saveSearchInfo: function (data, officeID, rootRef) {
-                var objectToSave = {};
-                objectToSave[officeID] = {
-                    'name': data.name,
-                    'address': data.address,
-                    'coordinates': data.coordinates,
-                    'acceptingNewPatients': data.acceptingNewPatients,
-                    'specialization': data.specialization,
-                    'photoAvailability': data.photoAvailability
+                objectToSave['/officeAdminInfo/' + officeId]['users'][this.userId] = 'admin';
+                objectToSave['/officeSearchInfo/' + officeId] = {
+                    'name': data.information.name,
+                    'address': data.information.address,
+                    'coordinates': data.information.coordinates,
+                    'acceptingNewPatients': data.information.acceptingNewPatients,
+                    'specialization': data.information.specialization,
+                    'photoAvailability': data.information.photoAvailability
                 };
-                rootRef.child('/officeSearchInfo').update(objectToSave);
-            },
-
-            saveOfficeToUser: function (officeID, rootRef, address) {
-                var objectToSave = {
+                objectToSave['/userOffices/' + userId + '/' + officeId] = {
                     'role': 'admin',
-                    'name': address.city + ', ' + address.street
+                    'name': data.information.address.city + ', ' + data.information.address.street
                 };
 
-                rootRef.child('/userOffices/' + this.userId + '/' + officeID).set(objectToSave);
+                rootRef.update(objectToSave, function (error) {
+                    if (error) {
+                        // TODO: handle error
+                        console.log("Error updating data:", error);
+                    } else {
+                        this.fire("show-toast", {text: "Ordinace zaregistrována"});
+                        this.fire('change-route', {url: '/office/interface/' + officeId});
+                    }
+                }.bind(this));
             },
 
             savePhoto: function (data, officeID) {
