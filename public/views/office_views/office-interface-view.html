@@ -93,6 +93,20 @@
                 }
             }
 
+            .badge {
+                background-color: var(--app-green-color);
+                border-radius: 12px; /* one half of ( (border * 2) + height + padding ) */
+                color: white;
+                font-size: 12px;
+                line-height: 13px;
+                font-weight: bold;
+                height: 16px;
+                padding: 4px 3px 0 3px;
+                margin-left: 0.5em;
+                text-align: center;
+                min-width: 14px;
+            }
+
         </style>
 
         <app-route
@@ -120,7 +134,7 @@
             <app-drawer id="drawer" position="left">
                 <iron-selector attr-for-selected="name" selected="{{page}}" on-iron-activate="toggleDrawer">
                     <paper-item name="notifications" class="nav">Upozornění
-                        <span hidden="[[!numberOfNotifications]]">[[numberOfNotifications]]</span>
+                        <span hidden="[[!showNotifications(numberOfNotifications)]]" class="badge">[[numberOfNotifications]]</span>
                     </paper-item>
                     <paper-item name="calendar" class="nav">Kalendář</paper-item>
                     <paper-item name="waiting-list" class="nav">Pořadník</paper-item>
@@ -187,6 +201,10 @@
                 } else {
                     this.set('routeData.officeId', selected);
                 }
+            },
+
+            showNotifications: function (numberOfNotifications) {
+                return (Number.isInteger(numberOfNotifications) && numberOfNotifications !== 0);
             },
 
             setSelected: function (officeId) {
