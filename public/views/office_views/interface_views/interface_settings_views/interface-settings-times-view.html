@@ -10,29 +10,11 @@
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/header-styles.html">
 <link rel="import" href="/styles/button-styles.html">
+<link rel="import" href="/styles/settings-styles.html">
 
 <dom-module id="interface-settings-times-view">
     <template>
-        <style include="button-styles layout-styles input-styles header-styles">
-
-            h2 {
-                font-size: 1.1em;
-            }
-
-            .main-frame {
-                max-width: 1100px;
-                text-align: center;
-            }
-
-            .subsection {
-                margin-top: 1em;
-            }
-
-            section {
-                text-align: left;
-                margin-bottom: 2em;
-            }
-
+        <style include="button-styles layout-styles input-styles header-styles settings-styles">
 
         </style>
         <form id="generalForm" is="iron-form" class="main-frame">
@@ -69,7 +51,7 @@
             </div>
 
             <hr>
-            <paper-button on-tap="confirm" responsive>
+            <paper-button id="confirm-button" on-tap="confirm" responsive>
                 Uložit změny
             </paper-button>
 
@@ -84,13 +66,13 @@
                 days: {
                     type: Array,
                     value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
-                },
+                }
 
             },
 
             getDayName: function (dayIndex) {
                 return (this.days[dayIndex]);
-            },
+            }
 
         });
     </script>

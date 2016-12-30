@@ -10,15 +10,9 @@
     <template>
         <style include="interface-styles">
 
-            .triangle-topleft {
-                margin: 0 !important;
-                width: 0;
-                height: 0;
-                border-top: 12px solid var(--border-color);
-                border-right: 12px solid transparent;
+            .interface-div:hover {
                 position: relative;
-                left: -1.5em;
-                top: -1.5em;
+                box-shadow: 0 5px 60px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1);
             }
 
             .interface-div:not(:first-child) {
@@ -71,12 +65,10 @@
                 }
             }
 
-
         </style>
 
         <template is="dom-repeat" items="[[notifications]]" as="entry">
             <div class="container flex-horizontal-with-ratios interface-div">
-                <div class="triangle-topleft"></div>
                 <div class="flexchild">[[entry.firstName]] [[entry.lastName]]</div>
                 <div class="flex2child">[[entry.address]]</div>
                 <div class="flex3child buttons">

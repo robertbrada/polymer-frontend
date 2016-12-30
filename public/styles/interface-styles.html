@@ -16,6 +16,7 @@
             .interface-div {
                 background-color: #fff;
                 padding: 1.5em;
+                transition: all 0.3s cubic-bezier(.25,.8,.25,1);
             }
 
             .interface-div paper-button {
@@ -41,8 +42,9 @@
                 background-color: #fff;
             }
 
-            .interface-div:hover {
-                background-color: #fafafa;
+
+            .interface-div paper-button:hover {
+                box-shadow: 0 12px 25px rgba(0,0,0,0.15), 0 8px 8px rgba(0,0,0,0.12);
             }
 
             @media only screen and (max-width: 767px) {
