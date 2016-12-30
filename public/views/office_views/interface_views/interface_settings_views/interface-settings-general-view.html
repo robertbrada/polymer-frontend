@@ -24,18 +24,27 @@
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
-<link rel="import" href="/styles/header-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="interface-settings-general-view">
     <template>
-        <style include="button-styles layout-styles input-styles header-styles">
+        <style include="button-styles layout-styles input-styles">
             h2 {
                 font-size: 1.1em;
             }
 
-            .main-frame{
+            .main-frame {
                 max-width: 1100px;
+                text-align: center;
+            }
+
+            .subsection {
+                margin-top: 1em;
+            }
+
+            section {
+                text-align: left;
+                margin-bottom: 2em;
             }
 
 
@@ -52,27 +61,30 @@
                     <paper-input id="sinput" label="Ulice a číslo popisné" value="[[officeData.address.street]]"
                                  minlength="1" maxlength="80" required auto-validate></paper-input>
 
-                    <h2>Vaše specializace</h2>
-                    <span>(Specializace v této ordinaci)</span>
+                    <h2>Vaše specializace v této ordinaci</h2>
                     <paper-dropdown-menu label="Specializace">
-                        <paper-listbox class="dropdown-content" selected="{{officeData.information.specialization}}">
+                        <paper-listbox class="dropdown-content" selected="[[officeData.specialization]]">
                             <template is="dom-repeat" items="[[specializations]]" as="entry">
                                 <paper-item>[[entry]]</paper-item>
                             </template>
                         </paper-listbox>
                     </paper-dropdown-menu>
 
-                    <h2>Klientela</h2>
-                    <p>Zaškrtněte, pokud máte omezenou klientelu.</p>
-                    <paper-checkbox checked="{{officeData.information.limitedClientele}}">Omezená klientela
+                    <h2>Přijímání nových pacientů</h2>
+                    <p>Zaškrtněte, pokud přijímáte nové pacienty.</p>
+                    <paper-checkbox checked="[[officeData.acceptingNewPatients]]">
+                        Přijímám nové pacienty
                     </paper-checkbox>
-                    <p hidden="[[!officeData.information.limitedClientele]]">Při zaškrtnutí omezené klientely si pacient
-                        před prvním objednáním v našem systému zažádá o potvrzení. Vám poté přijde zpráva s
-                        žádostí o potvrzení. Ve zprávě
-                        uvidíte pacientovi osobní údaje (jméno, adresa), na základě kterých umožníte
-                        pacientovi
-                        objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
+
+                    <h2>Manuální potvrzení při první návštěvě</h2>
+                    <p>Zaškrtněte, pokud chcete, aby pacient při prvním objednání nejprve musel zažádat o Vaše potvrzení.
+                        V případě, že jej zaškrtnete, pacient na Vašem profilu při prvním objednání bude muset zažádat o potvrzení. Poté
+                        Vám přijde zpráva s žádostí o potvrzení. Ve zprávě uvidíte pacientovi osobní údaje (jméno, adresa), na základě
+                        kterých umožníte pacientovi objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
                     </p>
+                    <paper-checkbox checked="[[officeData.manualConfirmation]]">
+                        Manuální potvrzení
+                    </paper-checkbox>
                 </section>
                 <section>
 
@@ -83,20 +95,21 @@
                         možnost:</p>
                     <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
                                       phone-number-pattern="XXX-XXX-XXX" auto-validate
-                                      value="{{officeData.information.phoneNumber}}">
+                                      value="[[officeData.phoneNumber]]">
                     </gold-phone-input>
-                    <gold-email-input id="email_id" label="Email" value="{{officeData.information.email}}"
+                    <gold-email-input id="email_id" label="Email" value="[[officeData.email]]"
                                       auto-validate></gold-email-input>
 
                     <h2>Text pro pacienty</h2>
                     <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu
                         pacientům. Zpráva není povinná.</p>
-                    <paper-textarea label="Zpráva pro pacienty" value="{{officeData.information.patientText}}"
+                    <paper-textarea label="Zpráva pro pacienty" value="[[officeData.patientText]]"
                                     char-counter maxlength="800"></paper-textarea>
 
                 </section>
             </div>
 
+            <hr>
             <paper-button on-tap="confirm" responsive>
                 Uložit změny
             </paper-button>
@@ -106,7 +119,14 @@
 
     <script>
         Polymer({
-            is: 'interface-settings-general-view'
+            is: 'interface-settings-general-view',
+
+            properties: {
+                specializations: {
+                    type: Array,
+                    value: ['Zubař', 'Rektálník', 'Gynekolog']
+                },
+            }
         });
     </script>
 </dom-module>
