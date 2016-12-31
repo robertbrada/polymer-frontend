@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 
 
 <link rel="import" href="/styles/input-styles.html">
@@ -16,11 +17,92 @@
     <template>
         <style include="button-styles layout-styles input-styles header-styles settings-styles">
 
+
+            .note, .manual-change-note {
+                padding: 1em;
+                /*font-size: 0.9em;*/
+                margin: 1em 0;
+                text-align: left;
+            }
+            .manual-change-note {
+                border: 1px solid var(--app-green-color);
+                color: var(--app-green-color);
+            }
+
+            .note h2, .manual-change-note h2 {
+                margin-top: 0;
+            }
+
+            .note a {
+                text-decoration: none;
+                font-weight: bolder;
+                color: var(--app-accent-color);
+            }
+
+            #manual-change {
+                color: var(--app-green-color);
+            }
+
+            #manual-change-checkbox {
+                --primary-color: var(--app-green-color);
+                margin-top: 2em;
+            }
+
+            #manual-change-input {
+                position: relative;
+                display: inline-block;
+                margin-left: 1em;
+                max-width: 11em;
+                margin-bottom: 0;
+                --paper-input-container-underline-focus: {
+                    background-color: var(--app-green-color);
+                    height: 2px;
+                };
+
+                --paper-input-container-input: {
+                    margin-bottom: 0;
+                    padding: 0;
+                };
+
+                --paper-input-container: {
+                    margin-top: 0;
+                    margin-bottom: 0;
+                    padding: 0;
+                };
+            }
+
         </style>
         <form id="generalForm" is="iron-form" class="main-frame">
-            <div class="subsection grid">
+            <div class="note">
+                <h2>Poznámka</h2>
+                <p>Toto nastavení slouží k nastavení dlouhodobé, nebo trvalé změny.
+                Pokud chcete upravit např. pouze konkrétní den, týden (dovolená), tak doporučujeme provést změnu v
+                    <a href="#">kalendáři</a>.</p>
+            </div>
+            <div class="manual-change-note">
+                <h2>Důležité</h2>
+                <p>Vámi provedená změna se automaticky projeví až v době, kdy nebude mít vliv na žádného,
+                již objednaného, pacienta.
+                Pokud si přejete provést změny od konkrétního dne, tak zrušíme objednání
+                všech pacientů,
+                    kterých se změna dotkne a pošleme jim upozornění, aby se objednali znovu.</p>
+                <div id="manual-change">
+                    <paper-checkbox id="manual-change-checkbox" checked="{{manualChange}}">Provést změny od konkrétního dne
+                    </paper-checkbox>
+                    <paper-input id="manual-change-input" disabled="[[!manualChange]]" auto-validate required
+                                 placeholder="den.měsíc.rok"
+                                 pattern="\d{1,2}.\d{1,2}.\d{4}"
+                                 prevent-invalid-input allowed-pattern="[\d.]">
 
+                        <!--po kliknuti na ikonu se asi zobrazi komponenta pick-up date-->
+                        <paper-icon-button icon="today" suffix></paper-icon-button>
+                    </paper-input>
+                </div>
+            </div>
+
+            <div class="subsection grid">
                 <section>
+
                     <h2>Délka návštěvy</h2>
                     <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
                         hodin určíme objednávací časy.</p>
@@ -66,6 +148,11 @@
                 days: {
                     type: Array,
                     value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
+                },
+
+                manualChange: {
+                    type: Boolean,
+                    value: false
                 }
 
             },
