@@ -1,31 +1,24 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="/bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
-<link rel="import" href="/bower_components/neon-animation/animations/slide-left-animation.html">
-
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
-<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/file-input/file-input.html">
-<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/bower_components/google-apis/google-maps-api.html">
-<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<!--<link rel="import" href="/bower_components/file-input/file-input.html">-->
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/settings-styles.html">
+
+<link rel="import" href="/behaviors/form-validation-behavior.html">
+
+<!--TODO: name, coordinates, photo-->
 
 <dom-module id="interface-settings-general-view">
     <template>
@@ -33,20 +26,20 @@
 
         </style>
 
-        <form id="generalForm" is="iron-form" class="main-frame">
+        <form id="general_form" is="iron-form" class="main-frame">
             <div class="subsection grid">
 
                 <section>
                     <h2>Adresa ordinace</h2>
-                    <paper-input id="cinput" label="Město" value="[[officeData.address.city]]"
+                    <paper-input label="Město" value="{{localOfficeData.address.city}}"
                                  minlength="1" maxlength="20" auto-validate>
                     </paper-input>
-                    <paper-input id="sinput" label="Ulice a číslo popisné" value="[[officeData.address.street]]"
+                    <paper-input label="Ulice a číslo popisné" value="{{localOfficeData.address.street}}"
                                  minlength="1" maxlength="80" required auto-validate></paper-input>
 
                     <h2>Vaše specializace v této ordinaci</h2>
                     <paper-dropdown-menu label="Specializace">
-                        <paper-listbox class="dropdown-content" selected="[[officeData.specialization]]">
+                        <paper-listbox class="dropdown-content" selected="{{localOfficeData.specialization}}">
                             <template is="dom-repeat" items="[[specializations]]" as="entry">
                                 <paper-item>[[entry]]</paper-item>
                             </template>
@@ -55,7 +48,7 @@
 
                     <h2>Přijímání nových pacientů</h2>
                     <p>Zaškrtněte, pokud přijímáte nové pacienty.</p>
-                    <paper-checkbox checked="[[officeData.acceptingNewPatients]]">
+                    <paper-checkbox checked="{{localOfficeData.acceptingNewPatients}}">
                         Přijímám nové pacienty
                     </paper-checkbox>
 
@@ -65,7 +58,7 @@
                         Vám přijde zpráva s žádostí o potvrzení. Ve zprávě uvidíte pacientovi osobní údaje (jméno, adresa), na základě
                         kterých umožníte pacientovi objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
                     </p>
-                    <paper-checkbox checked="[[officeData.manualConfirmation]]">
+                    <paper-checkbox checked="{{localOfficeData.manualConfirmation}}">
                         Manuální potvrzení
                     </paper-checkbox>
                 </section>
@@ -76,17 +69,17 @@
                         dobrovolné tudíž je nemusíte vyplňovat/nahrávat.</p>
                     <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím vyplňte tuto
                         možnost:</p>
-                    <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
+                    <gold-phone-input country-code="420" label="Telefonní číslo"
                                       phone-number-pattern="XXX-XXX-XXX" auto-validate
-                                      value="[[officeData.phoneNumber]]">
+                                      value="{{localOfficeData.phoneNumber}}">
                     </gold-phone-input>
-                    <gold-email-input id="email_id" label="Email" value="[[officeData.email]]"
+                    <gold-email-input label="Email" value="{{localOfficeData.email}}"
                                       auto-validate></gold-email-input>
 
                     <h2>Text pro pacienty</h2>
                     <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu
                         pacientům. Zpráva není povinná.</p>
-                    <paper-textarea label="Zpráva pro pacienty" value="[[officeData.patientText]]"
+                    <paper-textarea label="Zpráva pro pacienty" value="{{localOfficeData.patientText}}"
                                     char-counter maxlength="800"></paper-textarea>
 
                 </section>
@@ -104,11 +97,28 @@
         Polymer({
             is: 'interface-settings-general-view',
 
+            behaviors: [FormValidationBehavior],
+
             properties: {
                 specializations: {
                     type: Array,
                     value: ['Zubař', 'Rektálník', 'Gynekolog']
                 },
+
+                localOfficeData: {
+                    type: Object,
+                    computed: "computeLocalOfficeData(officeData)"
+                }
+            },
+
+            computeLocalOfficeData: function (officeData) {
+                return officeData;
+            },
+
+            confirm: function () {
+                if (this._validateForm(this.$.general_form)) {
+                    this.fire('update-office-data', {'localOfficeData': this.localOfficeData});
+                }
             }
         });
     </script>

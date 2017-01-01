@@ -130,7 +130,7 @@
                 var objectToSave = {},
                     rootRef = this.$.user_document.app.database().ref('/');
 
-                objectToSave['/officeFullInfo' + '/' + officeId] = data.information;
+                objectToSave['/officeFullInfo/' + officeId] = data.information;
                 objectToSave['/userInitialInfo/' + userId + '/showOfficeInterface'] = true;
                 objectToSave['/officeNumberOfNotifications/' + officeId] = 0;
                 objectToSave['/officeAdminInfo/' + officeId] = {

@@ -12,7 +12,7 @@
     <template>
         <style include="tab-styles"></style>
 
-        <firebase-document app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]"
+        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]"
                            data="{{officeFullInfo}}">
         </firebase-document>
 
@@ -42,6 +42,10 @@
                 }
             },
 
+            listeners: {
+                'update-office-data': 'updateOfficeData'
+            },
+
             loadView: function (viewName) {
                 this.importHref("/views/office_views/interface_views/interface_settings_views/interface-settings-" + viewName + "-view.html", null, false);
             },
@@ -49,6 +53,37 @@
             computeID: function (path) {
                 if (path.length < 2) return null;
                 return (path.substring(1));
+            },
+
+            updateOfficeData: function (event) {
+                var localOfficeData = event.detail.localOfficeData,
+                    rootRef = this.$.office_document.app.database().ref('/'),
+                    objectToSave = {}, officeId = this.officeId;
+
+                if (!!officeId) {
+                    objectToSave['/officeFullInfo/' + officeId] = localOfficeData;
+                    objectToSave['/officeSearchInfo/' + officeId] = {
+                        'name': localOfficeData.name,
+                        'address': localOfficeData.address,
+                        'coordinates': localOfficeData.coordinates,
+                        'acceptingNewPatients': localOfficeData.acceptingNewPatients,
+                        'specialization': localOfficeData.specialization,
+                        'photoAvailability': localOfficeData.photoAvailability
+                    };
+
+                    rootRef.update(objectToSave, function (error) {
+                        if (error) {
+                            console.log("Error updating data:", error);
+                        } else {
+                            this.fire("show-toast", {text: "Změny uloženy"});
+                        }
+                    }.bind(this));
+                } else {
+                    // TODO: handle error
+                    console.log("ID not yet loaded");
+                }
+
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
         });
     </script>
