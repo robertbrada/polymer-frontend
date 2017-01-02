@@ -16,38 +16,26 @@
             paper-button {
                 background-color: var(--app-green-color);
                 color: #fff;
-                border-radius: 0.2em;
                 padding: 0.85em 2.2em;
                 margin: 1.5em 0;
                 letter-spacing: 0.035em;
-                transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
-            }
-
-            paper-button:hover {
-                box-shadow: 0 14px 28px rgba(0,0,0,0.18), 0 10px 10px rgba(0,0,0,0.15);
             }
 
             paper-button[disabled] {
-                border: none;
+                background-color: #eaeaea;
+                color: #c9c9c9;
             }
 
             @media (max-width: 767px) {
 
                 paper-button[responsive] {
                     @apply(--layout-fixed-bottom);
-                    background: var(--app-green-color);
                     height: 64px;
                     z-index: 1;
                     color: white;
                     font-size: 15px;
                     width: 100%;
-                    border: none;
                     margin: 0;
-                }
-
-                paper-button[responsive][disabled] {
-                    background-color: #eaeaea;
-                    color: #c9c9c9;
                 }
             }
 

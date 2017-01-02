@@ -35,9 +35,9 @@
                     <paper-input id="cinput" label="Město" minlength="1" maxlength="20"
                                  value="[[userInfo.address.city]]">
                     </paper-input>
-                    <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
+                    <paper-input id="sinput" label="Ulice a číslo popisné" minlength="3" maxlength="80"
                                  value="[[userInfo.address.street]]"></paper-input>
-                    <paper-button id="confirm_button" on-tap="confirm">Uložit změny</paper-button>
+                    <paper-button id="confirm_button" on-tap="confirm" raised>Uložit změny</paper-button>
                 </form>
             </section>
 
@@ -45,7 +45,7 @@
                 <h2>Změna hesla</h2>
                 <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
                     změnit.</p>
-                <paper-button on-tap="passChange">Poslat email</paper-button>
+                <paper-button on-tap="passChange" raised>Poslat email</paper-button>
             </section>
         </div>
     </template>

@@ -63,7 +63,7 @@
                 <span>Tyto údaje můžete později změnit v nastavení</span>
             </header>
 
-            <paper-button id="step1_button" type="button" on-tap="toggleChange" disabled="[[collapse]]">
+            <paper-button id="step1_button" type="button" on-tap="toggleChange" disabled="[[collapse]]" raised>
                 [[computeButtonText(collapse, 1)]]
             </paper-button>
             <hr>
@@ -120,7 +120,7 @@
                     </div>
                 </form>
             </iron-collapse>
-            <paper-button id="step2_button" on-tap="toggleChange" disabled="[[!collapse]]">
+            <paper-button id="step2_button" on-tap="toggleChange" disabled="[[!collapse]]" raised>
                 [[computeButtonText(collapse, 2)]]
             </paper-button>
             <hr>
@@ -188,7 +188,7 @@
                                     pacientům. Zpráva není povinná.</p>
                                 <paper-textarea label="Zpráva pro pacienty" value="{{officeData.information.patientText}}"
                                                 char-counter maxlength="800"></paper-textarea>
-                                <paper-button responsive on-tap="confirm">
+                                <paper-button responsive on-tap="confirm" raised>
                                     Dokončit
                                 </paper-button>
                             </section>
