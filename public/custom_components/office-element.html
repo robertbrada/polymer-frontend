@@ -176,7 +176,7 @@
                     <p>Pro objednání je vyžadováno přihlášení. Můžete se přihlásit kliknutím na tlačítko níže.</p>
                     <paper-button on-tap="_logIn" raised>Přihlásit</paper-button>
                 </div>
-                <div hidden="[[!verificationRequired]]">
+                <div hidden="[[!_computeVerificationVisibility(verificationRequired, loggedIn)]]">
                     <h3>Vyžadováno potvrzení</h3>
                     <p>Pro přihlášení je nutné ověření od doktora. Doktor podle Vašich osobních údajů ověří, zda jste jeho pacient.Pro ověření prosím
                         klikněte na tlačítko níže. Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté se budete moci objednat.
@@ -363,6 +363,10 @@
 
             computeMapLink: function (address) {
                 return (!!address) ? "http://maps.google.com/maps?q=" + address.city + "," + address.street : null;
+            },
+
+            _computeVerificationVisibility: function (verificationRequired, loggedIn) {
+                return verificationRequired && loggedIn;
             }
         });
     </script>

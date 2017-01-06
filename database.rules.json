@@ -4,32 +4,72 @@
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
-        "information": {
-          "name": {
-            "firstName": {
-              ".validate": "newData.isString() && newData.val().length <= 30"
-            },
-            "lastName": {
-              ".validate": "newData.isString() && newData.val().length <= 30"
-            }
+        "name": {
+          "firstName": {
+            ".validate": "newData.isString() && newData.val().length <= 30"
+          },
+          "lastName": {
+            ".validate": "newData.isString() && newData.val().length <= 30"
+          }
+        },
+        "address": {
+          "city": {
+            ".validate": "newData.isString() && newData.val().length <= 30"
+          },
+          "street": {
+            ".validate": "newData.isString() && newData.val().length <= 80"
           }
         }
       }
     },
-    // TODO: proper rules
+    "userOffices": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "userInitialInfo": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "userAppointments": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
     "officeFullInfo": {
-      ".read": true,
-      ".write": true
+      "$oid": {
+        ".read": true,
+        ".write": "!data.exists() || root.child('officeAdminInfo').child($oid).child('users').child(auth.uid).val() == 'admin'"
+      }
     },
     "officeSearchInfo": {
-      ".read": true,
-      ".write": true
+      "$oid": {
+        ".read": true,
+        ".write": "!data.exists() || root.child('officeAdminInfo').child($oid).child('users').child(auth.uid).val() == 'admin'"
+      }
     },
     "officeAdminInfo": {
+      "$oid": {
+        ".read": "data.child('users').child(auth.uid).val() == 'admin'",
+        ".write": "!data.exists() || data.child('users').child(auth.uid).val() == 'admin'"
+      }
+    },
+    "officeRegisteredPatients": {
+      "$oid": {
+        ".read": "data.child('users').child(auth.uid).val() == 'admin' || data.child('users').child(auth.uid).val() == 'operator'",
+        ".write": "data.child('users').child(auth.uid).val() == 'admin' || data.child('users').child(auth.uid).val() == 'operator'"
+      }
+    },
+    // TODO: proper rules
+    "officeNumberOfNotifications": {
       ".read": true,
       ".write": true
     },
-    "userOffices": {
+    "officePatientsToVerify": {
       ".read": true,
       ".write": true
     },
@@ -40,30 +80,6 @@
     "appointmentsPrivate": {
       ".read": true,
       ".write": true
-    },
-    "userAppointments": {
-      ".read": true,
-      ".write": true
-    },
-    "userInitialInfo": {
-      ".read": true,
-      ".write": true
-    },
-    "officeNumberOfNotifications": {
-      ".read": true,
-      ".write": true
-    },
-    "officeRegisteredPatients": {
-      ".read": true,
-      ".write": true
-    },
-    "officePatientsToVerify": {
-      "$oid": {
-        "$uid": {
-          ".read": "$uid === auth.uid",
-          ".write": "$uid === auth.uid"
-        }
-      }
     }
   }
 }
