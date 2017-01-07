@@ -68,15 +68,19 @@
       "$oid": {
         "$uid": {
           ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-          ".write": "$uid === auth.uid && root.child('officeRegisteredPatients/' + $oid + '/' + $uid).val() !== true || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()"
+          ".write": "$uid === auth.uid && !root.child('officeRegisteredPatients/' + $oid + '/' + $uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()"
         }
       }
     },
-    // TODO: proper rules
+    // TODO: More strict notification rules. User might mess up the notification count in a very specific edge cases. Low priority
     "officeNumberOfNotifications": {
-      ".read": true,
-      ".write": true
+      "$oid": {
+        ".read": " root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".validate": "newData.isNumber()"
+      }
     },
+    // TODO: proper rules
     "appointmentsPublic": {
       ".read": true,
       ".write": true

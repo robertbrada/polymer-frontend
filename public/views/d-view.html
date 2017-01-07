@@ -113,13 +113,32 @@
             },
 
             _onVerifyUser: function () {
-                var uid = this.user.uid,
-                    ref = this.$.auth.app.database().ref('/officePatientsToVerify/' + this.officeId + '/' + uid);
+                var uid = this.user.uid, officeId = this.officeId,
+                    userInfoRef = this.$.auth.app.database().ref('/userInfo/' + uid),
+                    officePatientsToVerifyRef = this.$.auth.app.database().ref('/officePatientsToVerify/' + officeId + '/' + uid),
+                    officeNumberOfNotificationsRef = this.$.auth.app.database().ref('/officeNumberOfNotifications/' + officeId);
 
-                ref.set(true);
-                this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
+                userInfoRef.once('value').then(function (snapshot) {
+                    if (snapshot.val() === null) {
+                        this.fire("show-toast", {text: "Vyskytla se chyba"});
+                    } else {
+                        officePatientsToVerifyRef.set(snapshot.val(), function (error) {
+                            if (error === null) {
+/*                                officeNumberOfNotificationsRef.transaction(function (data) {
+                                    console.log(data);
+                                });*/
+                            } else {
+                                this.fire("show-toast", {text: "Vyskytla se chyba"});
+                            }
+                        })
+                    }
+                }.bind(this));
+
+//                officePatientsToVerifyRef.set(true);
+//                this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
+
 
             computeID: function (path) {
                 if (path.length < 2) return null;
