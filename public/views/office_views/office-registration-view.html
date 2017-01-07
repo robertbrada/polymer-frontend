@@ -59,7 +59,7 @@
                                 latitude: null
                             },
                             specialization: 0, // TODO: disable default and create paper-listbox validation
-                            visitLength: 30,
+                            visitLength: 40,
                             phoneNumber: null,
                             email: null,
                             manualConfirmation: false,
@@ -131,7 +131,7 @@
                     rootRef = this.$.user_document.app.database().ref('/');
 
                 objectToSave['/officeFullInfo/' + officeId] = data.information;
-                objectToSave['/userInitialInfo/' + userId + '/showOfficeInterface'] = true;
+                objectToSave['/userInterfaceInfo/' + userId + '/showOfficeInterface'] = true;
                 objectToSave['/officeNumberOfNotifications/' + officeId] = 0;
                 objectToSave['/officeAdminInfo/' + officeId] = {
                     'users': {},

@@ -28,7 +28,7 @@
         ".write": "$uid === auth.uid"
       }
     },
-    "userInitialInfo": {
+    "userInterfaceInfo": {
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
@@ -43,33 +43,37 @@
     "officeFullInfo": {
       "$oid": {
         ".read": true,
-        ".write": "!data.exists() || root.child('officeAdminInfo').child($oid).child('users').child(auth.uid).val() == 'admin'"
+        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
       }
     },
     "officeSearchInfo": {
       "$oid": {
         ".read": true,
-        ".write": "!data.exists() || root.child('officeAdminInfo').child($oid).child('users').child(auth.uid).val() == 'admin'"
+        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
       }
     },
     "officeAdminInfo": {
       "$oid": {
-        ".read": "data.child('users').child(auth.uid).val() == 'admin'",
-        ".write": "!data.exists() || data.child('users').child(auth.uid).val() == 'admin'"
+        ".read": "data.child('users/' + auth.uid).val() === 'admin'",
+        ".write": "!data.exists() || data.child('users/' + auth.uid).val() === 'admin'"
       }
     },
     "officeRegisteredPatients": {
       "$oid": {
-        ".read": "data.child('users').child(auth.uid).val() == 'admin' || data.child('users').child(auth.uid).val() == 'operator'",
-        ".write": "data.child('users').child(auth.uid).val() == 'admin' || data.child('users').child(auth.uid).val() == 'operator'"
+        ".read": "data.child('users/' + auth.uid).val() === 'admin' || data.child('users/' + auth.uid).val() === 'operator'",
+        ".write": "data.child('users/' + auth.uid).val() === 'admin' || data.child('users/' + auth.uid).val() === 'operator'"
+      }
+    },
+    "officePatientsToVerify": {
+      "$oid": {
+        "$uid": {
+          ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          ".write": "$uid === auth.uid && root.child('officeRegisteredPatients/' + $oid + '/' + $uid).val() !== true || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()"
+        }
       }
     },
     // TODO: proper rules
     "officeNumberOfNotifications": {
-      ".read": true,
-      ".write": true
-    },
-    "officePatientsToVerify": {
       ".read": true,
       ".write": true
     },

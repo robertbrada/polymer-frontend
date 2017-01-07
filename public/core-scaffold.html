@@ -153,8 +153,8 @@
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
 
-        <firebase-document app-name="doctor-appointment-system" path="/userInitialInfo/[[user.uid]]"
-                           data="{{userInitialInfo}}">
+        <firebase-document app-name="doctor-appointment-system" path="/userInterfaceInfo/[[user.uid]]"
+                           data="{{userInterfaceInfo}}">
         </firebase-document>
 
         <app-location route="{{route}}"></app-location>
@@ -177,8 +177,8 @@
                     </paper-icon-button>
                 </div>
                 <div class="text-bar-item" hidden="[[smallScreen]]">
-                    <a hidden="[[userInitialInfo.showOfficeInterface]]" href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
-                    <a hidden="[[!userInitialInfo.showOfficeInterface]]" href="office/interface/waiting-list/" aria-label="Informace pro lékaře">Mé ordinace</a>
+                    <a hidden="[[userInterfaceInfo.showOfficeInterface]]" href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
+                    <a hidden="[[!userInterfaceInfo.showOfficeInterface]]" href="office/interface/waiting-list/" aria-label="Informace pro lékaře">Mé ordinace</a>
                 </div>
                 <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">Docta.cz</a></div>
                 <div class="icon-bar-item">
@@ -187,7 +187,7 @@
                 </div>
                 <div class="icon-bar-item" hidden="[[!signedIn]]">
                     <a href="user/notifications/" tabindex="-1" id="notification-link">
-                        <div id="badge">[[userInitialInfo.numberOfNotifications]]</div>
+                        <div id="badge" hidden="[[!userInterfaceInfo.numberOfNotifications]]">[[userInterfaceInfo.numberOfNotifications]]</div>
                         <paper-icon-button id="account_icon" icon="account-circle">
                         </paper-icon-button>
                     </a>
@@ -199,8 +199,8 @@
             <!-- Two-way bind `drawerOpened` since app-drawer can update `opened` itself. -->
             <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
                 <iron-selector role="navigation" class="drawer-list">
-                    <a href="docinfo/" hidden="[[userInitialInfo.showOfficeInterface]]">Pro lékaře</a>
-                    <a href="office/interface/waiting-list/" hidden="[[!userInitialInfo.showOfficeInterface]]">Mé ordinace</a>
+                    <a href="docinfo/" hidden="[[userInterfaceInfo.showOfficeInterface]]">Pro lékaře</a>
+                    <a href="office/interface/waiting-list/" hidden="[[!userInterfaceInfo.showOfficeInterface]]">Mé ordinace</a>
                     <a href="user/notifications/" hidden="[[!signedIn]]">Notifikace</a>
                     <a href="user/appointments/" hidden="[[!signedIn]]">Návštěvy</a>
                     <a href="user/settings/" hidden="[[!signedIn]]">Nastavení</a>

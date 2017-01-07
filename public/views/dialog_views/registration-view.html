@@ -78,9 +78,10 @@
             },
 
             saveUserData: function (user) {
-                var db = this.$.auth.app.database();
+                var objectToSave = {},
+                    rootRef = this.$.auth.app.database().ref('/');
 
-                db.ref('/userInfo/' + user.uid).set({
+                objectToSave['/userInfo/' + user.uid] = {
                     name: {
                         'firstName': this.$.fninput.value,
                         'lastName': this.$.lninput.value
@@ -89,12 +90,14 @@
                         'city': '',
                         'street': ''
                     }
-                });
+                };
 
-                db.ref('/userInitialInfo/' + user.uid).set({
+                objectToSave['/userInterfaceInfo/' + user.uid] = {
                     'showOfficeInterface': false,
                     'numberOfNotifications': 0
-                });
+                };
+
+                rootRef.update(objectToSave);
             }
         });
 
