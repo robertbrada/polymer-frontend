@@ -27,7 +27,8 @@
                 <h1>Výsledná podoba profilu</h1>
                 <span>Dole můžete potvrdit registraci</span>
             </header>
-            <office-element office-data="[[officeData.information]]" photo-file="[[officeData.photoFile]]" logged-in="true"></office-element>
+            <office-element office-data="[[officeData.information]]" photo-file="[[officeData.photoFile]]" logged-in="true"
+                            patient-status="visited" verification-required="false"></office-element>
             <div class="subsection grid">
                 <section>
                     <paper-button on-tap="modifyOffice" raised>Upravit</paper-button>

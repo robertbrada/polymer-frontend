@@ -20,12 +20,16 @@
         <firebase-document id="office_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]" data="{{officeData}}">
         </firebase-document>
 
+        <firebase-document app-name="doctor-appointment-system"
+                           path="/userContactedOffices/[[user.uid]]/[[officeId]]" data="{{userContactedOffice}}">
+        </firebase-document>
+
         <div hidden="[[!dataNotLoaded]]">
             <paper-spinner-lite active="[[dataNotLoaded]]"></paper-spinner-lite>
         </div>
 
         <office-element hidden="[[dataNotLoaded]]" office-data="[[officeData]]" logged-in="[[loggedIn]]"
-                        verification-required="[[verificationRequired]]"></office-element>
+                        patient-status="[[patientStatus]]" verification-required="[[verificationRequired]]"></office-element>
     </template>
 
     <script>
@@ -52,6 +56,12 @@
                 verificationRequired: {
                     type: Boolean,
                     value: true
+                },
+
+                patientStatus: {
+                    type: String,
+                    value: null,
+                    computed: 'computePatientStatus(userContactedOffice)'
                 }
             },
 
@@ -63,6 +73,10 @@
             observers: [
                 'setVerificationRequired(officeData.manualConfirmation, user.uid)'
             ],
+
+            computePatientStatus: function(userContactedOffice) {
+                return (Object.keys(userContactedOffice).length === 1) ? userContactedOffice.status : null;
+            },
 
             setVerificationRequired: function (manualConfirmation, uid) {
                 if (manualConfirmation !== undefined) {

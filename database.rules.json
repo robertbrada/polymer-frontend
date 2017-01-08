@@ -41,7 +41,7 @@
         "$oid": {
           ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
           "status": {
-            ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'contacted' || newData.val() === 'visited'"
+            ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'visited'"
           }
         }
       }
