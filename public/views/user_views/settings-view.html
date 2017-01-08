@@ -15,9 +15,14 @@
         <style include="button-styles layout-styles input-styles">
         </style>
 
-        <firebase-document app-name="doctor-appointment-system" path="/userInfo/[[user.uid]]"
-                           data="{{userInfo}}">
+        <firebase-document id="user_document" app-name="doctor-appointment-system"
+                           path="/userInfo/[[user.uid]]" data="{{userInfo}}">
         </firebase-document>
+
+        <firebase-document app-name="doctor-appointment-system"
+                           path="/userContactedOffices/[[user.uid]]" data="{{userContactedOffices}}">
+        </firebase-document>
+
 
         <div class="main-frame subsection grid">
             <section>
@@ -71,11 +76,36 @@
             },
 
             saveChanges: function () {
-                this.set('userInfo.name.firstName', this.$.fninput.value);
-                this.set('userInfo.name.lastName', this.$.lninput.value);
-                this.set('userInfo.address.city', this.$.cinput.value);
-                this.set('userInfo.address.street', this.$.sinput.value);
-                this.fire("show-toast", {text: "Změny uloženy"});
+                var rootRef = this.$.user_document.ref.root, objectToSave = {}, i, status,
+                    uid = this.user.uid, officeIds = Object.keys(this.userContactedOffices),
+                    userInfo = {
+                        'name': {
+                            'firstName': this.$.fninput.value,
+                            'lastName': this.$.lninput.value
+                        },
+                        'address': {
+                            'city': this.$.cinput.value,
+                            'street': this.$.sinput.value
+                        }
+                    };
+
+                objectToSave['/userInfo/' + uid] = userInfo;
+
+                for (i = 0; i < officeIds.length; i++) {
+                    status = this.userContactedOffices[officeIds[i]].status;
+                    if (status === 'awaitsVerification') {
+                        objectToSave['/officePatientsToVerify/' + officeIds[i] + '/' + uid] = userInfo;
+                    } else if (status === 'visited') {
+                        objectToSave['/officePatients/' + officeIds[i] + '/' + uid] = userInfo;
+                    }
+                }
+
+                rootRef.update(objectToSave).then(function () {
+                    this.fire("show-toast", {text: "Změny uloženy"});
+                }.bind(this), function (error) {
+//                    TODO: generic error dialog
+                    console.log("Error occured in user settings view")
+                });
             }
         });
     </script>

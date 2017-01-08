@@ -115,27 +115,28 @@
             _onVerifyUser: function () {
                 var uid = this.user.uid, officeId = this.officeId,
                     userInfoRef = this.$.auth.app.database().ref('/userInfo/' + uid),
-                    officePatientsToVerifyRef = this.$.auth.app.database().ref('/officePatientsToVerify/' + officeId + '/' + uid),
-                    officeNumberOfNotificationsRef = this.$.auth.app.database().ref('/officeNumberOfNotifications/' + officeId);
+                    rootRef = this.$.auth.app.database().ref('/'),
+                    objectToSave = {};
 
+//                TODO: use Promises to handle all the errors in one place
                 userInfoRef.once('value').then(function (snapshot) {
                     if (snapshot.val() === null) {
                         this.fire("show-toast", {text: "Vyskytla se chyba"});
                     } else {
-                        officePatientsToVerifyRef.set(snapshot.val(), function (error) {
+                        objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'awaitsVerification';
+                        objectToSave['/officePatientsToVerify/' + officeId + '/' + uid] = snapshot.val();
+
+                        rootRef.update(objectToSave, function (error) {
                             if (error === null) {
-/*                                officeNumberOfNotificationsRef.transaction(function (data) {
-                                    console.log(data);
-                                });*/
+//                                TODO: increment office notifications
+                                this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
                             } else {
                                 this.fire("show-toast", {text: "Vyskytla se chyba"});
                             }
-                        })
+                        }.bind(this))
                     }
                 }.bind(this));
 
-//                officePatientsToVerifyRef.set(true);
-//                this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 

@@ -34,6 +34,18 @@
         ".write": "$uid === auth.uid"
       }
     },
+    "userContactedOffices": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        "$oid": {
+          ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          "status": {
+            ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'contacted' || newData.val() === 'visited'"
+          }
+        }
+      }
+    },
     "userAppointments": {
       "$uid": {
         ".read": "$uid === auth.uid",
@@ -58,10 +70,13 @@
         ".write": "!data.exists() || data.child('users/' + auth.uid).val() === 'admin'"
       }
     },
-    "officeRegisteredPatients": {
+    "officePatients": {
       "$oid": {
         ".read": "data.child('users/' + auth.uid).val() === 'admin' || data.child('users/' + auth.uid).val() === 'operator'",
-        ".write": "data.child('users/' + auth.uid).val() === 'admin' || data.child('users/' + auth.uid).val() === 'operator'"
+        ".write": "data.child('users/' + auth.uid).val() === 'admin' || data.child('users/' + auth.uid).val() === 'operator'",
+        "$uid": {
+          ".write": "data.exists() && $uid === auth.uid"
+        }
       }
     },
     "officePatientsToVerify": {
@@ -75,8 +90,8 @@
     // TODO: More strict notification rules. User might mess up the notification count in a very specific edge cases. Low priority
     "officeNumberOfNotifications": {
       "$oid": {
-        ".read": " root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".read": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "!data.exists() || root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         ".validate": "newData.isNumber()"
       }
     },
