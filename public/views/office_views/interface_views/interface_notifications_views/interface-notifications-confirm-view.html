@@ -3,6 +3,7 @@
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
@@ -14,7 +15,7 @@
 
             .interface-div:hover {
                 position: relative;
-                box-shadow: 0 5px 60px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1);
+                box-shadow: 0 5px 60px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
             }
 
             .interface-div:not(:first-child) {
@@ -69,13 +70,17 @@
 
         </style>
 
-        <template is="dom-repeat" items="[[notifications]]" as="entry">
+        <firebase-document id="verify_document" app-name="doctor-appointment-system" path="/officePatientsToVerify/[[officeId]]"
+                           data="{{officePatientsToVerify}}">
+        </firebase-document>
+
+        <template is="dom-repeat" items="[[patientsArray]]" as="patient">
             <div class="container flex-horizontal-with-ratios interface-div">
-                <div class="flexchild">[[entry.firstName]] [[entry.lastName]]</div>
-                <div class="flex2child">[[entry.address]]</div>
+                <div class="flexchild">[[computeFullName(patient.name)]]</div>
+                <div class="flex2child">[[computeAddress(patient.address)]]</div>
                 <div class="flex3child buttons">
-                    <paper-button class="confirm-button">Potvrdit</paper-button>
-                    <paper-button class="dismiss-button">Zamítnout</paper-button>
+                    <paper-button raised on-tap="confirmUser" class="confirm-button">Potvrdit</paper-button>
+                    <paper-button raised on-tap="dismissUser" class="dismiss-button">Zamítnout</paper-button>
                 </div>
             </div>
         </template>
@@ -89,32 +94,37 @@
             is: 'interface-notifications-confirm-view',
 
             properties: {
-                notifications: {
+                patientsArray: {
                     type: Array,
-                    value: [
-                        {
-                            firstName: "Robert",
-                            lastName: "Brada",
-                            address: "Kardinála Berana 13, Plzeň"
-                        },
-                        {
-                            firstName: "Michaelinsaknfdadc",
-                            lastName: "Aubreyisbaddmafdrf",
-                            address: "St. Church 123, London"
-                        },
-                        {
-                            firstName: "Mark",
-                            lastName: "Elliot",
-                            address: "Franz Joseph Sp. Strase 15, Wangen"
-
-                        },
-                        {
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            address: "Dvůr Králové nad Labem, Sady pětatřicátníků 28"
-                        }
-                    ]
+                    computed: 'computePatientsArray(officePatientsToVerify)'
                 }
+            },
+
+            confirmUser: function (event) {
+                var patient = event.model.patient;
+                console.log(patient);
+            },
+
+            dismissUser: function (event) {
+                var patientUid = event.model.patient.uid;
+                console.log(patientUid);
+            },
+
+            computePatientsArray: function (obj) {
+                var objectToReturn;
+                return Object.keys(obj).map(function (key) {
+                    objectToReturn = obj[key];
+                    objectToReturn['uid'] = key;
+                    return objectToReturn
+                });
+            },
+
+            computeFullName: function (name) {
+                return name.firstName + " " + name.lastName;
+            },
+
+            computeAddress: function (address) {
+                return address.street + ", " + address.city;
             }
         });
     </script>

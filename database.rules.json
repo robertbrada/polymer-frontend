@@ -41,7 +41,7 @@
         "$oid": {
           ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
           "status": {
-            ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'visited'"
+            ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'accessed'"
           }
         }
       }
@@ -81,9 +81,10 @@
     },
     "officePatientsToVerify": {
       "$oid": {
+        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$uid": {
-          ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-          ".write": "$uid === auth.uid && !root.child('officeRegisteredPatients/' + $oid + '/' + $uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()"
+          ".write": "$uid === auth.uid && !root.child('officeRegisteredPatients/' + $oid + '/' + $uid).exists()"
         }
       }
     },

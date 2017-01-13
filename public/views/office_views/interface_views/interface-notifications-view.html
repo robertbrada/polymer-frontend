@@ -20,7 +20,7 @@
             </paper-tabs>
 
             <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <interface-notifications-confirm-view name="confirm"></interface-notifications-confirm-view>
+                <interface-notifications-confirm-view name="confirm" office-id="[[officeId]]"></interface-notifications-confirm-view>
                 <interface-notifications-general-view name="general"></interface-notifications-general-view>
             </iron-pages>
         </paper-material>
@@ -31,11 +31,6 @@
             is: 'interface-notifications-view',
 
             properties: {
-                profileID: {
-                    type: String,
-                    computed: 'computeID(route.path)'
-                },
-
                 selected: {
                     type: String,
                     value: "confirm", // First selected view
@@ -45,11 +40,6 @@
 
             loadView: function (viewName) {
                 this.importHref("/views/office_views/interface_views/interface_notifications_views/interface-notifications-" + viewName + "-view.html", null, false);
-            },
-
-            computeID: function (path) {
-                if (path.length < 2) return null;
-                return (path.substring(1));
             }
         });
     </script>

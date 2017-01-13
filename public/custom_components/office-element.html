@@ -342,7 +342,7 @@
             },
 
             computeIfDisabled: function (loggedIn, verificationRequired, patientStatus) {
-                return (!loggedIn || (verificationRequired && patientStatus !== 'visited'));
+                return (!loggedIn || (verificationRequired && patientStatus !== 'accessed'));
             },
 
             formatName: function (first, last) {
