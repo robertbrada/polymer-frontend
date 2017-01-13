@@ -101,8 +101,20 @@
             },
 
             confirmUser: function (event) {
-                var patient = event.model.patient;
-                console.log(patient);
+                var patientUid = event.model.patient.uid, oid = this.officeId,
+                    rootRef = this.$.verify_document.ref.root, objectToSave = {};
+
+                objectToSave['/officePatients/' + oid + '/' + patientUid] = this.officePatientsToVerify[patientUid];
+                objectToSave['/officePatientsToVerify/' + oid + '/' + patientUid] = null;
+                objectToSave['/userContactedOffices/' + patientUid + '/' + oid + '/status'] = 'accessed';
+                // TODO: message to user
+
+                rootRef.update(objectToSave).then(function () {
+                    this.fire("show-toast", {text: "Přístup povolen"});
+                }.bind(this), function (error) {
+//                    TODO: generic error dialog
+                    console.log("Error occured in user settings view")
+                });
             },
 
             dismissUser: function (event) {
@@ -111,11 +123,12 @@
             },
 
             computePatientsArray: function (obj) {
-                var objectToReturn;
                 return Object.keys(obj).map(function (key) {
-                    objectToReturn = obj[key];
-                    objectToReturn['uid'] = key;
-                    return objectToReturn
+                    return {
+                        'name': obj[key]['name'],
+                        'address': obj[key]['address'],
+                        'uid': key
+                    }
                 });
             },
 

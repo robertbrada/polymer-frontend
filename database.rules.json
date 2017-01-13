@@ -72,8 +72,8 @@
     },
     "officePatients": {
       "$oid": {
-        ".read": "data.child('users/' + auth.uid).val() === 'admin' || data.child('users/' + auth.uid).val() === 'operator'",
-        ".write": "data.child('users/' + auth.uid).val() === 'admin' || data.child('users/' + auth.uid).val() === 'operator'",
+        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$uid": {
           ".write": "data.exists() && $uid === auth.uid"
         }
