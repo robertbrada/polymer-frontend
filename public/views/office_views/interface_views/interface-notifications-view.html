@@ -13,8 +13,12 @@
 
         </style>
 
+        <firebase-document id="verify_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]/manualConfirmation"
+                           data="{{manualConfirmation}}">
+        </firebase-document>
+
         <paper-material elevation="1">
-            <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
+            <paper-tabs hidden="[[computeVisibilityOfTabs(manualConfirmation)]]" focused selected="{{selected}}" attr-for-selected="name">
                 <paper-tab name="confirm">Žádosti o přijetí</paper-tab>
                 <paper-tab name="general">Ostatní upozornění</paper-tab>
             </paper-tabs>
@@ -33,9 +37,21 @@
             properties: {
                 selected: {
                     type: String,
-                    value: "confirm", // First selected view
+                    value: "general", // First selected view
                     observer: "loadView"
+                },
+
+                manualConfirmation: {
+                    observer: 'confirmationObserver'
                 }
+            },
+
+            confirmationObserver: function (val) {
+                this.selected = (val === true) ? 'confirm' : 'general';
+            },
+
+            computeVisibilityOfTabs: function(manualConfirmation) {
+                return manualConfirmation !== true;
             },
 
             loadView: function (viewName) {
