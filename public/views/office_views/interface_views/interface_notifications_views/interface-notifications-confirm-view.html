@@ -3,6 +3,7 @@
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/button-styles.html">
@@ -68,6 +69,13 @@
                 }
             }
 
+            .no-patients {
+                height: 10em;
+                font-size: 1.2em;
+                @apply(--layout);
+                @apply(--layout-center-center);
+            }
+
         </style>
 
         <firebase-document id="verify_document" app-name="doctor-appointment-system" path="/officePatientsToVerify/[[officeId]]"
@@ -84,6 +92,11 @@
                 </div>
             </div>
         </template>
+
+        <div hidden="[[computeIfPatients(patientsArray)]]" class="no-patients">
+            <iron-icon icon="info"></iron-icon>
+            Žádní pacienti k potvrzení
+        </div>
 
     </template>
 
@@ -156,6 +169,10 @@
 //                    TODO: generic error dialog
                     console.log("Error occurred in user settings view during dismiss event.")
                 });
+            },
+
+            computeIfPatients: function (patientsArray) {
+                return patientsArray.length !== 0;
             },
 
             computePatientsArray: function (officePatientsToVerify) {
