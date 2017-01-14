@@ -1,0 +1,224 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
+<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="/styles/button-styles.html">
+<link rel="import" href="/styles/interface-styles.html">
+
+<dom-module id="interface-patients-view">
+    <template>
+        <style include="interface-styles button-styles">
+
+            .interface-div {
+                border: 1px solid var(--border-color);
+                margin-top: 0.3em;
+            }
+
+            .collapse-content {
+                background-color: #fff;
+                padding: 1.2em;
+                border-left: 1px solid var(--border-color);
+                border-right: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            /* FLEX LAYOUT */
+            .flex-horizontal-with-ratios {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+                margin-right: 2em;
+            }
+
+            .flex2child {
+                @apply(--layout-flex-2);
+                margin-right: 2em;
+            }
+
+            .flex3child {
+                @apply(--layout-flex-2);
+                text-align: right;
+            }
+
+            /* search-bar */
+            .flexchild-search {
+                @apply(--layout-flex);
+                margin-right: 2em;
+            }
+
+            .flex2child-search {
+                @apply(--layout-flex-2);
+                margin-right: 2em;
+            }
+
+            .flex3child-search {
+                @apply(--layout-flex-2);
+                text-align: right;
+            }
+
+            /*RESPONSIVE ADDITIONS*/
+            @media only screen and (max-width: 1180px) {
+
+                .flex-horizontal-with-ratios {
+                    @apply(--layout-vertical);
+                }
+
+                .flex-horizontal-with-ratios > div {
+                    margin: 0.2em 0;
+                }
+
+                .flex3child {
+                    padding-top: 0.6em;
+                    text-align: left;
+                }
+
+                .interface-div {
+                    padding-bottom: 0.5em;
+                }
+            }
+
+
+
+            @media only screen and (max-width: 366px) {
+
+                .buttons > paper-button {
+                    display: block;
+                    margin: 0.9em 0;
+                    text-align: center;
+                    padding: 1.2em;
+                }
+            }
+
+            /* SEARCH */
+
+            #search-bar {
+                margin-bottom: 2em;
+            }
+
+            #search-bar input {
+                height: 1.6em;
+                border: 1px solid #dcdce5;
+                padding: 0.5em 0.8em;
+                font-size: 1.1em;
+                width: 95%;
+            }
+
+            #search-bar input::-webkit-input-placeholder {
+                color: #aaa;
+                font-weight: lighter;
+                letter-spacing: 0.02em;
+            }
+
+            #search-bar paper-button {
+                background-color: var(--app-green-color);
+                color: #fff;
+                border: none;
+            }
+
+            #send-message {
+                color: #889;
+                margin-left: 1em;
+            }
+
+
+        </style>
+
+        <paper-material id="search-bar" class="flex-horizontal-with-ratios interface-div">
+            <!--rodne cislo asi az pozdeji, jen na ukazku-->
+            <div class="flexchild-search "><input placeholder="Rodné číslo"></div>
+            <div class="flex2child-search "><input placeholder="Jméno"></div>
+            <div class="flex2child-search "><input placeholder="Adresa"></div>
+            <div class="flex3child-search buttons">
+                <paper-button class="dismiss-button" raised><iron-icon icon="icons:search"></iron-icon>Hledat</paper-button>
+            </div>
+        </paper-material>
+
+        <template is="dom-repeat" items="[[patients]]" as="patient">
+
+            <div class="container flex-horizontal-with-ratios interface-div">
+                <div class="flexchild">[[patient.identification_number]]</div>
+                <div class="flex2child">[[patient.firstName]] [[patient.lastName]]</div>
+                <div class="flex2child">[[patient.address]]</div>
+                <div class="flex3child buttons">
+
+                    <paper-button on-tap="handleDetail" class="details-button">
+                        [[computeText(patient.opened)]] detail
+                    </paper-button>
+                    <a title="poslat zprávu pacientovi"><paper-icon-button id="send-message" icon="communication:message"></paper-icon-button></a>
+                </div>
+            </div>
+
+            <iron-collapse opened="[[patient.opened]]">
+                <div class="collapse-content">
+                    TODO Patient info
+                </div>
+            </iron-collapse>
+        </template>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'interface-patients-view',
+
+            properties: {
+                patients: {
+                    type: Array,
+                    value: [
+                        {
+                            identification_number:8565123545,
+                            firstName: "Robert",
+                            lastName: "Brada",
+                            address: "Kardinála Berana 13, Plzeň",
+                            opened: false
+                        },
+                        {
+                            identification_number:8565123545,
+                            firstName: "Michaelinsaknfdadc",
+                            lastName: "Aubreyisbaddmafdrf",
+                            address: "St. Church 123, London",
+                            opened: false
+                        },
+                        {
+                            identification_number:8565123545,
+                            firstName: null,
+                            lastName: "Elliot",
+                            address: null,
+                            opened: false
+                        },
+                        {
+                            identification_number:8565123545,
+                            firstName: "Stephen",
+                            lastName: "Maturin",
+                            address: "Dvůr Králové nad Labem, Sady pětatřicátníků 28",
+                            opened: false
+                        },
+                        {
+                            identification_number:8565123545,
+                            firstName: "Stephen",
+                            lastName: "Maturin",
+                            address: "Franz Joseph Sp. Strase 15, Wangen",
+                            opened: false
+
+                        }
+                    ]
+                }
+            },
+
+            computeText: function (opened) {
+                return (opened) ? "Skrýt" : "Zobrazit";
+            },
+
+            handleDetail: function (event) {
+                var opened = event.model.patient.opened;
+                event.model.set('patient.opened', !opened);
+            }
+
+        });
+    </script>
+</dom-module>
