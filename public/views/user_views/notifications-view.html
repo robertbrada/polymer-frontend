@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/interface-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -29,17 +30,16 @@
                 box-shadow: 0 5px 60px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
             }
 
-            .dismiss-button{
-                transition: all 0.1s cubic-bezier(.25,.8,.25,1);
+            .dismiss-button {
+                transition: all 0.1s cubic-bezier(.25, .8, .25, 1);
             }
 
-            .interface-div:hover .dismiss-button{
+            .interface-div:hover .dismiss-button {
                 background-color: var(--app-green-color) !important;
                 color: #fff !important;
                 border-color: var(--app-green-color) !important;
                 font-weight: bolder;
             }
-
 
             .interface-div:not(:first-child) {
                 border-top: 1px solid var(--border-color);
@@ -101,12 +101,17 @@
 
         </style>
 
+        <firebase-document id="notification_document" app-name="doctor-appointment-system" path="/userNotifications/[[userId]]"
+                           data="{{notificationsData}}">
+        </firebase-document>
+
+        <!--TODO: disable URL escaping-->
         <div class="main-frame">
-            <template is="dom-repeat" items="[[notifications]]" as="entry">
+            <template is="dom-repeat" items="[[notificationsArray]]" as="notification">
                 <div class="interface-div">
-                    <h3>[[entry.heading]]</h3>
+                    <h3>[[notification.title]]</h3>
                     <div class="container flex-horizontal-with-ratios">
-                        <div class="flexchild">[[entry.description]]</div>
+                        <div class="flexchild">[[notification.message]]</div>
                         <div class="flex2child buttons">
                             <paper-button class="dismiss-button">Přečteno</paper-button>
                         </div>
@@ -122,38 +127,20 @@
             is: 'notifications-view',
 
             properties: {
-                notifications: {
+                notificationsArray: {
                     type: Array,
-                    value: [
-                        {
-                            heading: "Potvrzení od doktora",
-                            description: "Notifikace je synonymum pro oznámení, nejčastěji se využívá v aplikacích," +
-                            " v mobilních telefonech nebo na internetu. Notifikace představuje obvykle krátkou " +
-                            "textovou nebo multimediální zprávu s účelem informovat uživatele o aktuálních událostech"
-                        },
-                        {
-                            heading: "Upozornění",
-                            description: "Notifikace je synonymum pro oznámení, nejčastěji se využívá v aplikacích," +
-                            " v mobilních  o aktuálních událostech"
-                        },
-                        {
-                            heading: "Upozornění na platbu",
-                            description: "Notifikace je synonymum pro oznámení, nejčastěji se využívá v aplikacích," +
-                            " v mobilních telefonech nebo na internetu. Notifikace představuje obvykle krátkou " +
-                            "textovou nebo multimediální zprávu s účelem informovat uživatele o aktuálních událostech" +
-                            "fikace je synonymum pro oznámení, nejčastěji se využívá v aplikacích," +
-                            " v mobilních telefonech nebo na internetu. Notifikace představuje obvykle krátkou " +
-                            "textovou nebo multimediální zprávu s účelem informovat uživatele o"
-
-                        },
-                        {
-                            heading: "Upozornění na věc",
-                            description: "Notifikace je synonymum pro oznámení, nejčastěji se využívá v aplikacích," +
-                            " v mobilních telefonech nebo na internetu. Notifikace představuje obvykle krátkou " +
-                            "textovou nebo multimediální zprávu s účelem informovat uživatele o aktuálních událostech"
-                        }
-                    ]
+                    computed: 'computeNotificationsArray(notificationsData)'
                 }
+            },
+
+            computeNotificationsArray: function (notificationsData) {
+                return Object.keys(notificationsData).map(function (key) {
+                    return {
+                        'title': notificationsData[key]['title'],
+                        'message': notificationsData[key]['message'],
+                        'nid': key
+                    }
+                });
             }
         });
     </script>

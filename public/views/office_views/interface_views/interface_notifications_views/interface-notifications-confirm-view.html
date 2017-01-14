@@ -102,14 +102,24 @@
 
             confirmUser: function (event) {
                 var patientUid = event.model.patient.uid, oid = this.officeId,
-                    rootRef = this.$.verify_document.ref.root, objectToSave = {};
+                    rootRef = this.$.verify_document.ref.root,
+                    transactionRef = this.$.verify_document.ref.root.child('/userInterfaceInfo/' + patientUid + '/numberOfNotifications'),
+                    objectToSave = {};
 
                 objectToSave['/officePatients/' + oid + '/' + patientUid] = this.officePatientsToVerify[patientUid];
                 objectToSave['/officePatientsToVerify/' + oid + '/' + patientUid] = null;
                 objectToSave['/userContactedOffices/' + patientUid + '/' + oid + '/status'] = 'accessed';
-                // TODO: message to user
+                objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
+                    'title': 'Verifikace potvrzena',
+                    'message': 'Doktor potvrdil, že jste opravdu jeho pacient. Nyní se můžete objednat na <a href="/d/' + oid + '">profilu doktora</a>.',
+                    'sender': oid
+                };
 
                 rootRef.update(objectToSave).then(function () {
+                    return transactionRef.transaction(function (currentCount) {
+                        return (currentCount === null) ? null : currentCount + 1;
+                    });
+                }).then(function () {
                     this.fire("show-toast", {text: "Přístup povolen"});
                 }.bind(this), function (error) {
 //                    TODO: generic error dialog
@@ -122,11 +132,11 @@
                 console.log(patientUid);
             },
 
-            computePatientsArray: function (obj) {
-                return Object.keys(obj).map(function (key) {
+            computePatientsArray: function (officePatientsToVerify) {
+                return Object.keys(officePatientsToVerify).map(function (key) {
                     return {
-                        'name': obj[key]['name'],
-                        'address': obj[key]['address'],
+                        'name': officePatientsToVerify[key]['name'],
+                        'address': officePatientsToVerify[key]['address'],
                         'uid': key
                     }
                 });

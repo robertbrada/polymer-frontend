@@ -144,6 +144,8 @@
                             return (currentCount === null) ? null : currentCount + 1;
                         });
                     })
+                }).then(function () {
+                    this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
                 }.bind(this), function (error) {
                     // TODO: handle error
                     console.error(error);

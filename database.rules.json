@@ -31,7 +31,11 @@
     "userInterfaceInfo": {
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
+        ".write": "$uid === auth.uid",
+        "numberOfNotifications": {
+          ".read": "root.child('userOffices/' + auth.uid).exists()",
+          ".write": "root.child('userOffices/' + auth.uid).exists()"
+        }
       }
     },
     "userContactedOffices": {
@@ -50,6 +54,15 @@
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
+      }
+    },
+    "userNotifications": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        "$nid": {
+          ".write": "root.child('officeAdminInfo/' + newData.child('sender').val() + '/users/' + auth.uid).exists() && root.child('userContactedOffices/' + $uid + '/' + newData.child('sender').val()).exists()"
+        }
       }
     },
     "officeFullInfo": {

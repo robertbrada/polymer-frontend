@@ -30,7 +30,7 @@
             </paper-tabs>
 
             <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-                <notifications-view name="notifications"></notifications-view>
+                <notifications-view name="notifications" user-id="[[user.uid]]"></notifications-view>
                 <appointments-view name="appointments"></appointments-view>
                 <settings-view name="settings" user="[[user]]"></settings-view>
             </iron-pages>
