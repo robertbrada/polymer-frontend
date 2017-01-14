@@ -101,29 +101,30 @@
             },
 
             confirmUser: function (event) {
-                var patientUid = event.model.patient.uid, oid = this.officeId,
-                    rootRef = this.$.verify_document.ref.root,
-                    transactionRef = this.$.verify_document.ref.root.child('/userInterfaceInfo/' + patientUid + '/numberOfNotifications'),
-                    objectToSave = {};
+                var patientUid = event.model.patient.uid, officeId = this.officeId,
+                    db = this.$.verify_document.app.database(), objectToSave = {};
 
-                objectToSave['/officePatients/' + oid + '/' + patientUid] = this.officePatientsToVerify[patientUid];
-                objectToSave['/officePatientsToVerify/' + oid + '/' + patientUid] = null;
-                objectToSave['/userContactedOffices/' + patientUid + '/' + oid + '/status'] = 'accessed';
+                objectToSave['/officePatients/' + officeId + '/' + patientUid] = this.officePatientsToVerify[patientUid];
+                objectToSave['/officePatientsToVerify/' + officeId + '/' + patientUid] = null;
+                objectToSave['/userContactedOffices/' + patientUid + '/' + officeId + '/status'] = 'accessed';
                 objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
                     'title': 'Verifikace potvrzena',
-                    'message': 'Doktor potvrdil, že jste opravdu jeho pacient. Nyní se můžete objednat na <a href="/d/' + oid + '">profilu doktora</a>.',
-                    'sender': oid
+                    'message': 'Doktor potvrdil, že jste opravdu jeho pacient. Nyní se můžete objednat.',
+                    'sender': officeId
                 };
 
-                rootRef.update(objectToSave).then(function () {
-                    return transactionRef.transaction(function (currentCount) {
+                db.ref('/').update(objectToSave).then(function () {
+                    db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
                         return (currentCount === null) ? null : currentCount + 1;
+                    });
+                    db.ref('/officeNumberOfNotifications/' + officeId).transaction(function (currentCount) {
+                        return (currentCount === null) ? null : currentCount - 1;
                     });
                 }).then(function () {
                     this.fire("show-toast", {text: "Přístup povolen"});
                 }.bind(this), function (error) {
 //                    TODO: generic error dialog
-                    console.log("Error occured in user settings view")
+                    console.log("Error occurred in user settings view")
                 });
             },
 

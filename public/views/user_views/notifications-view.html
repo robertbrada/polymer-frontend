@@ -110,10 +110,11 @@
             <template is="dom-repeat" items="[[notificationsArray]]" as="notification">
                 <div class="interface-div">
                     <h3>[[notification.title]]</h3>
+                    <a href="/d/[[notification.sender]]">Profil odesílatele</a>
                     <div class="container flex-horizontal-with-ratios">
                         <div class="flexchild">[[notification.message]]</div>
                         <div class="flex2child buttons">
-                            <paper-button class="dismiss-button">Přečteno</paper-button>
+                            <paper-button on-tap="dismissNotification" class="dismiss-button">Přečteno</paper-button>
                         </div>
                     </div>
                 </div>
@@ -133,11 +134,23 @@
                 }
             },
 
+            dismissNotification: function (event) {
+                var notificationId = event.model.notification.nid,
+                    transactionRef = this.$.notification_document.ref.root.child('/userInterfaceInfo/' + this.userId + '/numberOfNotifications');
+
+                this.set('notificationsData.' + notificationId, null);
+
+                transactionRef.transaction(function (currentCount) {
+                    return (currentCount === null) ? null : currentCount - 1;
+                });
+            },
+
             computeNotificationsArray: function (notificationsData) {
                 return Object.keys(notificationsData).map(function (key) {
                     return {
                         'title': notificationsData[key]['title'],
                         'message': notificationsData[key]['message'],
+                        'sender': notificationsData[key]['sender'],
                         'nid': key
                     }
                 });

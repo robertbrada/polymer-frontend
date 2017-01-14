@@ -128,19 +128,16 @@
 
             _onVerifyUser: function () {
                 var uid = this.user.uid, officeId = this.officeId,
-                    userInfoRef = this.$.auth.app.database().ref('/userInfo/' + uid),
-                    rootRef = this.$.auth.app.database().ref('/'),
-                    transactionRef = this.$.auth.app.database().ref('/officeNumberOfNotifications/' + officeId),
-                    objectToSave = {};
+                    db = this.$.auth.app.database(), objectToSave = {};
 
 
-                userInfoRef.once('value').then(function (snapshot) {
+                db.ref('/userInfo/' + uid).once('value').then(function (snapshot) {
 
                     objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'awaitsVerification';
                     objectToSave['/officePatientsToVerify/' + officeId + '/' + uid] = snapshot.val();
 
-                    return rootRef.update(objectToSave).then(function () {
-                        return transactionRef.transaction(function (currentCount) {
+                    db.ref('/').update(objectToSave).then(function () {
+                        return db.ref('/officeNumberOfNotifications/' + officeId).transaction(function (currentCount) {
                             return (currentCount === null) ? null : currentCount + 1;
                         });
                     })

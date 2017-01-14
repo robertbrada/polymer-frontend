@@ -34,7 +34,8 @@
         ".write": "$uid === auth.uid",
         "numberOfNotifications": {
           ".read": "root.child('userOffices/' + auth.uid).exists()",
-          ".write": "root.child('userOffices/' + auth.uid).exists()"
+          ".write": "root.child('userOffices/' + auth.uid).exists()",
+          ".validate": "newData.isNumber() && newData.val() >= 0"
         }
       }
     },
@@ -106,7 +107,7 @@
       "$oid": {
         ".read": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         ".write": "!data.exists() || root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".validate": "newData.isNumber()"
+        ".validate": "newData.isNumber() && newData.val() >= 0"
       }
     },
     // TODO: proper rules
