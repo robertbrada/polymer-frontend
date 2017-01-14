@@ -97,6 +97,8 @@
                         objectToSave['/officePatientsToVerify/' + officeIds[i] + '/' + uid] = userInfo;
                     } else if (status === 'visited') {
                         objectToSave['/officePatients/' + officeIds[i] + '/' + uid] = userInfo;
+                    } else if (status === 'blocked') {
+                        objectToSave['/officeBlockedPatients/' + officeIds[i] + '/' + uid] = userInfo;
                     }
                 }
 

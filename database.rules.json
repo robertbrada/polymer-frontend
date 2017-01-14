@@ -46,7 +46,7 @@
         "$oid": {
           ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
           "status": {
-            ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'accessed'"
+            ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'accessed' || newData.val() === 'blocked'"
           }
         }
       }
@@ -93,12 +93,21 @@
         }
       }
     },
+    "officeBlockedPatients": {
+      "$oid": {
+        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        "$uid": {
+          ".write": "data.exists() && $uid === auth.uid"
+        }
+      }
+    },
     "officePatientsToVerify": {
       "$oid": {
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$uid": {
-          ".write": "$uid === auth.uid && !root.child('officeRegisteredPatients/' + $oid + '/' + $uid).exists()"
+          ".write": "$uid === auth.uid && !root.child('officeRegisteredPatients/' + $oid + '/' + $uid).exists() && !root.child('officeBlockedPatients/' + $oid + '/' + $uid).exists()"
         }
       }
     },

@@ -102,7 +102,8 @@
 
             confirmUser: function (event) {
                 var patientUid = event.model.patient.uid, officeId = this.officeId,
-                    db = this.$.verify_document.app.database(), objectToSave = {};
+                    db = this.$.verify_document.app.database(), objectToSave = {},
+                    rootRef = db.ref('/');
 
                 objectToSave['/officePatients/' + officeId + '/' + patientUid] = this.officePatientsToVerify[patientUid];
                 objectToSave['/officePatientsToVerify/' + officeId + '/' + patientUid] = null;
@@ -129,8 +130,32 @@
             },
 
             dismissUser: function (event) {
-                var patientUid = event.model.patient.uid;
-                console.log(patientUid);
+                var patientUid = event.model.patient.uid, officeId = this.officeId,
+                    db = this.$.verify_document.app.database(), objectToSave = {},
+                    rootRef = db.ref('/');
+
+                objectToSave['/officeBlockedPatients/' + officeId + '/' + patientUid] = this.officePatientsToVerify[patientUid];
+                objectToSave['/officePatientsToVerify/' + officeId + '/' + patientUid] = null;
+                objectToSave['/userContactedOffices/' + patientUid + '/' + officeId + '/status'] = 'blocked';
+                objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
+                    'title': 'Verifikace zamítnuta',
+                    'message': 'Je nám líto, ale doktor Vám zablokoval přístup k objednání.',
+                    'sender': officeId
+                };
+
+                db.ref('/').update(objectToSave).then(function () {
+                    db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
+                        return (currentCount === null) ? null : currentCount + 1;
+                    });
+                    db.ref('/officeNumberOfNotifications/' + officeId).transaction(function (currentCount) {
+                        return (currentCount === null) ? null : currentCount - 1;
+                    });
+                }).then(function () {
+                    this.fire("show-toast", {text: "Pacient zablokován"});
+                }.bind(this), function (error) {
+//                    TODO: generic error dialog
+                    console.log("Error occurred in user settings view during dismiss event.")
+                });
             },
 
             computePatientsArray: function (officePatientsToVerify) {

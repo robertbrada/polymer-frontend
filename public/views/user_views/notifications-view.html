@@ -142,7 +142,9 @@
 
                 transactionRef.transaction(function (currentCount) {
                     return (currentCount === null) ? null : currentCount - 1;
-                });
+                }).then(function () {
+                    this.fire("show-toast", {text: "Notifikace vymazána"});
+                }.bind(this))
             },
 
             computeNotificationsArray: function (notificationsData) {

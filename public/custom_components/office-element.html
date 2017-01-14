@@ -132,7 +132,7 @@
                     margin-top: 30px;
                 }
 
-                #order-info{
+                #order-info {
                     background-color: var(--app-green-color);
                     display: block;
                     padding-bottom: 1em;
@@ -202,6 +202,10 @@
                         objednat.
                     </p>
                     <paper-button on-tap="_verifyUser" raised>Požádat o potvrzení</paper-button>
+                </div>
+                <div hidden="[[computeBlocked(patientStatus)]]">
+                    <h3>Přístup zablokován</h3>
+                    <p>Doktor Vám zablokoval přístup k objednávání. Zřejmě nejste jeho pacientem.</p>
                 </div>
                 <div hidden="[[computeVerificationRequestSendVisibility(patientStatus)]]">
                     <h3>Žádost odeslána</h3>
@@ -375,6 +379,10 @@
 
             getSpecialization: function (specialization) {
                 return (this.specializations[specialization]);
+            },
+
+            computeBlocked: function (patientStatus) {
+                return patientStatus !== 'blocked';
             },
 
             computeTextAvailability: function (text) {
