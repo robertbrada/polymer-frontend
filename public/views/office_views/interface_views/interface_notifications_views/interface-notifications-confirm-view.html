@@ -14,6 +14,20 @@
     <template>
         <style include="interface-styles button-styles">
 
+            #not-confirmed-patients {
+                text-align: right;
+                padding: 1em;
+            }
+
+            #not-confirmed-patients a{
+                color: var(--app-green-color);
+                text-decoration: none;
+            }
+
+            #not-confirmed-patients a:hover{
+                text-decoration: underline;
+            }
+
             .interface-div:hover {
                 position: relative;
                 box-shadow: 0 5px 60px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -81,6 +95,10 @@
         <firebase-document id="verify_document" app-name="doctor-appointment-system" path="/officePatientsToVerify/[[officeId]]"
                            data="{{officePatientsToVerify}}">
         </firebase-document>
+
+        <div id="not-confirmed-patients">
+            <a href="#">Seznam zamítnutých pacientů</a>
+        </div>
 
         <template is="dom-repeat" items="[[patientsArray]]" as="patient">
             <div class="container flex-horizontal-with-ratios interface-div">
