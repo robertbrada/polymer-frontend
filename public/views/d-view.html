@@ -74,7 +74,7 @@
                 'setVerificationRequired(officeData.manualConfirmation, user.uid)'
             ],
 
-            computePatientStatus: function(userContactedOffice) {
+            computePatientStatus: function (userContactedOffice) {
                 return (Object.keys(userContactedOffice).length === 1) ? userContactedOffice.status : null;
             },
 
@@ -130,26 +130,24 @@
                 var uid = this.user.uid, officeId = this.officeId,
                     userInfoRef = this.$.auth.app.database().ref('/userInfo/' + uid),
                     rootRef = this.$.auth.app.database().ref('/'),
+                    transactionRef = this.$.auth.app.database().ref('/officeNumberOfNotifications/' + officeId),
                     objectToSave = {};
 
-//                TODO: use Promises to handle all the errors in one place
-                userInfoRef.once('value').then(function (snapshot) {
-                    if (snapshot.val() === null) {
-                        this.fire("show-toast", {text: "Vyskytla se chyba"});
-                    } else {
-                        objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'awaitsVerification';
-                        objectToSave['/officePatientsToVerify/' + officeId + '/' + uid] = snapshot.val();
 
-                        rootRef.update(objectToSave, function (error) {
-                            if (error === null) {
-//                                TODO: increment office notifications
-                                this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
-                            } else {
-                                this.fire("show-toast", {text: "Vyskytla se chyba"});
-                            }
-                        }.bind(this))
-                    }
-                }.bind(this));
+                userInfoRef.once('value').then(function (snapshot) {
+
+                    objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'awaitsVerification';
+                    objectToSave['/officePatientsToVerify/' + officeId + '/' + uid] = snapshot.val();
+
+                    return rootRef.update(objectToSave).then(function () {
+                        return transactionRef.transaction(function (currentCount) {
+                            return (currentCount === null) ? null : currentCount + 1;
+                        });
+                    })
+                }.bind(this), function (error) {
+                    // TODO: handle error
+                    console.error(error);
+                });
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
