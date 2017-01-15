@@ -29,6 +29,10 @@
     <template>
         <style include="layout-styles input-styles button-styles">
 
+            :host {
+                --order-info-background-color: var(--app-green-color);
+            }
+
             a {
                 text-decoration: none;
                 color: inherit;
@@ -86,7 +90,7 @@
             #order-info {
                 display: inline-block;
                 padding: 1em;
-                background-color: var(--app-green-color);
+                background-color: var(--order-info-background-color);
             }
 
             .patient-container {
@@ -133,7 +137,6 @@
                 }
 
                 #order-info {
-                    background-color: var(--app-green-color);
                     display: block;
                     padding-bottom: 1em;
                     padding-left: 15px;
@@ -179,9 +182,9 @@
                     [[officeData.email]]
                 </div>
 
-                <div id="order-info" hidden="[[!officeData.acceptingNewPatients]]">
+                <div id="order-info">
                     <iron-icon icon="social:group"></iron-icon>
-                    Lékař přijímá nové pacienty
+                    Lékař [[computeOrderInfo(officeData.acceptingNewPatients)]] nové pacienty
                 </div>
             </section>
         </div>
@@ -407,6 +410,16 @@
 
             computeVerificationRequestSendVisibility: function (patientStatus) {
                 return patientStatus !== 'awaitsVerification'
+            },
+
+            computeOrderInfo: function (acceptingNewPatients){
+                if(acceptingNewPatients){
+                    this.customStyle['--order-info-background-color'] = 'var(--app-green-color)';
+                } else {
+                    this.customStyle['--order-info-background-color'] = '#E91E63';
+                } this.updateStyles();
+
+                return (acceptingNewPatients) ? "přijímá" : "nepřijímá";
             }
         });
     </script>
