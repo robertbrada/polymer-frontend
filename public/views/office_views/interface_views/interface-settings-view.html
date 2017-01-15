@@ -57,10 +57,18 @@
 
             updateOfficeData: function (event) {
                 var localOfficeData = event.detail.localOfficeData,
-                    rootRef = this.$.office_document.app.database().ref('/'),
-                    objectToSave = {}, officeId = this.officeId;
+                    db = this.$.office_document.app.database(),
+                    objectToSave = {}, officeId = this.officeId,
+                    officeUserIds = null, i, officeName = '';
 
-                if (!!officeId) {
+                db.ref('/officeAdminInfo/' + officeId + '/users').once('value').then(function (snapshot) {
+                    officeUserIds = Object.keys(snapshot.val());
+                    officeName = localOfficeData.address.city + ', ' + localOfficeData.address.street;
+
+                    for (i = 0; i < officeUserIds.length; i++) {
+                        objectToSave['/userOffices/' + officeUserIds[i] + '/' + officeId + '/name'] = officeName;
+                    }
+
                     objectToSave['/officeFullInfo/' + officeId] = localOfficeData;
                     objectToSave['/officeSearchInfo/' + officeId] = {
                         'name': localOfficeData.name,
@@ -71,17 +79,14 @@
                         'photoAvailability': localOfficeData.photoAvailability
                     };
 
-                    rootRef.update(objectToSave, function (error) {
-                        if (error) {
-                            console.log("Error updating data:", error);
-                        } else {
-                            this.fire("show-toast", {text: "Změny uloženy"});
-                        }
-                    }.bind(this));
-                } else {
+                    db.ref('/').update(objectToSave);
+
+                }).then(function () {
+                    this.fire("show-toast", {text: "Změny uloženy"});
+                }.bind(this), function (error) {
                     // TODO: handle error
-                    console.log("ID not yet loaded");
-                }
+                    console.error(error);
+                });
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
