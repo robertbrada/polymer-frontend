@@ -354,7 +354,8 @@
 
                 disabledCalendar: {
                     type: Boolean,
-                    computed: 'computeIfDisabled(loggedIn, verificationRequired, patientStatus)'
+                    computed: 'computeIfDisabled(loggedIn, verificationRequired, patientStatus)',
+                    observer: 'changeCalendarOpacity'
                 },
 
                 appointmentId: {
@@ -493,6 +494,15 @@
 
             computeVerificationRequestSendVisibility: function (patientStatus) {
                 return patientStatus !== 'awaitsVerification'
+            },
+
+            changeCalendarOpacity: function () {
+                if(this.disabledCalendar){
+                    this.customStyle['--calendar-opacity'] = '0.3';
+                } else {
+                    this.customStyle['--calendar-opacity'] = '1';
+                }
+                this.updateStyles();
             }
         });
     </script>
