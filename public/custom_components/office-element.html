@@ -9,7 +9,6 @@
 <link rel="import" href="/bower_components/neon-animation/animations/slide-from-bottom-animation.html">
 <link rel="import" href="/bower_components/neon-animation/animations/slide-down-animation.html">
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/custom_components/calendar-element.html">
@@ -145,7 +144,7 @@
                 margin-bottom: -60px;
             }
 
-            #exit-form p {
+            #exit-form span {
                 color: var(--app-green-color);
                 cursor: pointer;
             }
@@ -306,11 +305,8 @@
                     <paper-textarea id="patient_message" label="Dobrovolná zpráva pro lékaře" char-counter
                                     maxlength="200"></paper-textarea>
                     <paper-button on-tap="_confirmAppointment" raised>Potvrdit objednání</paper-button>
-                    <div id="exit-form" class="centered">
-                        <p on-tap="_showCalendar">
-                            <paper-icon-button icon="expand-less"></paper-icon-button>
-                            Zpět na kalendář
-                        </p>
+                    <div id="exit-form" class="centered" on-tap="_showCalendar">
+                        <span><iron-icon icon="today"></iron-icon>Zpět na kalendář</span>
                     </div>
                 </div>
             </div>
@@ -497,7 +493,7 @@
             },
 
             changeCalendarOpacity: function () {
-                if(this.disabledCalendar){
+                if (this.disabledCalendar) {
                     this.customStyle['--calendar-opacity'] = '0.3';
                 } else {
                     this.customStyle['--calendar-opacity'] = '1';
