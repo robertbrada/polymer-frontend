@@ -5,14 +5,46 @@
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
 
 <link rel="import" href="/custom_components/login-required-element.html">
 <link rel="import" href="/behaviors/routing-behavior.html">
 <link rel="import" href="/styles/tab-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
 
 <dom-module id="user-view">
     <template>
-        <style include="tab-styles"></style>
+        <style include="tab-styles layout-styles">
+
+            #pages {
+                background-color: #fff;
+                max-width: 950px;
+                margin: 0 auto 3em;
+                padding: 3.5em 4% 3.5em 4%;
+            }
+
+            paper-tabs {
+                margin: 0 auto 0 auto;
+                max-width: 800px;
+            }
+
+            #page {
+                background-color: #eeeff2;
+                min-height: calc(100vh - 64px - 3em); /*app header and top padding */
+                margin-top: 0;
+                padding-top: 3em;
+                height: 100%;
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                #page {
+                    min-height: calc(100vh - 64px); /*app header */
+                    padding-top: 0;
+                }
+            }
+
+        </style>
 
         <app-route
                 route="{{route}}"
@@ -22,18 +54,20 @@
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
 
-        <div hidden="[[!loggedIn]]">
+        <div id="page" hidden="[[!loggedIn]]">
             <paper-tabs focused selected="{{page}}" attr-for-selected="name" hidden="[[smallScreen]]">
                 <paper-tab name="notifications">Notifikace</paper-tab>
                 <paper-tab name="appointments">Návštěvy</paper-tab>
                 <paper-tab name="settings">Nastavení</paper-tab>
             </paper-tabs>
 
-            <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-                <notifications-view name="notifications" user-id="[[user.uid]]"></notifications-view>
-                <appointments-view name="appointments"></appointments-view>
-                <settings-view name="settings" user="[[user]]"></settings-view>
-            </iron-pages>
+            <paper-material id="pages" class="main-frame">
+                <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+                    <notifications-view name="notifications" user-id="[[user.uid]]"></notifications-view>
+                    <appointments-view name="appointments"></appointments-view>
+                    <settings-view name="settings" user="[[user]]"></settings-view>
+                </iron-pages>
+            </paper-material>
         </div>
     </template>
 
