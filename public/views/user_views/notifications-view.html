@@ -5,50 +5,53 @@
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/interface-styles.html">
-<link rel="import" href="/styles/layout-styles.html">
 
 <dom-module id="notifications-view">
     <template>
-        <style include="interface-styles layout-styles">
-            :host {
-                display: block;
-                padding-top: 50px;
-            }
+        <style include="interface-styles">
 
-            .main-frame {
-                margin-bottom: 5em;
-                max-width: 1300px;
-            }
-
-            .interface-div {
-                padding: 2em;
-                border-top: 1px solid var(--border-color);
-
-            }
-
-            .interface-div:hover {
-                position: relative;
-                box-shadow: 0 5px 60px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            .dismiss-button {
-                transition: all 0.1s cubic-bezier(.25, .8, .25, 1);
-            }
-
-            .interface-div:hover .dismiss-button {
-                background-color: var(--app-green-color) !important;
-                color: #fff !important;
-                border-color: var(--app-green-color) !important;
+            a {
+                color: var(--app-green-color);
+                text-decoration: none;
                 font-weight: bolder;
             }
 
-            .interface-div:not(:first-child) {
-                border-top: 1px solid var(--border-color);
+            a:hover {
+                text-decoration: underline;
             }
 
             h3 {
                 margin-top: 0;
+                color: black;
+                margin-bottom: 0.3em;
             }
+
+            .interface-div {
+                text-align: justify;
+                border: 1px solid var(--border-color);
+                margin: 1em 0 0 0;
+                background-color: #fafafb;
+            }
+
+            .interface-div:first-child{
+                margin-top: 0;
+            }
+
+
+            .dismiss-button {
+                background-color: #fff !important;
+            }
+
+            .dismiss-button:hover {
+                background-color: var(--app-green-color) !important;
+                color: #fff !important;
+                border: none !important;
+            }
+
+            .notification-message {
+                margin-top: 2em;
+            }
+
 
             /* FLEX LAYOUT */
             .flex-horizontal-with-ratios {
@@ -67,26 +70,18 @@
             }
 
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1150px) {
+            @media only screen and (max-width: 767px) {
 
                 .flex-horizontal-with-ratios {
                     @apply(--layout-vertical);
                 }
 
                 .flex-horizontal-with-ratios > div {
-                    margin: 0.2em 0;
+                    margin: 1.2em 0 0 0;
                 }
 
                 .flex2child {
                     padding-top: 0.6em;
-                    text-align: left;
-                }
-            }
-
-            @media only screen and (max-width: 767px) {
-
-                .main-frame {
-                    padding: 0;
                 }
             }
 
@@ -108,20 +103,21 @@
 
         </style>
 
-        <firebase-document id="notification_document" app-name="doctor-appointment-system" path="/userNotifications/[[userId]]"
+        <firebase-document id="notification_document" app-name="doctor-appointment-system"
+                           path="/userNotifications/[[userId]]"
                            data="{{notificationsData}}">
         </firebase-document>
 
         <!--TODO: disable URL escaping-->
-        <div class="main-frame">
+        <div>
             <template is="dom-repeat" items="[[notificationsArray]]" as="notification">
                 <div class="interface-div">
                     <h3>[[notification.title]]</h3>
                     <a href="/d/[[notification.sender]]">Profil odesílatele</a>
                     <div class="container flex-horizontal-with-ratios">
-                        <div class="flexchild">[[notification.message]]</div>
+                        <div class="flexchild notification-message">[[notification.message]]</div>
                         <div class="flex2child buttons">
-                            <paper-button on-tap="dismissNotification" class="dismiss-button">Přečteno</paper-button>
+                            <paper-button on-tap="dismissNotification" class="dismiss-button" raised>Přečteno</paper-button>
                         </div>
                     </div>
                 </div>

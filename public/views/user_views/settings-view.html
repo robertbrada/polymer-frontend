@@ -5,7 +5,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/styles/input-styles.html">
-<link rel="import" href="/styles/layout-styles.html">
+<!--<link rel="import" href="/styles/layout-styles.html">-->
 <link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
@@ -13,6 +13,9 @@
 <dom-module id="settings-view">
     <template>
         <style include="button-styles layout-styles input-styles">
+            .subsection {
+                margin-top: 0;
+            }
         </style>
 
         <firebase-document id="user_document" app-name="doctor-appointment-system"
@@ -24,7 +27,7 @@
         </firebase-document>
 
 
-        <div class="main-frame subsection grid">
+        <div class="subsection grid">
             <section>
                 <form id="main_form" is="iron-form">
                     <h2>Základní informace</h2>
