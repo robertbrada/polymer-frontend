@@ -21,15 +21,9 @@
                 margin-bottom: 40px;
             }
 
-            #reg_button {
-                width: 100%;
-                margin-top: 60px;
-            }
-
-            @media only screen and (min-width: 767px) {
-                #reg_button {
-                    margin-top: 0;
-                }
+            a {
+                color: inherit;
+                text-decoration: inherit;
             }
 
         </style>
@@ -56,9 +50,9 @@
             Přihlásit
         </paper-button>
 
-        <button id="reg_button" on-tap="showRegistration">
+        <a href="/registration" dialog-dismiss>
             <span>Ještě nemáte účet? <b>Zaregistrujte se!</b></span>
-        </button>
+        </a>
 
     </template>
 
@@ -92,10 +86,6 @@
                     }
                     this.fire("show-dialog", {path: "", viewName: "login", open: true});
                 }.bind(this));
-            },
-
-            showRegistration: function () {
-                this.fire("show-dialog", {path: "", viewName: "registration", open: false});
             },
 
             passReset: function () {

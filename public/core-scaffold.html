@@ -123,10 +123,9 @@
                 margin: 0 auto;
             }
 
-
             /*** notification-badge ***/
 
-            #notification-link{
+            #notification-link {
                 position: relative;
             }
 
@@ -178,7 +177,8 @@
                 </div>
                 <div class="text-bar-item" hidden="[[smallScreen]]">
                     <a hidden="[[userInterfaceInfo.showOfficeInterface]]" href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
-                    <a hidden="[[!userInterfaceInfo.showOfficeInterface]]" href="office/interface/waiting-list/" aria-label="Informace pro lékaře">Mé ordinace</a>
+                    <a hidden="[[!userInterfaceInfo.showOfficeInterface]]" href="office/interface/waiting-list/" aria-label="Informace pro lékaře">Mé
+                        ordinace</a>
                 </div>
                 <div class="logo" main-title><a href="home/" aria-label="Domovská stránka">Docta.cz</a></div>
                 <div class="icon-bar-item">
@@ -221,6 +221,7 @@
             <e404-view name="e404"></e404-view>
             <emailaction-view name="emailaction" route="{{subRoute}}"></emailaction-view>
             <docinfo-view name="docinfo"></docinfo-view>
+            <registration-view name="registration"></registration-view>
         </iron-pages>
 
         <custom-dialog id="main_dialog" with-backdrop entry-animation="scale-up-animation"

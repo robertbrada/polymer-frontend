@@ -1,0 +1,130 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/button-styles.html">
+
+<link rel="import" href="/behaviors/form-validation-behavior.html">
+<link rel="import" href="/behaviors/pass-visibility-behavior.html">
+
+<dom-module id="registration-view">
+    <template>
+        <style include="button-styles layout-styles input-styles">
+            .subsection {
+                margin-top: 0;
+            }
+        </style>
+
+        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
+
+        <div class="main-frame">
+            <div class="subsection grid">
+                <section>
+                    <p class="error">{{errorMessage}}</p>
+                    <form id="form1" is="iron-form">
+                        <h2>Základní informace</h2>
+                        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="30" auto-validate
+                                     error-message="Nelze ponechat prázdné" required></paper-input>
+                        <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
+                                     maxlength="30" error-message="Nelze ponechat prázdné"
+                                     required></paper-input>
+                        <gold-email-input id="einput" error-message="Špatný formát"
+                                          label="Vaše emailová adresa" auto-validate required></gold-email-input>
+                        <h2>Datum narození</h2>
+                        <paper-input id="dinput" label="Datum narození" minlength="1" maxlength="30"
+                                     type="date" required auto-validate>
+                        </paper-input>
+                    </form>
+                </section>
+
+                <section>
+                    <form id="form2" is="iron-form">
+                        <h2>Adresa</h2>
+                        <paper-input id="cinput" label="Město" minlength="1" maxlength="30" auto-validate required>
+                        </paper-input>
+                        <paper-input id="sinput" label="Ulice a číslo popisné" minlength="3" maxlength="80" auto-validate required>
+                        </paper-input>
+                        <h2>Heslo</h2>
+                        <paper-input id="passinput" label="Heslo" required auto-validate
+                                     type="password" minlength="6" maxlength="48" error-message="Moc krátké">
+                            <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
+                        </paper-input>
+                        <paper-button responsive on-tap="confirm" raised>
+                            Registrovat
+                        </paper-button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'registration-view',
+
+            behaviors: [FormValidationBehavior, PassVisibilityBehavior],
+
+            confirm: function () {
+                var form1Validity = this._validateForm(this.$.form1),
+                    form2Validity = this._validateForm(this.$.form2);
+
+                if (form1Validity && form2Validity) {
+                    this.createUserWithEmailAndPassword();
+                    this.fire('dialog-confirm');
+                }
+            },
+
+            createUserWithEmailAndPassword: function () {
+                this.$.auth.createUserWithEmailAndPassword(this.$.einput.value, this.$.passinput.value).then(function (user) {
+                    user.sendEmailVerification();
+
+                    this.fire('change-route', {url: '/home'});
+                    this.fire("show-toast", {text: "Přihlášeno"});
+                    this.fire("show-dialog", {path: "", viewName: "emaildialog", open: true});
+
+                    this.saveUserData(user);
+
+                }.bind(this)).catch(function (error) {
+                    switch (error["code"]) {
+                        case "auth/email-already-in-use":
+                            this.errorMessage = "Účet s touto emailovou adresou již existuje";
+                            break;
+                        default:
+                            this.errorMessage = error["code"];
+                    }
+                    this.fire("show-dialog", {path: "", viewName: "registration", open: true});
+                }.bind(this));
+            },
+
+            saveUserData: function (user) {
+                var objectToSave = {},
+                    rootRef = this.$.auth.app.database().ref('/');
+
+                objectToSave['/userInfo/' + user.uid] = {
+                    name: {
+                        'firstName': this.$.fninput.value,
+                        'lastName': this.$.lninput.value
+                    },
+                    address: {
+                        'city': this.$.cinput.value,
+                        'street': this.$.sinput.value
+                    },
+                    dateOfBirth: this.$.dinput.value
+                };
+
+                objectToSave['/userInterfaceInfo/' + user.uid] = {
+                    'showOfficeInterface': false,
+                    'numberOfNotifications': 0
+                };
+
+                rootRef.update(objectToSave);
+            }
+        });
+    </script>
+</dom-module>

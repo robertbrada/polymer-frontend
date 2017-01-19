@@ -5,7 +5,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="/styles/input-styles.html">
-<!--<link rel="import" href="/styles/layout-styles.html">-->
+<link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
@@ -32,19 +32,19 @@
                 <form id="main_form" is="iron-form">
                     <h2>Základní informace</h2>
                     <paper-input id="fninput" label="Jméno" minlength="1" maxlength="30"
-                                 error-message="Nelze ponechat prázdné" required
+                                 error-message="Nelze ponechat prázdné" required auto-validate
                                  value="[[userInfo.name.firstName]]"></paper-input>
-                    <paper-input id="lninput" label="Příjmení" minlength="1"
+                    <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
                                  maxlength="30" error-message="Nelze ponechat prázdné"
                                  required value="[[userInfo.name.lastName]]"></paper-input>
                     <h2>Adresa</h2>
                     <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
                         V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
                     <paper-input id="cinput" label="Město" minlength="1" maxlength="30"
-                                 value="[[userInfo.address.city]]">
+                                 value="[[userInfo.address.city]]" required auto-validate>
                     </paper-input>
                     <paper-input id="sinput" label="Ulice a číslo popisné" minlength="3" maxlength="80"
-                                 value="[[userInfo.address.street]]"></paper-input>
+                                 value="[[userInfo.address.street]]" required auto-validate></paper-input>
                     <paper-button id="confirm_button" on-tap="confirm" raised>Uložit změny</paper-button>
                 </form>
             </section>
