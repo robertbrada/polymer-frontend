@@ -19,6 +19,17 @@
           "street": {
             ".validate": "newData.isString() && newData.val().length <= 80"
           }
+        },
+        "dateOfBirth": {
+          "date": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 31"
+          },
+          "month": {
+            ".validate": "newData.isNumber() && newData.val() >= 1  && newData.val() <= 12"
+          },
+          "year": {
+            ".validate": "newData.isNumber() && newData.val() >= 1900  && newData.val() <= 2020"
+          }
         }
       }
     },

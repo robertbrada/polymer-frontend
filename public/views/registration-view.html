@@ -9,21 +9,23 @@
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/button-styles.html">
+<link rel="import" href="/styles/header-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 <dom-module id="registration-view">
     <template>
-        <style include="button-styles layout-styles input-styles">
-            .subsection {
-                margin-top: 0;
-            }
+        <style include="button-styles layout-styles input-styles header-styles">
         </style>
 
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
         <div class="main-frame">
+            <header class="subsection">
+                <h1>Registrace</h1>
+                <span>Ůdaje níže vyžadujeme, jelikož Vás doktor při objednání potřebuje identifikovat.</span>
+            </header>
             <div class="subsection grid">
                 <section>
                     <p class="error">{{errorMessage}}</p>
@@ -34,12 +36,12 @@
                         <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
                                      maxlength="30" error-message="Nelze ponechat prázdné"
                                      required></paper-input>
-                        <gold-email-input id="einput" error-message="Špatný formát"
-                                          label="Vaše emailová adresa" auto-validate required></gold-email-input>
-                        <h2>Datum narození</h2>
-                        <paper-input id="dinput" label="Datum narození" minlength="1" maxlength="30"
-                                     type="date" required auto-validate>
+                        <paper-input id="dinput" label="Datum narození" auto-validate required placeholder="24.5.1995"
+                                     pattern="[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}" prevent-invalid-input allowed-pattern="[0-9.]">
                         </paper-input>
+                        <h2>Kontaktní údaje</h2>
+                        <gold-email-input id="einput" error-message="Špatný formát" label="Vaše emailová adresa" auto-validate required>
+                        </gold-email-input>
                     </form>
                 </section>
 
@@ -50,8 +52,8 @@
                         </paper-input>
                         <paper-input id="sinput" label="Ulice a číslo popisné" minlength="3" maxlength="80" auto-validate required>
                         </paper-input>
-                        <h2>Heslo</h2>
-                        <paper-input id="passinput" label="Heslo" required auto-validate
+                        <h2>Zabezpečení účtu</h2>
+                        <paper-input id="pass" label="Heslo" required auto-validate
                                      type="password" minlength="6" maxlength="48" error-message="Moc krátké">
                             <paper-icon-button icon="[[eyeIcon]]" on-tap="passVisibilityChange" suffix></paper-icon-button>
                         </paper-input>
@@ -81,7 +83,7 @@
             },
 
             createUserWithEmailAndPassword: function () {
-                this.$.auth.createUserWithEmailAndPassword(this.$.einput.value, this.$.passinput.value).then(function (user) {
+                this.$.auth.createUserWithEmailAndPassword(this.$.einput.value, this.$.pass.value).then(function (user) {
                     user.sendEmailVerification();
 
                     this.fire('change-route', {url: '/home'});
@@ -104,6 +106,7 @@
 
             saveUserData: function (user) {
                 var objectToSave = {},
+                    dateArray = this.$.dinput.value.split('.'),
                     rootRef = this.$.auth.app.database().ref('/');
 
                 objectToSave['/userInfo/' + user.uid] = {
@@ -115,7 +118,11 @@
                         'city': this.$.cinput.value,
                         'street': this.$.sinput.value
                     },
-                    dateOfBirth: this.$.dinput.value
+                    dateOfBirth: {
+                        date: Number(dateArray[0]),
+                        month: Number(dateArray[1]),
+                        year: Number(dateArray[2])
+                    }
                 };
 
                 objectToSave['/userInterfaceInfo/' + user.uid] = {

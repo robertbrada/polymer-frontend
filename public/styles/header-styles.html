@@ -1,37 +1,33 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!--Used in /office/registration/data /office/registration/confirm /registration-->
 
 <dom-module id="header-styles">
-  <template>
-    <style>
+    <template>
+        <style>
+            header {
+                text-align: center;
+            }
 
-      [hidden] {
-        display: none !important;
-      }
+            header > h1 {
+                margin: 1.5em 0 0.2em 0;
+                font-size: 1.3em;
+                font-weight: 500;
+            }
 
-      header {
-        text-align: center;
-      }
+            header > span {
+                color: var(--app-secondary-color);
+                font-size: 0.95em;
+            }
 
-      header > h1 {
-        margin: 1.5em 0 0.2em 0;
-        font-size: 1.3em;
-        font-weight: 500;
-      }
+            @media (max-width: 767px) {
 
-      header > span {
-        color: var(--app-secondary-color);
-        font-size: 0.95em;
-      }
+                header > h1 {
+                    font-size: 1.1em;
+                }
 
-      @media (max-width: 767px) {
+            }
 
-        header > h1 {
-          font-size: 1.1em;
-        }
-
-      }
-
-    </style>
-  </template>
+        </style>
+    </template>
 </dom-module>

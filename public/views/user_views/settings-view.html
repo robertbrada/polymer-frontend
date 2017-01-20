@@ -13,9 +13,6 @@
 <dom-module id="settings-view">
     <template>
         <style include="button-styles layout-styles input-styles">
-            .subsection {
-                margin-top: 0;
-            }
         </style>
 
         <firebase-document id="user_document" app-name="doctor-appointment-system"
@@ -29,7 +26,7 @@
 
         <div class="subsection grid">
             <section>
-                <form id="main_form" is="iron-form">
+                <form id="form1" is="iron-form">
                     <h2>Základní informace</h2>
                     <paper-input id="fninput" label="Jméno" minlength="1" maxlength="30"
                                  error-message="Nelze ponechat prázdné" required auto-validate
@@ -37,9 +34,15 @@
                     <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
                                  maxlength="30" error-message="Nelze ponechat prázdné"
                                  required value="[[userInfo.name.lastName]]"></paper-input>
+                    <paper-input id="dinput" label="Datum narození" value="[[computeDateOfBirth(userInfo.dateOfBirth)]]" auto-validate required
+                                 placeholder="24.5.1995" pattern="[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}" prevent-invalid-input allowed-pattern="[0-9.]">
+                    </paper-input>
+                </form>
+            </section>
+
+            <section>
+                <form id="form2" is="iron-form">
                     <h2>Adresa</h2>
-                    <p>Adresa je povinná pouze pokud se budete chtít objednat u lékaře, který má omezenou klientelu.
-                        V tomto případě lékař potřebuje zjistit, zda jste opravdu jeho pacientem.</p>
                     <paper-input id="cinput" label="Město" minlength="1" maxlength="30"
                                  value="[[userInfo.address.city]]" required auto-validate>
                     </paper-input>
@@ -48,13 +51,12 @@
                     <paper-button id="confirm_button" on-tap="confirm" raised>Uložit změny</paper-button>
                 </form>
             </section>
-
-            <section>
-                <h2>Změna hesla</h2>
-                <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
-                    změnit.</p>
-                <paper-button on-tap="passChange" raised>Poslat email</paper-button>
-            </section>
+        </div>
+        <div>
+            <h2>Změna hesla</h2>
+            <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
+                změnit.</p>
+            <paper-button on-tap="passChange" raised>Poslat email</paper-button>
         </div>
     </template>
 
@@ -65,7 +67,10 @@
             behaviors: [FormValidationBehavior],
 
             confirm: function () {
-                if (this._validateForm(this.$.main_form)) {
+                var form1Validity = this._validateForm(this.$.form1),
+                    form2Validity = this._validateForm(this.$.form2);
+
+                if (form1Validity && form2Validity) {
                     this.saveChanges();
                 }
             },
@@ -78,9 +83,14 @@
                 })
             },
 
+            computeDateOfBirth: function (dateOfBirth) {
+                return (!!dateOfBirth) ? "" + dateOfBirth.date + "." + dateOfBirth.month + "." + dateOfBirth.year : null;
+            },
+
             saveChanges: function () {
                 var rootRef = this.$.user_document.ref.root, objectToSave = {}, i, status,
                     uid = this.user.uid, officeIds = Object.keys(this.userContactedOffices),
+                    dateArray = this.$.dinput.value.split('.'),
                     userInfo = {
                         'name': {
                             'firstName': this.$.fninput.value,
@@ -89,6 +99,11 @@
                         'address': {
                             'city': this.$.cinput.value,
                             'street': this.$.sinput.value
+                        },
+                        'dateOfBirth': {
+                            'date': Number(dateArray[0]),
+                            'month': Number(dateArray[1]),
+                            'year': Number(dateArray[2])
                         }
                     };
 
@@ -108,7 +123,7 @@
                 rootRef.update(objectToSave).then(function () {
                     this.fire("show-toast", {text: "Změny uloženy"});
                 }.bind(this), function (error) {
-//                    TODO: generic error dialog
+//                    TODO: generic error dialog, handle validation error
                     console.log("Error occured in user settings view")
                 });
             }
