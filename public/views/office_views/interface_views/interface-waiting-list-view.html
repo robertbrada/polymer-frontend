@@ -1,9 +1,9 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/paper-material/paper-material.html">
 <link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
@@ -23,7 +23,12 @@
 
             .my-list-item {
                 border: 1px solid var(--border-color);
-                margin: 1em 0 0 0;
+                margin: 1.2em 0 0 0;
+            }
+
+            .my-list-item iron-icon{
+                height: 19px;
+                width: 19px;
             }
 
             .collapse-content {
@@ -39,36 +44,34 @@
                 font-weight: bold;
             }
 
-
             /* FIRST PATIENT CSS DIFFERENCES */
 
-            .my-list-item:nth-child(2) {
+            .my-list-item:nth-child(3) {
                 margin-top: 0;
-                box-shadow: 0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.12);
+                box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.12);
             }
 
-            .my-list-item:nth-child(2) paper-button {
-                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            .my-list-item:nth-child(3) paper-button {
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
 
-            .my-list-item:nth-child(2) .confirm-button {
+            .my-list-item:nth-child(3) .confirm-button {
                 background-color: var(--app-green-color);
                 border-color: var(--app-green-color);
                 color: #fff;
             }
 
-            .my-list-item:nth-child(2) .dismiss-button {
+            .my-list-item:nth-child(3) .dismiss-button {
                 background-color: var(--app-red-color);
                 border-color: var(--app-red-color);
                 color: #fff;
             }
 
-            .my-list-item:nth-child(2) .details-button {
+            .my-list-item:nth-child(3) .details-button {
                 background-color: var(--app-accent-color);
                 border-color: var(--app-accent-color);
                 color: #fff;
             }
-
 
             /* FLEX LAYOUT */
             .flex-horizontal-with-ratios {
@@ -109,24 +112,21 @@
                     padding-bottom: 0.5em;
                 }
 
-                .details-button{
+                .details-button {
                     float: left;
                 }
 
             }
 
+            @media only screen and (max-width: 435px) {
 
-            @media only screen and (max-width: 382px) {
-
-                .details-button{
+                .details-button {
                     float: none;
                 }
 
                 .buttons > paper-button {
-                    display: block;
-                    margin: 0.9em 0;
-                    text-align: center;
-                    padding: 1.2em;
+                    margin: 0 0.9%;
+                    width: 30.8%;
                 }
 
                 .my-list-item {
@@ -137,6 +137,7 @@
 
         </style>
 
+        <iron-media-query query="max-width: 435px" query-matches="{{smallScreen}}"></iron-media-query>
         <div id="current_patient">Pacient na řadě</div>
 
         <template is="dom-repeat" items="[[patients]]" as="patient">
@@ -148,10 +149,15 @@
                 <div class="flex3child buttons">
 
                     <paper-button hidden="[[!patient.text]]" on-tap="handleDetail" class="details-button">
-                        [[computeText(patient.opened)]] detail
+                        <iron-icon icon="icons:info-outline"></iron-icon>
+                        <span hidden="[[smallScreen]]">&nbsp [[computeText(patient.opened)]] zprávu</span>
                     </paper-button>
-                    <paper-button class="confirm-button">Vyřízen</paper-button>
-                    <paper-button class="dismiss-button">Nedorazil</paper-button>
+                    <paper-button class="confirm-button">
+                        <iron-icon icon="icons:check"></iron-icon>
+                        <span hidden="[[smallScreen]]">&nbsp Vyřízen</span></paper-button>
+                    <paper-button class="dismiss-button">
+                        <iron-icon icon="icons:close"></iron-icon>
+                        <span hidden="[[smallScreen]]">&nbsp Nedorazil</span></paper-button>
                 </div>
             </div>
 

@@ -4,7 +4,6 @@
 <link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
@@ -74,11 +73,19 @@
                 padding-top: 8px;
             }
 
-            #help-tab {
+            .bottom-link {
                 position: fixed;
-                bottom: 120px; /* top padding of drawer */
                 width: 224px; /*calc(256px - 2*16px) -> 16px is padding of paper-item */
                 border-top: 1px solid var(--border-color);
+            }
+
+            #help-tab {
+                bottom: calc(120px + 49px); /* top padding of drawer + height of issue-tab */
+
+            }
+
+            #issue-tab {
+                bottom: 120px; /* top padding of drawer */
             }
 
             @media only screen and (max-width: 767px) {
@@ -140,7 +147,8 @@
                     <paper-item name="waiting-list" class="nav">Pořadník</paper-item>
                     <paper-item name="patients" class="nav">Pacienti</paper-item>
                     <paper-item name="settings" class="nav">Nastavení</paper-item>
-                    <paper-item name="help" id="help-tab" class="nav">Nahlásit problém
+                    <paper-item name="help" id="help-tab" class="nav bottom-link">Nápověda</paper-item>
+                    <paper-item name="issue" id="issue-tab" class="nav bottom-link">Nahlásit problém
                     </paper-item>
                 </iron-selector>
             </app-drawer>
@@ -160,12 +168,14 @@
                 </paper-dropdown-menu>
 
                 <iron-pages attr-for-selected="name" selected="[[page]]">
-                    <interface-notifications-view name="notifications" office-id="[[officeId]]"></interface-notifications-view>
+                    <interface-notifications-view name="notifications"
+                                                  office-id="[[officeId]]"></interface-notifications-view>
                     <interface-calendar-view name="calendar"></interface-calendar-view>
                     <interface-waiting-list-view name="waiting-list"></interface-waiting-list-view>
                     <interface-patients-view name="patients"></interface-patients-view>
                     <interface-settings-view name="settings" office-id="[[officeId]]"></interface-settings-view>
                     <interface-help-view name="help"></interface-help-view>
+                    <interface-issue-view name="issue"></interface-issue-view>
                 </iron-pages>
             </div>
         </app-drawer-layout>
