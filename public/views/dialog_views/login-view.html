@@ -21,9 +21,26 @@
                 margin-bottom: 40px;
             }
 
+            #go-to-registration {
+                display: block;
+                text-align: center;
+                margin-top: 0.9em;
+            }
+
+            #go-to-registration b {
+                color: var(--app-green-color);
+            }
+
             a {
                 color: inherit;
                 text-decoration: inherit;
+            }
+
+            @media (max-width: 767px) {
+
+                #go-to-registration {
+                    margin-top: 7em;
+                }
             }
 
         </style>
@@ -50,8 +67,8 @@
             Přihlásit
         </paper-button>
 
-        <a href="/registration" dialog-dismiss>
-            <span>Ještě nemáte účet? <b>Zaregistrujte se!</b></span>
+        <a id="go-to-registration" href="/registration" dialog-dismiss>
+            <span>Ještě nemáte účet? <b>ZAREGISTRUJTE SE!</b></span>
         </a>
 
     </template>
