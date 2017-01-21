@@ -26,32 +26,20 @@
                 margin-bottom: 0.3em;
             }
 
-            .interface-div {
+            .my-list-item {
                 text-align: justify;
                 border: 1px solid var(--border-color);
                 margin: 1em 0 0 0;
                 background-color: #fafafb;
             }
 
-            .interface-div:first-child{
+            .my-list-item:first-child{
                 margin-top: 0;
-            }
-
-
-            .dismiss-button {
-                background-color: #fff !important;
-            }
-
-            .dismiss-button:hover {
-                background-color: var(--app-green-color) !important;
-                color: #fff !important;
-                border: none !important;
             }
 
             .notification-message {
                 margin-top: 2em;
             }
-
 
             /* FLEX LAYOUT */
             .flex-horizontal-with-ratios {
@@ -111,13 +99,13 @@
         <!--TODO: disable URL escaping-->
         <div>
             <template is="dom-repeat" items="[[notificationsArray]]" as="notification">
-                <div class="interface-div">
+                <div class="my-list-item">
                     <h3>[[notification.title]]</h3>
                     <a href="/d/[[notification.sender]]">Profil odesílatele</a>
                     <div class="container flex-horizontal-with-ratios">
                         <div class="flexchild notification-message">[[notification.message]]</div>
                         <div class="flex2child buttons">
-                            <paper-button on-tap="dismissNotification" class="dismiss-button" raised>Přečteno</paper-button>
+                            <paper-button on-tap="dismissNotification" class="confirm-button">Přečteno</paper-button>
                         </div>
                     </div>
                 </div>

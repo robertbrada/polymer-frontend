@@ -28,12 +28,7 @@
                 text-decoration: underline;
             }
 
-            .interface-div:hover {
-                position: relative;
-                box-shadow: 0 5px 60px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            .interface-div:not(:first-child) {
+            .my-list-item:not(:first-child) {
                 border-top: 1px solid var(--border-color);
             }
 
@@ -69,7 +64,6 @@
 
                 .flex3child {
                     padding-top: 0.6em;
-                    text-align: left;
                 }
             }
 
@@ -101,12 +95,12 @@
         </div>
 
         <template is="dom-repeat" items="[[patientsArray]]" as="patient">
-            <div class="container flex-horizontal-with-ratios interface-div">
+            <div class="container flex-horizontal-with-ratios my-list-item">
                 <div class="flexchild">[[computeFullName(patient.name)]]</div>
                 <div class="flex2child">[[computeAddress(patient.address)]]</div>
                 <div class="flex3child buttons">
-                    <paper-button raised on-tap="confirmUser" class="confirm-button">Potvrdit</paper-button>
-                    <paper-button raised on-tap="dismissUser" class="dismiss-button">Zamítnout</paper-button>
+                    <paper-button on-tap="confirmUser" class="confirm-button">Potvrdit</paper-button>
+                    <paper-button on-tap="dismissUser" class="dismiss-button">Zamítnout</paper-button>
                 </div>
             </div>
         </template>

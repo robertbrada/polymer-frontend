@@ -21,13 +21,9 @@
                 margin-bottom: -1px; /*to cover border od patient_div */
             }
 
-            .interface-div {
+            .my-list-item {
                 border: 1px solid var(--border-color);
-                margin: 1.2em 0 0 0;
-            }
-
-            .interface-div:hover{
-                box-shadow: 0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.12);
+                margin: 1em 0 0 0;
             }
 
             .collapse-content {
@@ -46,10 +42,33 @@
 
             /* FIRST PATIENT CSS DIFFERENCES */
 
-            .interface-div:nth-child(2) {
+            .my-list-item:nth-child(2) {
                 margin-top: 0;
                 box-shadow: 0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.12);
             }
+
+            .my-list-item:nth-child(2) paper-button {
+                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            }
+
+            .my-list-item:nth-child(2) .confirm-button {
+                background-color: var(--app-green-color);
+                border-color: var(--app-green-color);
+                color: #fff;
+            }
+
+            .my-list-item:nth-child(2) .dismiss-button {
+                background-color: var(--app-red-color);
+                border-color: var(--app-red-color);
+                color: #fff;
+            }
+
+            .my-list-item:nth-child(2) .details-button {
+                background-color: var(--app-accent-color);
+                border-color: var(--app-accent-color);
+                color: #fff;
+            }
+
 
             /* FLEX LAYOUT */
             .flex-horizontal-with-ratios {
@@ -84,22 +103,35 @@
                 .flex3child {
                     border-top: 1px solid #ddd;
                     padding-top: 0.6em;
-                    text-align: left;
                 }
 
-                .interface-div {
+                .my-list-item {
                     padding-bottom: 0.5em;
                 }
+
+                .details-button{
+                    float: left;
+                }
+
             }
 
 
-            @media only screen and (max-width: 366px) {
+            @media only screen and (max-width: 382px) {
+
+                .details-button{
+                    float: none;
+                }
 
                 .buttons > paper-button {
                     display: block;
                     margin: 0.9em 0;
                     text-align: center;
                     padding: 1.2em;
+                }
+
+                .my-list-item {
+                    border: 1px solid var(--border-color);
+                    margin-top: 2em;
                 }
             }
 
@@ -109,7 +141,7 @@
 
         <template is="dom-repeat" items="[[patients]]" as="patient">
 
-            <div class="container flex-horizontal-with-ratios interface-div">
+            <div class="container flex-horizontal-with-ratios my-list-item">
                 <div class="time">[[patient.time]]</div>
                 <div class="flexchild">[[patient.firstName]] [[patient.lastName]]</div>
                 <div class="flex2child">[[patient.address]]</div>

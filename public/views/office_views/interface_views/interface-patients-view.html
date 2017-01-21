@@ -12,7 +12,7 @@
     <template>
         <style include="interface-styles button-styles">
 
-            .interface-div {
+            .my-list-item {
                 border: 1px solid var(--border-color);
                 margin-top: 0.3em;
             }
@@ -77,7 +77,7 @@
                     text-align: left;
                 }
 
-                .interface-div {
+                .my-list-item {
                     padding-bottom: 0.5em;
                 }
             }
@@ -128,7 +128,7 @@
 
         </style>
 
-        <paper-material id="search-bar" class="flex-horizontal-with-ratios interface-div">
+        <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
             <!--rodne cislo asi az pozdeji, jen na ukazku-->
             <div class="flexchild-search "><input placeholder="Rodné číslo"></div>
             <div class="flex2child-search "><input placeholder="Jméno"></div>
@@ -140,7 +140,7 @@
 
         <template is="dom-repeat" items="[[patients]]" as="patient">
 
-            <div class="container flex-horizontal-with-ratios interface-div">
+            <div class="container flex-horizontal-with-ratios my-list-item">
                 <div class="flexchild">[[patient.identification_number]]</div>
                 <div class="flex2child">[[patient.firstName]] [[patient.lastName]]</div>
                 <div class="flex2child">[[patient.address]]</div>
