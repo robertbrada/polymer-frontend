@@ -90,6 +90,17 @@
         Polymer({
             is: 'user-view',
 
+            properties: {
+                pageNames:{
+                    type: Object,
+                    value: {
+                        "notifications":"Upozornění",
+                        "appointments":"Návštěvy",
+                        "settings":"Nastavení"
+                    }
+                }
+            },
+
             behaviors: [RoutingBehavior],
 
             defaultPage: 'notifications',
@@ -97,13 +108,7 @@
             validPrefix: '/user',
 
             computePageName: function (pageName) {
-                if (pageName == "notifications") {
-                    return "Upozornění"
-                } else if (pageName == "appointments") {
-                    return "Návštěvy"
-                } else if (pageName == "settings") {
-                    return "Nastavení"
-                }
+                return(this.pageNames[pageName])
             }
 
         });

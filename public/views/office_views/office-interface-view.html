@@ -38,7 +38,7 @@
                 color: #fff;
                 font-size: 1.1em;
                 text-align: center;
-                padding: 0.6em 0;
+                padding: 0.7em 0;
             }
 
             paper-dropdown-menu {
@@ -218,6 +218,19 @@
                 selectedItem: {
                     type: String,
                     observer: 'observeSelected'
+                },
+
+                pageNames:{
+                    type: Object,
+                    value: {
+                        "notifications":"Upozornění",
+                        "calendar":"Kalendář",
+                        "waiting-list":"Pořadník",
+                        "patients":"Pacienti",
+                        "settings":"Nastavení",
+                        "help":"Nápověda",
+                        "issue":"Nahlásit problém"
+                    }
                 }
             },
 
@@ -261,21 +274,7 @@
             },
 
             computePageName: function (pageName) {
-                if (pageName == "notifications") {
-                    return "Upozornění"
-                } else if (pageName == "calendar") {
-                    return "Kalendář"
-                } else if (pageName == "waiting-list") {
-                    return "Pořadník"
-                } else if (pageName == "patients") {
-                    return "Pacienti"
-                } else if (pageName == "settings") {
-                    return "Nastavení"
-                } else if (pageName == "help") {
-                    return "Nápověda"
-                } else if (pageName == "issue") {
-                    return "Nahlásit problém"
-                }
+                return(this.pageNames[pageName])
             }
 
         });
