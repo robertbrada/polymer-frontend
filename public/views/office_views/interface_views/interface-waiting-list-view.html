@@ -52,6 +52,14 @@
                 font-size: 0.9em;
             }
 
+            .in-waiting-room {
+                padding: 0.6em;
+                color: #828292;
+                background-color: #eeeff2;
+                text-align: center;
+                border: 1px solid var(--border-color);
+            }
+
             /* FIRST PATIENT CSS DIFFERENCES */
 
             .my-list-item:nth-child(4) {
@@ -131,6 +139,11 @@
                     display: inline-block;
                     margin-right: 0.5em;
                 }
+
+                .address-city{
+                    margin-left: 3.5em;
+                    display: inline-block;
+                }
             }
 
             @media only screen and (max-width: 435px) {
@@ -168,8 +181,11 @@
                 <div class="flexchild date-of-birth" hidden="[[!patient.dateOfBirth]]"><span class="label">Datum narození:</span>[[patient.dateOfBirth]]
                 </div>
 
-                <div class="flex2child address" hidden="[[!patient.addressStreet]]"><span class="label">Adresa:</span>[[patient.addressStreet]]<br
-                        hidden="[[smallScreen]]"><span hidden="[[!smallScreen]]">,&nbsp</span>[[patient.addressCity]]
+                <!--zobrazi se kdyz chybi datum narozeni (je v cekarne), az bude krabicek tak bude asi jine kriterium-->
+                <div class="flex3child in-waiting-room" hidden="[[patient.dateOfBirth]]">Pacient v čekárně</div>
+
+                <div class="flex2child address" hidden="[[!patient.addressStreet]]"><span class="label">Adresa:</span>[[patient.addressStreet]]<br>
+                <span class="address-city">[[patient.addressCity]]</span>
                 </div>
 
                 <div class="flex3child buttons">
