@@ -30,6 +30,15 @@
                 background-color: var(--app-accent-color);
                 color: #fff;
                 margin-top: 64px;
+                font-size: 1.3em;
+            }
+
+            #page-name {
+                background-color: var(--app-green-color);
+                color: #fff;
+                font-size: 1.1em;
+                text-align: center;
+                padding: 0.6em 0;
             }
 
             paper-dropdown-menu {
@@ -117,7 +126,6 @@
                 text-align: center;
                 min-width: 14px;
             }
-
         </style>
 
         <app-route
@@ -140,6 +148,7 @@
                     <paper-icon-button icon="chevron-right"></paper-icon-button>
                     Menu ordinace
                 </app-toolbar>
+                <div id="page-name" hidden="[[!smallScreen]]">[[computePageName(page)]]</div>
             </div>
 
             <app-drawer id="drawer" position="left">
@@ -249,7 +258,26 @@
                 if (this.narrow) {
                     this.$.drawer.toggle();
                 }
+            },
+
+            computePageName: function (pageName) {
+                if (pageName == "notifications") {
+                    return "Upozornění"
+                } else if (pageName == "calendar") {
+                    return "Kalendář"
+                } else if (pageName == "waiting-list") {
+                    return "Pořadník"
+                } else if (pageName == "patients") {
+                    return "Pacienti"
+                } else if (pageName == "settings") {
+                    return "Nastavení"
+                } else if (pageName == "help") {
+                    return "Nápověda"
+                } else if (pageName == "issue") {
+                    return "Nahlásit problém"
+                }
             }
+
         });
     </script>
 </dom-module>

@@ -9,6 +9,7 @@
 
 <link rel="import" href="/custom_components/login-required-element.html">
 <link rel="import" href="/behaviors/routing-behavior.html">
+
 <link rel="import" href="/styles/tab-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 
@@ -36,11 +37,23 @@
                 height: 100%;
             }
 
+            #page-name {
+                background-color: var(--app-green-color);
+                color: #fff;
+                font-size: 1.2em;
+                text-align: center;
+                padding: 1em 0;
+            }
+
             @media only screen and (max-width: 767px) {
 
                 #page {
                     min-height: calc(100vh - 64px); /*app header */
                     padding-top: 0;
+                }
+
+                #pages {
+                    padding-top: 1em;
                 }
             }
 
@@ -54,9 +67,11 @@
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
 
+        <div id="page-name" hidden="[[!smallScreen]]">[[computePageName(page)]]</div>
+
         <div id="page" hidden="[[!loggedIn]]">
             <paper-tabs focused selected="{{page}}" attr-for-selected="name" hidden="[[smallScreen]]">
-                <paper-tab name="notifications">Notifikace</paper-tab>
+                <paper-tab name="notifications">Upozornění</paper-tab>
                 <paper-tab name="appointments">Návštěvy</paper-tab>
                 <paper-tab name="settings">Nastavení</paper-tab>
             </paper-tabs>
@@ -79,7 +94,18 @@
 
             defaultPage: 'notifications',
             viewPath: '/views/user_views/',
-            validPrefix: '/user'
+            validPrefix: '/user',
+
+            computePageName: function (pageName) {
+                if (pageName == "notifications") {
+                    return "Upozornění"
+                } else if (pageName == "appointments") {
+                    return "Návštěvy"
+                } else if (pageName == "settings") {
+                    return "Nastavení"
+                }
+            }
+
         });
     </script>
 </dom-module>
