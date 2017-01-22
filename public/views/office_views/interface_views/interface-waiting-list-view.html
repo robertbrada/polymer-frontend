@@ -12,7 +12,6 @@
     <template>
         <style include="interface-styles button-styles">
 
-
             #current_patient {
                 background-color: var(--app-green-color);
                 color: #fff;
@@ -26,7 +25,7 @@
                 margin: 1.2em 0 0 0;
             }
 
-            .my-list-item iron-icon{
+            .my-list-item iron-icon {
                 height: 19px;
                 width: 19px;
             }
@@ -40,34 +39,43 @@
             }
 
             .time {
-                margin-right: 1em;
+                margin-right: 2em;
+                font-size: 1.1em;
                 font-weight: bold;
+                color: var(--app-green-color);
+
+            }
+
+            .label {
+                color: #9a9a9b;
+                display: block;
+                font-size: 0.9em;
             }
 
             /* FIRST PATIENT CSS DIFFERENCES */
 
-            .my-list-item:nth-child(3) {
+            .my-list-item:nth-child(4) {
                 margin-top: 0;
                 box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.12);
             }
 
-            .my-list-item:nth-child(3) paper-button {
+            .my-list-item:nth-child(4) paper-button {
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
 
-            .my-list-item:nth-child(3) .confirm-button {
+            .my-list-item:nth-child(4) .confirm-button {
                 background-color: var(--app-green-color);
                 border-color: var(--app-green-color);
                 color: #fff;
             }
 
-            .my-list-item:nth-child(3) .dismiss-button {
+            .my-list-item:nth-child(4) .dismiss-button {
                 background-color: var(--app-red-color);
                 border-color: var(--app-red-color);
                 color: #fff;
             }
 
-            .my-list-item:nth-child(3) .details-button {
+            .my-list-item:nth-child(4) .details-button {
                 background-color: var(--app-accent-color);
                 border-color: var(--app-accent-color);
                 color: #fff;
@@ -84,16 +92,19 @@
             }
 
             .flex2child {
-                @apply(--layout-flex);
+                @apply(--layout-flex-2);
             }
 
             .flex3child {
-                @apply(--layout-flex-2);
+                @apply(--layout-flex-3);
+            }
+
+            .buttons {
                 text-align: right;
             }
 
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1180px) {
+            @media only screen and (max-width: 1350px) {
 
                 .flex-horizontal-with-ratios {
                     @apply(--layout-vertical);
@@ -116,6 +127,10 @@
                     float: left;
                 }
 
+                .label {
+                    display: inline-block;
+                    margin-right: 0.5em;
+                }
             }
 
             @media only screen and (max-width: 435px) {
@@ -137,27 +152,38 @@
 
         </style>
 
-        <iron-media-query query="max-width: 435px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 435px" query-matches="{{mobileScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 1350px" query-matches="{{smallScreen}}"></iron-media-query>
+
         <div id="current_patient">Pacient na řadě</div>
 
         <template is="dom-repeat" items="[[patients]]" as="patient">
 
             <div class="container flex-horizontal-with-ratios my-list-item">
                 <div class="time">[[patient.time]]</div>
-                <div class="flexchild">[[patient.firstName]] [[patient.lastName]]</div>
-                <div class="flex2child">[[patient.address]]</div>
+
+                <div class="flexchild name"><span class="label">Jméno:</span>[[patient.firstName]] [[patient.lastName]]
+                </div>
+
+                <div class="flexchild date-of-birth" hidden="[[!patient.dateOfBirth]]"><span class="label">Datum narození:</span>[[patient.dateOfBirth]]
+                </div>
+
+                <div class="flex2child address" hidden="[[!patient.addressStreet]]"><span class="label">Adresa:</span>[[patient.addressStreet]]<br
+                        hidden="[[smallScreen]]"><span hidden="[[!smallScreen]]">,&nbsp</span>[[patient.addressCity]]
+                </div>
+
                 <div class="flex3child buttons">
 
                     <paper-button hidden="[[!patient.text]]" on-tap="handleDetail" class="details-button">
                         <iron-icon icon="icons:info-outline"></iron-icon>
-                        <span hidden="[[smallScreen]]">&nbsp [[computeText(patient.opened)]] zprávu</span>
+                        <span hidden="[[mobileScreen]]">&nbsp [[computeText(patient.opened)]] zprávu</span>
                     </paper-button>
                     <paper-button class="confirm-button">
                         <iron-icon icon="icons:check"></iron-icon>
-                        <span hidden="[[smallScreen]]">&nbsp Vyřízen</span></paper-button>
+                        <span hidden="[[mobileScreen]]">&nbsp Vyřízen</span></paper-button>
                     <paper-button class="dismiss-button">
                         <iron-icon icon="icons:close"></iron-icon>
-                        <span hidden="[[smallScreen]]">&nbsp Nedorazil</span></paper-button>
+                        <span hidden="[[mobileScreen]]">&nbsp Nedorazil</span></paper-button>
                 </div>
             </div>
 
@@ -179,42 +205,53 @@
                     type: Array,
                     value: [
                         {
+                            time: "7:30",
                             firstName: "Robert",
                             lastName: "Brada",
-                            address: "Kardinála Berana 13, Plzeň",
-                            time: "7:30",
+                            dateOfBirth: "2.2.1995",
+                            addressCity: "Plzeň",
+                            addressStreet: "Kardinála Berana 13",
                             text: "Je mi špatně a teče mi hnis z oka.",
                             opened: false
                         },
                         {
+                            time: "8:00",
                             firstName: "Michaelinsaknfdadc",
                             lastName: "Aubreyisbaddmafdrf",
-                            address: "St. Church 123, London",
-                            time: "8:00",
+                            dateOfBirth: "13.11.1999",
+                            addressCity: "London",
+                            addressStreet: "St. Church 123",
                             text: null,
                             opened: false
                         },
                         {
+                            time: "8:30",
                             firstName: null,
                             lastName: "Elliot",
-                            time: "8:30",
+                            dateOfBirth: null,
+                            addressCity: null,
+                            addressStreet: null,
                             address: null,
                             text: null,
                             opened: false
                         },
                         {
+                            time: "9:00",
                             firstName: "Stephen",
                             lastName: "Maturin",
-                            time: "9:00",
-                            address: "Dvůr Králové nad Labem, Sady pětatřicátníků 28",
+                            dateOfBirth: "2.10.1986",
+                            addressCity: "Dvůr Králové nad Labem",
+                            addressStreet: "Sady pětatřicátníků 28",
                             text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
                             opened: false
                         },
                         {
+                            time: "9:00",
                             firstName: "Stephen",
                             lastName: "Maturin",
-                            time: "9:00",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
+                            dateOfBirth: "20.9.1995",
+                            addressCity: "Wangen",
+                            addressStreet: "Franz Joseph Sp. Strase 15",
                             text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
                             opened: false
 
