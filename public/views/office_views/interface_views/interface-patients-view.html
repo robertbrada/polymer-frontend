@@ -30,6 +30,7 @@
             }
 
             .collapse-content {
+                position: relative;
                 background-color: #fff;
                 padding: 2em;
                 border-left: 1px solid var(--border-color);
@@ -82,12 +83,22 @@
 
             #close-message {
                 position: absolute;
-                padding: 0 0 0 1.2em;
+                padding: 0.8em 1em 0.8em 1.2em;
                 font-size: 0.8em;
                 top: 0.5em;
                 right: 2em;
-                background-color: var(--app-red-color);
-                color: #fff;;
+            }
+
+            #close-message iron-icon{
+                height: 20px;
+                width: 20px;
+            }
+
+            /* INFO */
+            #delete-patient {
+                display: block;
+                width: 16em;
+                font-size: 0.7em;
             }
 
             /* FLEX LAYOUT */
@@ -191,7 +202,7 @@
                 <div class="flex3child buttons">
 
                     <paper-button on-tap="handleDetail" class="details-button">
-                        [[computeText(patient.opened)]] detail
+                        [[computeText(patient.infoOpened)]] detail
                     </paper-button>
                     <a title="poslat zprávu pacientovi" on-tap="handleMessage">
                         <paper-icon-button id="send-message" icon="communication:message"></paper-icon-button>
@@ -202,12 +213,13 @@
             <iron-collapse opened="[[patient.infoOpened]]">
                 <div class="collapse-content">
                     TODO Patient info
+                    <paper-button id="delete-patient" class="red" raised>Odstranit pacienta</paper-button>
                 </div>
             </iron-collapse>
 
             <iron-collapse opened="[[patient.messageOpened]]">
                 <div class="collapse-content message-container">
-                    <paper-button id="close-message" on-tap="handleMessage">Zrušit<paper-icon-button icon="icons:close"></paper-icon-button></paper-button>
+                    <paper-button id="close-message" class="red" on-tap="handleMessage" raised>Zrušit<iron-icon icon="icons:close"></iron-icon></paper-button>
                     <h3>Zpráva pacientovi</h3>
                     <paper-input class="subject" label="Předmět zprávy" maxlength="50"></paper-input>
                     <paper-textarea label="Vaše zpráva" char-counter maxlength="2000"></paper-textarea>
