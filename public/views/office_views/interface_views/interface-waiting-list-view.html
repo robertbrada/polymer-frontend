@@ -12,30 +12,17 @@
     <template>
         <style include="interface-styles button-styles">
 
-            #current_patient {
-                background-color: var(--app-green-color);
-                color: #fff;
-                padding: 0.8em 1.5em;
-                display: inline-block;
-                margin-bottom: -1px; /*to cover border od patient_div */
-            }
-
             .my-list-item {
                 border: 1px solid var(--border-color);
                 margin: 1.2em 0 0 0;
             }
 
-            .my-list-item iron-icon {
-                height: 19px;
-                width: 19px;
-            }
-
-            .collapse-content {
-                background-color: #fff;
-                padding: 1.2em;
-                border-left: 1px solid var(--border-color);
-                border-right: 1px solid var(--border-color);
-                border-bottom: 1px solid var(--border-color);
+            #current_patient {
+                background-color: var(--app-green-color);
+                color: #fff;
+                padding: 0.8em 1.5em;
+                display: inline-block;
+                margin-bottom: -1px;
             }
 
             .time {
@@ -44,12 +31,6 @@
                 font-weight: bold;
                 color: var(--app-green-color);
 
-            }
-
-            .label {
-                color: #9a9a9b;
-                display: block;
-                font-size: 0.9em;
             }
 
             .in-waiting-room {
@@ -90,41 +71,19 @@
             }
 
             /* FLEX LAYOUT */
-            .flex-horizontal-with-ratios {
-                @apply(--layout-horizontal);
-            }
-
-            .flexchild {
-                @apply(--layout-flex);
-                margin-right: 2em;
-            }
-
-            .flex2child {
-                @apply(--layout-flex-2);
-            }
-
-            .flex3child {
-                @apply(--layout-flex-3);
-            }
-
-            .buttons {
-                text-align: right;
+            .name, .address {
+                max-width: 15%;
             }
 
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1350px) {
+            @media only screen and (max-width: 1410px) {
 
                 .flex-horizontal-with-ratios {
                     @apply(--layout-vertical);
                 }
 
-                .flex-horizontal-with-ratios > div {
-                    margin: 0.2em 0;
-                }
-
-                .flex3child {
-                    border-top: 1px solid #ddd;
-                    padding-top: 0.6em;
+                .name, .address {
+                    max-width: 100%;
                 }
 
                 .my-list-item {
@@ -137,12 +96,18 @@
 
                 .label {
                     display: inline-block;
-                    margin-right: 0.5em;
+                    margin: 0.25em 0.5em 0.25em 0;
                 }
 
                 .address-city{
-                    margin-left: 3.5em;
+                    margin-left: 3.51em;
                     display: inline-block;
+                }
+
+                .buttons {
+                    border-top: 1px solid var(--border-color);
+                    padding-top: 0.6em;
+                    margin-top: 1em;
                 }
             }
 
@@ -166,7 +131,7 @@
         </style>
 
         <iron-media-query query="max-width: 435px" query-matches="{{mobileScreen}}"></iron-media-query>
-        <iron-media-query query="max-width: 1350px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 1410px" query-matches="{{smallScreen}}"></iron-media-query>
 
         <div id="current_patient">Pacient na řadě</div>
 
@@ -184,22 +149,22 @@
                 <!--zobrazi se kdyz chybi datum narozeni (je v cekarne), az bude krabicek tak bude asi jine kriterium-->
                 <div class="flex3child in-waiting-room" hidden="[[patient.dateOfBirth]]">Pacient v čekárně</div>
 
-                <div class="flex2child address" hidden="[[!patient.addressStreet]]"><span class="label">Adresa:</span>[[patient.addressStreet]]<br>
-                <span class="address-city">[[patient.addressCity]]</span>
+                <div class="flex2child address" hidden="[[!patient.addressStreet]]"><span class="label">Adresa:</span>[[patient.addressStreet]]
+                    <br><div class="address-city">[[patient.addressCity]]</div>
                 </div>
 
                 <div class="flex3child buttons">
 
                     <paper-button hidden="[[!patient.text]]" on-tap="handleDetail" class="details-button">
                         <iron-icon icon="icons:info-outline"></iron-icon>
-                        <span hidden="[[mobileScreen]]">&nbsp [[computeText(patient.opened)]] zprávu</span>
+                        <span hidden="[[mobileScreen]]">[[computeText(patient.opened)]] zprávu</span>
                     </paper-button>
                     <paper-button class="confirm-button">
                         <iron-icon icon="icons:check"></iron-icon>
-                        <span hidden="[[mobileScreen]]">&nbsp Vyřízen</span></paper-button>
+                        <span hidden="[[mobileScreen]]">Vyřízen</span></paper-button>
                     <paper-button class="dismiss-button">
                         <iron-icon icon="icons:close"></iron-icon>
-                        <span hidden="[[mobileScreen]]">&nbsp Nedorazil</span></paper-button>
+                        <span hidden="[[mobileScreen]]">Nedorazil</span></paper-button>
                 </div>
             </div>
 

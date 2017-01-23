@@ -1,0 +1,56 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+
+<dom-module id="patietsAndConfirm-styles">
+    <template>
+        <style>
+
+            /*used in office-interface patients and confirmation views*/
+
+
+            .flexchild:not(:last-child) {
+                margin-right: 1em;
+            }
+
+            /* to not stretch flexchilds when longer text in them */
+            .name, .address {
+                max-width: 25%;
+            }
+
+            /*RESPONSIVE ADDITIONS*/
+            @media only screen and (max-width: 1300px) {
+
+                .flex-horizontal-with-ratios {
+                    @apply(--layout-vertical);
+                }
+
+
+
+                .my-list-item {
+                    padding-bottom: 0.5em;
+                }
+
+                .label {
+                    display: inline-block;
+                    margin: 0.25em 0.5em 0.25em 0;
+                }
+
+                .address-city{
+                    margin-left: 3.51em;
+                }
+
+                .buttons {
+                    margin-top: 1em;
+                    padding-top: 0.5em;
+                    border-top: 1px solid var(--border-color);
+                }
+
+                .name, .address {
+                    max-width: 100%;
+                }
+            }
+
+
+        </style>
+    </template>
+</dom-module>

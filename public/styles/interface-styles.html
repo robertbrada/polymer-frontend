@@ -59,6 +59,60 @@
                 box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
             }
 
+            .label {
+                color: #9a9a9b;
+                display: block;
+                font-size: 0.9em;
+                margin-bottom: 0.3em;
+            }
+
+            .collapse-content {
+                position: relative;
+                background-color: #fff;
+                padding: 2em;
+                border-left: 1px solid var(--border-color);
+                border-right: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            paper-button > iron-icon {
+                height: 20px;
+                width: 20px;
+                margin-right: 0.5em;
+            }
+
+            .buttons {
+                text-align: right;
+            }
+
+            .name {
+                margin-right: 1em;
+            }
+
+            /*zalomi delsi text ve vsech flexchilds, ve vychozim roztahuje flexchild*/
+            .flex-horizontal-with-ratios > * {
+                word-wrap: break-word;
+            }
+
+            /* FLEX LAYOUT */
+
+            .flex-horizontal-with-ratios {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+            }
+
+            .flex2child {
+                @apply(--layout-flex-2);
+            }
+
+            .flex3child {
+                @apply(--layout-flex-3);
+            }
+
+
             @media only screen and (max-width: 767px) {
 
                 .confirm-button {
@@ -84,6 +138,8 @@
                     height: 3.5em;
                 }
             }
+
+
 
         </style>
     </template>
