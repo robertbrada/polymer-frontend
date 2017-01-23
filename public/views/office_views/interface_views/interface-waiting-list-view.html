@@ -17,25 +17,12 @@
                 color: #fff;
                 padding: 0.8em 1.5em;
                 display: inline-block;
-                margin-bottom: -1px; /*to cover border od patient_div */
+                margin-bottom: -1px;
             }
 
             .my-list-item {
                 border: 1px solid var(--border-color);
                 margin: 1.2em 0 0 0;
-            }
-
-            .my-list-item iron-icon {
-                height: 19px;
-                width: 19px;
-            }
-
-            .collapse-content {
-                background-color: #fff;
-                padding: 1.2em;
-                border-left: 1px solid var(--border-color);
-                border-right: 1px solid var(--border-color);
-                border-bottom: 1px solid var(--border-color);
             }
 
             .time {
@@ -44,12 +31,6 @@
                 font-weight: bold;
                 color: var(--app-green-color);
 
-            }
-
-            .label {
-                color: #9a9a9b;
-                display: block;
-                font-size: 0.9em;
             }
 
             .in-waiting-room {
@@ -96,7 +77,6 @@
 
             .flexchild {
                 @apply(--layout-flex);
-                margin-right: 2em;
             }
 
             .flex2child {
@@ -107,12 +87,12 @@
                 @apply(--layout-flex-3);
             }
 
-            .buttons {
-                text-align: right;
+            .name, .date-of-birth {
+                margin-right: 2em;
             }
 
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1350px) {
+            @media only screen and (max-width: 1410px) {
 
                 .flex-horizontal-with-ratios {
                     @apply(--layout-vertical);
@@ -123,7 +103,6 @@
                 }
 
                 .flex3child {
-                    border-top: 1px solid #ddd;
                     padding-top: 0.6em;
                 }
 
@@ -143,6 +122,10 @@
                 .address-city{
                     margin-left: 3.5em;
                     display: inline-block;
+                }
+
+                .buttons {
+                    border-top: 1px solid var(--border-color);
                 }
             }
 
@@ -166,7 +149,7 @@
         </style>
 
         <iron-media-query query="max-width: 435px" query-matches="{{mobileScreen}}"></iron-media-query>
-        <iron-media-query query="max-width: 1350px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 1410px" query-matches="{{smallScreen}}"></iron-media-query>
 
         <div id="current_patient">Pacient na řadě</div>
 
@@ -184,8 +167,8 @@
                 <!--zobrazi se kdyz chybi datum narozeni (je v cekarne), az bude krabicek tak bude asi jine kriterium-->
                 <div class="flex3child in-waiting-room" hidden="[[patient.dateOfBirth]]">Pacient v čekárně</div>
 
-                <div class="flex2child address" hidden="[[!patient.addressStreet]]"><span class="label">Adresa:</span>[[patient.addressStreet]]<br>
-                <span class="address-city">[[patient.addressCity]]</span>
+                <div class="flex2child address" hidden="[[!patient.addressStreet]]"><span class="label">Adresa:</span>[[patient.addressStreet]]
+                    <br><div class="address-city">[[patient.addressCity]]</div>
                 </div>
 
                 <div class="flex3child buttons">

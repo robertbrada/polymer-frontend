@@ -9,6 +9,8 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-icons/communication-icons.html">
 
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
@@ -24,25 +26,15 @@
                 position: relative;
             }
 
-            #send-message {
+            .send-message-icon {
                 color: #757576;
                 margin-left: 1em;
-            }
-
-            .collapse-content {
-                position: relative;
-                background-color: #fff;
-                padding: 2em;
-                border-left: 1px solid var(--border-color);
-                border-right: 1px solid var(--border-color);
-                border-bottom: 1px solid var(--border-color);
             }
 
             /* SEARCH */
 
             #search-button {
-                width: 12em;
-                height: 4em;
+                padding: 0.9em 3em;
             }
 
             #search-bar {
@@ -51,10 +43,9 @@
 
             #search-bar input {
                 box-sizing: border-box;
-                height: 1.6em;
-                border: 1px solid #dcdce5;
-                padding: 1.3em 0.7em;
-                font-size: 1.1em;
+                border: 1px solid var(--border-color);
+                padding: 0.9em 0.7em;
+                font-size: 1em;
                 width: 100%;
             }
 
@@ -73,7 +64,7 @@
             /* MESSAGE CONTAINER */
 
             .message-container {
-                position: relative;
+                /*position: relative;*/
                 background-color: #fbfbfc;
             }
 
@@ -90,7 +81,7 @@
                 right: 2em;
             }
 
-            #close-message iron-icon{
+            #close-message iron-icon {
                 height: 20px;
                 width: 20px;
             }
@@ -100,6 +91,10 @@
                 display: block;
                 width: 16em;
                 font-size: 0.7em;
+            }
+
+            .search-button-container{
+                text-align: right;
             }
 
             /* FLEX LAYOUT */
@@ -112,34 +107,8 @@
                 margin-right: 0.7em;
             }
 
-            .flex2child {
-                @apply(--layout-flex-2);
-                margin-right: 0.7em;
-            }
-
-            .flex3child {
-                @apply(--layout-flex-2);
-                text-align: right;
-            }
-
-            /* search-bar */
-            .flexchild-search {
-                @apply(--layout-flex);
-                margin-right: 0.7em;
-            }
-
-            .flex2child-search {
-                @apply(--layout-flex-2);
-                margin-right: 0.7em;
-            }
-
-            .flex3child-search {
-                @apply(--layout-flex-2);
-                text-align: right;
-            }
-
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1180px) {
+            @media only screen and (max-width: 1220px) {
 
                 .flex-horizontal-with-ratios {
                     @apply(--layout-vertical);
@@ -149,19 +118,28 @@
                     margin: 0.3em 0;
                 }
 
-                .flex3child {
-                    padding-top: 0.6em;
-                    text-align: left;
-                }
-
                 .my-list-item {
                     padding-bottom: 0.5em;
                 }
 
-                #send-message {
+                .send-message-icon {
                     position: absolute;
                     top: 1em;
                     right: 1em;
+                }
+
+                .label {
+                    display: inline-block;
+                    margin-right: 0.5em;
+                }
+
+                .address-city{
+                    margin-left: 3.5em;
+                }
+
+                .buttons {
+                    padding-top: 0.6em;
+                    border-top: 1px solid var(--border-color);
                 }
             }
 
@@ -169,9 +147,8 @@
 
                 .buttons > paper-button {
                     display: block;
-                    margin: 0.9em 0;
                     text-align: center;
-                    padding: 1.2em;
+                    padding: 1em;
                 }
 
                 #search-button {
@@ -181,12 +158,15 @@
 
         </style>
 
+        <firebase-document id="verify_document" app-name="doctor-appointment-system" path="/officePatients/[[officeId]]"
+                           data="{{officePatients}}">
+        </firebase-document>
+
         <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
-            <!--rodne cislo asi az pozdeji, jen na ukazku-->
-            <div class="flexchild-search "><input placeholder="Rodné číslo"></div>
-            <div class="flex2child-search "><input placeholder="Jméno"></div>
-            <div class="flex2child-search "><input placeholder="Adresa"></div>
-            <div class="flex3child-search buttons">
+            <div class="flexchild"><input placeholder="Jméno"></div>
+            <div class="flexchild "><input placeholder="Adresa"></div>
+            <div class="flexchild "><input placeholder="Datum narození"></div>
+            <div class="flexchild search-button-container">
                 <paper-button id="search-button" raised>
                     <iron-icon icon="icons:search"></iron-icon>
                     Hledat
@@ -194,19 +174,27 @@
             </div>
         </paper-material>
 
-        <template is="dom-repeat" items="[[patients]]" as="patient">
 
+        <template is="dom-repeat" items="[[patientsArray]]" as="patient">
             <div class="container flex-horizontal-with-ratios my-list-item">
-                <div class="flexchild">[[patient.identification_number]]</div>
-                <div class="flex2child">[[patient.firstName]] [[patient.lastName]]</div>
-                <div class="flex2child">[[patient.address]]</div>
-                <div class="flex3child buttons">
+
+                <div class="flexchild date-of-birth"><span class="label">Jméno:</span>[[computeFullName(patient.name)]]
+                </div>
+
+                <div class="flexchild name"><span class="label">Datum narození:</span>[[computeDateOfBirth(patient.dateOfBirth)]]
+                </div>
+
+                <div class="flexchild address"><span class="label">Adresa:</span>[[patient.address.street]]
+                    <br><div class="address-city">[[patient.address.city]]</div>
+                </div>
+
+                <div class="flexchild buttons">
 
                     <paper-button on-tap="handleDetail" class="details-button">
                         [[computeText(patient.infoOpened)]] detail
                     </paper-button>
                     <a title="poslat zprávu pacientovi" on-tap="handleMessage">
-                        <paper-icon-button id="send-message" icon="communication:message"></paper-icon-button>
+                        <paper-icon-button class="send-message-icon" icon="communication:message"></paper-icon-button>
                     </a>
                 </div>
             </div>
@@ -220,7 +208,9 @@
 
             <iron-collapse opened="[[patient.messageOpened]]">
                 <div class="collapse-content message-container">
-                    <paper-button id="close-message" class="red" on-tap="handleMessage" raised>Zrušit<iron-icon icon="icons:close"></iron-icon></paper-button>
+                    <paper-button id="close-message" class="red" on-tap="handleMessage" raised>Zrušit
+                        <iron-icon icon="icons:close"></iron-icon>
+                    </paper-button>
                     <h3>Zpráva pacientovi</h3>
                     <paper-input class="subject" label="Předmět zprávy" maxlength="50"></paper-input>
                     <paper-textarea label="Vaše zpráva" char-counter maxlength="2000"></paper-textarea>
@@ -236,51 +226,11 @@
             is: 'interface-patients-view',
 
             properties: {
-                patients: {
+                patientsArray: {
                     type: Array,
-                    value: [
-                        {
-                            identification_number: 8565123545,
-                            firstName: "Robert",
-                            lastName: "Brada",
-                            address: "Kardinála Berana 13, Plzeň",
-                            infoOpened: false,
-                            messageOpened: false
-                        },
-                        {
-                            identification_number: 8565123545,
-                            firstName: "Michaelinsaknfdadc",
-                            lastName: "Aubreyisbaddmafdrf",
-                            address: "St. Church 123, London",
-                            infoOpened: false,
-                            messageOpened: false
-                        },
-                        {
-                            identification_number: 8565123545,
-                            firstName: null,
-                            lastName: "Elliot",
-                            address: null,
-                            infoOpened: false,
-                            messageOpened: false
-                        },
-                        {
-                            identification_number: 8565123545,
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            address: "Dvůr Králové nad Labem, Sady pětatřicátníků 28",
-                            infoOpened: false,
-                            messageOpened: false
-                        },
-                        {
-                            identification_number: 8565123545,
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            address: "Franz Joseph Sp. Strase 15, Wangen",
-                            infoOpened: false,
-                            messageOpened: false
-                        }
-                    ]
+                    computed: 'computePatientsArray(officePatients)'
                 }
+
             },
 
             computeText: function (infoOpened) {
@@ -295,6 +245,25 @@
             handleMessage: function (event) {
                 var messageOpened = event.model.patient.messageOpened;
                 event.model.set('patient.messageOpened', !messageOpened);
+            },
+
+            computePatientsArray: function (officePatients) {
+                return Object.keys(officePatients).map(function (key) {
+                    return {
+                        'dateOfBirth': officePatients[key]['dateOfBirth'],
+                        'name': officePatients[key]['name'],
+                        'address': officePatients[key]['address'],
+                        'uid': key
+                    }
+                });
+            },
+
+            computeFullName: function (name) {
+                return name.firstName + " " + name.lastName;
+            },
+
+            computeDateOfBirth: function (dateOfBirth) {
+                return dateOfBirth.date + ". " + dateOfBirth.month + ". " + dateOfBirth.year;
             }
 
         });
