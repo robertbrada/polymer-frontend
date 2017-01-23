@@ -8,73 +8,28 @@
 
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
-
+<link rel="import" href="/styles/patietsAndConfirm.html">
 
 <dom-module id="interface-notifications-confirm-view">
     <template>
-        <style include="interface-styles button-styles">
+        <style include="interface-styles button-styles patietsAndConfirm-styles">
 
             #not-confirmed-patients {
                 text-align: right;
                 padding: 1em;
             }
 
-            #not-confirmed-patients a{
+            #not-confirmed-patients a {
                 color: var(--app-green-color);
                 text-decoration: none;
             }
 
-            #not-confirmed-patients a:hover{
+            #not-confirmed-patients a:hover {
                 text-decoration: underline;
             }
 
             .my-list-item:not(:first-child) {
                 border-top: 1px solid var(--border-color);
-            }
-
-            /* FLEX LAYOUT */
-            .flex-horizontal-with-ratios {
-                @apply(--layout-horizontal);
-            }
-
-            .flexchild {
-                @apply(--layout-flex);
-                margin-right: 2em;
-            }
-
-            .flex2child {
-                @apply(--layout-flex);
-            }
-
-            .flex3child {
-                @apply(--layout-flex);
-                text-align: right;
-            }
-
-            /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1150px) {
-
-                .flex-horizontal-with-ratios {
-                    @apply(--layout-vertical);
-                }
-
-                .flex-horizontal-with-ratios > div {
-                    margin: 0.2em 0;
-                }
-
-                .flex3child {
-                    padding-top: 0.6em;
-                }
-            }
-
-            @media only screen and (max-width: 300px) {
-
-                .buttons > paper-button {
-                    display: block;
-                    margin: 0.9em 0;
-                    text-align: center;
-                    padding: 1.2em;
-                }
             }
 
             .no-patients {
@@ -86,7 +41,8 @@
 
         </style>
 
-        <firebase-document id="verify_document" app-name="doctor-appointment-system" path="/officePatientsToVerify/[[officeId]]"
+        <firebase-document id="verify_document" app-name="doctor-appointment-system"
+                           path="/officePatientsToVerify/[[officeId]]"
                            data="{{officePatientsToVerify}}">
         </firebase-document>
 
@@ -95,14 +51,31 @@
         </div>
 
         <template is="dom-repeat" items="[[patientsArray]]" as="patient">
+
             <div class="container flex-horizontal-with-ratios my-list-item">
-                <div class="flexchild">[[computeFullName(patient.name)]]</div>
-                <div class="flex2child">[[computeAddress(patient.address)]]</div>
-                <div class="flex3child buttons">
-                    <paper-button on-tap="confirmUser" class="confirm-button">Potvrdit</paper-button>
-                    <paper-button on-tap="dismissUser" class="dismiss-button">Zamítnout</paper-button>
+
+                <div class="flexchild name"><span class="label">Jméno:</span>
+                    [[computeFullName(patient.name)]]
+                </div>
+
+                <div class="flexchild date-of-birth"><span class="label">Datum narození:</span>
+                    [[computeDateOfBirth(patient.dateOfBirth)]]
+                </div>
+
+                <div class="flexchild address"><span class="label">Adresa:</span>[[patient.address.street]]<br>
+                    <div class="address-city">[[patient.address.city]]</div>
+                </div>
+
+                <div class="flexchild buttons">
+                    <paper-button class="confirm-button" on-tap="confirmUser">
+                        <iron-icon icon="icons:check"></iron-icon>
+                        Potvrdit</paper-button>
+                    <paper-button class="dismiss-button">
+                        <iron-icon icon="icons:close" on-tap="dismissUser"></iron-icon>
+                        Zamítnout</paper-button>
                 </div>
             </div>
+
         </template>
 
         <div hidden="[[computeIfPatients(patientsArray)]]" class="no-patients">
@@ -192,6 +165,7 @@
                     return {
                         'name': officePatientsToVerify[key]['name'],
                         'address': officePatientsToVerify[key]['address'],
+                        'dateOfBirth': officePatientsToVerify[key]['dateOfBirth'],
                         'uid': key
                     }
                 });
@@ -203,7 +177,12 @@
 
             computeAddress: function (address) {
                 return address.street + ", " + address.city;
+            },
+
+            computeDateOfBirth: function (dateOfBirth) {
+                return dateOfBirth.date + ". " + dateOfBirth.month + ". " + dateOfBirth.year;
             }
+
         });
     </script>
 </dom-module>

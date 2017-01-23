@@ -12,17 +12,17 @@
     <template>
         <style include="interface-styles button-styles">
 
+            .my-list-item {
+                border: 1px solid var(--border-color);
+                margin: 1.2em 0 0 0;
+            }
+
             #current_patient {
                 background-color: var(--app-green-color);
                 color: #fff;
                 padding: 0.8em 1.5em;
                 display: inline-block;
                 margin-bottom: -1px;
-            }
-
-            .my-list-item {
-                border: 1px solid var(--border-color);
-                margin: 1.2em 0 0 0;
             }
 
             .time {
@@ -71,24 +71,8 @@
             }
 
             /* FLEX LAYOUT */
-            .flex-horizontal-with-ratios {
-                @apply(--layout-horizontal);
-            }
-
-            .flexchild {
-                @apply(--layout-flex);
-            }
-
-            .flex2child {
-                @apply(--layout-flex-2);
-            }
-
-            .flex3child {
-                @apply(--layout-flex-3);
-            }
-
-            .name, .date-of-birth {
-                margin-right: 2em;
+            .name, .address {
+                max-width: 15%;
             }
 
             /*RESPONSIVE ADDITIONS*/
@@ -98,12 +82,8 @@
                     @apply(--layout-vertical);
                 }
 
-                .flex-horizontal-with-ratios > div {
-                    margin: 0.2em 0;
-                }
-
-                .flex3child {
-                    padding-top: 0.6em;
+                .name, .address {
+                    max-width: 100%;
                 }
 
                 .my-list-item {
@@ -116,16 +96,18 @@
 
                 .label {
                     display: inline-block;
-                    margin-right: 0.5em;
+                    margin: 0.25em 0.5em 0.25em 0;
                 }
 
                 .address-city{
-                    margin-left: 3.5em;
+                    margin-left: 3.51em;
                     display: inline-block;
                 }
 
                 .buttons {
                     border-top: 1px solid var(--border-color);
+                    padding-top: 0.6em;
+                    margin-top: 1em;
                 }
             }
 
@@ -175,14 +157,14 @@
 
                     <paper-button hidden="[[!patient.text]]" on-tap="handleDetail" class="details-button">
                         <iron-icon icon="icons:info-outline"></iron-icon>
-                        <span hidden="[[mobileScreen]]">&nbsp [[computeText(patient.opened)]] zprávu</span>
+                        <span hidden="[[mobileScreen]]">[[computeText(patient.opened)]] zprávu</span>
                     </paper-button>
                     <paper-button class="confirm-button">
                         <iron-icon icon="icons:check"></iron-icon>
-                        <span hidden="[[mobileScreen]]">&nbsp Vyřízen</span></paper-button>
+                        <span hidden="[[mobileScreen]]">Vyřízen</span></paper-button>
                     <paper-button class="dismiss-button">
                         <iron-icon icon="icons:close"></iron-icon>
-                        <span hidden="[[mobileScreen]]">&nbsp Nedorazil</span></paper-button>
+                        <span hidden="[[mobileScreen]]">Nedorazil</span></paper-button>
                 </div>
             </div>
 

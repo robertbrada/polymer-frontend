@@ -14,11 +14,12 @@
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
+<link rel="import" href="/styles/patietsAndConfirm.html">
 
 
 <dom-module id="interface-patients-view">
     <template>
-        <style include="interface-styles button-styles input-styles">
+        <style include="interface-styles button-styles input-styles patietsAndConfirm-styles">
 
             .my-list-item {
                 border: 1px solid var(--border-color);
@@ -34,7 +35,8 @@
             /* SEARCH */
 
             #search-button {
-                padding: 0.9em 3em;
+                padding: 1em 3em;
+                border: none;
             }
 
             #search-bar {
@@ -55,17 +57,19 @@
                 letter-spacing: 0.02em;
             }
 
-            #search-bar paper-button {
-                background-color: var(--app-green-color);
-                color: #fff;
-                border: none;
+            .search-button-container {
+                text-align: right;
             }
 
             /* MESSAGE CONTAINER */
 
-            .message-container {
-                /*position: relative;*/
-                background-color: #fbfbfc;
+            .message-container{
+                background-color: #fbfbfd;
+            }
+
+            .message-container h3 {
+                margin-top: 0;
+                color: var(--app-green-color);
             }
 
             .subject {
@@ -81,45 +85,19 @@
                 right: 2em;
             }
 
-            #close-message iron-icon {
-                height: 20px;
-                width: 20px;
-            }
-
-            /* INFO */
+            /* MORE INFO CONTAINER*/
             #delete-patient {
                 display: block;
                 width: 16em;
                 font-size: 0.7em;
             }
 
-            .search-button-container{
-                text-align: right;
-            }
-
-            /* FLEX LAYOUT */
-            .flex-horizontal-with-ratios {
-                @apply(--layout-horizontal);
-            }
-
-            .flexchild {
-                @apply(--layout-flex);
-                margin-right: 0.7em;
-            }
-
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1220px) {
+            @media only screen and (max-width: 1300px) {
 
-                .flex-horizontal-with-ratios {
-                    @apply(--layout-vertical);
-                }
-
-                .flex-horizontal-with-ratios > div {
+                /* space between all search-fleychild*/
+                #search-bar > .flexchild {
                     margin: 0.3em 0;
-                }
-
-                .my-list-item {
-                    padding-bottom: 0.5em;
                 }
 
                 .send-message-icon {
@@ -127,32 +105,18 @@
                     top: 1em;
                     right: 1em;
                 }
-
-                .label {
-                    display: inline-block;
-                    margin-right: 0.5em;
-                }
-
-                .address-city{
-                    margin-left: 3.5em;
-                }
-
-                .buttons {
-                    padding-top: 0.6em;
-                    border-top: 1px solid var(--border-color);
-                }
             }
 
             @media only screen and (max-width: 366px) {
+
+                #search-button {
+                    width: 100%;
+                }
 
                 .buttons > paper-button {
                     display: block;
                     text-align: center;
                     padding: 1em;
-                }
-
-                #search-button {
-                    width: 100%;
                 }
             }
 
@@ -163,9 +127,9 @@
         </firebase-document>
 
         <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
-            <div class="flexchild"><input placeholder="Jméno"></div>
-            <div class="flexchild "><input placeholder="Adresa"></div>
+            <div class="flexchild "><input placeholder="Jméno"></div>
             <div class="flexchild "><input placeholder="Datum narození"></div>
+            <div class="flexchild "><input placeholder="Adresa"></div>
             <div class="flexchild search-button-container">
                 <paper-button id="search-button" raised>
                     <iron-icon icon="icons:search"></iron-icon>
@@ -185,7 +149,8 @@
                 </div>
 
                 <div class="flexchild address"><span class="label">Adresa:</span>[[patient.address.street]]
-                    <br><div class="address-city">[[patient.address.city]]</div>
+                    <br>
+                    <div class="address-city">[[patient.address.city]]</div>
                 </div>
 
                 <div class="flexchild buttons">
@@ -208,8 +173,8 @@
 
             <iron-collapse opened="[[patient.messageOpened]]">
                 <div class="collapse-content message-container">
-                    <paper-button id="close-message" class="red" on-tap="handleMessage" raised>Zrušit
-                        <iron-icon icon="icons:close"></iron-icon>
+                    <paper-button id="close-message" class="red" on-tap="handleMessage" raised>
+                        <iron-icon icon="icons:close"></iron-icon>Zrušit
                     </paper-button>
                     <h3>Zpráva pacientovi</h3>
                     <paper-input class="subject" label="Předmět zprávy" maxlength="50"></paper-input>
@@ -250,9 +215,9 @@
             computePatientsArray: function (officePatients) {
                 return Object.keys(officePatients).map(function (key) {
                     return {
-                        'dateOfBirth': officePatients[key]['dateOfBirth'],
                         'name': officePatients[key]['name'],
                         'address': officePatients[key]['address'],
+                        'dateOfBirth': officePatients[key]['dateOfBirth'],
                         'uid': key
                     }
                 });
