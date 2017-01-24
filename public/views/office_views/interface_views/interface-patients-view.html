@@ -14,18 +14,11 @@
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
-<link rel="import" href="/styles/patientsAndConfirm-styles.html">
 
 
 <dom-module id="interface-patients-view">
     <template>
-        <style include="interface-styles button-styles input-styles patientsAndConfirm-styles">
-
-            .my-list-item {
-                border: 1px solid var(--border-color);
-                margin-top: 0.5em;
-                position: relative;
-            }
+        <style include="interface-styles button-styles input-styles">
 
             .send-message-icon {
                 color: #757576;
@@ -40,13 +33,13 @@
             }
 
             #search-bar {
-                margin-bottom: 2em;
+                margin-bottom: 1em;
             }
 
             #search-bar input {
                 box-sizing: border-box;
                 border: 1px solid var(--border-color);
-                padding: 0.9em 0.7em;
+                padding: 0.85em 0.5em;
                 font-size: 1em;
                 width: 100%;
             }
@@ -61,9 +54,13 @@
                 text-align: right;
             }
 
+            .flexchild:not(:last-child) {
+                margin-right: 0.5em;
+            }
+
             /* MESSAGE CONTAINER */
 
-            .message-container{
+            .message-container {
                 background-color: #fbfbfd;
             }
 
@@ -87,13 +84,36 @@
 
             /* MORE INFO CONTAINER*/
             #delete-patient {
-                display: block;
-                width: 16em;
                 font-size: 0.7em;
             }
 
+            /* FLEX  - not to stretch flex childs when longer content*/
+            .name, .address {
+                max-width: 25%;
+            }
+
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1300px) {
+            @media only screen and (max-width: 1100px) {
+
+                .flex-horizontal-with-ratios {
+                    @apply(--layout-vertical);
+                }
+
+                .details-button {
+                    @apply(--buttons-medium-screen-layout);
+                }
+
+                .label {
+                    @apply(--label-medium-screen-layout);
+                }
+
+                .address-city {
+                    @apply(--city-medium-screen-layout);
+                }
+
+                .my-list-item {
+                    @apply(--list-medium-screen-layout);
+                }
 
                 /* space between all search-fleychild*/
                 #search-bar > .flexchild {
@@ -102,21 +122,40 @@
 
                 .send-message-icon {
                     position: absolute;
-                    top: 1em;
+                    top: 0.5em;
                     right: 1em;
+                }
+
+                .buttons {
+                    margin: 0;
+                    padding: 0;
+                    border: none;
+                }
+
+                .name, .address {
+                    max-width: 50%;
                 }
             }
 
-            @media only screen and (max-width: 366px) {
+            @media only screen and (max-width: 420px) {
 
                 #search-button {
                     width: 100%;
                 }
 
-                .buttons > paper-button {
-                    display: block;
-                    text-align: center;
-                    padding: 1em;
+                .details-button {
+                    position: static;
+                    width: 100%;
+                    height: auto;
+                }
+
+                .buttons {
+                    @apply(--buttons-small-screen-layout);
+                }
+
+                .name, .address {
+                    max-width: 100%;
+                    margin-right: 0;
                 }
             }
 
@@ -125,6 +164,8 @@
         <firebase-document id="verify_document" app-name="doctor-appointment-system" path="/officePatients/[[officeId]]"
                            data="{{officePatients}}">
         </firebase-document>
+
+        <iron-media-query query="max-width: 1100px" query-matches="{{smallScreen}}"></iron-media-query>
 
         <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
             <div class="flexchild "><input placeholder="Jméno"></div>
@@ -138,17 +179,16 @@
             </div>
         </paper-material>
 
-
         <template is="dom-repeat" items="[[patientsArray]]" as="patient">
             <div class="container flex-horizontal-with-ratios my-list-item">
 
-                <div class="flexchild date-of-birth"><span class="label">Jméno:</span>[[computeFullName(patient.name)]]
+                <div class="flexchild date-of-birth"><span class="label" hidden="[[!smallScreen]]">Jméno:</span>[[computeFullName(patient.name)]]
                 </div>
 
-                <div class="flexchild name"><span class="label">Datum narození:</span>[[computeDateOfBirth(patient.dateOfBirth)]]
+                <div class="flexchild name"><span class="label" hidden="[[!smallScreen]]">Datum narození:</span>[[computeDateOfBirth(patient.dateOfBirth)]]
                 </div>
 
-                <div class="flexchild address"><span class="label">Adresa:</span>[[patient.address.street]]
+                <div class="flexchild address"><span class="label" hidden="[[!smallScreen]]">Adresa:</span>[[patient.address.street]]
                     <br>
                     <div class="address-city">[[patient.address.city]]</div>
                 </div>
@@ -159,7 +199,8 @@
                         [[computeText(patient.infoOpened)]] detail
                     </paper-button>
                     <a title="poslat zprávu pacientovi" on-tap="handleMessage">
-                        <paper-icon-button class="send-message-icon" icon="communication:message"></paper-icon-button>
+                        <paper-icon-button class="send-message-icon"
+                                           icon="communication:message"></paper-icon-button>
                     </a>
                 </div>
             </div>
@@ -174,7 +215,8 @@
             <iron-collapse opened="[[patient.messageOpened]]">
                 <div class="collapse-content message-container">
                     <paper-button id="close-message" class="red" on-tap="handleMessage" raised>
-                        <iron-icon icon="icons:close"></iron-icon>Zrušit
+                        <iron-icon icon="icons:close"></iron-icon>
+                        Zrušit
                     </paper-button>
                     <h3>Zpráva pacientovi</h3>
                     <paper-input class="subject" label="Předmět zprávy" maxlength="50"></paper-input>

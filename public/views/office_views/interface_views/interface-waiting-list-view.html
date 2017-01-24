@@ -82,40 +82,52 @@
                     @apply(--layout-vertical);
                 }
 
-                .name, .address {
-                    max-width: 100%;
+                .buttons {
+                    @apply(--buttons-medium-screen-layout);
                 }
 
                 .my-list-item {
-                    padding-bottom: 0.6em;
-                }
-
-                .details-button {
-                    float: left;
+                    @apply(--list-medium-screen-layout);
+                    margin-top: 1.2em;
                 }
 
                 .label {
-                    display: inline-block;
-                    margin: 0.25em 0.5em 0.25em 0;
+                    @apply(--label-medium-screen-layout);
                 }
 
-                .address-city{
-                    margin-left: 3.51em;
-                    display: inline-block;
+                .address-city {
+                    @apply(--city-medium-screen-layout);
                 }
+
+                /*************************/
+
+                .name, .address {
+                    max-width: 50%;
+                }
+
+                .in-waiting-room {
+                    margin-bottom: 3.8em;
+                }
+            }
+
+            @media only screen and (max-width: 1030px) {
 
                 .buttons {
-                    border-top: 1px solid var(--border-color);
-                    padding-top: 0.6em;
-                    margin-top: 1em;
+                    @apply(--buttons-small-screen-layout);
+                }
+
+                .name, .address {
+                    max-width: 100%;
+                    margin-right: 0;
+                }
+
+
+                .in-waiting-room {
+                    margin-bottom: 0;
                 }
             }
 
             @media only screen and (max-width: 435px) {
-
-                .details-button {
-                    float: none;
-                }
 
                 .buttons > paper-button {
                     margin: 0 0.9%;
@@ -123,10 +135,10 @@
                 }
 
                 .my-list-item {
-                    border: 1px solid var(--border-color);
                     margin-top: 2em;
                 }
             }
+
 
         </style>
 
