@@ -8,13 +8,14 @@
 
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
-<link rel="import" href="/styles/patientsAndConfirm-styles.html">
 
 <dom-module id="interface-notifications-confirm-view">
     <template>
-        <style include="interface-styles button-styles patientsAndConfirm-styles">
+        <style include="interface-styles button-styles">
 
             #not-confirmed-patients {
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                background-color: #fff;
                 text-align: right;
                 padding: 1em;
             }
@@ -28,15 +29,54 @@
                 text-decoration: underline;
             }
 
-            .my-list-item:not(:first-child) {
-                border-top: 1px solid var(--border-color);
-            }
-
             .no-patients {
                 height: 10em;
                 font-size: 1.2em;
                 @apply(--layout);
                 @apply(--layout-center-center);
+            }
+
+            .name, .address {
+                max-width: 25%;
+            }
+
+            @media only screen and (max-width: 1300px) {
+
+                .flex-horizontal-with-ratios {
+                    @apply(--layout-vertical);
+                }
+
+                .buttons {
+                    @apply(--buttons-medium-screen-layout);
+                }
+
+                .my-list-item {
+                    @apply(--list-medium-screen-layout);
+                }
+
+                .label {
+                    @apply(--label-medium-screen-layout);
+                }
+
+                .address-city {
+                    @apply(--city-medium-screen-layout);
+                }
+
+                .name, .address {
+                    max-width: 50%;
+                }
+            }
+
+            @media only screen and (max-width: 867px) {
+
+                .buttons {
+                    @apply(--buttons-small-screen-layout);
+                }
+
+                .name, .address {
+                    max-width: 100%;
+                    margin-right: 0;
+                }
             }
 
         </style>
@@ -69,10 +109,12 @@
                 <div class="flexchild buttons">
                     <paper-button class="confirm-button" on-tap="confirmUser">
                         <iron-icon icon="icons:check"></iron-icon>
-                        Potvrdit</paper-button>
+                        Potvrdit
+                    </paper-button>
                     <paper-button class="dismiss-button">
                         <iron-icon icon="icons:close" on-tap="dismissUser"></iron-icon>
-                        Zamítnout</paper-button>
+                        Zamítnout
+                    </paper-button>
                 </div>
             </div>
 
