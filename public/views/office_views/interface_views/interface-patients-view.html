@@ -99,8 +99,8 @@
                     @apply(--layout-vertical);
                 }
 
-                .details-button {
-                    @apply(--buttons-medium-screen-layout);
+                .buttons {
+                    @apply(--buttons-medium-screen-layout)
                 }
 
                 .label {
@@ -126,12 +126,6 @@
                     right: 1em;
                 }
 
-                .buttons {
-                    margin: 0;
-                    padding: 0;
-                    border: none;
-                }
-
                 .name, .address {
                     max-width: 50%;
                 }
@@ -143,20 +137,18 @@
                     width: 100%;
                 }
 
-                .details-button {
-                    position: static;
-                    width: 100%;
-                    height: auto;
-                }
-
                 .buttons {
-                    @apply(--buttons-small-screen-layout);
+                    @apply(--buttons-small-screen-layout)
                 }
 
                 .name, .address {
                     max-width: 100%;
-                    margin-right: 0;
                 }
+
+                .name{
+                    margin-right: 4em;
+                }
+
             }
 
         </style>
@@ -198,11 +190,11 @@
                     <paper-button on-tap="handleDetail" class="details-button">
                         [[computeText(patient.infoOpened)]] detail
                     </paper-button>
-                    <a title="poslat zprávu pacientovi" on-tap="handleMessage">
-                        <paper-icon-button class="send-message-icon"
-                                           icon="communication:message"></paper-icon-button>
-                    </a>
                 </div>
+                <a title="poslat zprávu pacientovi" on-tap="handleMessage">
+                    <paper-icon-button class="send-message-icon"
+                                       icon="communication:message"></paper-icon-button>
+                </a>
             </div>
 
             <iron-collapse opened="[[patient.infoOpened]]">
