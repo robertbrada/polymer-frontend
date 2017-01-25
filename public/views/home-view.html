@@ -9,12 +9,11 @@
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
-<link rel="import" href="/styles/header-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="home-view">
     <template>
-        <style include="button-styles input-styles layout-styles header-styles">
+        <style include="button-styles input-styles layout-styles">
             :host {
                 display: block;
             }
@@ -109,7 +108,19 @@
                 }
             }
 
+            .office-element {
+                padding: 1em;
+                margin: 1em;
+                background-color: #fff;
+                border: 1px solid #d5d5d6
+            }
+
         </style>
+
+
+        <firebase-document app-name="doctor-appointment-system" path="/officeSearchInfo"
+                           data="{{officeSearchInfo}}">
+        </firebase-document>
 
         <div id="head">
 
@@ -134,16 +145,41 @@
                         Hledat
                     </paper-button>
                 </section>
-
             </div>
         </div>
 
-        <div id="content" style="height: 100vh"></div>
+        <!-- List of all offices -->
+
+        <template is="dom-repeat" items="[[officesArray]]" as="office">
+            <div class="office-element">
+                <div>1: [[office.name.firstName]]</div>
+                <div>2: [[office.name.lastName]]</div>
+                <div>3: [[office.address.street]]</div>
+                <div>4: [[office.address.city]]</div>
+            </div>
+        </template>
 
     </template>
     <script>
         Polymer({
-            is: 'home-view'
+            is: 'home-view',
+
+            properties: {
+                officesArray: {
+                    type: Array,
+                    computed: 'computeOfficesArray(officeSearchInfo)'
+                }
+            },
+
+            computeOfficesArray: function (officeSearchInfo) {
+                return Object.keys(officeSearchInfo).map(function (key) {
+                    return {
+                        'name': officeSearchInfo[key]['name'],
+                        'address': officeSearchInfo[key]['address'],
+                        'officeId': key
+                    }
+                });
+            }
         });
     </script>
 </dom-module>
