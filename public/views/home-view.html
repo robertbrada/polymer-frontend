@@ -137,13 +137,14 @@
 
             #profile-photo {
                 border: 1px solid #c5c5c6;
-                height: var(--large-photo-width);
-                width: var(--large-photo-width);
+                height:100%;
+                width: 100%;
                 border-radius: 50%;
             }
 
-            #align-container {
+            #photo-container {
                 width: var(--large-photo-width);
+                height: var(--large-photo-width);
             }
 
             #name-address {
@@ -247,15 +248,10 @@
                     margin-top: 0.85em;
                 }
 
-                #profile-photo {
+                #photo-container {
+                    width: var(--small-photo-width);
                     height: var(--small-photo-width);
-                    width: var(--small-photo-width);
                 }
-
-                #align-container {
-                    width: var(--small-photo-width);
-                }
-
             }
 
 
@@ -305,12 +301,11 @@
             <template is="dom-repeat" items="[[officesArray]]" as="office">
                 <div class="office-element container flex-horizontal-with-ratios">
 
-                    <template is="dom-if" if="[[office.photoAvailability]]" class="template-with-photo">
-                        <img src$="#" id="profile-photo">
-                    </template>
-
-                    <!--to align contenw when photo not available - maybe not the best solution-->
-                    <div id="align-container" hidden="[[office.photoAvailability]]"></div>
+                    <div id="photo-container">
+                        <template is="dom-if" if="[[office.photoAvailability]]">
+                            <img src$="#" id="profile-photo">
+                        </template>
+                    </div>
 
                     <div id="name-address">
                         <div id="name">[[computeFullName(office.name)]]</div>
