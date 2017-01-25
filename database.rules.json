@@ -84,8 +84,8 @@
       }
     },
     "officeSearchInfo": {
+      ".read": true,
       "$oid": {
-        ".read": true,
         ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
       }
     },
