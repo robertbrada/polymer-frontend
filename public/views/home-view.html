@@ -1,11 +1,15 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <!--icons-->
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -16,12 +20,16 @@
         <style include="button-styles input-styles layout-styles">
             :host {
                 display: block;
+                background-color: var(--app-background-color);
+                --large-photo-width: 105px;
+                --small-photo-width: 85px;
             }
 
             #head {
                 padding: 70px 0 140px 0;
                 margin: 0 auto;
                 background-color: var(--app-accent-color);
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
             }
 
             /* prepsane nektere vlastnosti naimportovane z input styles - specificke pro home-view input */
@@ -41,7 +49,7 @@
                 };
             }
 
-            h1 {
+            #head h1 {
                 text-align: center;
                 margin: 0 20px;
                 letter-spacing: 0.03em;
@@ -83,7 +91,6 @@
 
                 #head {
                     padding-bottom: 0;
-                    border-bottom: 1px solid var(--app-accent-color);
                 }
 
                 #search-div {
@@ -108,12 +115,149 @@
                 }
             }
 
-            .office-element {
-                padding: 1em;
-                margin: 1em;
-                background-color: #fff;
-                border: 1px solid #d5d5d6
+            /*** PROFILES ***/
+
+            a {
+                text-decoration: none;
+                color: inherit;
             }
+
+            .main-frame {
+                margin-top: 3em;
+                min-height: 100vh;
+            }
+
+            .office-element {
+                padding: 1.5em;
+                border-top: 1px solid #ccccce;
+                background-color: #fff;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                font-size: 0.95em;
+            }
+
+            #profile-photo {
+                border: 1px solid #c5c5c6;
+                height: var(--large-photo-width);
+                width: var(--large-photo-width);
+                border-radius: 50%;
+            }
+
+            #align-container {
+                width: var(--large-photo-width);
+            }
+
+            #name-address {
+                margin-left: 2.5em;
+                word-wrap: break-word;
+                max-width: calc(100% - (110px + 220px)); /*100% width of container - width of photo and accept text + some space */
+            }
+
+            #name {
+                font-weight: bold;
+                font-size: 1.1em;
+            }
+
+            #specialization {
+                color: #77787a;
+            }
+
+            #street {
+                margin-top: 1.4em;
+            }
+
+            /*** ACCEPTING ***/
+
+            .accepting-new-container {
+                text-align: right;
+                margin-left: auto;
+            }
+
+            paper-button iron-icon {
+                margin-right: 0.2em;
+            }
+
+            .accepting-new-container iron-icon {
+                margin-left: 0.5em;
+            }
+
+            #accepting, #not-accepting {
+                color: #88888a;
+            }
+
+            #accepting iron-icon {
+                color: var(--app-green-color);
+            }
+
+            #not-accepting iron-icon {
+                color: var(--app-red-color);
+            }
+
+            /*** OTHER ***/
+
+            #show-profile {
+                font-size: 0.9em;
+                display: block;
+                margin-top: 3em;
+                margin-bottom: 0;
+            }
+
+            #show-profile paper-button {
+                margin: 0;
+            }
+
+            .flex-horizontal-with-ratios {
+                @apply(--layout-horizontal);
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                .main-frame {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+            }
+
+            @media only screen and (max-width: 585px) {
+
+                .office-element {
+                    position: relative;
+                    font-size: 0.88em;
+                    padding-top: 1em;
+                    padding-bottom: 1em;
+                }
+
+                #name-address {
+                    margin-left: 1.5em;
+                    max-width: calc(100% - (85px + 60px));
+                }
+
+                /* link to doctor is over all office card and is transparent */
+                #show-profile {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0);
+                    margin: 0;
+                    padding: 0;
+                    top:0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
+
+                #street {
+                    margin-top: 0.85em;
+                }
+
+                #profile-photo {
+                    height: var(--small-photo-width);
+                    width: var(--small-photo-width);
+                }
+
+                #align-container {
+                    width: var(--small-photo-width);
+                }
+
+            }
+
 
         </style>
 
@@ -122,42 +266,77 @@
                            data="{{officeSearchInfo}}">
         </firebase-document>
 
+        <iron-media-query query="max-width: 585px" query-matches="{{mobileScreen}}"></iron-media-query>
+
         <div id="head">
 
             <h1>Objednejte se online a bez čekání</h1>
 
-            <div id="search-div" class="subsection grid">
-                <section>
-                    <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search"
-                                 autofocus focused="{{focused1}}" always-float-label="[[focused1]]">
-                    </paper-input>
-                </section>
+            <div id="search-div">
+                <div class="subsection grid">
+                    <section>
+                        <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search"
+                                     focused="{{focused1}}" always-float-label="[[focused1]]">
+                        </paper-input>
+                    </section>
 
-                <section>
-                    <paper-input id="search_input_place" label="Město nebo PSČ" type="search"
-                                 focused="{{focused2}}" always-float-label="[[focused2]]">
-                    </paper-input>
-                </section>
+                    <section>
+                        <paper-input id="search_input_place" label="Město nebo PSČ" type="search"
+                                     focused="{{focused2}}" always-float-label="[[focused2]]">
+                        </paper-input>
+                    </section>
 
-                <section>
-                    <paper-button id="search_button" raised>
-                        <iron-icon icon="search"></iron-icon>
-                        Hledat
-                    </paper-button>
-                </section>
+                    <section>
+                        <paper-button id="search_button" raised>
+                            <iron-icon icon="search"></iron-icon>
+                            Hledat
+                        </paper-button>
+                    </section>
+                </div>
+                <paper-checkbox id="accepting-new-checkbox">Najít pouze lékaře přijímající nové pacienty
+                </paper-checkbox>
             </div>
+
         </div>
 
-        <!-- List of all offices -->
 
-        <template is="dom-repeat" items="[[officesArray]]" as="office">
-            <div class="office-element">
-                <div>1: [[office.name.firstName]]</div>
-                <div>2: [[office.name.lastName]]</div>
-                <div>3: [[office.address.street]]</div>
-                <div>4: [[office.address.city]]</div>
-            </div>
-        </template>
+        <div id="main-container" class="main-frame container flex-horizontal">
+
+            <template is="dom-repeat" items="[[officesArray]]" as="office">
+                <div class="office-element container flex-horizontal-with-ratios">
+
+                    <template is="dom-if" if="[[office.photoAvailability]]" class="template-with-photo">
+                        <img src$="#" id="profile-photo">
+                    </template>
+
+                    <!--to align contenw when photo not available - maybe not the best solution-->
+                    <div id="align-container" hidden="[[office.photoAvailability]]"></div>
+
+                    <div id="name-address">
+                        <div id="name">[[computeFullName(office.name)]]</div>
+                        <div id="specialization">[[computeSpecialization(office.specialization)]]</div>
+                        <div id="street">[[office.address.street]]</div>
+                        <div id="city">[[office.address.city]]</div>
+                    </div>
+
+                    <div class="accepting-new-container">
+
+                        <div hidden="[[!office.acceptingNewPatients]]" id="accepting">
+                            <span hidden="[[mobileScreen]]">Přijímá nové pacienty</span>
+                            <iron-icon icon="social:group"></iron-icon>
+                        </div>
+                        <div hidden="[[office.acceptingNewPatients]]" id="not-accepting">
+                            <span hidden="[[mobileScreen]]">Nepřijímá nové pacienty</span>
+                            <iron-icon icon="social:group"></iron-icon>
+                        </div>
+
+                        <a href="/d/[[office.officeId]]" id="show-profile">
+                            <paper-button hidden="[[mobileScreen]]" raised>Objednat se</paper-button>
+                        </a>
+                    </div>
+                </div>
+            </template>
+        </div>
 
     </template>
     <script>
@@ -165,6 +344,12 @@
             is: 'home-view',
 
             properties: {
+
+                specializations: {
+                    type: Array,
+                    value: ['Zubař', 'Rektálník', 'Gynekolog']
+                },
+
                 officesArray: {
                     type: Array,
                     computed: 'computeOfficesArray(officeSearchInfo)'
@@ -176,9 +361,20 @@
                     return {
                         'name': officeSearchInfo[key]['name'],
                         'address': officeSearchInfo[key]['address'],
+                        'specialization': officeSearchInfo[key]['specialization'],
+                        'photoAvailability': officeSearchInfo[key]['photoAvailability'],
+                        'acceptingNewPatients': officeSearchInfo[key]['acceptingNewPatients'],
                         'officeId': key
                     }
                 });
+            },
+
+            computeFullName: function (name) {
+                return name.firstName + " " + name.lastName;
+            },
+
+            computeSpecialization: function (specialization) {
+                return this.specializations[specialization];
             }
         });
     </script>
