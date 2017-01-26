@@ -13,6 +13,12 @@
 <dom-module id="settings-view">
     <template>
         <style include="button-styles layout-styles input-styles">
+            .main-frame {
+                background-color: #fff;
+                max-width: 950px;
+                margin: 0 auto 3em;
+                padding: 1em 4.5% 3.5em 4.5%;
+            }
         </style>
 
         <firebase-document id="user_document" app-name="doctor-appointment-system"
@@ -24,40 +30,44 @@
         </firebase-document>
 
 
-        <div class="subsection grid">
-            <section>
-                <form id="form1" is="iron-form">
-                    <h2>Základní informace</h2>
-                    <paper-input id="fninput" label="Jméno" minlength="1" maxlength="30"
-                                 error-message="Nelze ponechat prázdné" required auto-validate
-                                 value="[[userInfo.name.firstName]]"></paper-input>
-                    <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
-                                 maxlength="30" error-message="Nelze ponechat prázdné"
-                                 required value="[[userInfo.name.lastName]]"></paper-input>
-                    <paper-input id="dinput" label="Datum narození" value="[[computeDateOfBirth(userInfo.dateOfBirth)]]" auto-validate required
-                                 placeholder="24.5.1995" pattern="[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}" prevent-invalid-input allowed-pattern="[0-9.]">
-                    </paper-input>
-                </form>
-            </section>
+        <paper-material class="main-frame">
+            <div class="subsection grid">
+                <section>
+                    <form id="form1" is="iron-form">
+                        <h2>Základní informace</h2>
+                        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="30"
+                                     error-message="Nelze ponechat prázdné" required auto-validate
+                                     value="[[userInfo.name.firstName]]"></paper-input>
+                        <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
+                                     maxlength="30" error-message="Nelze ponechat prázdné"
+                                     required value="[[userInfo.name.lastName]]"></paper-input>
+                        <paper-input id="dinput" label="Datum narození"
+                                     value="[[computeDateOfBirth(userInfo.dateOfBirth)]]" auto-validate required
+                                     placeholder="24.5.1995" pattern="[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}"
+                                     prevent-invalid-input allowed-pattern="[0-9.]">
+                        </paper-input>
+                    </form>
+                </section>
 
-            <section>
-                <form id="form2" is="iron-form">
-                    <h2>Adresa</h2>
-                    <paper-input id="cinput" label="Město" minlength="1" maxlength="30"
-                                 value="[[userInfo.address.city]]" required auto-validate>
-                    </paper-input>
-                    <paper-input id="sinput" label="Ulice a číslo popisné" minlength="3" maxlength="80"
-                                 value="[[userInfo.address.street]]" required auto-validate></paper-input>
-                    <paper-button id="confirm_button" on-tap="confirm" raised>Uložit změny</paper-button>
-                </form>
-            </section>
-        </div>
-        <div>
-            <h2>Změna hesla</h2>
-            <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
-                změnit.</p>
-            <paper-button on-tap="passChange" raised>Poslat email</paper-button>
-        </div>
+                <section>
+                    <form id="form2" is="iron-form">
+                        <h2>Adresa</h2>
+                        <paper-input id="cinput" label="Město" minlength="1" maxlength="30"
+                                     value="[[userInfo.address.city]]" required auto-validate>
+                        </paper-input>
+                        <paper-input id="sinput" label="Ulice a číslo popisné" minlength="3" maxlength="80"
+                                     value="[[userInfo.address.street]]" required auto-validate></paper-input>
+                        <paper-button id="confirm_button" on-tap="confirm" raised>Uložit změny</paper-button>
+                    </form>
+                </section>
+            </div>
+            <div>
+                <h2>Změna hesla</h2>
+                <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
+                    změnit.</p>
+                <paper-button on-tap="passChange" raised>Poslat email</paper-button>
+            </div>
+        </paper-material>
     </template>
 
     <script>

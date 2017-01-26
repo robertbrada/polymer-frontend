@@ -27,14 +27,18 @@
             }
 
             .my-list-item {
-                text-align: justify;
-                border: 1px solid var(--border-color);
-                margin: 1em 0 0 0;
-                background-color: #fafafb;
+                padding: 2em;
+                max-width: 950px;
+                margin: 0 auto;
+                border: none !important;
             }
 
-            .my-list-item:first-child{
-                margin-top: 0;
+            .my-list-item:not(:nth-child(2)) {
+                border-top: 1px solid #ebebec !important;
+            }
+
+            .buttons {
+                margin-top: auto;
             }
 
             .notification-message {
@@ -47,14 +51,8 @@
             }
 
             .flexchild {
-                @apply(--layout-flex-3);
-                margin-right: 2em;
-            }
-
-            .flex2child {
                 @apply(--layout-flex);
-                text-align: right;
-                margin-top: auto;
+                margin-right: 2em;
             }
 
             /*RESPONSIVE ADDITIONS*/
@@ -68,25 +66,14 @@
                     margin: 1.2em 0 0 0;
                 }
 
-                .flex2child {
-                    padding-top: 0.6em;
-                }
-            }
+                .my-list-item {
+                    padding: 1em;
 
-            @media only screen and (max-width: 300px) {
-
-                .buttons > paper-button {
-                    display: block;
-                    margin: 0.9em 0;
-                    text-align: center;
-                    padding: 1.2em;
                 }
             }
 
             .no-notifications {
-                font-size: 1.2em;
-                @apply(--layout);
-                @apply(--layout-center-center);
+                text-align: center;
             }
 
         </style>
@@ -97,24 +84,26 @@
         </firebase-document>
 
         <!--TODO: disable URL escaping-->
-        <div>
-            <template is="dom-repeat" items="[[notificationsArray]]" as="notification">
-                <div class="my-list-item">
-                    <h3>[[notification.title]]</h3>
-                    <a href="/d/[[notification.sender]]">Profil odesílatele</a>
-                    <div class="container flex-horizontal-with-ratios">
-                        <div class="flexchild notification-message">[[notification.message]]</div>
-                        <div class="flex2child buttons">
-                            <paper-button on-tap="dismissNotification" class="confirm-button">Přečteno</paper-button>
-                        </div>
+        <template is="dom-repeat" items="[[notificationsArray]]" as="notification">
+            <div class="my-list-item">
+                <h3>[[notification.title]]</h3>
+                <a href="/d/[[notification.sender]]">Profil odesílatele</a>
+                <div class="container flex-horizontal-with-ratios">
+                    <div class="flexchild notification-message">[[notification.message]]</div>
+                    <div class="buttons">
+                        <paper-button on-tap="dismissNotification" class="confirm-button">
+                            <iron-icon icon="icons:check"></iron-icon>
+                            Přečteno
+                        </paper-button>
                     </div>
                 </div>
-            </template>
-        </div>
+            </div>
+        </template>
 
-        <div hidden="[[computeIfNotifications(notificationsArray)]]" class="no-notifications">
+
+        <div hidden="[[computeIfNotifications(notificationsArray)]]" class="no-notifications my-list-item">
             <iron-icon icon="info"></iron-icon>
-            Žádné nové upozornění
+            Žádná nová upozornění
         </div>
 
     </template>
