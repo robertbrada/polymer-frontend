@@ -9,6 +9,7 @@
 <link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
+<link rel="import" href="/custom_components/date-validator.html">
 
 <dom-module id="settings-view">
     <template>
@@ -29,6 +30,7 @@
                            path="/userContactedOffices/[[user.uid]]" data="{{userContactedOffices}}">
         </firebase-document>
 
+        <date-validator validator-name="dateValidator"></date-validator>
 
         <paper-material class="main-frame">
             <div class="subsection grid">
@@ -41,10 +43,9 @@
                         <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
                                      maxlength="30" error-message="Nelze ponechat prázdné"
                                      required value="[[userInfo.name.lastName]]"></paper-input>
-                        <paper-input id="dinput" label="Datum narození"
-                                     value="[[computeDateOfBirth(userInfo.dateOfBirth)]]" auto-validate required
-                                     placeholder="24.5.1995" pattern="[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}"
-                                     prevent-invalid-input allowed-pattern="[0-9.]">
+                        <paper-input id="dinput" label="Datum narození" auto-validate required placeholder="24.5.1995"
+                                     pattern="[0-9]{1,2}[.][0-9]{1,2}[.][0-9]{4}" value="[[computeDateOfBirth(userInfo.dateOfBirth)]]"
+                                     prevent-invalid-input allowed-pattern="[0-9.]" validator="dateValidator">
                         </paper-input>
                     </form>
                 </section>

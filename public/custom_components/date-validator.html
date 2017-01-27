@@ -1,0 +1,24 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/iron-validator-behavior/iron-validator-behavior.html">
+
+<script>
+    Polymer({
+
+        is: 'date-validator',
+
+        behaviors: [
+            Polymer.IronValidatorBehavior
+        ],
+
+        validate: function (value) {
+            var dateArray = value.split('.'),
+                date = Number(dateArray[0]),
+                month = Number(dateArray[1]),
+                year = Number(dateArray[2]);
+
+            return date >= 1 && date <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2020;
+        }
+    });
+
+</script>

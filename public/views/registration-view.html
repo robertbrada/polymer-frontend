@@ -16,6 +16,7 @@
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
+<link rel="import" href="/custom_components/date-validator.html">
 
 <dom-module id="registration-view">
     <template>
@@ -143,6 +144,8 @@
 
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
+        <date-validator validator-name="dateValidator"></date-validator>
+
         <div class="main-frame">
             <header>
                 <h1>Registrace</h1>
@@ -161,8 +164,8 @@
                                      maxlength="30" error-message="Nelze ponechat prázdné"
                                      required></paper-input>
                         <paper-input id="dinput" label="Datum narození" auto-validate required placeholder="24.5.1995"
-                                     pattern="[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}" prevent-invalid-input
-                                     allowed-pattern="[0-9.]">
+                                     pattern="[0-9]{1,2}[.][0-9]{1,2}[.][0-9]{4}" prevent-invalid-input
+                                     allowed-pattern="[0-9.]" validator="dateValidator">
                         </paper-input>
 
                         <span id="birth-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést své datum narození?</span>
