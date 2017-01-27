@@ -1,12 +1,10 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/iron-meta/iron-meta.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 
 <dom-module id="emailaction-view">
     <template>
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
-        <iron-meta key="actionCode" value$="{{actionCode}}"></iron-meta>
     </template>
 
     <script>
@@ -21,7 +19,7 @@
 
                 switch (this.route.__queryParams["mode"]) {
                     case 'resetPassword':
-                        this.handleResetPassword(auth, actionCode);
+                        this.handleResetPassword(actionCode);
                         break;
                     case 'recoverEmail':
                         this.handleRecoverEmail(auth, actionCode);
@@ -35,10 +33,14 @@
                 }
             },
 
-            handleResetPassword: function (auth, actionCode) {
-                this.actionCode = actionCode;
+            handleResetPassword: function (actionCode) {
                 this.fire('change-route', {url: '/home'});
-                this.fire("show-dialog", {path: "emailactions/", viewName: "passreset", open: true});
+                this.fire("show-dialog", {
+                    path: "emailactions/", viewName: "passreset", open: true,
+                    data: {
+                        actionCode: actionCode
+                    }
+                });
             },
 
             handleRecoverEmail: function (auth, actionCode) {
@@ -48,7 +50,14 @@
             handleVerifyEmail: function (auth, actionCode) {
                 auth.applyActionCode(actionCode).then(function () {
                     this.fire('change-route', {url: '/home'});
-                    this.fire("show-dialog", {path: "emailactions/", viewName: "actionconfirm", open: true});
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Váš email byl úspěšně potvrzen. Nyní se můžete objednat. V případě že jste doktor prosím pokračujte přidáním ordinace.',
+                            nextRoute: '/office/registration/data',
+                            buttonText: 'Přidat ordinaci'
+                        }
+                    });
                 }.bind(this)).catch(function () {
                     this.fire('change-route', {url: '/home'});
                     this.fire("show-dialog", {path: "emailactions/", viewName: "actionerror", open: true})

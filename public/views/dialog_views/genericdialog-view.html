@@ -4,27 +4,28 @@
 
 <link rel="import" href="/styles/button-styles.html">
 
-<dom-module id="actionconfirm-view">
+<dom-module id="genericdialog-view">
     <template>
         <style include="button-styles">
-            .main-text {
+            p {
                 font-size: 1.2em;
             }
         </style>
 
-        <p class="main-text">Váš email byl úspěšně potvrzen. Nyní se můžete objednat. <br> V případě že jste doktor
-            prosím pokračujte přidáním ordinace.</p>
+        <p>[[data.text]]</p>
         <paper-button responsive id="dialog-button" on-tap="confirm" raised>
-            Přidat ordinaci
+            [[data.buttonText]]
         </paper-button>
     </template>
 
     <script>
         Polymer({
-            is: 'actionconfirm-view',
+            is: 'genericdialog-view',
 
             confirm: function () {
-                this.fire('change-route', {url: '/office/registration/data'});
+                if (!!this.data.nextRoute) {
+                    this.fire('change-route', {url: this.data.nextRoute});
+                }
                 this.fire('dialog-confirm');
             }
         });

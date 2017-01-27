@@ -53,11 +53,10 @@
 
         <iron-pages id="main-pages" selected="{{viewName}}" attr-for-selected="name">
             <login-view name="login"></login-view>
-            <emaildialog-view name="emaildialog"></emaildialog-view>
             <actionerror-view name="actionerror"></actionerror-view>
-            <actionconfirm-view name="actionconfirm"></actionconfirm-view>
-            <passreset-view name="passreset"></passreset-view>
             <emailinput-view name="emailinput"></emailinput-view>
+            <passreset-view name="passreset" data="[[dialogData.passreset]]"></passreset-view>
+            <genericdialog-view name="genericdialog" data="[[dialogData.genericdialog]]"></genericdialog-view>
         </iron-pages>
     </template>
 
@@ -74,6 +73,12 @@
                 viewName: {
                     type: String,
                     value: "login"
+                },
+
+                /* Structure: {viewName1: data1, viewName2: data2}*/
+                dialogData: {
+                    type: Object,
+                    value: {}
                 }
             },
 
@@ -103,9 +108,12 @@
             // Custom
 
             _showDialog: function (event) {
-                this.viewName = event.detail.viewName;
-                this.importHref("/views/dialog_views/" + event.detail.path + event.detail.viewName + "-view.html", function () {
-                    if (event.detail.open) {
+                var _dialogData = event.detail;
+
+                this.importHref("/views/dialog_views/" + _dialogData.path + _dialogData.viewName + "-view.html", function () {
+                    this.set('dialogData.' + _dialogData.viewName, _dialogData.data);
+                    this.viewName = _dialogData.viewName;
+                    if (_dialogData.open) {
                         this.toggle();
                     } else {
                         this.notifyResize();

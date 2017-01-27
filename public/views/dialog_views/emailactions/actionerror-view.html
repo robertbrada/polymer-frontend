@@ -36,7 +36,13 @@
             resendVerification: function () {
                 if (!!this.user) {
                     this.user.sendEmailVerification();
-                    this.fire("show-dialog", {path: "", viewName: "emaildialog", open: false});
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Na Vaší emailovou adresu byl poslán potvrzovací email. Jakmile jej potvrdíte, budete se moci objednat.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
                 } else {
                     console.log("Not logged in error");
 //                    TODO: dialog pro login

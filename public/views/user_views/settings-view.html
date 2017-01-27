@@ -100,7 +100,7 @@
             },
 
             passChange: function () {
-                this.$.auth.auth.sendPasswordResetEmail(this.user.email).then(function () {
+                this.$.user_document.app.auth().sendPasswordResetEmail(this.user.email).then(function () {
                     this.fire("show-toast", {text: "Email odeslán"});
                 }.bind(this)).catch(function () {
                     console.log("email sending error");
