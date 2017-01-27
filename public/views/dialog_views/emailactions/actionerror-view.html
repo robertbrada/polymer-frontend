@@ -34,19 +34,17 @@
             },
 
             resendVerification: function () {
-                if (!!this.user) {
-                    this.user.sendEmailVerification();
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'Na Vaší emailovou adresu byl poslán potvrzovací email. Jakmile jej potvrdíte, budete se moci objednat.',
-                            buttonText: 'Zavřít'
-                        }
-                    });
-                } else {
-                    console.log("Not logged in error");
-//                    TODO: dialog pro login
-                }
+                var dialogText = (!!this.user) ? 'Na Vaší emailovou adresu byl poslán potvrzovací email. Jakmile jej potvrdíte, budete se moci objednat.' :
+                    "Pro odeslání potvrzovacího emailu je nutné se přihlásit.";
+
+                this.user.sendEmailVerification();
+                this.fire("show-dialog", {
+                    path: "", viewName: "genericdialog", open: true,
+                    data: {
+                        text: dialogText,
+                        buttonText: 'Zavřít'
+                    }
+                });
             }
         });
     </script>
