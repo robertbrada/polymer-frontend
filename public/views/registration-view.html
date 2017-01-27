@@ -13,24 +13,23 @@
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/button-styles.html">
-<link rel="import" href="/styles/header-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 <link rel="import" href="/behaviors/pass-visibility-behavior.html">
 
 <dom-module id="registration-view">
     <template>
-        <style include="button-styles layout-styles input-styles header-styles">
+        <style include="button-styles layout-styles input-styles">
 
-            h1 {
-                font-size: 1.6em !important;
-                text-align: left;
-                color: var(--app-green-color);
-                font-weight: lighter;
-                padding-bottom: 0.4em;
+            header {
                 border-bottom: 1px solid #e2e2e4;
-                margin-bottom: 0 !important;
-                margin-top: 0.7em !important;
+            }
+
+            header > h1 {
+                font-size: 1.6em;
+                color: var(--app-green-color);
+                font-weight: 400;
+                margin-bottom: 0.1em;
             }
 
             h2 {
@@ -100,7 +99,7 @@
                 margin-bottom: 2em;
             }
 
-            paper-input, gold-email-input, gold-phone-input  {
+            paper-input, gold-email-input, gold-phone-input {
 
                 --paper-input-container: {
                     margin-top: 0;
@@ -114,7 +113,7 @@
 
             @media only screen and (min-width: 767px) {
 
-                section h2:first-child{
+                section h2:first-child {
                     margin-top: 2.2em;
                 }
 
@@ -129,7 +128,7 @@
 
             @media only screen and (max-width: 767px) {
 
-                #form1 h2:first-child{
+                #form1 h2:first-child {
                     margin-top: 2em;
                 }
 
@@ -145,9 +144,8 @@
         <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
 
         <div class="main-frame">
-            <header class="subsection">
+            <header>
                 <h1>Registrace</h1>
-                <!--<span>Ůdaje níže vyžadujeme, jelikož Vás doktor při objednání potřebuje identifikovat.</span>-->
             </header>
             <div class="subsection grid">
                 <section>
