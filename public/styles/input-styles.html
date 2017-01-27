@@ -1,6 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-
 <dom-module id="input-styles">
     <template>
         <style>
@@ -13,21 +12,26 @@
             }
 
             h2 {
-                font-size: 18px;
-                margin-top: 40px;
+                font-size: 1em;
+                margin-top: 3.5em;
+                margin-bottom: 0.5em;
             }
 
-            paper-button {
-                margin-top: 20px;
+            h2 iron-icon {
+                margin-right: 0.4em;
+                color: var(--app-green-color);
+                height: 20px;
+                width: 20px;
+                margin-top: -3px
             }
 
             p {
-                margin-bottom: 0px;
+                margin-bottom: 0;
             }
 
             paper-checkbox {
                 margin-top: 20px;
-                --primary-color: var(--app-primary-color);
+                --primary-color: var(--app-green-color);
             }
 
             paper-input, gold-email-input, paper-textarea, gold-phone-input  {
@@ -36,8 +40,8 @@
                 };
 
                 --paper-input-container: {
-                    margin-top: 9px;
-                    margin-bottom: 9px;
+                    margin-top: 0;
+                    margin-bottom: 5px;
                 };
 
                 --paper-input-container-underline: {
@@ -52,17 +56,18 @@
 
                 --paper-input-container-label-focus: {
                     color: var(--app-accent-color);
-                    padding-bottom: 5px;
+                    padding-bottom: 2px;
                 };
 
                 --paper-input-container-label-floating: {
-                    padding-bottom: 5px;
+                    padding-bottom: 2px;
                 };
 
                 --paper-input-container-input: {
-                    margin-bottom: 7px;
+                    margin-bottom: 2px;
                 }
             }
+
         </style>
     </template>
 </dom-module>

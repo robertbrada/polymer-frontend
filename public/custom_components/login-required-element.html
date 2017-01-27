@@ -8,18 +8,12 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/button-styles.html">
-<link rel="import" href="/styles/header-styles.html">
-
 
 <dom-module id="login-required-element">
     <template>
-        <style include="input-styles button-styles header-styles">
-            .main-frame {
-                margin: 0 auto;
-                max-width: 900px;
-                padding-top: 64px;
-            }
+        <style include="input-styles button-styles layout-styles">
 
             .controls {
                 @apply(--layout);
@@ -32,6 +26,18 @@
             .controls > button, paper-button {
                 flex: 50%;
             }
+
+            .controls > paper-button {
+                max-width: 15em;
+            }
+
+            @media only screen and (min-width: 767px) {
+
+                .main-frame {
+                    padding-top: 4em;
+                }
+            }
+
         </style>
 
         <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}" user="{{user}}"></firebase-auth>

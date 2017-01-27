@@ -20,6 +20,13 @@
                 margin: 0 auto 3em;
                 padding: 1em 4.5% 3.5em 4.5%;
             }
+
+            @media only screen and (max-width: 767px) {
+
+                #form1 h2:first-child {
+                    margin-top: 2em;
+                }
+            }
         </style>
 
         <firebase-document id="user_document" app-name="doctor-appointment-system"
@@ -36,7 +43,10 @@
             <div class="subsection grid">
                 <section>
                     <form id="form1" is="iron-form">
-                        <h2>Základní informace</h2>
+                        <h2>
+                            <iron-icon icon="icons:account-circle"></iron-icon>
+                            Základní informace
+                        </h2>
                         <paper-input id="fninput" label="Jméno" minlength="1" maxlength="30"
                                      error-message="Nelze ponechat prázdné" required auto-validate
                                      value="[[userInfo.name.firstName]]"></paper-input>
@@ -52,7 +62,10 @@
 
                 <section>
                     <form id="form2" is="iron-form">
-                        <h2>Adresa</h2>
+                        <h2>
+                            <iron-icon icon="maps:place"></iron-icon>
+                            Adresa
+                        </h2>
                         <paper-input id="cinput" label="Město" minlength="1" maxlength="30"
                                      value="[[userInfo.address.city]]" required auto-validate>
                         </paper-input>
@@ -63,7 +76,7 @@
                 </section>
             </div>
             <div>
-                <h2>Změna hesla</h2>
+                <h2><iron-icon icon="icons:lock"></iron-icon>Změna hesla</h2>
                 <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
                     změnit.</p>
                 <paper-button on-tap="passChange" raised>Poslat email</paper-button>
