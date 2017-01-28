@@ -20,9 +20,9 @@
     <template>
         <style include="interface-styles button-styles input-styles">
 
-            .send-message-icon {
-                color: #757576;
-                margin-left: 1em;
+            #send-message-icon {
+                color: var(--app-secondary-color);
+                margin-left: 0.5em;
             }
 
             /* SEARCH */
@@ -61,7 +61,8 @@
             /* MESSAGE CONTAINER */
 
             .message-container {
-                background-color: #fbfbfd;
+                background-color: #fafafb;
+                font-size: 0.9em;
             }
 
             .message-container h3 {
@@ -123,22 +124,18 @@
                 .name, .address {
                     max-width: 50%;
                 }
-            }
 
-            @media only screen and (max-width: 480px) {
-
-                .send-message-icon {
+                #send-message-icon {
                     position: absolute;
                     top: 0.5em;
                     right: 1em;
                 }
+            }
+
+            @media only screen and (max-width: 480px) {
 
                 #search-button {
                     width: 100%;
-                }
-
-                .buttons {
-                    @apply(--buttons-small-screen-layout)
                 }
 
                 .name, .address {
@@ -147,6 +144,14 @@
 
                 .name {
                     margin-right: 4em;
+                }
+
+                .details-button > iron-icon {
+                    margin: 0;
+                }
+
+                .details-button {
+                    min-width: 0;
                 }
             }
 
@@ -157,6 +162,7 @@
         </firebase-document>
 
         <iron-media-query query="max-width: 1100px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 480px" query-matches="{{mobileScreen}}"></iron-media-query>
 
         <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
             <div class="flexchild "><input placeholder="Jméno"></div>
@@ -187,13 +193,13 @@
                 <div class="flexchild buttons">
 
                     <paper-button on-tap="handleDetail" class="details-button">
-                        [[computeText(patient.infoOpened)]] detail
+                        <iron-icon icon="icons:info-outline"></iron-icon>
+                        <span hidden="[[mobileScreen]]">[[computeText(patient.infoOpened)]] detail</span>
                     </paper-button>
-
-                    <a title="poslat zprávu pacientovi" on-tap="handleMessage">
-                        <paper-icon-button class="send-message-icon" icon="communication:message"></paper-icon-button>
-                    </a>
                 </div>
+
+                <paper-icon-button id="send-message-icon" icon="communication:message"
+                                   on-tap="handleMessage"></paper-icon-button>
 
             </div>
 
