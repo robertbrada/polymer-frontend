@@ -325,7 +325,7 @@
             <template is="dom-if"
                       if="[[computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
                 <!--TODO: restrict API key for our domain -->
-                <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="16"
+                <google-map id="map_element" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="16"
                             latitude="[[officeData.coordinates.latitude]]"
                             longitude="[[officeData.coordinates.longitude]]">
                     <google-map-marker latitude="[[officeData.coordinates.latitude]]"
@@ -395,6 +395,21 @@
             listeners: {
                 'neon-animation-finish': '_onNeonAnimationFinish',
                 'appointment-request': '_onAppointmentRequest'
+            },
+
+            observers: [
+                '_resizeMap(officeData.coordinates.*)'
+            ],
+
+            /*
+             _resizeMap function is called when the change of coordinates is observed.
+             This is required in order to center the map using the new coordinates.
+             */
+            _resizeMap: function () {
+                var mapElement = this.$$("#map_element");
+                if (!!mapElement) {
+                    mapElement.resize();
+                }
             },
 
             _onNeonAnimationFinish: function () {
