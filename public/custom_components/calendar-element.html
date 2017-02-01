@@ -207,7 +207,9 @@
             ],
 
             handleAppointment: function (event) {
-                this.fire('appointment-request', {"appointmentId": event.target.dataset.args})
+                if (!this.disabled) { // Workaround for bug #10
+                    this.fire('appointment-request', {"appointmentId": event.target.dataset.args})
+                }
             },
 
             next: function () {

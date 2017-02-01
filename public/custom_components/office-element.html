@@ -398,18 +398,16 @@
             },
 
             observers: [
-                '_resizeMap(officeData.coordinates.*)'
+                '_dataLoaded(officeData)'
             ],
 
-            /*
-             _resizeMap function is called when the change of coordinates is observed.
-             This is required in order to center the map using the new coordinates.
-             */
-            _resizeMap: function () {
+            _dataLoaded: function () {
                 var mapElement = this.$$("#map_element");
                 if (!!mapElement) {
-                    mapElement.resize();
+                    mapElement.resize(); // Center the map with new coordinates
                 }
+
+                this.calendarVisibility = true; // Hide appointment form. Might be visible if user came from different office profile
             },
 
             _onNeonAnimationFinish: function () {
