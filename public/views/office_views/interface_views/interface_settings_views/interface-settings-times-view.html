@@ -5,6 +5,7 @@
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 
 <link rel="import" href="/styles/input-styles.html">
@@ -69,6 +70,11 @@
             }
 
         </style>
+
+        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/generatorInfo/[[officeId]]"
+                           data="{{generatorInfo}}">
+        </firebase-document>
+
         <form id="generalForm" is="iron-form" class="main-frame">
             <div class="note">
                 <h2>Poznámka</h2>
@@ -104,7 +110,7 @@
                     <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
                         hodin určíme objednávací časy.</p>
                     <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
-                                 value="[[officeData.visitLength]]">
+                                 value="[[generatorInfo.visitLength]]">
                         <div suffix>min</div>
                     </paper-input>
 
@@ -114,7 +120,7 @@
                 <section>
                     <h2>Ordinační hodiny</h2>
 
-                    <template is="dom-repeat" items="[[officeData.officeHours]]" as="entry">
+                    <template is="dom-repeat" items="[[generatorInfo.officeHours]]" as="entry">
                         <div>
                             <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]</paper-checkbox>
 

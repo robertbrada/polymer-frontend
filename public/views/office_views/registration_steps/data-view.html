@@ -103,7 +103,7 @@
                         </section>
                         <section>
                             <h2>Ordinační hodiny</h2>
-                            <template is="dom-repeat" items="[[officeData.information.officeHours]]" as="entry">
+                            <template is="dom-repeat" items="[[officeData.generatorInfo.officeHours]]" as="entry">
                                 <div>
                                     <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]
                                     </paper-checkbox>
@@ -228,7 +228,7 @@
 
             setVisitLength: function (event) {
                 // Workaround for object serialization bug in paper-input
-                this.set('officeData.information.visitLength', Number(event.target.value));
+                this.set('officeData.generatorInfo.visitLength', Number(event.target.value));
             },
 
             loadFile: function (event) {

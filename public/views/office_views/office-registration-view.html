@@ -59,11 +59,20 @@
                                 latitude: null
                             },
                             specialization: 0, // TODO: disable default and create paper-listbox validation
-                            visitLength: 40,
                             phoneNumber: null,
                             email: null,
-                            manualConfirmation: false,
+                            manualConfirmation: true,
                             patientText: null,
+                            photoAvailability: false,
+                            acceptingNewPatients: false
+                        },
+                        photoFile: File,
+                        device: {
+                            enabled: false,
+                            deviceID: null
+                        },
+
+                        generatorInfo: {
                             officeHours: [
                                 {'available': true, hours: null}, // Monday
                                 {'available': true, hours: null},
@@ -73,14 +82,10 @@
                                 {'available': false, hours: null},
                                 {'available': false, hours: null}
                             ],
-                            photoAvailability: false,
-                            acceptingNewPatients: false
-                        },
-                        photoFile: File,
-                        device: {
-                            enabled: false,
-                            deviceID: null
+                            visitLength: 40,
+                            numberOfDays: 30
                         }
+
                     }
                 },
 
@@ -150,6 +155,7 @@
                     'role': 'admin',
                     'name': data.information.address.city + ', ' + data.information.address.street
                 };
+                objectToSave['/generatorInfo/' + officeId] = data.generatorInfo;
 
                 rootRef.update(objectToSave, function (error) {
                     if (error) {

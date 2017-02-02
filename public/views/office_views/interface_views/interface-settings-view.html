@@ -3,7 +3,6 @@
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 
 <link rel="import" href="/styles/tab-styles.html">
@@ -11,10 +10,6 @@
 <dom-module id="interface-settings-view">
     <template>
         <style include="tab-styles"></style>
-
-        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]"
-                           data="{{officeFullInfo}}">
-        </firebase-document>
 
         <paper-material elevation="1">
             <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
@@ -24,8 +19,8 @@
 
 
             <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <interface-settings-general-view name="general" office-data="{{officeFullInfo}}"></interface-settings-general-view>
-                <interface-settings-times-view name="times" office-data="{{officeFullInfo}}"></interface-settings-times-view>
+                <interface-settings-general-view name="general" office-id="[[officeId]]"></interface-settings-general-view>
+                <interface-settings-times-view name="times" office-id="[[officeId]]"></interface-settings-times-view>
             </iron-pages>
         </paper-material>
     </template>
@@ -42,53 +37,8 @@
                 }
             },
 
-            listeners: {
-                'update-office-data': 'updateOfficeData'
-            },
-
             loadView: function (viewName) {
                 this.importHref("/views/office_views/interface_views/interface_settings_views/interface-settings-" + viewName + "-view.html", null, false);
-            },
-
-            computeID: function (path) {
-                if (path.length < 2) return null;
-                return (path.substring(1));
-            },
-
-            updateOfficeData: function (event) {
-                var localOfficeData = event.detail.localOfficeData,
-                    db = this.$.office_document.app.database(),
-                    objectToSave = {}, officeId = this.officeId,
-                    officeUserIds = null, i, officeName = '';
-
-                db.ref('/officeAdminInfo/' + officeId + '/users').once('value').then(function (snapshot) {
-                    officeUserIds = Object.keys(snapshot.val());
-                    officeName = localOfficeData.address.city + ', ' + localOfficeData.address.street;
-
-                    for (i = 0; i < officeUserIds.length; i++) {
-                        objectToSave['/userOffices/' + officeUserIds[i] + '/' + officeId + '/name'] = officeName;
-                    }
-
-                    objectToSave['/officeFullInfo/' + officeId] = localOfficeData;
-                    objectToSave['/officeSearchInfo/' + officeId] = {
-                        'name': localOfficeData.name,
-                        'address': localOfficeData.address,
-                        'coordinates': localOfficeData.coordinates,
-                        'acceptingNewPatients': localOfficeData.acceptingNewPatients,
-                        'specialization': localOfficeData.specialization,
-                        'photoAvailability': localOfficeData.photoAvailability
-                    };
-
-                    db.ref('/').update(objectToSave);
-
-                }).then(function () {
-                    this.fire("show-toast", {text: "Změny uloženy"});
-                }.bind(this), function (error) {
-                    // TODO: handle error
-                    console.error(error);
-                });
-
-                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             }
         });
     </script>

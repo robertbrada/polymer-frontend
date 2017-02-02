@@ -130,6 +130,12 @@
         ".validate": "newData.isNumber() && newData.val() >= 0"
       }
     },
+    "generatorInfo": {
+      "$oid": {
+        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+      }
+    },
     // TODO: proper rules
     "appointmentsPublic": {
       ".read": true,

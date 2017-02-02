@@ -10,6 +10,7 @@
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <!--<link rel="import" href="/bower_components/file-input/file-input.html">-->
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -24,6 +25,10 @@
     <template>
         <style include="button-styles layout-styles input-styles settings-styles">
         </style>
+
+        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]"
+                           data="{{officeFullInfo}}">
+        </firebase-document>
 
         <form id="general_form" is="iron-form" class="main-frame">
             <div class="subsection grid">
@@ -105,7 +110,7 @@
 
                 localOfficeData: {
                     type: Object,
-                    computed: "computeLocalOfficeData(officeData)"
+                    computed: "computeLocalOfficeData(officeFullInfo)"
                 }
             },
 
@@ -115,8 +120,41 @@
 
             confirm: function () {
                 if (this._validateForm(this.$.general_form)) {
-                    this.fire('update-office-data', {'localOfficeData': this.localOfficeData});
+                    this.updateOfficeData(this.localOfficeData)
                 }
+            },
+
+            updateOfficeData: function (localOfficeData) {
+                var db = this.$.office_document.app.database(),
+                    objectToSave = {}, officeId = this.officeId,
+                    officeUserIds = null, i, officeName = '';
+
+                db.ref('/officeAdminInfo/' + officeId + '/users').once('value').then(function (snapshot) {
+                    officeUserIds = Object.keys(snapshot.val());
+                    officeName = localOfficeData.address.city + ', ' + localOfficeData.address.street;
+
+                    for (i = 0; i < officeUserIds.length; i++) {
+                        objectToSave['/userOffices/' + officeUserIds[i] + '/' + officeId + '/name'] = officeName;
+                    }
+
+                    objectToSave['/officeFullInfo/' + officeId] = localOfficeData;
+                    objectToSave['/officeSearchInfo/' + officeId] = {
+                        'name': localOfficeData.name,
+                        'address': localOfficeData.address,
+                        'coordinates': localOfficeData.coordinates,
+                        'acceptingNewPatients': localOfficeData.acceptingNewPatients,
+                        'specialization': localOfficeData.specialization,
+                        'photoAvailability': localOfficeData.photoAvailability
+                    };
+
+                    db.ref('/').update(objectToSave);
+
+                }).then(function () {
+                    this.fire("show-toast", {text: "Změny uloženy"});
+                }.bind(this), function (error) {
+                    // TODO: handle error
+                    console.error(error);
+                });
             }
         });
     </script>
