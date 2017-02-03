@@ -25,8 +25,7 @@
                 selected-attribute="visible"
                 role="main">
             <data-view name="data" office-data="{{officeData}}"></data-view>
-            <coordinates-view name="coordinates" information="{{officeData.information}}"></coordinates-view>
-            <confirm-view name="confirm" office-data="[[officeData]]"></confirm-view>
+            <coordinates-view name="coordinates" full-info="{{officeData.fullInfo}}"></coordinates-view>
         </iron-pages>
 
 
@@ -45,7 +44,7 @@
                 officeData: {
                     type: Object,
                     value: {
-                        information: {
+                        fullInfo: {
                             name: {
                                 firstName: null,
                                 lastName: null
@@ -100,17 +99,17 @@
             },
 
             userChange: function (data) {
-                var name = this.officeData.information.name;
+                var name = this.officeData.fullInfo.name;
 
                 if (name.firstName === null && name.lastName === null && !!data.firstName && !!data.lastName) {
-                    this.set('officeData.information.name.firstName', data.firstName);
-                    this.set('officeData.information.name.lastName', data.lastName);
+                    this.set('officeData.fullInfo.name.firstName', data.firstName);
+                    this.set('officeData.fullInfo.name.lastName', data.lastName);
                     this.$.user_document.ref.off();
                 }
             },
 
             _registerOffice: function (event) {
-                var normalizedString = this.normalizeText(this.officeData.information.name.lastName) + "_" + this.normalizeText(this.officeData.information.address.city);
+                var normalizedString = this.normalizeText(this.officeData.fullInfo.name.lastName) + "_" + this.normalizeText(this.officeData.fullInfo.address.city);
 
                 this.generateOfficeId(this.officeData, normalizedString, 0);
 
@@ -135,7 +134,7 @@
                 var objectToSave = {},
                     rootRef = this.$.user_document.app.database().ref('/');
 
-                objectToSave['/officeFullInfo/' + officeId] = data.information;
+                objectToSave['/officeFullInfo/' + officeId] = data.fullInfo;
                 objectToSave['/userInterfaceInfo/' + userId + '/showOfficeInterface'] = true;
                 objectToSave['/officeNumberOfNotifications/' + officeId] = 0;
                 objectToSave['/officeAdminInfo/' + officeId] = {
@@ -144,16 +143,16 @@
                 };
                 objectToSave['/officeAdminInfo/' + officeId]['users'][this.userId] = 'admin';
                 objectToSave['/officeSearchInfo/' + officeId] = {
-                    'name': data.information.name,
-                    'address': data.information.address,
-                    'coordinates': data.information.coordinates,
-                    'acceptingNewPatients': data.information.acceptingNewPatients,
-                    'specialization': data.information.specialization,
-                    'photoAvailability': data.information.photoAvailability
+                    'name': data.fullInfo.name,
+                    'address': data.fullInfo.address,
+                    'coordinates': data.fullInfo.coordinates,
+                    'acceptingNewPatients': data.fullInfo.acceptingNewPatients,
+                    'specialization': data.fullInfo.specialization,
+                    'photoAvailability': data.fullInfo.photoAvailability
                 };
                 objectToSave['/userOffices/' + userId + '/' + officeId] = {
                     'role': 'admin',
-                    'name': data.information.address.city + ', ' + data.information.address.street
+                    'name': data.fullInfo.address.city + ', ' + data.fullInfo.address.street
                 };
                 objectToSave['/generatorInfo/' + officeId] = data.generatorInfo;
 

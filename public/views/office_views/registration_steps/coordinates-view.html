@@ -28,8 +28,8 @@
 
         </style>
 
-        <geo-location latitude="{{information.coordinates.latitude}}"
-                      longitude="{{information.coordinates.longitude}}"></geo-location>
+        <geo-location latitude="{{fullInfo.coordinates.latitude}}"
+                      longitude="{{fullInfo.coordinates.longitude}}"></geo-location>
 
         <div class="wide-container">
             <h3>Vyberte polohu ordinace na mapě</h3>
@@ -40,20 +40,20 @@
 
         <div class="subsection grid">
             <section>
-                <span>Zeměpisná šířka: [[information.coordinates.latitude]]</span>
+                <span>Zeměpisná šířka: [[fullInfo.coordinates.latitude]]</span>
             </section>
             <section>
-                <span>Zeměpisná délka: [[information.coordinates.longitude]]</span>
+                <span>Zeměpisná délka: [[fullInfo.coordinates.longitude]]</span>
             </section>
         </div>
 
         <div class="wide-container">
             <!--TODO: restrict API key for our domain -->
             <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="15"
-                        latitude="[[information.coordinates.latitude]]"
-                        longitude="[[information.coordinates.longitude]]">
-                <google-map-marker latitude="{{information.coordinates.latitude}}"
-                                   longitude="{{information.coordinates.longitude}}" draggable="true">
+                        latitude="[[fullInfo.coordinates.latitude]]"
+                        longitude="[[fullInfo.coordinates.longitude]]">
+                <google-map-marker latitude="{{fullInfo.coordinates.latitude}}"
+                                   longitude="{{fullInfo.coordinates.longitude}}" draggable="true">
                 </google-map-marker>
             </google-map>
         </div>
@@ -63,7 +63,7 @@
                 <paper-button on-tap="modifyOffice" raised>Upravit</paper-button>
             </section>
             <section>
-                <paper-button on-tap="finish" raised>Dokončit</paper-button>
+                <paper-button on-tap="finish" raised>Zaregistrovat</paper-button>
             </section>
         </div>
 
@@ -74,7 +74,7 @@
             is: 'coordinates-view',
 
             finish: function () {
-                this.fire('change-route', {url: '/office/registration/confirm'});
+                this.fire('register-office');
             },
 
             modifyOffice: function () {
