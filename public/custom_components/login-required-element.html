@@ -77,7 +77,7 @@
             properties: {
                 loggedIn: {
                     type: Boolean,
-                    computed: 'computeLoginStatus(statusKnown, user)',
+                    computed: 'computeLoggedInProperty(statusKnown, user)',
                     notify: true
                 },
 
@@ -110,7 +110,7 @@
                 }.bind(this));
             },
 
-            computeLoginStatus: function (statusKnown, user) {
+            computeLoggedInProperty: function (statusKnown, user) {
                 return (statusKnown && !!user);
             },
 
