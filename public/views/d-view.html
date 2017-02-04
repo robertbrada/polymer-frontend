@@ -521,12 +521,28 @@
             // Handlers of events from UI
 
             _confirmAppointment: function () {
-                var rootRef = this.$.office_document.ref.root,
+                var db = this.$.office_document.app.database(),
                     appointmentId = this.appointmentId,
                     officeId = this.officeId,
                     uid = this.user.uid,
-                    patientMessage = this.$.patient_message.value,
+                    patientMessage = (!!this.$.patient_message.value) ? this.$.patient_message.value : null,
+                    patientStatus = this.patientStatus,
                     objectToSave = {};
+
+                var saveAppointment = function (objectToSave, db) {
+                    db.ref("/").update(objectToSave).then(function () {
+                        this.fire('change-route', {url: '/user/appointments'});
+                        this.fire("show-toast", {text: "Návštěva zaregistrována"});
+                    }.bind(this), function (error) {
+                        this.fire("show-dialog", {
+                            path: "", viewName: "genericdialog", open: true,
+                            data: {
+                                text: 'Při objednávání se vyskytla chyba. Zkuste to prosím znovu.',
+                                buttonText: 'Zavřít'
+                            }
+                        });
+                    });
+                }.bind(this);
 
                 objectToSave['/appointmentsPublic/' + officeId + '/' + appointmentId] = false;
                 objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
@@ -538,18 +554,15 @@
                     'officeId': officeId
                 };
 
-                rootRef.update(objectToSave).then(function () {
-                    this.fire('change-route', {url: '/user/appointments'});
-                    this.fire("show-toast", {text: "Návštěva zaregistrována"});
-                }.bind(this), function (error) {
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'Při objednávání se vyskytla chyba. Zkuste to prosím znovu.',
-                            buttonText: 'Zavřít'
-                        }
-                    });
-                });
+                if (patientStatus === null) {
+                    db.ref("/userInfo/" + uid).once("value").then(function (snapshot) {
+                        objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'accessed';
+                        objectToSave['/officePatients/' + officeId + '/' + uid] = snapshot.val();
+                        saveAppointment(objectToSave, db);
+                    }.bind(this))
+                } else {
+                    saveAppointment(objectToSave, db);
+                }
             },
 
 
