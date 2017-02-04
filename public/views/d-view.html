@@ -573,6 +573,11 @@
                 this.fire("show-dialog", {path: "", viewName: "login", open: true});
             },
 
+            _showCalendar: function () {
+                this.actionAfterAnimation = true;
+                this.playAnimation('slideDown');
+            },
+
             // Handlers of animation events
 
             _onNeonAnimationFinish: function () {

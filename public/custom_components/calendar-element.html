@@ -105,11 +105,11 @@
                             [[computeDateString(date)]]
                         </div>
 
-                        <template is="dom-repeat" items="[[computeBookingTimes(date)]]" as="bookTime">
+                        <template is="dom-repeat" items="[[computeBookingTimes(date, bookingTimesOfDates)]]" as="bookTime">
                             <div class="row">
-                                <!--                                <button on-tap="handleAppointment" data-args$="[[TODO: id]]" disabled="[[disabled]]">
-                                                                    TODO: button text
-                                                                </button>-->
+                                <button on-tap="handleAppointment" data-args$="[[bookTime.id]]" disabled="[[disabled]]">
+                                    [[bookTime.buttonText]]
+                                </button>
                             </div>
                         </template>
                     </section>
@@ -152,14 +152,12 @@
 
                 // Query properties
 
-                startAt: {
-                    type: String,
-                    computed: 'computeStartAtProperty(firstVisibleDate)'
-                },
-
-                endAt: {
-                    type: String,
-                    computed: 'computeEndAtProperty(firstVisibleDate, numberOfColumns)'
+                /**
+                 * Example: {startAt: "201702040000", endAt: "201702110000"}
+                 */
+                dateInterval: {
+                    type: Object,
+                    computed: 'computeDateIntervalProperty(firstVisibleDate, numberOfColumns)'
                 },
 
                 // Value is set by setBookingTimesOfDates method
@@ -200,10 +198,10 @@
                     type: Boolean
                 },
 
-                dataReloadFinished: {
+                // Check if data reload was caused by user action (and play animationa ccordingly)
+                userAction: {
                     type: Boolean,
-                    value: false,
-                    observer: 'dataReloadFinishedObserver'
+                    value: false
                 }
             },
 
@@ -213,14 +211,14 @@
             },
 
             observers: [
-                'fetchData(startAt, endAt, officeId)'
+                'fetchData(dateInterval, officeId)'
             ],
 
             // I am using the firebase API directly, because the firebase-query element was extremely retarded
-            fetchData: function (startAt, endAt, officeId) {
+            fetchData: function (dateInterval, officeId) {
                 var db = this.$.document.app.database();
 
-                db.ref("/appointmentsPublic/" + officeId).orderByKey().startAt(startAt).endAt(endAt).once('value').then(function (snapshot) {
+                db.ref("/appointmentsPublic/" + officeId).orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
                     this.setBookingTimesOfDates(snapshot.val());
                 }.bind(this));
             },
@@ -247,7 +245,11 @@
                 }
 
                 this.bookingTimesOfDates = bookingTimesOfDates;
-                this.dataReloadFinished = true;
+
+                if (this.userAction) {
+                    this.showCalendar();
+                    this.userAction = false;
+                }
             },
 
             getButtonText: function (appointmentId) {
@@ -281,6 +283,7 @@
             next: function () {
                 this.hideCalendar = true;
                 this.animationNext = true;
+                this.userAction = true;
                 this.playAnimation('slideLeft');
                 this.reloadData(1);
             },
@@ -288,6 +291,7 @@
             previous: function () {
                 this.hideCalendar = true;
                 this.animationNext = false;
+                this.userAction = true;
                 this.playAnimation('slideRight');
                 this.reloadData(-1);
             },
@@ -304,23 +308,18 @@
                 }
             },
 
-            dataReloadFinishedObserver: function (dataReloadFinished) {
-                if (dataReloadFinished) {
-                    this.hideCalendar = false;
-                    this.$.animated_calendar.style.visibility = 'visible';
+            showCalendar: function () {
+                this.hideCalendar = false;
+                this.$.animated_calendar.style.visibility = 'visible';
 
-                    this.playAnimation((this.animationNext) ? 'slideFromRight' : 'slideFromLeft');
+                this.playAnimation((this.animationNext) ? 'slideFromRight' : 'slideFromLeft');
+            },
 
-                    this.dataReloadFinished = false;
+            computeDateIntervalProperty: function (firstVisibleDate, numberOfColumns) {
+                return {
+                    startAt: this.getDateId(firstVisibleDate) + "0000",
+                    endAt: this.getDateId(new Date(firstVisibleDate.valueOf() + numberOfColumns * 86400000)) + "0000"
                 }
-            },
-
-            computeStartAtProperty: function (firstVisibleDate) {
-                return this.getDateId(firstVisibleDate);
-            },
-
-            computeEndAtProperty: function (firstVisibleDate, numberOfColumns) {
-                return this.getDateId(new Date(firstVisibleDate.valueOf() + numberOfColumns * 86400000));
             },
 
             computeDates: function (firstVisibleDate, numberOfColumns, namesOfDaysArray) {
@@ -338,23 +337,18 @@
                 return dates;
             },
 
-            computeBookingTimes: function (date) {
-//                console.log(date);
-                return [];
+            computeBookingTimes: function (date, bookingTimesOfDates) {
+                return bookingTimesOfDates[this.getDateId(date)];
             },
 
             getDateId: function (date) {
                 var month = date.getMonth() + 1,
-                    dayDate = date.getDate(),
-                    hours = "00",
-                    minutes = "00";
+                    dayDate = date.getDate();
 
                 if (month < 10) month = "0" + month;
                 if (dayDate < 10) dayDate = "0" + dayDate;
-                /*                if (hours < 10) hours = "0" + hours;
-                 if (minutes < 10) minutes = "0" + minutes;*/
 
-                return "" + date.getFullYear() + month + dayDate + hours + minutes;
+                return "" + date.getFullYear() + month + dayDate;
             },
 
             getDayIndex: function (date) {
