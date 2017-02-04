@@ -20,9 +20,10 @@
     <template>
         <style include="interface-styles button-styles input-styles">
 
-            #send-message-icon {
+            .send-message-icon {
                 color: var(--app-secondary-color);
                 margin-left: 0.5em;
+                vertical-align: top;
             }
 
             /* SEARCH */
@@ -94,7 +95,7 @@
             }
 
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1100px) {
+            @media only screen and (max-width: 1200px) {
 
                 .flex-horizontal-with-ratios {
                     @apply(--layout-vertical);
@@ -125,7 +126,7 @@
                     max-width: 50%;
                 }
 
-                #send-message-icon {
+                .send-message-icon {
                     position: absolute;
                     top: 0.5em;
                     right: 1em;
@@ -161,7 +162,7 @@
                            data="{{officePatients}}">
         </firebase-document>
 
-        <iron-media-query query="max-width: 1100px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 1200px" query-matches="{{smallScreen}}"></iron-media-query>
         <iron-media-query query="max-width: 480px" query-matches="{{mobileScreen}}"></iron-media-query>
 
         <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
@@ -196,9 +197,12 @@
                         <iron-icon icon="icons:info-outline"></iron-icon>
                         <span hidden="[[mobileScreen]]">[[computeText(patient.infoOpened)]] detail</span>
                     </paper-button>
+
+                    <paper-icon-button class="send-message-icon" hidden="[[smallScreen]]" icon="communication:message"
+                                       on-tap="handleMessage"></paper-icon-button>
                 </div>
 
-                <paper-icon-button id="send-message-icon" icon="communication:message"
+                <paper-icon-button class="send-message-icon" hidden="[[!smallScreen]]" icon="communication:message"
                                    on-tap="handleMessage"></paper-icon-button>
 
             </div>
