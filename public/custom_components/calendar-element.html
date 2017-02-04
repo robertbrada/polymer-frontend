@@ -1,6 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/custom_components/time-prototype.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
@@ -87,27 +86,28 @@
             }
 
         </style>
+
         <div class="wrapper">
             <div class="controls">
                 <paper-icon-button icon="chevron-left" on-tap="previous"></paper-icon-button>
             </div>
             <div id="animated_calendar">
-                <template is="dom-repeat" items="{{computeDates(firstVisibleDate, numberOfColumns, officeHours)}}" as="date">
+                <template is="dom-repeat" items="[[computeDates(firstVisibleDate, numberOfColumns, days)]]" as="date">
                     <section>
                         <div class="row">
                             [[date.nameOfTheDay]]
                         </div>
                         <div class="row date">
-                            [[computeDate(date)]]
+                            [[computeDateString(date)]]
                         </div>
 
-                        <template is="dom-repeat" items="{{computeBookTimes(date, visitLength, officeHours)}}" as="bookTime">
-                            <div class="row">
-                                <button on-tap="handleAppointment" data-args$="{{computeId(date, bookTime)}}" disabled="[[disabled]]">
-                                    [[computeButtonText(bookTime)]]
-                                </button>
-                            </div>
-                        </template>
+                        <!--                        <template is="dom-repeat" items="[[TODO: compute booking times array]]" as="bookTime">
+                                                    <div class="row">
+                                                        <button on-tap="handleAppointment" data-args$="[[TODO: id]]" disabled="[[disabled]]">
+                                                            TODO: button text
+                                                        </button>
+                                                    </div>
+                                                </template>-->
                     </section>
                 </template>
             </div>
@@ -188,12 +188,8 @@
 
                 dataReloadFinished: {
                     type: Boolean,
-                    value: false
-                },
-
-                animationFinished: {
-                    type: Boolean,
-                    value: false
+                    value: false,
+                    observer: 'dataReloadFinishedObserver'
                 }
             },
 
@@ -202,15 +198,24 @@
                 'iron-resize': '_onWidthChange'
             },
 
-            observers: [
-                '_stateChanged(dataReloadFinished, animationFinished)'
-            ],
-
             handleAppointment: function (event) {
                 if (!this.disabled) { // Workaround for bug #10
                     this.fire('appointment-request', {"appointmentId": event.target.dataset.args})
                 }
             },
+
+            _onWidthChange: function () {
+                var numberOfColumns,
+                    w = this.$.animated_calendar.offsetWidth;
+                if (w > 0) {
+                    numberOfColumns = w / 100 >> 0;
+                    if (numberOfColumns > 7) numberOfColumns = 7;
+                    else if (numberOfColumns === 0) numberOfColumns = 1;
+                    this.numberOfColumns = numberOfColumns;
+                }
+            },
+
+            // Animation section
 
             next: function () {
                 this.hideCalendar = true;
@@ -226,38 +231,6 @@
                 this.reloadData(-1);
             },
 
-            _onNeonAnimationFinish: function () {
-                if (this.hideCalendar) {
-                    this.$.animated_calendar.style.visibility = 'hidden';
-                    this.hideCalendar = false;
-                    this.animationFinished = true;
-                }
-            },
-
-            _onWidthChange: function () {
-                var numberOfColumns,
-                    w = this.$.animated_calendar.offsetWidth;
-                if (w > 0) {
-                    numberOfColumns = w / 100 >> 0;
-                    if (numberOfColumns > 7) numberOfColumns = 7;
-                    else if (numberOfColumns === 0) numberOfColumns = 1;
-                    this.numberOfColumns = numberOfColumns;
-                }
-            },
-
-            _stateChanged: function (dataReloadState, animationFinishState) {
-                if (dataReloadState && animationFinishState) {
-                    this.$.animated_calendar.style.visibility = 'visible';
-                    if (this.animationNext) {
-                        this.playAnimation('slideFromRight');
-                    } else {
-                        this.playAnimation('slideFromLeft');
-                    }
-                    this.dataReloadFinished = false;
-                    this.animationFinished = false;
-                }
-            },
-
             // If clicked next, next = 1. Otherwise -1
             reloadData: function (next) {
                 var i = next * this.numberOfColumns;
@@ -266,7 +239,24 @@
                 this.dataReloadFinished = true;
             },
 
-            computeDates: function (firstVisibleDate, numberOfColumns, officeHours) {
+            _onNeonAnimationFinish: function () {
+                if (this.hideCalendar) {
+                    this.$.animated_calendar.style.visibility = 'hidden';
+                }
+            },
+
+            dataReloadFinishedObserver: function (dataReloadFinished) {
+                if (dataReloadFinished) {
+                    this.hideCalendar = false;
+                    this.$.animated_calendar.style.visibility = 'visible';
+
+                    this.playAnimation((this.animationNext) ? 'slideFromRight' : 'slideFromLeft');
+
+                    this.dataReloadFinished = false;
+                }
+            },
+
+            computeDates: function (firstVisibleDate, numberOfColumns, days) {
                 var date, i, dayIndex,
                     dates = [],
                     valOfFirstVisibleDate = firstVisibleDate.valueOf();
@@ -274,8 +264,7 @@
                 for (i = 0; i < numberOfColumns; i++) {
                     date = new Date(valOfFirstVisibleDate + i * 86400000);
                     dayIndex = this.getDayIndex(date);
-                    date["officeHours"] = officeHours[dayIndex];
-                    date["nameOfTheDay"] = this.days[dayIndex];
+                    date["nameOfTheDay"] = days[dayIndex];
                     dates.push(date);
                 }
                 return dates;
@@ -286,57 +275,10 @@
                 return (day < 0) ? 6 : day;
             },
 
-            computeBookTimes: function (date, visitLength) {
-                var intervals, i, interval, currentTime, nextTime,
-                    bookTimes = [];
-
-                if (date.officeHours.available) {
-                    intervals = this.computeIntervals(date.officeHours.hours);
-                    for (i = 0; i < intervals.length; i++) {
-                        interval = intervals[i];
-                        currentTime = interval.from;
-                        while (currentTime.isValidBookTime(interval, nextTime = generateIncrementedTime(currentTime, visitLength))) {
-                            bookTimes.push(currentTime);
-                            currentTime = nextTime;
-                        }
-                    }
-                }
-                return bookTimes;
-            },
-
-            computeIntervals: function (hours) {
-                var i, timeVals,
-                    intervals = [],
-                    splittedHours = hours.split(',');
-
-                for (i = 0; i < splittedHours.length; i++) {
-                    timeVals = splittedHours[i].split('-');
-                    intervals.push({"from": CustomTimeBuilder(timeVals[0]), "to": CustomTimeBuilder(timeVals[1])});
-                }
-                return intervals;
-            },
-
-            computeDate: function (date) {
+            computeDateString: function (date) {
                 return date.getDate() + "." + (date.getMonth() + 1) + ".";
-            },
-
-            computeButtonText: function (bookTime) {
-                return bookTime.hours + ":" + ((bookTime.minutes > 9) ? bookTime.minutes : "0" + bookTime.minutes);
-            },
-
-            computeId: function (date, bookTime) {
-                var month = date.getMonth() + 1,
-                    dayDate = date.getDate(),
-                    hours = bookTime.hours,
-                    minutes = bookTime.minutes;
-
-                if (month < 10) month = "0" + month;
-                if (dayDate < 10) dayDate = "0" + dayDate;
-                if (hours < 10) hours = "0" + hours;
-                if (minutes < 10) minutes = "0" + minutes;
-
-                return "" + date.getFullYear() + month + dayDate + hours + minutes;
             }
+
         });
     </script>
 </dom-module>
