@@ -147,8 +147,13 @@
                 rootRef.update(objectToSave).then(function () {
                     this.fire("show-toast", {text: "Změny uloženy"});
                 }.bind(this), function (error) {
-//                    TODO: generic error dialog, handle validation error
-                    console.log("Error occured in user settings view")
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
                 });
             }
         });

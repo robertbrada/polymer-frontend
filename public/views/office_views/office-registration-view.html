@@ -158,8 +158,13 @@
 
                 rootRef.update(objectToSave, function (error) {
                     if (error) {
-                        // TODO: handle error
-                        console.log("Error updating data:", error);
+                        this.fire("show-dialog", {
+                            path: "", viewName: "genericdialog", open: true,
+                            data: {
+                                text: 'Při registraci ordinace se vyskytla chyba. Zkuste to prosím znovu.',
+                                buttonText: 'Zavřít'
+                            }
+                        });
                     } else {
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/waiting-list/' + officeId});

@@ -47,7 +47,13 @@
                 this.$.auth.auth.confirmPasswordReset(this.data.actionCode, this.password).then(function () {
                     this.fire("show-toast", {text: "Heslo změněno"});
                 }.bind(this)).catch(function (error) {
-                    console.log(error); // TODO: error dialog
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: false,
+                        data: {
+                            text: 'Při změně hesla se vyskytla chyba. Klikněte prosím znovu na zapomenuté heslo v přihlašovacím dialogu',
+                            buttonText: 'Zavřít'
+                        }
+                    });
                 })
             }
         });

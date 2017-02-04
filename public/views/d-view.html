@@ -523,24 +523,33 @@
             _confirmAppointment: function () {
                 var rootRef = this.$.office_document.ref.root,
                     appointmentId = this.appointmentId,
-                    patientMessage = (!!this.$.patient_message.value) ? this.$.patient_message.value : null,
-                    privateAppointmentObject = {
-                        'message': patientMessage,
-                        'patient': this.user.uid
-                    },
-                    userAppointmentObject = {
-                        'message': patientMessage,
-                        'officeId': this.officeId
-                    };
+                    officeId = this.officeId,
+                    uid = this.user.uid,
+                    patientMessage = this.$.patient_message.value,
+                    objectToSave = {};
 
-                // TODO: verify if set correctly
-                rootRef.child('/appointmentsPublic/' + this.officeId + '/' + appointmentId).set(true);
-                rootRef.child('/appointmentsPrivate/' + this.officeId + '/' + appointmentId).set(privateAppointmentObject);
-                rootRef.child('/userAppointments/' + this.user.uid + '/' + appointmentId).set(userAppointmentObject);
+                objectToSave['/appointmentsPublic/' + officeId + '/' + appointmentId] = false;
+                objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
+                    'message': patientMessage,
+                    'patient': uid
+                };
+                objectToSave['/userAppointments/' + uid + '/' + appointmentId] = {
+                    'message': patientMessage,
+                    'officeId': officeId
+                };
 
-
-                this.fire('change-route', {url: '/user/appointments'});
-                this.fire("show-toast", {text: "Návštěva zaregistrována"});
+                rootRef.update(objectToSave).then(function () {
+                    this.fire('change-route', {url: '/user/appointments'});
+                    this.fire("show-toast", {text: "Návštěva zaregistrována"});
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při objednávání se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                });
             },
 
 
@@ -562,8 +571,13 @@
                 }).then(function () {
                     this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
                 }.bind(this), function (error) {
-                    // TODO: handle error
-                    console.error(error);
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při posílání žádosti o potvrzení se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
                 });
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);

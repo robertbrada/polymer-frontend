@@ -164,8 +164,13 @@
                 }).then(function () {
                     this.fire("show-toast", {text: "Přístup povolen"});
                 }.bind(this), function (error) {
-//                    TODO: generic error dialog
-                    console.log("Error occurred in user settings view")
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při potvrzování pacienta se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
                 });
             },
 
@@ -193,8 +198,13 @@
                 }).then(function () {
                     this.fire("show-toast", {text: "Pacient zablokován"});
                 }.bind(this), function (error) {
-//                    TODO: generic error dialog
-                    console.log("Error occurred in user settings view during dismiss event.")
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při odstraňování pacienta se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
                 });
             },
 

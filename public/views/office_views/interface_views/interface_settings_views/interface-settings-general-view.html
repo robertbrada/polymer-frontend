@@ -152,8 +152,13 @@
                 }).then(function () {
                     this.fire("show-toast", {text: "Změny uloženy"});
                 }.bind(this), function (error) {
-                    // TODO: handle error
-                    console.error(error);
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
                 });
             }
         });
