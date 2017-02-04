@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
@@ -87,12 +88,15 @@
 
         </style>
 
+        <firebase-document id="document" app-name="doctor-appointment-system" path="/appointmentsPublic/[[officeId]]">
+        </firebase-document>
+
         <div class="wrapper">
             <div class="controls">
                 <paper-icon-button icon="chevron-left" on-tap="previous"></paper-icon-button>
             </div>
             <div id="animated_calendar">
-                <template is="dom-repeat" items="[[computeDates(firstVisibleDate, numberOfColumns, days)]]" as="date">
+                <template is="dom-repeat" items="[[computeDates(firstVisibleDate, numberOfColumns, namesOfDaysArray)]]" as="date">
                     <section>
                         <div class="row">
                             [[date.nameOfTheDay]]
@@ -101,13 +105,13 @@
                             [[computeDateString(date)]]
                         </div>
 
-                        <!--                        <template is="dom-repeat" items="[[TODO: compute booking times array]]" as="bookTime">
-                                                    <div class="row">
-                                                        <button on-tap="handleAppointment" data-args$="[[TODO: id]]" disabled="[[disabled]]">
-                                                            TODO: button text
-                                                        </button>
-                                                    </div>
-                                                </template>-->
+                        <template is="dom-repeat" items="[[computeBookingTimes(date)]]" as="bookTime">
+                            <div class="row">
+                                <!--                                <button on-tap="handleAppointment" data-args$="[[TODO: id]]" disabled="[[disabled]]">
+                                                                    TODO: button text
+                                                                </button>-->
+                            </div>
+                        </template>
                     </section>
                 </template>
             </div>
@@ -125,13 +129,6 @@
             behaviors: [Polymer.NeonAnimationRunnerBehavior, Polymer.IronResizableBehavior],
 
             properties: {
-                officeHours: {
-                    type: Object
-                },
-
-                visitLength: {
-                    type: Number
-                },
 
                 officeLocalTime: {
                     type: Date,
@@ -148,9 +145,26 @@
                     value: 1
                 },
 
-                days: {
+                namesOfDaysArray: {
                     type: Array,
                     value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
+                },
+
+                // Query properties
+
+                startAt: {
+                    type: String,
+                    computed: 'computeStartAtProperty(firstVisibleDate)'
+                },
+
+                endAt: {
+                    type: String,
+                    computed: 'computeEndAtProperty(firstVisibleDate, numberOfColumns)'
+                },
+
+                // Value is set by setBookingTimesOfDates method
+                bookingTimesOfDates: {
+                    type: Object
                 },
 
                 // Animation properties follow
@@ -198,6 +212,53 @@
                 'iron-resize': '_onWidthChange'
             },
 
+            observers: [
+                'fetchData(startAt, endAt, officeId)'
+            ],
+
+            // I am using the firebase API directly, because the firebase-query element was extremely retarded
+            fetchData: function (startAt, endAt, officeId) {
+                var db = this.$.document.app.database();
+
+                db.ref("/appointmentsPublic/" + officeId).orderByKey().startAt(startAt).endAt(endAt).once('value').then(function (snapshot) {
+                    this.setBookingTimesOfDates(snapshot.val());
+                }.bind(this));
+            },
+
+            setBookingTimesOfDates: function (data) {
+                var bookingTimesOfDates = {},
+                    dateId = null,
+                    key, value, newDateId;
+
+                for (key in data) {
+                    value = data[key];
+                    if (data.hasOwnProperty(key) && value === true) { // TODO: find a way to query only true values
+                        newDateId = key.substr(0, 8);
+                        if (newDateId !== dateId) {
+                            dateId = newDateId;
+                            bookingTimesOfDates[dateId] = [];
+                        }
+
+                        bookingTimesOfDates[newDateId].push({
+                            id: key,
+                            buttonText: this.getButtonText(key)
+                        });
+                    }
+                }
+
+                this.bookingTimesOfDates = bookingTimesOfDates;
+                this.dataReloadFinished = true;
+            },
+
+            getButtonText: function (appointmentId) {
+                var hours, minutes;
+
+                hours = Number(appointmentId.substring(8, 10));
+                minutes = appointmentId.substring(10, 12);
+
+                return "" + hours + ":" + minutes;
+            },
+
             handleAppointment: function (event) {
                 if (!this.disabled) { // Workaround for bug #10
                     this.fire('appointment-request', {"appointmentId": event.target.dataset.args})
@@ -235,8 +296,6 @@
             reloadData: function (next) {
                 var i = next * this.numberOfColumns;
                 this.firstVisibleDate = new Date(this.firstVisibleDate.valueOf() + i * 86400000);
-                console.log("TODO: Firebase data fetch + wait for them to reload");
-                this.dataReloadFinished = true;
             },
 
             _onNeonAnimationFinish: function () {
@@ -256,7 +315,15 @@
                 }
             },
 
-            computeDates: function (firstVisibleDate, numberOfColumns, days) {
+            computeStartAtProperty: function (firstVisibleDate) {
+                return this.getDateId(firstVisibleDate);
+            },
+
+            computeEndAtProperty: function (firstVisibleDate, numberOfColumns) {
+                return this.getDateId(new Date(firstVisibleDate.valueOf() + numberOfColumns * 86400000));
+            },
+
+            computeDates: function (firstVisibleDate, numberOfColumns, namesOfDaysArray) {
                 var date, i, dayIndex,
                     dates = [],
                     valOfFirstVisibleDate = firstVisibleDate.valueOf();
@@ -264,10 +331,30 @@
                 for (i = 0; i < numberOfColumns; i++) {
                     date = new Date(valOfFirstVisibleDate + i * 86400000);
                     dayIndex = this.getDayIndex(date);
-                    date["nameOfTheDay"] = days[dayIndex];
+                    date["nameOfTheDay"] = namesOfDaysArray[dayIndex];
                     dates.push(date);
                 }
+
                 return dates;
+            },
+
+            computeBookingTimes: function (date) {
+//                console.log(date);
+                return [];
+            },
+
+            getDateId: function (date) {
+                var month = date.getMonth() + 1,
+                    dayDate = date.getDate(),
+                    hours = "00",
+                    minutes = "00";
+
+                if (month < 10) month = "0" + month;
+                if (dayDate < 10) dayDate = "0" + dayDate;
+                /*                if (hours < 10) hours = "0" + hours;
+                 if (minutes < 10) minutes = "0" + minutes;*/
+
+                return "" + date.getFullYear() + month + dayDate + hours + minutes;
             },
 
             getDayIndex: function (date) {
