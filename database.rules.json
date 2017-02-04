@@ -118,11 +118,11 @@
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$uid": {
-          ".write": "$uid === auth.uid && !root.child('officeRegisteredPatients/' + $oid + '/' + $uid).exists() && !root.child('officeBlockedPatients/' + $oid + '/' + $uid).exists()"
+          ".write": "$uid === auth.uid && !root.child('officePatients/' + $oid + '/' + $uid).exists() && !root.child('officeBlockedPatients/' + $oid + '/' + $uid).exists()"
         }
       }
     },
-    // TODO: More strict notification rules. User might mess up the notification count in a very specific edge cases. Low priority
+    // TODO: It's hackable. Moving the logic to backend would solve the issue. Low priority
     "officeNumberOfNotifications": {
       "$oid": {
         ".read": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
@@ -136,14 +136,24 @@
         ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
       }
     },
-    // TODO: proper rules
+    // TODO: Limit to number of appointments is not yet enforced, requires backend. Low priority
     "appointmentsPublic": {
       ".read": true,
-      ".write": true
+      "$oid": {
+        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        "$aid": {
+          ".write": "auth !== null && ((data.val() === true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.val() === false && root.child('appointmentsPrivate/' + $oid + '/' + $aid + '/patient').val() === auth.uid)"
+        }
+      }
     },
     "appointmentsPrivate": {
-      ".read": true,
-      ".write": true
+      "$oid": {
+        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        "$aid": {
+          ".write": "auth !== null && ((!data.exists() && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.child('patient').val() === auth.uid)"
+        }
+      }
     }
   }
 }

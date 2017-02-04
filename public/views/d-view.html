@@ -541,7 +541,7 @@
                                 buttonText: 'Zavřít'
                             }
                         });
-                    });
+                    }.bind(this));
                 }.bind(this);
 
                 objectToSave['/appointmentsPublic/' + officeId + '/' + appointmentId] = false;
@@ -555,6 +555,7 @@
                 };
 
                 if (patientStatus === null) {
+                    // Patient saving when accessed for the first time and manual confirmation is not required
                     db.ref("/userInfo/" + uid).once("value").then(function (snapshot) {
                         objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'accessed';
                         objectToSave['/officePatients/' + officeId + '/' + uid] = snapshot.val();

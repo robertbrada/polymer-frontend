@@ -170,7 +170,7 @@
                             text: 'Při potvrzování pacienta se vyskytla chyba. Zkuste to prosím znovu.',
                             buttonText: 'Zavřít'
                         }
-                    });
+                    }.bind(this));
                 });
             },
 
@@ -205,7 +205,7 @@
                             buttonText: 'Zavřít'
                         }
                     });
-                });
+                }.bind(this));
             },
 
             computeIfPatients: function (patientsArray) {
