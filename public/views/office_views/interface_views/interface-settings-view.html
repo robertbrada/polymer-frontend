@@ -13,14 +13,14 @@
 
         <paper-material elevation="1">
             <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
-                <paper-tab name="general">Obecné</paper-tab>
-                <paper-tab name="times">Ordinační hodiny</paper-tab>
+                <paper-tab name="office-info">Obecné</paper-tab>
+                <paper-tab name="generator-info">Ordinační hodiny</paper-tab>
             </paper-tabs>
 
 
             <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <interface-settings-general-view name="general" office-id="[[officeId]]"></interface-settings-general-view>
-                <interface-settings-times-view name="times" office-id="[[officeId]]"></interface-settings-times-view>
+                <office-info-view name="office-info" office-id="[[officeId]]"></office-info-view>
+                <generator-info-view name="generator-info" office-id="[[officeId]]"></generator-info-view>
             </iron-pages>
         </paper-material>
     </template>
@@ -32,13 +32,13 @@
             properties: {
                 selected: {
                     type: String,
-                    value: "general", // First selected view
+                    value: "office-info", // First selected view
                     observer: "loadView"
                 }
             },
 
             loadView: function (viewName) {
-                this.importHref("/views/office_views/interface_views/interface_settings_views/interface-settings-" + viewName + "-view.html", null, false);
+                this.importHref("/views/office_views/interface_views/interface_settings_views/" + viewName + "-view.html", null, false);
             }
         });
     </script>
