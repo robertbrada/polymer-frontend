@@ -154,6 +154,15 @@
           ".write": "auth !== null && ((!data.exists() && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.child('patient').val() === auth.uid)"
         }
       }
+    },
+    "issues": {
+      "$iid": {
+        ".read": false,
+        ".write": "root.child('officeAdminInfo/' + newData.child('officeId').val() + '/users/' + auth.uid).exists()",
+        "message": {
+          ".validate": "newData.isString() && newData.val().length <= 2000"
+        }
+      }
     }
   }
 }

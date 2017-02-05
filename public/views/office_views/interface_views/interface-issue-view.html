@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
@@ -21,16 +22,52 @@
 
         </style>
 
+        <firebase-document id="issue_document" app-name="doctor-appointment-system">
+        </firebase-document>
+
         <div id="content">
-            <h1>Napište nám, s čím máte problém, nebo co je potřeba zlepšit.</h1>
-            <paper-textarea label="Vaše zpráva" char-counter maxlength="2000"></paper-textarea>
-            <paper-button raised>Odeslat</paper-button>
+            <h1>Napište nám, s čím máte problém, co je potřeba zlepšit, nebo jakoukoliv jinou připomínku.</h1>
+            <paper-textarea required auto-validate id="issue_input" label="Vaše zpráva" char-counter maxlength="2000"
+                            invalid="{{invalid}}"></paper-textarea>
+            <paper-button raised on-tap="sendIssue" disabled="[[invalid]]">Odeslat</paper-button>
         </div>
     </template>
 
     <script>
         Polymer({
-            is: 'interface-issue-view'
+            is: 'interface-issue-view',
+
+            sendIssue: function () {
+                var message = this.$.issue_input.value,
+                    officeId = this.officeId,
+                    db = this.$.issue_document.app.database();
+
+                if (!!officeId) {
+                    db.ref("/issues/").push({
+                        "officeId": officeId,
+                        "message": message
+                    }).then(function () {
+                        this.fire("show-toast", {text: "Zpráva odeslána"});
+                        this.fire('change-route', {url: "/office/interface/waiting-list/" + officeId});
+                    }.bind(this), function () {
+                        this.fire("show-dialog", {
+                            path: "", viewName: "genericdialog", open: true,
+                            data: {
+                                text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                                buttonText: 'Zavřít'
+                            }
+                        });
+                    }.bind(this));
+                } else {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Nejprve prosím vyberte ordinaci vlevo.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }
+            }
         });
     </script>
 </dom-module>
