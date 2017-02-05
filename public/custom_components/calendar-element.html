@@ -86,6 +86,10 @@
                 cursor: auto;
             }
 
+            paper-icon-button[disabled] {
+                color: grey;
+            }
+
         </style>
 
         <firebase-document id="document" app-name="doctor-appointment-system" path="/appointmentsPublic/[[officeId]]">
@@ -93,7 +97,8 @@
 
         <div class="wrapper">
             <div class="controls">
-                <paper-icon-button icon="chevron-left" on-tap="previous"></paper-icon-button>
+                <paper-icon-button icon="chevron-left" on-tap="previous"
+                                   disabled="[[computeLeftDisabled(firstVisibleDate, officeLocalTime)]]"></paper-icon-button>
             </div>
             <div id="animated_calendar">
                 <template is="dom-repeat" items="[[computeDates(firstVisibleDate, numberOfColumns, namesOfDaysArray)]]" as="date">
@@ -116,7 +121,8 @@
                 </template>
             </div>
             <div class="controls">
-                <paper-icon-button icon="chevron-right" on-tap="next"></paper-icon-button>
+                <paper-icon-button id="right_button" icon="chevron-right" on-tap="next"
+                                   disabled="[[computeRightDisabled(lastVisibleDate, lastGeneratedDate)]]"></paper-icon-button>
             </div>
         </div>
 
@@ -137,7 +143,16 @@
 
                 firstVisibleDate: {
                     type: Date,
-                    value: new Date()
+                    value: function () {
+                        var d = new Date();
+                        d.setHours(0, 0, 0, 0);
+                        return d;
+                    }
+                },
+
+                lastVisibleDate: {
+                    type: Date,
+                    computed: 'computeLastVisibleDateProperty(firstVisibleDate, numberOfColumns)'
                 },
 
                 numberOfColumns: {
@@ -157,7 +172,12 @@
                  */
                 dateInterval: {
                     type: Object,
-                    computed: 'computeDateIntervalProperty(firstVisibleDate, numberOfColumns)'
+                    computed: 'computeDateIntervalProperty(firstVisibleDate, lastVisibleDate, officeLocalTime)'
+                },
+
+                lastGeneratedDate: {
+                    type: Date,
+                    computed: 'computeLastGeneratedDateProperty(lastGeneratedDateRaw)'
                 },
 
                 // Value is set by setBookingTimesOfDates method
@@ -299,6 +319,7 @@
             // If clicked next, next = 1. Otherwise -1
             reloadData: function (next) {
                 var i = next * this.numberOfColumns;
+
                 this.firstVisibleDate = new Date(this.firstVisibleDate.valueOf() + i * 86400000);
             },
 
@@ -315,11 +336,20 @@
                 this.playAnimation((this.animationNext) ? 'slideFromRight' : 'slideFromLeft');
             },
 
-            computeDateIntervalProperty: function (firstVisibleDate, numberOfColumns) {
+            computeLastVisibleDateProperty: function (firstVisibleDate, numberOfColumns) {
+                return new Date(firstVisibleDate.valueOf() + numberOfColumns * 86400000);
+            },
+
+            computeDateIntervalProperty: function (firstVisibleDate, lastVisibleDate, officeLocalTime) {
                 return {
-                    startAt: this.getDateId(firstVisibleDate) + "0000",
-                    endAt: this.getDateId(new Date(firstVisibleDate.valueOf() + numberOfColumns * 86400000)) + "0000"
+                    // Ternary operator on the next line ensures that expired booking times are not shown
+                    startAt: (firstVisibleDate < officeLocalTime) ? this.getDateTimeId(officeLocalTime, false) : this.getDateTimeId(firstVisibleDate, true),
+                    endAt: this.getDateTimeId(lastVisibleDate, true)
                 }
+            },
+
+            computeLastGeneratedDateProperty: function (lastGeneratedDateRaw) {
+                return new Date(lastGeneratedDateRaw.year, lastGeneratedDateRaw.month - 1, lastGeneratedDateRaw.date, 0, 0, 0, 0);
             },
 
             computeDates: function (firstVisibleDate, numberOfColumns, namesOfDaysArray) {
@@ -351,6 +381,19 @@
                 return "" + date.getFullYear() + month + dayDate;
             },
 
+            getDateTimeId: function (date, stripHoursAndMinutes) {
+
+                if (stripHoursAndMinutes) return (this.getDateId(date) + "0000");
+
+                var hours = date.getHours(),
+                    minutes = date.getMinutes();
+
+                if (hours < 10) hours = "0" + hours;
+                if (minutes < 10) minutes = "0" + minutes;
+
+                return this.getDateId(date) + hours + minutes;
+            },
+
             getDayIndex: function (date) {
                 var day = date.getDay() - 1;
                 return (day < 0) ? 6 : day;
@@ -358,6 +401,14 @@
 
             computeDateString: function (date) {
                 return date.getDate() + "." + (date.getMonth() + 1) + ".";
+            },
+
+            computeLeftDisabled: function (firstVisibleDate, officeLocalTime) {
+                return (firstVisibleDate < officeLocalTime);
+            },
+
+            computeRightDisabled: function (lastVisibleDate, lastGeneratedDate) {
+                return (lastGeneratedDate < lastVisibleDate);
             }
 
         });
