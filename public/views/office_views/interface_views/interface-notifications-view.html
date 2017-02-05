@@ -28,8 +28,8 @@
             </paper-tabs>
 
             <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <interface-notifications-confirm-view name="confirm" office-id="[[officeId]]"></interface-notifications-confirm-view>
-                <interface-notifications-general-view name="general"></interface-notifications-general-view>
+                <confirm-view name="confirm" office-id="[[officeId]]"></confirm-view>
+                <general-view name="general"></general-view>
             </iron-pages>
         </div>
     </template>
@@ -59,7 +59,7 @@
             },
 
             loadView: function (viewName) {
-                this.importHref("/views/office_views/interface_views/interface_notifications_views/interface-notifications-" + viewName + "-view.html", null, false);
+                this.importHref("/views/office_views/interface_views/interface_notifications_views/" + viewName + "-view.html", null, false);
             }
         });
     </script>

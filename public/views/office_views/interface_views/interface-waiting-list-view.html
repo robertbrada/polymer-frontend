@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
@@ -100,7 +101,6 @@
                 }
 
                 /*************************/
-
                 .name, .address {
                     max-width: 50%;
                 }
@@ -120,7 +120,6 @@
                     max-width: 100%;
                     margin-right: 0;
                 }
-
 
                 .in-waiting-room {
                     margin-bottom: 0;
@@ -142,34 +141,36 @@
 
         </style>
 
+        <firebase-document id="document" app-name="doctor-appointment-system">
+        </firebase-document>
+
         <iron-media-query query="max-width: 435px" query-matches="{{mobileScreen}}"></iron-media-query>
-        <iron-media-query query="max-width: 1410px" query-matches="{{smallScreen}}"></iron-media-query>
 
         <div id="current_patient">Pacient na řadě</div>
 
-        <template is="dom-repeat" items="[[patients]]" as="patient">
+        <template is="dom-repeat" items="[[appointmentsArray]]" as="appointment">
 
             <div class="container flex-horizontal-with-ratios my-list-item">
-                <div class="time">[[patient.time]]</div>
+                <div class="time">[[appointment.time]]</div>
 
-                <div class="flexchild name"><span class="label">Jméno:</span>[[patient.firstName]] [[patient.lastName]]
+                <div class="flexchild name"><span class="label">Jméno:</span>[[appointment.name]]
                 </div>
 
-                <div class="flexchild date-of-birth" hidden="[[!patient.dateOfBirth]]"><span class="label">Datum narození:</span>[[patient.dateOfBirth]]
+                <div class="flex3child in-waiting-room" hidden="[[!appointment.waitRoom]]">Pacient v čekárně</div>
+
+                <div class="flexchild date-of-birth" hidden="[[appointment.waitRoom]]"><span class="label">Datum narození:</span>[[appointment.dateOfBirth]]
                 </div>
 
-                <!--zobrazi se kdyz chybi datum narozeni (je v cekarne), az bude krabicek tak bude asi jine kriterium-->
-                <div class="flex3child in-waiting-room" hidden="[[patient.dateOfBirth]]">Pacient v čekárně</div>
-
-                <div class="flex2child address" hidden="[[!patient.addressStreet]]"><span class="label">Adresa:</span>[[patient.addressStreet]]
-                    <br><div class="address-city">[[patient.addressCity]]</div>
+                <div class="flex2child address" hidden="[[appointment.waitRoom]]"><span class="label">Adresa:</span>[[appointment.address.street]]
+                    <br>
+                    <div class="address-city">[[appointment.address.city]]</div>
                 </div>
 
                 <div class="flex3child buttons">
 
-                    <paper-button hidden="[[!patient.text]]" on-tap="handleDetail" class="details-button">
+                    <paper-button hidden="[[!appointment.showMessage]]" on-tap="handleDetail" class="details-button">
                         <iron-icon icon="icons:info-outline"></iron-icon>
-                        <span hidden="[[mobileScreen]]">[[computeText(patient.opened)]] zprávu</span>
+                        <span hidden="[[mobileScreen]]">[[computeText(appointment.viewMessage)]] zprávu</span>
                     </paper-button>
                     <paper-button class="confirm-button">
                         <iron-icon icon="icons:check"></iron-icon>
@@ -180,9 +181,9 @@
                 </div>
             </div>
 
-            <iron-collapse opened="[[patient.opened]]">
+            <iron-collapse opened="[[appointment.viewMessage]]">
                 <div class="collapse-content">
-                    <div class="text">[[patient.text]]</div>
+                    <div class="text">[[appointment.message]]</div>
                 </div>
             </iron-collapse>
         </template>
@@ -194,72 +195,95 @@
             is: 'interface-waiting-list-view',
 
             properties: {
-                patients: {
-                    type: Array,
-                    value: [
-                        {
-                            time: "7:30",
-                            firstName: "Robert",
-                            lastName: "Brada",
-                            dateOfBirth: "2.2.1995",
-                            addressCity: "Plzeň",
-                            addressStreet: "Kardinála Berana 13",
-                            text: "Je mi špatně a teče mi hnis z oka.",
-                            opened: false
-                        },
-                        {
-                            time: "8:00",
-                            firstName: "Michaelinsaknfdadc",
-                            lastName: "Aubreyisbaddmafdrf",
-                            dateOfBirth: "13.11.1999",
-                            addressCity: "London",
-                            addressStreet: "St. Church 123",
-                            text: null,
-                            opened: false
-                        },
-                        {
-                            time: "8:30",
-                            firstName: null,
-                            lastName: "Elliot",
-                            dateOfBirth: null,
-                            addressCity: null,
-                            addressStreet: null,
-                            address: null,
-                            text: null,
-                            opened: false
-                        },
-                        {
-                            time: "9:00",
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            dateOfBirth: "2.10.1986",
-                            addressCity: "Dvůr Králové nad Labem",
-                            addressStreet: "Sady pětatřicátníků 28",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
-                        },
-                        {
-                            time: "9:00",
-                            firstName: "Stephen",
-                            lastName: "Maturin",
-                            dateOfBirth: "20.9.1995",
-                            addressCity: "Wangen",
-                            addressStreet: "Franz Joseph Sp. Strase 15",
-                            text: "Potřeboval bych vyplnit nějaká lejstra a předepsat steroidy, protože chci být obrovkej.",
-                            opened: false
+                appointmentsArray: {
+                    type: Array
+                },
 
+                /**
+                 * Example: {startAt: "201702040000", endAt: "201702110000"}
+                 */
+                dateInterval: {
+                    type: Object,
+                    value: function () {
+                        var today = new Date(),
+                            tomorrow = new Date();
+
+                        tomorrow.setDate(today.getDate() + 1);
+
+                        return {
+                            startAt: this.getDateTimeIdAtNoon(today),
+                            endAt: this.getDateTimeIdAtNoon(tomorrow)
                         }
-                    ]
+                    }
                 }
             },
 
-            computeText: function (opened) {
-                return (opened) ? "Skrýt" : "Zobrazit";
+            observers: [
+                'fetchData(dateInterval, officeId)'
+            ],
+
+            fetchData: function (dateInterval, officeId) {
+                var db = this.$.document.app.database();
+
+                db.ref("/appointmentsPrivate/" + officeId).orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
+                    this.setAppointments(snapshot.val());
+                }.bind(this));
+            },
+
+            setAppointments: function (data) {
+                var appointmentData, userInfo, convertedAppointment;
+
+                this.appointmentsArray = Object.keys(data).map(function (key) {
+                    appointmentData = data[key];
+
+                    if (!!appointmentData.patient) {
+                        // Booked online
+                        userInfo = appointmentData.userInfo;
+
+                        convertedAppointment = {
+                            waitRoom: false,
+                            name: userInfo.name.lastName + " " + userInfo.name.firstName,
+                            dateOfBirth: userInfo.dateOfBirth.date + "." + userInfo.dateOfBirth.month + "." + userInfo.dateOfBirth.year,
+                            address: appointmentData.userInfo.address,
+                            message: appointmentData.message,
+                            showMessage: !!appointmentData.message,
+                            viewMessage: false
+                        };
+                    } else {
+                        // Booked in wait room
+                        convertedAppointment = {
+                            waitRoom: true,
+                            name: appointmentData.name,
+                            showMessage: false
+                        };
+                    }
+
+                    convertedAppointment["appointmentId"] = key;
+                    convertedAppointment["time"] = "" + Number(key.substring(8, 10)) + ":" + key.substring(10, 12);
+
+                    return convertedAppointment;
+                });
+
+
+            },
+
+            getDateTimeIdAtNoon: function (date) {
+                var month = date.getMonth() + 1,
+                    dayDate = date.getDate();
+
+                if (month < 10) month = "0" + month;
+                if (dayDate < 10) dayDate = "0" + dayDate;
+
+                return "" + date.getFullYear() + month + dayDate + "0000";
+            },
+
+            computeText: function (viewMessage) {
+                return (viewMessage) ? "Skrýt" : "Zobrazit";
             },
 
             handleDetail: function (event) {
-                var opened = event.model.patient.opened;
-                event.model.set('patient.opened', !opened);
+                var viewMessage = event.model.appointment.viewMessage;
+                event.model.set('appointment.viewMessage', !viewMessage);
             }
 
         });
