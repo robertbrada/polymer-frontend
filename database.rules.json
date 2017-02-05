@@ -100,7 +100,7 @@
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$uid": {
-          ".write": "data.exists() && $uid === auth.uid"
+          ".write": "data.exists() && $uid === auth.uid || !data.exists() && root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false"
         }
       }
     },

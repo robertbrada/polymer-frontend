@@ -315,7 +315,8 @@
                         <h3 hidden="[[!calendarVisibility]]">Kalendář</h3>
                         <p hidden="[[!calendarVisibility]]">Pro objednání vyberte čas, na který se chcete objednat.</p>
 
-                        <calendar-element hidden="[[!calendarVisibility]]" office-id="[[officeId]]" last-generated-date-raw="[[officeData.lastGeneratedDate]]"
+                        <calendar-element hidden="[[!calendarVisibility]]" office-id="[[officeId]]"
+                                          last-generated-date-raw="[[officeData.lastGeneratedDate]]"
                                           disabled="[[disabledCalendar]]">
                         </calendar-element>
                     </div>
@@ -528,9 +529,30 @@
                     uid = this.user.uid,
                     patientMessage = (!!this.$.patient_message.value) ? this.$.patient_message.value : null,
                     patientStatus = this.patientStatus,
-                    objectToSave = {};
+                    objectToSave = {},
+                    userInfo;
 
-                var saveAppointment = function (objectToSave, db) {
+                objectToSave['/appointmentsPublic/' + officeId + '/' + appointmentId] = false;
+                objectToSave['/userAppointments/' + uid + '/' + appointmentId] = {
+                    'message': patientMessage,
+                    'officeId': officeId
+                };
+
+                db.ref("/userInfo/" + uid).once("value").then(function (snapshot) {
+                    userInfo = snapshot.val();
+
+                    if (patientStatus === null) {
+                        objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'accessed';
+                        objectToSave['/officePatients/' + officeId + '/' + uid] = userInfo;
+                    }
+
+                    objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
+                        'message': patientMessage,
+                        'patient': uid,
+                        'userInfo': userInfo
+                    };
+
+                    // Save the appointment + optionally patientInfo
                     db.ref("/").update(objectToSave).then(function () {
                         this.fire('change-route', {url: '/user/appointments'});
                         this.fire("show-toast", {text: "Návštěva zaregistrována"});
@@ -543,28 +565,8 @@
                             }
                         });
                     }.bind(this));
-                }.bind(this);
 
-                objectToSave['/appointmentsPublic/' + officeId + '/' + appointmentId] = false;
-                objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
-                    'message': patientMessage,
-                    'patient': uid
-                };
-                objectToSave['/userAppointments/' + uid + '/' + appointmentId] = {
-                    'message': patientMessage,
-                    'officeId': officeId
-                };
-
-                if (patientStatus === null) {
-                    // Patient saving when accessed for the first time and manual confirmation is not required
-                    db.ref("/userInfo/" + uid).once("value").then(function (snapshot) {
-                        objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'accessed';
-                        objectToSave['/officePatients/' + officeId + '/' + uid] = snapshot.val();
-                        saveAppointment(objectToSave, db);
-                    }.bind(this))
-                } else {
-                    saveAppointment(objectToSave, db);
-                }
+                }.bind(this));
             },
 
 

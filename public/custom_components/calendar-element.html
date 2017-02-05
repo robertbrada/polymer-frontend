@@ -349,6 +349,7 @@
             },
 
             computeLastGeneratedDateProperty: function (lastGeneratedDateRaw) {
+                if (lastGeneratedDateRaw === undefined) return new Date(3000, 0, 1, 0, 0, 0, 0); // No date limit when function attribute is undefined
                 return new Date(lastGeneratedDateRaw.year, lastGeneratedDateRaw.month - 1, lastGeneratedDateRaw.date, 0, 0, 0, 0);
             },
 
