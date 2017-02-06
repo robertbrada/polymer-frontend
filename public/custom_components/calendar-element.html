@@ -290,11 +290,16 @@
             _onWidthChange: function () {
                 var numberOfColumns,
                     w = this.$.animated_calendar.offsetWidth;
+
                 if (w > 0) {
                     numberOfColumns = w / 100 >> 0;
                     if (numberOfColumns > 7) numberOfColumns = 7;
                     else if (numberOfColumns === 0) numberOfColumns = 1;
                     this.numberOfColumns = numberOfColumns;
+                } else if (w === 0) {
+                    // workaround for Firefox in which the width is 0 until resize event
+                    // TODO: remove after Polymer 2.0 update
+                    this.numberOfColumns = 7;
                 }
             },
 

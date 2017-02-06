@@ -65,7 +65,10 @@
     "userAppointments": {
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
+        ".write": "$uid === auth.uid",
+        "$aid": {
+          ".write": "root.child('officeAdminInfo/' + data.child('officeId').val() + '/users/' + auth.uid).exists()"
+        }
       }
     },
     "userNotifications": {

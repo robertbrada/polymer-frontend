@@ -180,10 +180,10 @@
                         <iron-icon icon="icons:info-outline"></iron-icon>
                         <span hidden="[[mobileScreen]]">[[computeText(appointment.viewMessage)]] zprávu</span>
                     </paper-button>
-                    <paper-button class="confirm-button">
+                    <paper-button class="confirm-button" on-tap="appointmentFinishedButtonEvent">
                         <iron-icon icon="icons:check"></iron-icon>
                         <span hidden="[[mobileScreen]]">Vyřízen</span></paper-button>
-                    <paper-button class="dismiss-button">
+                    <paper-button class="dismiss-button" on-tap="noArrivalButtonEvent">
                         <iron-icon icon="icons:close"></iron-icon>
                         <span hidden="[[mobileScreen]]">Nedorazil</span></paper-button>
                 </div>
@@ -240,6 +240,44 @@
                 'fetchData(dateInterval, officeId)'
             ],
 
+            noArrivalButtonEvent: function (event) {
+                this.buttonEventHandler(event, true)
+            },
+
+            appointmentFinishedButtonEvent: function (event) {
+                this.buttonEventHandler(event, false)
+            },
+
+            buttonEventHandler: function (event, noArrival) {
+                var appointment = event.model.appointment,
+                    db = this.$.document.app.database(),
+                    officeId = this.officeId,
+                    objectToSave = {};
+
+                objectToSave['/appointmentsPrivate/' + officeId + '/' + appointment.id] = null;
+                objectToSave['/appointmentsPublic/' + officeId + '/' + appointment.id] = null;
+
+                if(!appointment.waitRoom) {
+                    objectToSave['/userAppointments/' + appointment.patientId + '/' + appointment.id] = null;
+                }
+
+                console.log(objectToSave);
+
+//                console.log(appointment);
+                db.ref("/").update(objectToSave).then(function () {
+                    this.fire("show-toast", {text: "Vyřízeno"});
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání změn se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+
+            },
+
             fetchData: function (dateInterval, officeId) {
                 var db = this.$.document.app.database();
 
@@ -266,6 +304,7 @@
 
                         convertedAppointment = {
                             waitRoom: false,
+                            patientId: appointmentData.patient,
                             name: userInfo.name.lastName + " " + userInfo.name.firstName,
                             dateOfBirth: userInfo.dateOfBirth.date + "." + userInfo.dateOfBirth.month + "." + userInfo.dateOfBirth.year,
                             address: appointmentData.userInfo.address,
@@ -282,7 +321,7 @@
                         };
                     }
 
-                    convertedAppointment["appointmentId"] = key;
+                    convertedAppointment["id"] = key;
                     convertedAppointment["time"] = "" + Number(key.substring(8, 10)) + ":" + key.substring(10, 12);
 
                     return convertedAppointment;
