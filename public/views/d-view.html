@@ -80,7 +80,6 @@
                 width: 140px;
                 height: 140px;
                 border-radius: 50%;
-                border: 1px solid white;
                 margin-bottom: 1em;
             }
 
@@ -241,7 +240,8 @@
             <div id="head" class="subsection grid">
                 <section class="photo-name-section">
                     <template is="dom-if" if="[[officeData.photoAvailability]]">
-                        <img src$="[[computePhotoURL(photoFile)]]">
+                        <!--<img src$="[[computePhotoURL(photoFile)]]">-->
+                        <img src="../images/docprofile.png">
                         <h3>[[computeFormattedName(officeData.name.firstName, officeData.name.lastName)]]</h3>
                         <span>[[computeSpecialization(officeData.specialization)]]</span>
                     </template>
