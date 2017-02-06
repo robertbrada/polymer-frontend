@@ -5,6 +5,7 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
@@ -74,6 +75,13 @@
             /* FLEX LAYOUT */
             .name, .address {
                 max-width: 15%;
+            }
+
+            .no-appointments {
+                height: 10em;
+                font-size: 1.2em;
+                @apply(--layout);
+                @apply(--layout-center-center);
             }
 
             /*RESPONSIVE ADDITIONS*/
@@ -146,9 +154,9 @@
 
         <iron-media-query query="max-width: 435px" query-matches="{{mobileScreen}}"></iron-media-query>
 
-        <div id="current_patient">Pacient na řadě</div>
+        <div id="current_patient" hidden="[[!appointmentsAvailable]]">Pacient na řadě</div>
 
-        <template is="dom-repeat" items="[[appointmentsArray]]" as="appointment">
+        <template is="dom-repeat" hidden="[[!appointmentsAvailable]]" items="[[appointmentsArray]]" as="appointment">
 
             <div class="container flex-horizontal-with-ratios my-list-item">
                 <div class="time">[[appointment.time]]</div>
@@ -188,6 +196,11 @@
             </iron-collapse>
         </template>
 
+        <div hidden="[[appointmentsAvailable]]" class="no-appointments">
+            <iron-icon icon="info"></iron-icon>
+            Dnes nemáte žádné objednané pacienty
+        </div>
+
     </template>
 
     <script>
@@ -197,6 +210,11 @@
             properties: {
                 appointmentsArray: {
                     type: Array
+                },
+
+                appointmentsAvailable: {
+                    type: Boolean,
+                    value: false
                 },
 
                 /**
@@ -226,7 +244,13 @@
                 var db = this.$.document.app.database();
 
                 db.ref("/appointmentsPrivate/" + officeId).orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
-                    this.setAppointments(snapshot.val());
+                    if (snapshot.exists()) {
+                        this.setAppointments(snapshot.val());
+                        this.appointmentsAvailable = true;
+                    } else {
+                        this.appointmentsArray = [];
+                        this.appointmentsAvailable = false;
+                    }
                 }.bind(this));
             },
 

@@ -74,8 +74,8 @@
                 background-color: var(--app-green-color);
                 margin-right: 12px;
                 border-radius: 50%;
-                height:36px;
-                width:36px;
+                height: 36px;
+                width: 36px;
                 box-shadow: 1px 1px 10px rgba(0, 0, 40, 0.7);
             }
 
@@ -106,7 +106,6 @@
             #issue-tab {
                 bottom: 120px; /* top padding of drawer */
             }
-
 
             /*** DASHBOARD PAGES CONTAINER ***/
 
@@ -167,7 +166,8 @@
             <div id="toolbar" on-tap="toggleDrawer" hidden="[[!narrow]]">
                 <app-toolbar>
                     <paper-icon-button id="office-menu-icon" icon="chevron-right"></paper-icon-button>
-                    Menu ordinace  <paper-icon-button icon="chevron-right"></paper-icon-button>
+                    Menu ordinace
+                    <paper-icon-button icon="chevron-right"></paper-icon-button>
                     <span id="page-name">[[computePageName(page)]]</span>
                 </app-toolbar>
             </div>
@@ -190,11 +190,11 @@
 
 
                 <iron-selector attr-for-selected="name" selected="{{page}}" on-iron-activate="toggleDrawer">
+                    <paper-item name="waiting-list" class="nav">Pořadník</paper-item>
+                    <paper-item name="calendar" class="nav">Kalendář</paper-item>
                     <paper-item name="notifications" class="nav">Upozornění
                         <span hidden="[[!showNotifications(numberOfNotifications)]]" class="badge">[[numberOfNotifications]]</span>
                     </paper-item>
-                    <paper-item name="calendar" class="nav">Kalendář</paper-item>
-                    <paper-item name="waiting-list" class="nav">Pořadník</paper-item>
                     <paper-item name="patients" class="nav">Pacienti</paper-item>
                     <paper-item name="settings" class="nav">Nastavení</paper-item>
                     <paper-item name="help" id="help-tab" class="nav bottom-link">Nápověda</paper-item>
@@ -244,16 +244,16 @@
                     observer: 'observeSelected'
                 },
 
-                pageNames:{
+                pageNames: {
                     type: Object,
                     value: {
-                        "notifications":"Upozornění",
-                        "calendar":"Kalendář",
-                        "waiting-list":"Pořadník",
-                        "patients":"Pacienti",
-                        "settings":"Nastavení",
-                        "help":"Nápověda",
-                        "issue":"Nahlásit problém"
+                        "notifications": "Upozornění",
+                        "calendar": "Kalendář",
+                        "waiting-list": "Pořadník",
+                        "patients": "Pacienti",
+                        "settings": "Nastavení",
+                        "help": "Nápověda",
+                        "issue": "Nahlásit problém"
                     }
                 }
             },
@@ -298,7 +298,7 @@
             },
 
             computePageName: function (pageName) {
-                return(this.pageNames[pageName])
+                return (this.pageNames[pageName])
             }
 
         });
