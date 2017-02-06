@@ -68,7 +68,7 @@
 
             <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
                 <notifications-view name="notifications" user-id="[[user.uid]]"></notifications-view>
-                <appointments-view name="appointments"></appointments-view>
+                <appointments-view name="appointments" user-id="[[user.uid]]"></appointments-view>
                 <settings-view name="settings" user="[[user]]"></settings-view>
             </iron-pages>
         </div>

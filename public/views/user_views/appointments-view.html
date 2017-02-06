@@ -1,5 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
 <dom-module id="appointments-view">
     <template>
         <style>
@@ -16,15 +18,39 @@
 
         </style>
 
+        <firebase-document app-name="doctor-appointment-system" path="/userAppointments/[[userId]]" data="{{appointmentsRaw}}">
+        </firebase-document>
+
         <paper-material class="main-frame">
-            TODO: appointments
+            <template is="dom-repeat" items="[[appointmentsArray]]" as="appointment">
+                <div>[[appointment.officeId]]</div>
+            </template>
         </paper-material>
 
     </template>
 
     <script>
         Polymer({
-            is: 'appointments-view'
+            is: 'appointments-view',
+
+            properties: {
+                appointmentsArray: {
+                    type: Array,
+                    computed: 'computeAppointments(appointmentsRaw)'
+                }
+            },
+
+            computeAppointments: function (appointmentsRaw) {
+                var convertedAppointment,
+                    appointmentsArray = Object.keys(appointmentsRaw).map(function (key) {
+                        convertedAppointment = appointmentsRaw[key];
+                        convertedAppointment["appointmentId"] = key;
+                        return convertedAppointment;
+                    });
+
+                console.log(appointmentsArray);
+                return appointmentsArray;
+            }
         });
     </script>
 </dom-module>

@@ -201,6 +201,8 @@
             Dnes nemáte žádné objednané pacienty
         </div>
 
+        <!--TODO: paper-toast-->
+
     </template>
 
     <script>
@@ -261,9 +263,6 @@
                     objectToSave['/userAppointments/' + appointment.patientId + '/' + appointment.id] = null;
                 }
 
-                console.log(objectToSave);
-
-//                console.log(appointment);
                 db.ref("/").update(objectToSave).then(function () {
                     this.fire("show-toast", {text: "Vyřízeno"});
                 }.bind(this), function (error) {

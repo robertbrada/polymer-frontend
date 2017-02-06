@@ -526,6 +526,7 @@
                 var db = this.$.office_document.app.database(),
                     appointmentId = this.appointmentId,
                     officeId = this.officeId,
+                    officeData = this.officeData,
                     uid = this.user.uid,
                     patientMessage = (!!this.$.patient_message.value) ? this.$.patient_message.value : null,
                     patientStatus = this.patientStatus,
@@ -535,7 +536,9 @@
                 objectToSave['/appointmentsPublic/' + officeId + '/' + appointmentId] = false;
                 objectToSave['/userAppointments/' + uid + '/' + appointmentId] = {
                     'message': patientMessage,
-                    'officeId': officeId
+                    'officeId': officeId,
+                    'address': officeData.address,
+                    'name': officeData.name
                 };
 
                 db.ref("/userInfo/" + uid).once("value").then(function (snapshot) {
