@@ -7,11 +7,12 @@
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
-
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/settings-styles.html">
+
+<link rel="import" href="/behaviors/form-validation-behavior.html">
 
 <dom-module id="generator-info-view">
     <template>
@@ -71,11 +72,11 @@
 
         </style>
 
-        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/generatorInfo/[[officeId]]"
+        <firebase-document id="generator_document" app-name="doctor-appointment-system" path="/generatorInfo/[[officeId]]"
                            data="{{generatorInfo}}">
         </firebase-document>
 
-        <form id="generalForm" is="iron-form" class="main-frame">
+        <form id="generator_form" is="iron-form" class="main-frame">
             <div class="note">
                 <h2>Poznámka</h2>
                 <p>Toto nastavení slouží k nastavení dlouhodobé, nebo trvalé změny.
@@ -92,7 +93,7 @@
                 <div id="manual-change">
                     <paper-checkbox id="manual-change-checkbox" checked="{{manualChange}}">Provést změny od konkrétního dne
                     </paper-checkbox>
-                    <paper-input id="manual-change-input" disabled="[[!manualChange]]" auto-validate required
+                    <paper-input id="manual-change-input" disabled="[[!manualChange]]" auto-validate required="[[manualChange]]"
                                  placeholder="den.měsíc.rok"
                                  pattern="\d{1,2}.\d{1,2}.\d{4}"
                                  prevent-invalid-input allowed-pattern="[\d.]">
@@ -110,7 +111,14 @@
                     <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
                         hodin určíme objednávací časy.</p>
                     <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
-                                 value="[[generatorInfo.visitLength]]">
+                                 value="{{copyOfGeneratorInfo.visitLength}}">
+                        <div suffix>min</div>
+                    </paper-input>
+
+                    <h2>Počet objednávacích dní</h2>
+                    <p>Zde můžete nastavit počet dní, ve kterých zpřístupníme pacientům objednávání.</p>
+                    <paper-input type="number" label="Počet dní" min="7" max="360" required auto-validate
+                                 value="{{copyOfGeneratorInfo.numberOfDays}}">
                         <div suffix>min</div>
                     </paper-input>
 
@@ -120,12 +128,12 @@
                 <section>
                     <h2>Ordinační hodiny</h2>
 
-                    <template is="dom-repeat" items="[[generatorInfo.officeHours]]" as="entry">
+                    <template is="dom-repeat" items="[[copyOfGeneratorInfo.officeHours]]" as="entry">
                         <div>
                             <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]</paper-checkbox>
 
                             <template is="dom-if" if="[[entry.available]]">
-                                <paper-input value="[[entry.hours]]" auto-validate required
+                                <paper-input value="{{entry.hours}}" auto-validate required
                                              placeholder="07:30-12:30,13:30-15:30"
                                              pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](,([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])*"
                                              prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
@@ -146,6 +154,8 @@
         Polymer({
             is: 'generator-info-view',
 
+            behaviors: [FormValidationBehavior],
+
             properties: {
                 days: {
                     type: Array,
@@ -155,8 +165,48 @@
                 manualChange: {
                     type: Boolean,
                     value: false
+                },
+
+                // The generatorInfo is copied so that the changes are saved after the button is pressed.
+                copyOfGeneratorInfo: {
+                    type: Object,
+                    computed: 'computeCopyOfGeneratorInfo(generatorInfo)'
                 }
 
+            },
+
+            confirm: function () {
+                if (this._validateForm(this.$.generator_form)) {
+                    this.saveChanges(this.copyOfGeneratorInfo);
+                } else {
+                    this.fire("show-toast", {text: "Chybný formát"});
+                }
+            },
+
+            saveChanges: function (updatedGeneratorInfo) {
+                var db = this.$.generator_document.app.database(),
+                    officeId = this.officeId;
+
+                db.ref('/generatorInfo/' + officeId).update(updatedGeneratorInfo).then(function () {
+                    this.fire("show-toast", {text: "Změny uloženy"});
+                    this.regenerateExistingValues()
+                }.bind(this), function () {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání změn se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this))
+            },
+
+            regenerateExistingValues: function () {
+                // TODO: regenerate values
+            },
+
+            computeCopyOfGeneratorInfo: function (generatorInfo) {
+                return generatorInfo;
             },
 
             getDayName: function (dayIndex) {
