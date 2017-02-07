@@ -21,6 +21,21 @@
                 padding: 1em 4.5% 3.5em 4.5%;
             }
 
+            #confirm_button {
+                float: right;
+            }
+
+            #pass-change-container h2 {
+               margin-top: 0;
+            }
+
+            #pass-change-container {
+                background-color: #f6f6f7;
+                border: 1px solid #ddddde;
+                margin-top: 3em;
+                padding: 2em 2em 0 2em;
+            }
+
             @media only screen and (max-width: 767px) {
 
                 .main-frame {
@@ -29,6 +44,14 @@
 
                 #form1 h2:first-child {
                     margin-top: 2em;
+                }
+
+                #confirm_button {
+                    float: none;
+                }
+
+                #pass-change-container {
+                    padding: 1em 1em 0 1em;
                 }
             }
         </style>
@@ -79,7 +102,7 @@
                     </form>
                 </section>
             </div>
-            <div>
+            <div id="pass-change-container">
                 <h2><iron-icon icon="icons:lock"></iron-icon>Změna hesla</h2>
                 <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
                     změnit.</p>
