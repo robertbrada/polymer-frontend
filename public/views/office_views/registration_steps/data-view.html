@@ -52,6 +52,29 @@
                 margin-bottom: 0 !important;
                 padding-bottom: 0 !important;
             }
+
+
+            .step-button{
+                margin-top: 3em;
+            }
+
+            .step-button[disabled]{
+                background-color: transparent;
+                color: var(--app-green-color);
+                font-weight: bold;
+                font-size: 1.1em;
+                padding-left: 0;
+                margin-top: 1.5em;
+                margin-bottom: 0;
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                section:first-child h2:first-child {
+                    margin-top: 1em;
+                }
+            }
+
         </style>
 
         <google-maps-api id="map_api" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-maps-api>
@@ -62,10 +85,10 @@
                 <span>Tyto údaje můžete později změnit v nastavení</span>
             </header>
 
-            <paper-button id="step1_button" type="button" on-tap="toggleChange" disabled="[[collapse]]" raised>
+            <paper-button id="step1_button" class="step-button" type="button" on-tap="toggleChange" disabled="[[collapse]]" raised>
                 [[computeButtonText(collapse, 1)]]
             </paper-button>
-            <hr>
+            <hr hidden="[[collapse]]">
 
             <iron-collapse opened="[[collapse]]">
                 <form id="step1Form" is="iron-form">
@@ -79,7 +102,7 @@
                             <paper-input label="Příjmení" minlength="1" auto-validate
                                          maxlength="80" error-message="Nelze ponechat prázdné"
                                          required value="{{officeData.fullInfo.name.lastName}}"></paper-input>
-                            <h2>Adresa</h2>
+                            <h2>Adresa ordinace</h2>
                             <paper-input id="cinput" label="Město" value="{{officeData.fullInfo.address.city}}"
                                          minlength="1" maxlength="20" required auto-validate>
                             </paper-input>
@@ -119,10 +142,9 @@
                     </div>
                 </form>
             </iron-collapse>
-            <paper-button id="step2_button" on-tap="toggleChange" disabled="[[!collapse]]" raised>
+            <paper-button id="step2_button" class="step-button" on-tap="toggleChange" disabled="[[!collapse]]" raised>
                 [[computeButtonText(collapse, 2)]]
             </paper-button>
-            <hr>
             <iron-collapse opened="[[!collapse]]">
                 <form id="step2Form" is="iron-form">
                     <template is="dom-if" if="[[renderStep2]]">
@@ -293,9 +315,9 @@
 
             computeButtonText: function (collapse, index) {
                 if (collapse) {
-                    return (index === 1) ? "Krok1" : "Další krok";
+                    return (index === 1) ? "1. Krok" : "Další krok";
                 } else {
-                    return (index === 1) ? "Upravit krok 1" : "Krok2";
+                    return (index === 1) ? "Upravit 1. krok" : "2. Krok";
                 }
             },
 
