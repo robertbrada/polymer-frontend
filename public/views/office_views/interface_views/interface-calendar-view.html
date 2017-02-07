@@ -1,15 +1,47 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
+
+<link rel="import" href="/styles/tab-styles.html">
+
 <dom-module id="interface-calendar-view">
     <template>
-        <style>
+        <style include="tab-styles">
+            img {
+                max-width: 100%;
+            }
         </style>
-        TODO: calendar view
+
+        <paper-material elevation="1">
+            <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
+                <paper-tab name="calendar">Kalendář</paper-tab>
+                <paper-tab name="holiday">Dovolená</paper-tab>
+            </paper-tabs>
+
+
+            <iron-pages selected="[[selected]]" attr-for-selected="name">
+                <img name="calendar" src="../../../images/calendar-render.png">
+                <img name="holiday" src="../../../images/holiday-render.png">
+                <!--<office-info-view name="office-info" office-id="[[officeId]]"></office-info-view>-->
+                <!--<generator-info-view name="generator-info" office-id="[[officeId]]"></generator-info-view>-->
+            </iron-pages>
+        </paper-material>
+
     </template>
 
     <script>
         Polymer({
-            is: 'interface-calendar-view'
+            is: 'interface-calendar-view',
+
+            properties: {
+                selected: {
+                    type: String,
+                    value: "calendar", // First selected view
+//                    observer: "loadView"
+                }
+            },
         });
     </script>
 </dom-module>
