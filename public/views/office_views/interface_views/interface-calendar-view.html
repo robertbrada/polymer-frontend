@@ -24,8 +24,6 @@
             <iron-pages selected="[[selected]]" attr-for-selected="name">
                 <img name="calendar" src="../../../images/calendar-render.png">
                 <img name="holiday" src="../../../images/holiday-render.png">
-                <!--<office-info-view name="office-info" office-id="[[officeId]]"></office-info-view>-->
-                <!--<generator-info-view name="generator-info" office-id="[[officeId]]"></generator-info-view>-->
             </iron-pages>
         </paper-material>
 
@@ -38,10 +36,9 @@
             properties: {
                 selected: {
                     type: String,
-                    value: "calendar", // First selected view
-//                    observer: "loadView"
+                    value: "calendar" // First selected view
                 }
-            },
+            }
         });
     </script>
 </dom-module>
