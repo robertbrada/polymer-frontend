@@ -1,31 +1,153 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+
+<link rel="import" href="/bower_components/iron-icons/editor-icons.html">
 
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
+<link rel="import" href="/styles/interface-styles.html">
+<link rel="import" href="/styles/input-styles.html">
+
 <dom-module id="appointments-view">
     <template>
-        <style>
+        <style include="interface-styles input-styles">
             :host {
                 display: block;
             }
 
-            .main-frame {
-                background-color: #fff;
-                max-width: 900px;
-                margin: 0 auto 3em;
-                padding: 1em 4.5% 3.5em 4.5%;
+            a {
+                color: var(--app-green-color);
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            .my-list-item {
+                padding: 1.8em;
+                margin: 0.6em auto;
+            }
+
+            .my-list-item:hover #save-changes {
+                box-shadow: none;
+            }
+
+
+            paper-textarea {
+                margin-top: 1.8em;
+                margin-right: 1.5em;
+                margin-bottom: 0;
+                padding-bottom: 0;
+
+                --paper-input-container: {
+                    margin-bottom: 0;
+                    padding-bottom: 0;
+                };
+
+            }
+
+            paper-input[disabled] {
+                color: red;
+            }
+
+            #edit-message {
+                margin-top: auto;
+                margin-left: 0.5em;
+            }
+
+            .name, .address {
+                max-width: 30%;
+            }
+            @media only screen and (max-width: 767px) {
+
+                .flex-horizontal-with-ratios {
+                    @apply(--layout-vertical);
+                }
+
+                .dismiss-button {
+                    position: absolute;
+                    top: 1em;
+                    right: 1em;
+                }
+
+                .my-list-item {
+                    padding: 1em;
+                }
+
+                .label {
+                    @apply(--label-medium-screen-layout);
+                }
+
+                .address-city {
+                    margin-left: 3.72em;
+                }
+
+                paper-textarea {
+                    margin-right: 0;
+                    margin-bottom: 1em;
+                }
+
+                .name, .address {
+                    max-width: 90%;
+                }
             }
 
         </style>
 
-        <firebase-document app-name="doctor-appointment-system" path="/userAppointments/[[userId]]" data="{{appointmentsRaw}}">
+        <firebase-document app-name="doctor-appointment-system" path="/userAppointments/[[userId]]"
+                           data="{{appointmentsRaw}}">
         </firebase-document>
 
-        <paper-material class="main-frame">
-            <template is="dom-repeat" items="[[appointmentsArray]]" as="appointment">
-                <div>[[appointment.officeId]]</div>
-            </template>
-        </paper-material>
+        <template is="dom-repeat" items="[[appointmentsArray]]" as="appointment">
+            <div class="my-list-item">
+                <div class="container flex-horizontal-with-ratios">
+
+                    <div class="flexchild time">
+                        <span class="label">Čas objednání:</span>
+                        <b>[[computeAppointmentDate(appointment.appointmentId)]]</b>
+                    </div>
+
+                    <div class="flexchild name">
+                        <span class="label">Lékař:</span>
+                        <a href="/d/[[appointment.officeId]]" title="zobrazit profil lékaře">[[appointment.name.firstName]]
+                            [[appointment.name.lastName]]</a>
+                    </div>
+
+                    <div class="flexchild address"><span class="label">Adresa:</span>
+                        <a href="[[computeMapLink(appointment.address)]]" target="_blank" title="zobrazit na mapě">[[appointment.address.street]]
+                            <br>
+                            <div class="address-city">[[appointment.address.city]]</div>
+                        </a>
+                    </div>
+
+                    <div class="buttons">
+                        <paper-button on-tap="#" class="dismiss-button">
+                            <iron-icon icon="icons:close"></iron-icon>
+                            Zrušit
+                        </paper-button>
+                    </div>
+
+                </div>
+
+                <div class="container flex-horizontal-with-ratios">
+                    <paper-textarea id="message" class="flexchild" label="Zpráva lékaři" minlength="1" maxlength="200"
+                                    value="[[appointment.message]]">
+                    </paper-textarea>
+                    <div id="edit-message" class="buttons" disabled="">
+                        <!--disabled se zruší při změně v textareře - htělo by udělat napříč celým projektem-->
+                        <paper-button id="save-changes" on-tap="#" disabled>
+                            <iron-icon icon="icons:check"></iron-icon>
+                            Uložit změny
+                        </paper-button>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </template>
 
     </template>
 
@@ -50,7 +172,24 @@
 
                 console.log(appointmentsArray);
                 return appointmentsArray;
-            }
+            },
+
+            computeAppointmentDate: function (appointmentId) {
+                var date, year, month, hours, minutes,
+                    stringId = "" + appointmentId;
+
+                date = Number(stringId.substring(6, 8));
+                year = stringId.substring(0, 4);
+                month = Number(stringId.substring(4, 6));
+                hours = Number(stringId.substring(8, 10));
+                minutes = stringId.substring(10, 12);
+
+                return "" + date + "." + month + "." + year + " v " + hours + ":" + minutes;
+            },
+
+            computeMapLink: function (address) {
+                return (!!address) ? "http://maps.google.com/maps?q=" + address.city + "," + address.street : null;
+            },
         });
     </script>
 </dom-module>

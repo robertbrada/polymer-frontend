@@ -18,8 +18,14 @@
         <style include="tab-styles layout-styles">
 
             paper-tabs {
-                margin: 0 auto 0 auto;
-                max-width: 767px;
+                max-width: 1006px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                margin: 0 auto;
+            }
+
+            iron-pages {
+                max-width: 1006px;
+                margin: 0 auto;
             }
 
             #page {
@@ -37,7 +43,6 @@
                 text-align: center;
                 padding: 1em 0;
             }
-
 
             @media only screen and (max-width: 767px) {
 
@@ -57,9 +62,9 @@
 
         <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
 
-        <div id="page-name" hidden="[[!smallScreen]]">[[computePageName(page)]]</div>
 
         <div id="page" hidden="[[!loggedIn]]">
+            <div id="page-name" hidden="[[!smallScreen]]">[[computePageName(page)]]</div>
             <paper-tabs focused selected="{{page}}" attr-for-selected="name" hidden="[[smallScreen]]">
                 <paper-tab name="notifications">Upozornění</paper-tab>
                 <paper-tab name="appointments">Návštěvy</paper-tab>
