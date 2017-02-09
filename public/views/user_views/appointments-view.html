@@ -34,7 +34,6 @@
                 box-shadow: none;
             }
 
-
             paper-textarea {
                 margin-top: 1.8em;
                 margin-right: 1.5em;
@@ -60,6 +59,7 @@
             .name, .address {
                 max-width: 30%;
             }
+
             @media only screen and (max-width: 767px) {
 
                 .flex-horizontal-with-ratios {
@@ -133,7 +133,7 @@
 
                 <div class="container flex-horizontal-with-ratios">
                     <paper-textarea id="patient_message" class="flexchild" label="Zpráva lékaři" minlength="1" maxlength="200"
-                                    value="[[appointment.message]]">
+                                    value="{{appointment.message}}">
                     </paper-textarea>
                     <div id="edit-message" class="buttons">
                         <!--disabled se zruší při změně v textareře - htělo by udělat napříč celým projektem-->
@@ -170,7 +170,6 @@
                         return convertedAppointment;
                     });
 
-                console.log(appointmentsArray);
                 return appointmentsArray;
             },
 
@@ -193,19 +192,14 @@
 
             saveChanges: function (event) {
                 var db = this.$.appointment_document.app.database(),
-                    appointmentId = this.appointmentId,
-                    officeId = this.officeId,
+                    appointment = event.model.appointment,
                     userId = this.userId,
-                    patientMessage = event.model.appointment.message;
-                    patientMessage = (patientMessage) ? patientMessage : null,
+                    patientMessage = (!!appointment.message) ? appointment.message : null,
                     objectToSave = {};
 
-                objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
-                    'message': patientMessage
-                };
-                objectToSave['/userAppointments/' + userId + '/' + appointmentId] = {
-                    'message': patientMessage
-                };
+
+                objectToSave['/appointmentsPrivate/' + appointment.officeId + '/' + appointment.appointmentId + '/message'] = patientMessage;
+                objectToSave['/userAppointments/' + userId + '/' + appointment.appointmentId + '/message'] = patientMessage;
 
                 db.ref("/").update(objectToSave).then(function () {
                     this.fire("show-toast", {text: "Změny uloženy"});
