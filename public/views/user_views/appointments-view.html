@@ -96,7 +96,7 @@
 
         </style>
 
-        <firebase-document app-name="doctor-appointment-system" path="/userAppointments/[[userId]]"
+        <firebase-document id="appointment_document" app-name="doctor-appointment-system" path="/userAppointments/[[userId]]"
                            data="{{appointmentsRaw}}">
         </firebase-document>
 
@@ -123,7 +123,7 @@
                     </div>
 
                     <div class="buttons">
-                        <paper-button on-tap="#" class="dismiss-button">
+                        <paper-button on-tap="deleteAppointment" class="dismiss-button">
                             <iron-icon icon="icons:close"></iron-icon>
                             Zrušit
                         </paper-button>
@@ -132,12 +132,12 @@
                 </div>
 
                 <div class="container flex-horizontal-with-ratios">
-                    <paper-textarea id="message" class="flexchild" label="Zpráva lékaři" minlength="1" maxlength="200"
+                    <paper-textarea id="patient_message" class="flexchild" label="Zpráva lékaři" minlength="1" maxlength="200"
                                     value="[[appointment.message]]">
                     </paper-textarea>
-                    <div id="edit-message" class="buttons" disabled="">
+                    <div id="edit-message" class="buttons">
                         <!--disabled se zruší při změně v textareře - htělo by udělat napříč celým projektem-->
-                        <paper-button id="save-changes" on-tap="#" disabled>
+                        <paper-button id="save-changes" on-tap="saveChanges">
                             <iron-icon icon="icons:check"></iron-icon>
                             Uložit změny
                         </paper-button>
@@ -190,6 +190,35 @@
             computeMapLink: function (address) {
                 return (!!address) ? "http://maps.google.com/maps?q=" + address.city + "," + address.street : null;
             },
+
+            saveChanges: function (event) {
+                var db = this.$.appointment_document.app.database(),
+                    appointmentId = this.appointmentId,
+                    officeId = this.officeId,
+                    userId = this.userId,
+                    patientMessage = event.model.appointment.message;
+                    patientMessage = (patientMessage) ? patientMessage : null,
+                    objectToSave = {};
+
+                objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
+                    'message': patientMessage
+                };
+                objectToSave['/userAppointments/' + userId + '/' + appointmentId] = {
+                    'message': patientMessage
+                };
+
+                db.ref("/").update(objectToSave).then(function () {
+                    this.fire("show-toast", {text: "Změny uloženy"});
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            }
         });
     </script>
 </dom-module>
