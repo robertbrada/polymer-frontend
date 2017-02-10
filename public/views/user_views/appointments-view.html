@@ -30,9 +30,6 @@
                 margin: 0.6em auto;
             }
 
-            .my-list-item:hover #save-changes {
-                box-shadow: none;
-            }
 
             paper-textarea {
                 margin-top: 1.8em;
@@ -137,15 +134,13 @@
                     </paper-textarea>
                     <div id="edit-message" class="buttons">
                         <!--disabled se zruší při změně v textareře - htělo by udělat napříč celým projektem-->
-                        <paper-button id="save-changes" on-tap="saveChanges">
+                        <paper-button id="save-changes" class="confirm-button" on-tap="saveChanges">
                             <iron-icon icon="icons:check"></iron-icon>
                             Uložit změny
                         </paper-button>
                     </div>
 
                 </div>
-
-
             </div>
         </template>
 
@@ -208,6 +203,37 @@
                         path: "", viewName: "genericdialog", open: true,
                         data: {
                             text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            },
+
+            deleteAppointment: function (event) {
+
+                var db = this.$.appointment_document.app.database(),
+                    appointment = event.model.appointment,
+                    userId = this.userId,
+                    objectToSave = {};
+
+
+                //smaze planovane objednani u lekare
+                objectToSave['/appointmentsPrivate/' + appointment.officeId + '/' + appointment.appointmentId] = null;
+
+                //povoli objednani na to appointmentId
+                objectToSave['/appointmentsPublic/' + appointment.officeId + '/' + appointment.appointmentId] = true;
+
+                //smaze planovane objednani u pacienta
+                objectToSave['/userAppointments/' + userId + '/' + appointment.appointmentId] = null;
+
+
+                db.ref("/").update(objectToSave).then(function () {
+                    this.fire("show-toast", {text: "Objednání zrušeno"});
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při odstraňování objednání se vyskytla chyba. Zkuste to prosím znovu.',
                             buttonText: 'Zavřít'
                         }
                     });
