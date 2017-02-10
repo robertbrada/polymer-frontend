@@ -168,8 +168,33 @@
                     } else {
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/waiting-list/' + officeId});
+                        this.notifyGenerator(officeId);
                     }
                 }.bind(this));
+            },
+
+            notifyGenerator: function (officeId) {
+                var postData = {
+                        officeId: officeId
+                    },
+                    request = new XMLHttpRequest();
+
+                request.onerror = function () {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'V průběhu příštích 24 hodin budou vygenerovány první termíny.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                };
+
+                // TODO: enable pre-flight request redirection when CORS standard catches up
+                request.open("POST", "https://doctor-appointment-system.appspot.com/registration/generate", true);
+
+                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                request.send(JSON.stringify(postData));
             },
 
             savePhoto: function (data, officeID) {
