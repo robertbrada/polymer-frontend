@@ -35,7 +35,7 @@
                 --calendar-opacity: 1;
             }
 
-            #spinner {
+            .centered {
                 padding-top: 74px;
                 @apply(--layout);
                 @apply(--layout-center-justified);
@@ -225,18 +225,19 @@
 
         <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}" user="{{user}}"></firebase-auth>
 
-        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]" data="{{officeData}}">
-        </firebase-document>
-
-        <firebase-document app-name="doctor-appointment-system"
+        <firebase-document id="user_contacted_document" app-name="doctor-appointment-system"
                            path="/userContactedOffices/[[user.uid]]/[[officeId]]" data="{{userContactedOffice}}">
         </firebase-document>
 
-        <div id="spinner" hidden="[[!dataNotLoaded]]">
-            <paper-spinner-lite active="[[dataNotLoaded]]"></paper-spinner-lite>
+        <div class="centered" hidden="[[hideError]]">
+            <iron-icon icon="error"></iron-icon> Profil nenalezen
         </div>
 
-        <div hidden="[[dataNotLoaded]]">
+        <div class="centered" hidden="[[hideSpinner]]">
+            <paper-spinner-lite active="[[!hideSpinner]]"></paper-spinner-lite>
+        </div>
+
+        <div hidden="[[hideContent]]">
             <div id="head" class="subsection grid">
                 <section class="photo-name-section">
                     <template is="dom-if" if="[[officeData.photoAvailability]]">
@@ -370,17 +371,13 @@
 
                 officeId: {
                     type: String,
-                    computed: 'computeIdProperty(route.path)'
+                    computed: 'computeIdProperty(route.path)',
+                    observer: 'loadOfficeData'
                 },
 
                 loggedIn: {
                     type: Boolean,
                     computed: 'computeLoggedInProperty(statusKnown, user)'
-                },
-
-                dataNotLoaded: {
-                    type: Boolean,
-                    computed: 'computeDataNotLoadedProperty(officeData)',
                 },
 
                 disabledCalendar: {
@@ -395,11 +392,22 @@
                     computed: 'computePatientStatusProperty(userContactedOffice)'
                 },
 
-                // Other
-
-                officeData: {
-                    observer: 'observerOfficeData'
+                hideSpinner: {
+                    type: Boolean,
+                    value: false
                 },
+
+                hideError: {
+                    type: Boolean,
+                    value: true
+                },
+
+                hideContent: {
+                    type: Boolean,
+                    value: true
+                },
+
+                // Other
 
                 verificationRequired: {
                     type: Boolean,
@@ -458,6 +466,26 @@
                 'setVerificationRequired(officeData.manualConfirmation, user.uid)'
             ],
 
+            loadOfficeData: function (officeId) {
+                var db = this.$.user_contacted_document.app.database(),
+                    officeData;
+
+                db.ref('/officeFullInfo/' + officeId).once('value').then(function (snapshot) {
+                    officeData = snapshot.val();
+
+                    if (officeData === null) {
+                        this.hideError = false;
+                    } else {
+                        this.officeData = officeData;
+                        this.hideContent = false;
+                        this.hideError = true;
+                        this.onOfficeDataLoaded();
+                    }
+
+                    this.hideSpinner = true;
+                }.bind(this));
+            },
+
             // Section for computed properties
 
             computeIdProperty: function (path) {
@@ -467,10 +495,6 @@
 
             computeLoggedInProperty: function (statusKnown, user) {
                 return (statusKnown && !!user);
-            },
-
-            computeDataNotLoadedProperty: function (data) {
-                return Object.keys(data).length === 0;
             },
 
             computeDisabledCalendarProperty: function (loggedIn, verificationRequired, patientStatus) {
@@ -499,7 +523,7 @@
                 }
             },
 
-            observerOfficeData: function () {
+            onOfficeDataLoaded: function () {
                 var mapElement = this.$$("#map_element");
                 if (!!mapElement) {
                     mapElement.resize(); // Center the map with new coordinates
@@ -523,7 +547,7 @@
             // Handlers of events from UI
 
             _confirmAppointment: function () {
-                var db = this.$.office_document.app.database(),
+                var db = this.$.user_contacted_document.app.database(),
                     appointmentId = this.appointmentId,
                     officeId = this.officeId,
                     officeData = this.officeData,
@@ -686,6 +710,10 @@
 
             computeVerificationRequestSendVisibility: function (patientStatus) {
                 return patientStatus !== 'awaitsVerification'
+            },
+
+            computeContentHiddenness: function (requestFinished, wrongId) {
+                return requestFinished || wrongId;
             }
         });
     </script>
