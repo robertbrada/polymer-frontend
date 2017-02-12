@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/iron-icons/editor-icons.html">
 
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="/styles/interface-styles.html">
 <link rel="import" href="/styles/input-styles.html">
@@ -30,6 +31,9 @@
                 margin: 0.6em auto;
             }
 
+            .no-appointments {
+                text-align: center;
+            }
 
             paper-textarea {
                 margin-top: 1.8em;
@@ -144,6 +148,11 @@
             </div>
         </template>
 
+        <div hidden="[[computeIfAppointments(appointmentsArray)]]" class="no-appointments my-list-item">
+            <iron-icon icon="info"></iron-icon>
+            Nemáte žádné návštěvy
+        </div>
+
     </template>
 
     <script>
@@ -155,6 +164,10 @@
                     type: Array,
                     computed: 'computeAppointments(appointmentsRaw)'
                 }
+            },
+
+            computeIfAppointments: function (appointmentsArray) {
+                return appointmentsArray.length !== 0;
             },
 
             computeAppointments: function (appointmentsRaw) {
