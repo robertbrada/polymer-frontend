@@ -5,6 +5,7 @@
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/input-styles.html">
@@ -107,19 +108,21 @@
             <div class="subsection grid">
                 <section>
 
-                    <h2>Délka návštěvy</h2>
-                    <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
-                        hodin určíme objednávací časy.</p>
+                    <h2>Délka návštěvy<span id="visit-length-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Vysvětlení</span></h2>
+                    <paper-tooltip for="visit-length-tooltip" offset="0">Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
+                        hodin určíme objednávací časy.
+                    </paper-tooltip>
                     <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
                                  value="{{copyOfGeneratorInfo.visitLength}}">
                         <div suffix>min</div>
                     </paper-input>
 
-                    <h2>Počet objednávacích dní</h2>
-                    <p>Zde můžete nastavit počet dní, ve kterých zpřístupníme pacientům objednávání.</p>
+                    <h2>Počet objednávacích dní<span id="num-of-days-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Vysvětlení</span></h2>
+                    <paper-tooltip for="num-of-days-tooltip" offset="0">Zadejte na jak daleko do budoucna se mohou pacienti objednat. <br><br>Pokud napíšete např. 7 dní, tak nebude možné objednat se na 8. den a dále od dnešního data.
+                    </paper-tooltip>
                     <paper-input type="number" label="Počet dní" min="7" max="360" required auto-validate
                                  value="{{copyOfGeneratorInfo.numberOfDays}}">
-                        <div suffix>min</div>
+                        <div suffix>dní</div>
                     </paper-input>
 
 

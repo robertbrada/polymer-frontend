@@ -53,12 +53,11 @@
                 padding-bottom: 0 !important;
             }
 
-
-            .step-button{
+            .step-button {
                 margin-top: 3em;
             }
 
-            .step-button[disabled]{
+            .step-button[disabled] {
                 background-color: transparent;
                 color: var(--app-green-color);
                 font-weight: bold;
@@ -85,7 +84,8 @@
                 <span>Tyto údaje můžete později změnit v nastavení</span>
             </header>
 
-            <paper-button id="step1_button" class="step-button" type="button" on-tap="toggleChange" disabled="[[collapse]]" raised>
+            <paper-button id="step1_button" class="step-button" type="button" on-tap="toggleChange"
+                          disabled="[[collapse]]" raised>
                 [[computeButtonText(collapse, 1)]]
             </paper-button>
             <hr hidden="[[collapse]]">
@@ -106,7 +106,8 @@
                             <paper-input id="cinput" label="Město" value="{{officeData.fullInfo.address.city}}"
                                          minlength="1" maxlength="20" required auto-validate>
                             </paper-input>
-                            <paper-input id="sinput" label="Ulice a číslo popisné" value="{{officeData.fullInfo.address.street}}"
+                            <paper-input id="sinput" label="Ulice a číslo popisné"
+                                         value="{{officeData.fullInfo.address.street}}"
                                          minlength="1" maxlength="80" required auto-validate></paper-input>
                             <h2>Délka návštěvy</h2>
                             <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
@@ -117,7 +118,8 @@
                             </paper-input>
                             <h2>Vaše specializace</h2>
                             <paper-dropdown-menu label="Specializace">
-                                <paper-listbox class="dropdown-content" selected="{{officeData.fullInfo.specialization}}">
+                                <paper-listbox class="dropdown-content"
+                                               selected="{{officeData.fullInfo.specialization}}">
                                     <template is="dom-repeat" items="[[specializations]]" as="entry">
                                         <paper-item>[[entry]]</paper-item>
                                     </template>
@@ -165,10 +167,9 @@
                                                  value="{{officeData.device.deviceID}}"></paper-input>
                                 </template>
                                 <h2>Vřejné informace profilu</h2>
-                                <p>Zadejte prosím údaje, které si přejete zobrazit u Vašeho profilu. Tyto údaje jsou
-                                    dobrovolné tudíž je nemusíte vyplňovat/nahrávat.</p>
-                                <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím vyplňte tuto
-                                    možnost:</p>
+                                <p>Zadejte údaje, které si přejete zobrazit na profilu ordinace. Údaje jsou
+                                    dobrovolné a nemusíte je tak vyplňovat/nahrávat. </p>
+                                <p>Pokud chcete pacientům umožnit objednání přes telefon, tak jej vyplňte.</p>
                                 <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
                                                   phone-number-pattern="XXX-XXX-XXX" auto-validate
                                                   value="{{officeData.fullInfo.phoneNumber}}">
@@ -196,17 +197,18 @@
                                     Přijímám nové pacienty
                                 </paper-checkbox>
                                 <h2>Manuální potvrzení při první návštěvě</h2>
-                                <p>Zaškrtněte, pokud chcete aby pacient při prvním objednání nejprve musel zažádat o Vaše potvrzení.
-                                    V případě, že jej zaškrtnete, pacient na Vašem profilu při prvním objednání bude muset zažádat o potvrzení. Poté
-                                    Vám přijde zpráva s žádostí o potvrzení. Ve zprávě uvidíte pacientovi osobní údaje (jméno, adresa), na základě
-                                    kterých umožníte pacientovi objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
+                                <p>Zaškrtněte, pokud chcete, aby pacient při prvním objednání nejprve musel zažádat o
+                                    vaše potvrzení.
+                                    Poté, co pacient zažádá o potvrzení, vám přijde zpráva, ve které uvidíte pacientovi osobní údaje
+                                    (jméno, adresa, datum narození), na jejichž základě umožníte pacientovi objednání či naopak. <br>
+                                    Při dalších návštěvách již potvrzeného pacienta nebude nutné vaše potvrzení.
                                 </p>
                                 <paper-checkbox checked="{{officeData.fullInfo.manualConfirmation}}">
-                                    Manuální potvrzení
+                                    Vyžaduji manuální potvrzení
                                 </paper-checkbox>
                                 <h2>Text pro pacienty</h2>
-                                <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu
-                                    pacientům. Zpráva není povinná.</p>
+                                <p>Tento text se zobrazí na profilu ordinace.
+                                    Můžete zde zadat libovolnou zprávu pacientům. Zpráva není povinná.</p>
                                 <paper-textarea label="Zpráva pro pacienty" value="{{officeData.fullInfo.patientText}}"
                                                 char-counter maxlength="800"></paper-textarea>
                                 <paper-button responsive on-tap="confirm" raised>

@@ -33,6 +33,36 @@
                 margin-bottom: 2em;
             }
 
+            .tooltip {
+                font-weight: 300;
+                font-size: 0.9em;
+                color: #99999a;
+                cursor: help;
+                float: right;
+                margin-left: 1em;
+            }
+
+            .tooltip iron-icon {
+                margin-right: 0.2em;
+                width: 18px;
+                height: 18px;
+                color: #ccccce;
+                margin-top: -2px;
+            }
+
+            paper-tooltip {
+                --paper-tooltip: {
+                    font-size: 0.95em;
+                    line-height: 1.4em;
+                    letter-spacing: 0.03em;
+                    position: absolute;
+                    top: 5px;
+                    left: -250px;
+                    width: 280px;
+                    opacity: 1;
+                };
+            }
+
             @media only screen and (max-width: 767px) {
 
                 .subsection {
