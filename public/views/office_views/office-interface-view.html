@@ -116,7 +116,7 @@
             #main-content {
                 padding: 1.5em;
                 background-color: var(--app-background-color);
-                min-height: calc(100vh - 4em); /* padding on top and bottom */
+                min-height: calc(100vh - 3em); /* minus padding on top and bottom */
             }
 
             /*** RESPONSIVE ***/
@@ -129,6 +129,21 @@
 
                 iron-pages {
                     margin-top: 0;
+                }
+            }
+
+            /*responsive css for horizontal phone position*/
+            @media only screen and (max-height: 470px) {
+                .bottom-link {
+                    position: static;
+                    border-top: none;
+                    bottom: auto;
+                }
+
+                app-drawer {
+                    --app-drawer-content-container: {
+                        overflow: auto;
+                    };
                 }
             }
 
@@ -178,7 +193,7 @@
                         <!--TODO: Bug: on office name change listbox doesn't reload the name of selected even though the name changes in dropdown-->
                         <paper-listbox class="dropdown-content" selected="{{selectedItem}}" attr-for-selected="name">
                             <template is="dom-repeat" items="[[officeArray]]" as="office">
-                                <paper-item name="[[office.id]]">[[office.name]]</paper-item>
+                                <paper-item on-tap="toggleDrawer" name="[[office.id]]">[[office.name]]</paper-item>
                             </template>
                             <paper-item id="add-office" name="_add_office">
                                 <iron-icon icon="add"></iron-icon>

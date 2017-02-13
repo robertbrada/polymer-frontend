@@ -9,6 +9,7 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-tooltip/paper-tooltip.html">
 <!--<link rel="import" href="/bower_components/file-input/file-input.html">-->
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
@@ -50,29 +51,37 @@
                         </paper-listbox>
                     </paper-dropdown-menu>
 
-                    <h2>Přijímání nových pacientů</h2>
-                    <p>Zaškrtněte, pokud přijímáte nové pacienty.</p>
+                    <h2>Přijímání nových pacientů<span id="accept-new-tooltip" class="tooltip"><iron-icon
+                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
+                    <paper-tooltip for="accept-new-tooltip" offset="0">Zaškrtněte, pokud přijímáte nové pacienty.
+                    </paper-tooltip>
                     <paper-checkbox checked="{{localOfficeData.acceptingNewPatients}}">
                         Přijímám nové pacienty
                     </paper-checkbox>
 
-                    <h2>Manuální potvrzení při první návštěvě</h2>
-                    <p>Zaškrtněte, pokud chcete, aby pacient při prvním objednání nejprve musel zažádat o Vaše potvrzení.
-                        V případě, že jej zaškrtnete, pacient na Vašem profilu při prvním objednání bude muset zažádat o potvrzení. Poté
-                        Vám přijde zpráva s žádostí o potvrzení. Ve zprávě uvidíte pacientovi osobní údaje (jméno, adresa), na základě
-                        kterých umožníte pacientovi objednání či naopak. Při dalších pacientových návštěvách potvrzení nebude nutné.
-                    </p>
+                    <h2>Manuální potvrzení při první návštěvě<span id="manual-confirm-tooltip" class="tooltip"><iron-icon
+                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
+                    <paper-tooltip for="manual-confirm-tooltip" offset="0">Zaškrtněte, pokud chcete, aby pacient při
+                        prvním objednání nejprve musel zažádat o
+                        vaše potvrzení. Poté, co pacient zažádá o potvrzení, vám přijde zpráva, ve které uvidíte pacientovi osobní údaje
+                        (jméno, adresa, datum narození), na jejichž základě umožníte pacientovi objednání či naopak.
+                        <br>
+                        Při dalších návštěvách již potvrzeného pacienta nebude nutné vaše potvrzení.
+                    </paper-tooltip>
+
                     <paper-checkbox checked="{{localOfficeData.manualConfirmation}}">
-                        Manuální potvrzení
+                        Vyžaduji manuální potvrzení
                     </paper-checkbox>
                 </section>
                 <section>
 
-                    <h2>Vřejné informace profilu</h2>
-                    <p>Zadejte prosím údaje, které si přejete zobrazit u Vašeho profilu. Tyto údaje jsou
-                        dobrovolné tudíž je nemusíte vyplňovat/nahrávat.</p>
-                    <p>Pokud chcete, aby se pacienti mohli objednat přes telefon, prosím vyplňte tuto
-                        možnost:</p>
+                    <h2>Vřejné informace profilu<span id="contact-info-tooltip" class="tooltip"><iron-icon
+                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
+                    <paper-tooltip for="contact-info-tooltip" offset="0">Zadejte údaje, které si přejete zobrazit na
+                        profilu ordinace. Údaje jsou
+                        dobrovolné a nemusíte je tak vyplňovat/nahrávat. <br>
+                        Pokud chcete pacientům umožnit objednání přes telefon, tak jej vyplňte.
+                    </paper-tooltip>
                     <gold-phone-input country-code="420" label="Telefonní číslo"
                                       phone-number-pattern="XXX-XXX-XXX" auto-validate
                                       value="{{localOfficeData.phoneNumber}}">
@@ -80,12 +89,13 @@
                     <gold-email-input label="Email" value="{{localOfficeData.email}}"
                                       auto-validate></gold-email-input>
 
-                    <h2>Text pro pacienty</h2>
-                    <p>Tento text se zobrazí na stránce Vaší ordinace. Můžete zde zadat libovolnou zprávu
-                        pacientům. Zpráva není povinná.</p>
+                    <h2>Text pro pacienty<span id="patient-text-tooltip" class="tooltip"><iron-icon
+                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
+                    <paper-tooltip for="patient-text-tooltip" offset="0">Tento text se zobrazí na profilu ordinace.
+                        Můžete zde zadat libovolnou zprávu pacientům. Zpráva není povinná.
+                    </paper-tooltip>
                     <paper-textarea label="Zpráva pro pacienty" value="{{localOfficeData.patientText}}"
                                     char-counter maxlength="800"></paper-textarea>
-
                 </section>
             </div>
 
