@@ -1,66 +1,17 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="/bower_components/paper-material/paper-material.html">
-<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
-
-<link rel="import" href="/styles/tab-styles.html">
-
 <dom-module id="interface-notifications-view">
     <template>
-        <style include="tab-styles">
-
-            paper-tabs {
-                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-            }
-
+        <style>
         </style>
 
-        <firebase-document id="verify_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]/manualConfirmation"
-                           data="{{manualConfirmation}}">
-        </firebase-document>
+        TODO Notifications
 
-        <div>
-            <paper-tabs hidden="[[computeVisibilityOfTabs(manualConfirmation)]]" focused selected="{{selected}}" attr-for-selected="name">
-                <paper-tab name="confirm">Žádosti o přijetí</paper-tab>
-                <paper-tab name="general">Ostatní upozornění</paper-tab>
-            </paper-tabs>
-
-            <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <confirm-view name="confirm" office-id="[[officeId]]"></confirm-view>
-                <general-view name="general"></general-view>
-            </iron-pages>
-        </div>
     </template>
 
     <script>
         Polymer({
             is: 'interface-notifications-view',
-
-            properties: {
-                selected: {
-                    type: String,
-                    value: "general", // First selected view
-                    observer: "loadView"
-                },
-
-                manualConfirmation: {
-                    observer: 'confirmationObserver'
-                }
-            },
-
-            confirmationObserver: function (val) {
-                this.selected = (val === true) ? 'confirm' : 'general';
-            },
-
-            computeVisibilityOfTabs: function(manualConfirmation) {
-                return manualConfirmation !== true;
-            },
-
-            loadView: function (viewName) {
-                this.importHref("/views/office_views/interface_views/interface_notifications_views/" + viewName + "-view.html", null, false);
-            }
         });
     </script>
 </dom-module>
