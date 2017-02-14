@@ -1,7 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
@@ -19,11 +17,14 @@
 
             /* SEARCH */
 
+            #search-bar {
+                background-color: #fafafb;
+            }
+
             #search-button {
                 padding: 1em 3em;
                 border: none;
             }
-
 
             #search-bar input {
                 box-sizing: border-box;
@@ -52,17 +53,8 @@
                 max-width: 25%;
             }
 
-            paper-tab span {
-                margin-left: 0.6em;
-            }
-
-            paper-tab iron-icon {
-                height: 20px;
-                width: 20px;
-            }
-
             /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1200px) {
+            @media only screen and (max-width: 1100px) {
 
                 .flex-horizontal-with-ratios {
                     @apply(--layout-vertical);
@@ -84,7 +76,7 @@
                     @apply(--list-medium-screen-layout);
                 }
 
-                /* space between all search-fleychild*/
+                /* space between all search-flexchild*/
                 #search-bar > .flexchild {
                     margin: 0.3em 0;
                 }
@@ -101,11 +93,15 @@
                 }
 
                 .name, .address {
-                    max-width: 100%;
+                    max-width: calc(100% - 5em);
                 }
 
                 .name {
                     margin-right: 4em;
+                }
+
+                paper-button > iron-icon{
+                    margin: 0;
                 }
             }
         </style>
@@ -146,17 +142,17 @@
 
                 <div class="flexchild buttons">
 
-                    <paper-button on-tap="#" class="confirm-button">
+                    <paper-button on-tap="confirmUser" class="confirm-button">
                         <iron-icon icon="icons:done"></iron-icon>
-                        <span hidden="[[mobileScreen]]">Potvrdit</span>
+                        <span hidden="[[mobileScreen]]">Povolit přístup</span>
                     </paper-button>
                 </div>
             </div>
         </template>
 
-        <!--<div hidden="[[computeIfPatients(patientsArray)]]" class="no-patients my-list-item">-->
-        <!--<iron-icon icon="info"></iron-icon>-->
-        <!--Zatím nemáte žádné zámítnuté pacienty.-->
+        <!--<div class="no-patients my-list-item">-->
+            <!--<iron-icon icon="info"></iron-icon>-->
+            <!--Zatím nemáte žádné zámítnuté pacienty.-->
         <!--</div>-->
 
     </template>
@@ -183,6 +179,39 @@
                         'uid': key
                     }
                 });
+            },
+
+            confirmUser: function (event) {
+                var db = this.$.patients_document.app.database(),
+                    patientUid = event.model.patient.uid,
+                    officeId = this.officeId,
+                    objectToSave = {},
+                    rootRef = db.ref('/');
+
+                objectToSave['/officePatients/' + officeId + '/' + patientUid] = this.officeBlockedPatients[patientUid];
+                objectToSave['/officeBlockedPatients/' + officeId + '/' + patientUid] = null;
+                objectToSave['/userContactedOffices/' + patientUid + '/' + officeId + '/status'] = 'accessed';
+                objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
+                    'title': 'Verifikace potvrzena',
+                    'message': 'Doktor potvrdil, že jste opravdu jeho pacient. Nyní se můžete objednat.',
+                    'sender': officeId
+                };
+
+                db.ref('/').update(objectToSave).then(function () {
+                    db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
+                        return (currentCount === null) ? null : currentCount + 1;
+                    });
+                }).then(function () {
+                    this.fire("show-toast", {text: "Pacientovi byl udělen přístup"});
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při udělování přístupu se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
             },
 
             computeFullName: function (name) {

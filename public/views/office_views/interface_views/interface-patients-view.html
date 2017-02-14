@@ -1,103 +1,20 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/paper-material/paper-material.html">
-<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
 
-<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="/bower_components/iron-icons/social-icons.html">
 
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
-<link rel="import" href="/styles/button-styles.html">
-<link rel="import" href="/styles/input-styles.html">
-<link rel="import" href="/styles/interface-styles.html">
 <link rel="import" href="/styles/tab-styles.html">
 
 
 <dom-module id="interface-patients-view">
     <template>
-        <style include="interface-styles button-styles input-styles tab-styles">
-
-            .send-message-icon {
-                color: var(--app-secondary-color);
-                margin-left: 0.5em;
-                vertical-align: top;
-            }
-
-            /* SEARCH */
-
-            #search-button {
-                padding: 1em 3em;
-                border: none;
-            }
-
-            #search-bar {
-                margin-bottom: 1em;
-            }
-
-            #search-bar input {
-                box-sizing: border-box;
-                border: 1px solid var(--border-color);
-                padding: 0.85em 0.5em;
-                font-size: 1em;
-                width: 100%;
-            }
-
-            #search-bar input::-webkit-input-placeholder {
-                color: #aaa;
-                font-weight: lighter;
-                letter-spacing: 0.02em;
-            }
-
-            .search-button-container {
-                text-align: right;
-            }
-
-            .flexchild:not(:last-child) {
-                margin-right: 0.5em;
-            }
-
-            /* MESSAGE CONTAINER */
-
-            .message-container {
-                background-color: #fafafb;
-                font-size: 0.9em;
-            }
-
-            .message-container h3 {
-                margin-top: 0;
-                color: var(--app-green-color);
-            }
-
-            .subject {
-                max-width: 20em;
-                margin-bottom: 2em;
-            }
-
-            #close-message {
-                position: absolute;
-                padding: 0.8em 1em 0.8em 1.2em;
-                font-size: 0.8em;
-                top: 0.5em;
-                right: 2em;
-            }
-
-            /* MORE INFO CONTAINER*/
-            #delete-patient {
-                font-size: 0.7em;
-            }
-
-            /* FLEX  - not to stretch flex childs when longer content*/
-            .name, .address {
-                max-width: 25%;
-            }
+        <style include="tab-styles">
 
             paper-tab span {
                 margin-left: 0.6em;
@@ -108,67 +25,6 @@
                 width: 20px;
             }
 
-            /*RESPONSIVE ADDITIONS*/
-            @media only screen and (max-width: 1200px) {
-
-                .flex-horizontal-with-ratios {
-                    @apply(--layout-vertical);
-                }
-
-                .buttons {
-                    @apply(--buttons-medium-screen-layout)
-                }
-
-                .label {
-                    @apply(--label-medium-screen-layout);
-                }
-
-                .address-city {
-                    @apply(--city-medium-screen-layout);
-                }
-
-                .my-list-item {
-                    @apply(--list-medium-screen-layout);
-                }
-
-                /* space between all search-fleychild*/
-                #search-bar > .flexchild {
-                    margin: 0.3em 0;
-                }
-
-                .name, .address {
-                    max-width: 50%;
-                }
-
-                .send-message-icon {
-                    position: absolute;
-                    top: 0.5em;
-                    right: 1em;
-                }
-            }
-
-            /*@media only screen and (max-width: 480px) {*/
-
-                /*#search-button {*/
-                    /*width: 100%;*/
-                /*}*/
-
-                /*.name, .address {*/
-                    /*max-width: 100%;*/
-                /*}*/
-
-                /*.name {*/
-                    /*margin-right: 4em;*/
-                /*}*/
-
-                /*.details-button > iron-icon {*/
-                    /*margin: 0;*/
-                /*}*/
-
-                /*.details-button {*/
-                    /*min-width: 0;*/
-                /*}*/
-            /*}*/
 
         </style>
 
@@ -199,7 +55,6 @@
                 <blocked-patients-view name="blocked-patients" office-id="[[officeId]]"></blocked-patients-view>
             </iron-pages>
         </paper-material>
-
     </template>
 
     <script>
@@ -207,122 +62,11 @@
             is: 'interface-patients-view',
 
             properties: {
-                patientsArray: {
-                    type: Array,
-                    computed: 'computePatientsArray(officePatients)'
-                },
-
                 selected: {
                     type: String,
                     value: "confirm-patients", // First selected view
                     observer: "loadView"
                 }
-
-
-            },
-
-            blockPatient: function (event) {
-                var db = this.$.patients_document.app.database(),
-                    objectToSave = {},
-                    patientId = event.model.patient.uid,
-                    patientData = this.officePatients[patientId],
-                    officeId = this.officeId;
-
-                objectToSave['/officeBlockedPatients/' + officeId + '/' + patientId] = patientData;
-                objectToSave['/officePatients/' + officeId + '/' + patientId] = null;
-                objectToSave['/userContactedOffices/' + patientId + '/' + officeId + '/status'] = 'blocked';
-                objectToSave['/userNotifications/' + patientId + '/' + db.ref().push().key] = {
-                    'title': 'Zablokování přístupu',
-                    'message': 'Je nám líto, ale doktor Vám  odepřel přístup k objednání.',
-                    'sender': officeId
-                };
-
-                db.ref('/').update(objectToSave).then(function () {
-                    db.ref('/userInterfaceInfo/' + patientId + '/numberOfNotifications').transaction(function (currentCount) {
-                        return (currentCount === null) ? null : currentCount + 1;
-                    });
-                }).then(function () {
-                    this.fire("show-toast", {text: "Pacient přesunut do sekce zablokovaných"});
-                }.bind(this), function (error) {
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'Při odstraňování pacienta se vyskytla chyba. Zkuste to prosím znovu.',
-                            buttonText: 'Zavřít'
-                        }
-                    });
-                }.bind(this));
-            },
-
-            sendMessage: function (event) {
-                var db = this.$.patients_document.app.database(),
-                    patient = event.model.patient,
-                    objectToSave = {},
-                    officeId = this.officeId;
-
-                objectToSave['/userNotifications/' + patient.uid + '/' + db.ref().push().key] = {
-                    'title': patient.messageTitle,
-                    'message': patient.messageBody,
-                    'sender': officeId
-                };
-
-                db.ref('/').update(objectToSave).then(function () {
-                    db.ref('/userInterfaceInfo/' + patient.uid + '/numberOfNotifications').transaction(function (currentCount) {
-                        return (currentCount === null) ? null : currentCount + 1;
-                    });
-                }).then(function () {
-                    this.fire("show-toast", {text: "Zpráva odeslána"});
-                    event.model.set('patient.messageTitle', null);
-                    event.model.set('patient.messageBody', null);
-                    event.model.set('patient.messageOpened', false);
-                }.bind(this), function (error) {
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'Při odesílání zprávy se vyskytla chyba, zkuste to prosím znovu.',
-                            buttonText: 'Zavřít'
-                        }
-                    }.bind(this));
-                });
-            },
-
-            computeText: function (infoOpened) {
-                return (infoOpened) ? "Skrýt" : "Zobrazit";
-            },
-
-            handleDetail: function (event) {
-                var infoOpened = event.model.patient.infoOpened;
-                event.model.set('patient.infoOpened', !infoOpened);
-            },
-
-            handleMessage: function (event) {
-                var messageOpened = event.model.patient.messageOpened;
-                event.model.set('patient.messageOpened', !messageOpened);
-            },
-
-            computePatientsArray: function (officePatients) {
-                return Object.keys(officePatients).map(function (key) {
-                    return {
-                        'name': officePatients[key]['name'],
-                        'address': officePatients[key]['address'],
-                        'dateOfBirth': officePatients[key]['dateOfBirth'],
-                        'uid': key,
-                        'messageTitle': null,
-                        'messageBody': null
-                    }
-                });
-            },
-
-            computeFullName: function (name) {
-                return name.firstName + " " + name.lastName;
-            },
-
-            computeDateOfBirth: function (dateOfBirth) {
-                return dateOfBirth.date + ". " + dateOfBirth.month + ". " + dateOfBirth.year;
-            },
-
-            computeDisabled: function (messageTitle, messageBody) {
-                return !(!!messageTitle && !!messageBody);
             },
 
             loadView: function (viewName) {

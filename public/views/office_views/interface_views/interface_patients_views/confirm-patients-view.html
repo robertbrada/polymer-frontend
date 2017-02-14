@@ -13,6 +13,9 @@
     <template>
         <style include="interface-styles button-styles">
 
+            .my-list-item {
+                box-shadow: none;
+            }
             .no-patients {
                 height: 10em;
                 font-size: 1.2em;
@@ -100,7 +103,7 @@
 
         </template>
 
-        <div hidden="[[computeIfPatients(patientsArray)]]" class="no-patients">
+        <div hidden="[[computeIfPatients(patientsArray)]]" class="no-patients my-list-item">
             <iron-icon icon="info"></iron-icon>
             Žádní pacienti k potvrzení
         </div>
@@ -154,7 +157,7 @@
 
             dismissUser: function (event) {
                 var patientUid = event.model.patient.uid, officeId = this.officeId,
-                    db = this.$.verify_document.app.database(), objectToSave = {},
+                    db = this.$.patients_document.app.database(), objectToSave = {},
                     rootRef = db.ref('/');
 
                 objectToSave['/officeBlockedPatients/' + officeId + '/' + patientUid] = this.officePatientsToVerify[patientUid];

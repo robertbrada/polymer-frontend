@@ -8,7 +8,12 @@
 
 <dom-module id="interface-settings-view">
     <template>
-        <style include="tab-styles"></style>
+        <style include="tab-styles">
+
+            iron-pages {
+                border-top: 1px solid #dadbdd !important;
+            }
+        </style>
 
         <paper-material elevation="1">
             <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
