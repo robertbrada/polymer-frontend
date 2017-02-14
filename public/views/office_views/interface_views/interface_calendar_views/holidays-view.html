@@ -1,0 +1,119 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-date-picker-item/paper-datetime-picker-item.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
+<link rel="import" href="/custom_components/moment-wrapper-cs.html">
+<link rel="import" href="/styles/button-styles.html">
+
+<dom-module id="holidays-view">
+    <template>
+        <style include="button-styles">
+            .error {
+                color: red;
+            }
+        </style>
+
+        <firebase-document id="holidays_document" app-name="doctor-appointment-system" path="/officeHolidays/[[officeId]]"
+                           data="{{officeHolidays}}">
+        </firebase-document>
+
+
+        <paper-input id="name_input" label="Název dovolené" value="{{holidayName}}" auto-focus required auto-validate></paper-input>
+        <p class="error" hidden="[[hideErrorMessage]]">Začátek dovolené je před koncem.</p>
+        <paper-datetime-picker-item required icon="icons:today" placeholder="Zadat začátek dovolené" default-time="00:00"
+                                    locale="cs" date="{{fromDateTime}}"></paper-datetime-picker-item>
+        <paper-datetime-picker-item icon="icons:today" placeholder="Zadat konec dovolené" default-time="23:59"
+                                    locale="cs" date="{{toDateTime}}"></paper-datetime-picker-item>
+        <paper-button raised on-tap="addHolidays" disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
+        </paper-button>
+
+        <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
+            <hr>
+            <span>name: [[holiday.name]]</span><br>
+            <span>startAt: [[holiday.startAt]]</span><br>
+            <span>endAt: [[holiday.endAt]]</span><br>
+            <span>hId: [[holiday.hId]]</span><br>
+        </template>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'holidays-view',
+
+            properties: {
+                hideErrorMessage: {
+                    type: Boolean,
+                    value: true
+                },
+
+                holidaysArray: {
+                    type: Array,
+                    computed: 'computeHolidaysArray(officeHolidays)'
+                }
+            },
+
+            computeHolidaysArray: function (officeHolidays) {
+                return Object.keys(officeHolidays).map(function (key) {
+                    return {
+                        'name': officeHolidays[key]['name'],
+                        'startAt': officeHolidays[key]['startAt'],
+                        'endAt': officeHolidays[key]['endAt'],
+                        'hId': key
+                    }
+                });
+            },
+
+            computeDisabled: function (fromDateTime, toDateTime, holidayName) {
+                if (fromDateTime === null || toDateTime === null) {
+                    this.hideErrorMessage = true;
+                    return true;
+                } else if (fromDateTime > toDateTime) {
+                    this.hideErrorMessage = false;
+                    return true
+                } else if (!this.$.name_input.validate()) {
+                    this.hideErrorMessage = true;
+                    return true;
+                }
+
+                return false;
+            },
+
+            addHolidays: function () {
+                var rootRef = this.$.holidays_document.app.database().ref("/"),
+                    officeId = this.officeId,
+                    fromTimestamp = this.fromDateTime.valueOf(),
+                    toTimestamp = this.toDateTime.valueOf(),
+                    name = this.holidayName,
+                    objectToSave = {},
+                    holidayId = rootRef.push().key;
+
+
+                objectToSave["/officeHolidays/" + officeId + "/" + holidayId] = {
+                    startAt: fromTimestamp,
+                    endAt: toTimestamp,
+                    name: name
+                };
+
+                objectToSave["/generatorInfo/" + officeId + "/holidays/" + holidayId] = {
+                    startAt: fromTimestamp,
+                    endAt: toTimestamp
+                };
+
+                rootRef.update(objectToSave).then().then(function () {
+                    this.fire("show-toast", {text: "Dovolená uložena"});
+                }.bind(this), function () {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání dovolené se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            }
+        });
+    </script>
+</dom-module>

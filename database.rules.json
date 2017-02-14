@@ -125,6 +125,12 @@
         }
       }
     },
+    "officeHolidays": {
+      "$oid": {
+        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+      }
+    },
     // TODO: It's hackable. Moving the logic to backend would solve the issue. Low priority
     "officeNumberOfNotifications": {
       "$oid": {

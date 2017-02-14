@@ -9,21 +9,18 @@
 <dom-module id="interface-calendar-view">
     <template>
         <style include="tab-styles">
-            img {
-                max-width: 100%;
-            }
         </style>
 
         <paper-material elevation="1">
             <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
                 <paper-tab name="calendar">Kalendář</paper-tab>
-                <paper-tab name="holiday">Dovolená</paper-tab>
+                <paper-tab name="holidays">Dovolená</paper-tab>
             </paper-tabs>
 
 
             <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <img name="calendar" src="../../../images/calendar-render.png">
-                <img name="holiday" src="../../../images/holiday-render.png">
+                <calendar-view name="calendar"></calendar-view>
+                <holidays-view name="holidays" office-id="[[officeId]]"></holidays-view>
             </iron-pages>
         </paper-material>
 
@@ -36,8 +33,13 @@
             properties: {
                 selected: {
                     type: String,
-                    value: "calendar" // First selected view
+                    value: "calendar", // First selected view
+                    observer: "loadView"
                 }
+            },
+
+            loadView: function (viewName) {
+                this.importHref("/views/office_views/interface_views/interface_calendar_views/" + viewName + "-view.html", null, false);
             }
         });
     </script>
