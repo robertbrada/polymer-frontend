@@ -1,34 +1,26 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/paper-material/paper-material.html">
-<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
-
-<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/bower_components/iron-icons/communication-icons.html">
-<link rel="import" href="/bower_components/iron-icons/social-icons.html">
-
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/styles/button-styles.html">
-<link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
-<link rel="import" href="/styles/tab-styles.html">
 
-
-<dom-module id="interface-patients-view">
+<dom-module id="accessed-patients-view">
     <template>
-        <style include="interface-styles button-styles input-styles tab-styles">
+        <style include="interface-styles button-styles">
 
             .send-message-icon {
                 color: var(--app-secondary-color);
                 margin-left: 0.5em;
                 vertical-align: top;
+            }
+
+            .my-list-item {
+                box-shadow: none;
             }
 
             /* SEARCH */
@@ -38,9 +30,6 @@
                 border: none;
             }
 
-            #search-bar {
-                margin-bottom: 1em;
-            }
 
             #search-bar input {
                 box-sizing: border-box;
@@ -147,29 +136,28 @@
                 }
             }
 
-            /*@media only screen and (max-width: 480px) {*/
+            @media only screen and (max-width: 480px) {
 
-                /*#search-button {*/
-                    /*width: 100%;*/
-                /*}*/
+                #search-button {
+                    width: 100%;
+                }
 
-                /*.name, .address {*/
-                    /*max-width: 100%;*/
-                /*}*/
+                .name, .address {
+                    max-width: 100%;
+                }
 
-                /*.name {*/
-                    /*margin-right: 4em;*/
-                /*}*/
+                .name {
+                    margin-right: 4em;
+                }
 
-                /*.details-button > iron-icon {*/
-                    /*margin: 0;*/
-                /*}*/
+                .details-button > iron-icon {
+                    margin: 0;
+                }
 
-                /*.details-button {*/
-                    /*min-width: 0;*/
-                /*}*/
-            /*}*/
-
+                .details-button {
+                    min-width: 0;
+                }
+            }
         </style>
 
         <firebase-document id="patients_document" app-name="doctor-appointment-system"
@@ -180,45 +168,91 @@
         <iron-media-query query="max-width: 1200px" query-matches="{{smallScreen}}"></iron-media-query>
         <iron-media-query query="max-width: 480px" query-matches="{{mobileScreen}}"></iron-media-query>
 
-        <paper-material elevation="1">
-            <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
-                <paper-tab name="confirm-patients">
-                    <iron-icon icon="social:person-add"></iron-icon>
-                    <span hidden="[[mobileScreen]]">Pacienti k potvrzení</span></paper-tab>
-                <paper-tab name="accessed-patients">
-                    <iron-icon icon="done"></iron-icon>
-                    <span hidden="[[mobileScreen]]">Potvrzení pacienti</span></paper-tab>
-                <paper-tab name="blocked-patients">
-                    <iron-icon icon="block"></iron-icon>
-                    <span hidden="[[mobileScreen]]">Zamítnutí pacienti</span></paper-tab>
-            </paper-tabs>
-
-            <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <confirm-patients-view name="confirm-patients" office-id="[[officeId]]"></confirm-patients-view>
-                <accessed-patients-view name="accessed-patients" office-id="[[officeId]]"></accessed-patients-view>
-                <blocked-patients-view name="blocked-patients" office-id="[[officeId]]"></blocked-patients-view>
-            </iron-pages>
+        <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
+            <div class="flexchild "><input placeholder="Jméno"></div>
+            <div class="flexchild "><input placeholder="Datum narození"></div>
+            <div class="flexchild "><input placeholder="Adresa"></div>
+            <div class="flexchild search-button-container">
+                <paper-button id="search-button" raised>
+                    <iron-icon icon="icons:search"></iron-icon>
+                    Hledat
+                </paper-button>
+            </div>
         </paper-material>
+
+        <template is="dom-repeat" items="[[patientsArray]]" as="patient">
+            <div class="container flex-horizontal-with-ratios my-list-item">
+
+                <div class="flexchild date-of-birth"><span class="label" hidden="[[!smallScreen]]">Jméno:</span>[[computeFullName(patient.name)]]
+                </div>
+
+                <div class="flexchild name"><span class="label" hidden="[[!smallScreen]]">Datum narození:</span>[[computeDateOfBirth(patient.dateOfBirth)]]
+                </div>
+
+                <div class="flexchild address"><span class="label" hidden="[[!smallScreen]]">Adresa:</span>[[patient.address.street]]
+                    <br>
+                    <div class="address-city">[[patient.address.city]]</div>
+                </div>
+
+                <div class="flexchild buttons">
+
+                    <paper-button on-tap="handleDetail" class="details-button">
+                        <iron-icon icon="icons:info-outline"></iron-icon>
+                        <span hidden="[[mobileScreen]]">[[computeText(patient.infoOpened)]] detail</span>
+                    </paper-button>
+
+                    <paper-icon-button class="send-message-icon" hidden="[[smallScreen]]" icon="communication:message"
+                                       on-tap="handleMessage"></paper-icon-button>
+                </div>
+
+                <paper-icon-button class="send-message-icon" hidden="[[!smallScreen]]" icon="communication:message"
+                                   on-tap="handleMessage"></paper-icon-button>
+
+            </div>
+
+            <iron-collapse opened="[[patient.infoOpened]]">
+                <div class="collapse-content">
+                    <paper-button id="delete-patient" class="red" raised on-tap="blockPatient">Odstranit pacienta
+                    </paper-button>
+                </div>
+            </iron-collapse>
+
+            <iron-collapse opened="[[patient.messageOpened]]">
+                <div class="collapse-content message-container">
+                    <paper-button id="close-message" class="red" on-tap="handleMessage" raised>
+                        <iron-icon icon="icons:close"></iron-icon>
+                        Zrušit
+                    </paper-button>
+                    <h3>Zpráva pacientovi</h3>
+                    <paper-input auto-validate required autofocus class="subject" label="Předmět zprávy" maxlength="50"
+                                 value="{{patient.messageTitle}}"></paper-input>
+                    <paper-textarea auto-validate required label="Vaše zpráva" char-counter maxlength="2000"
+                                    value="{{patient.messageBody}}"></paper-textarea>
+                    <paper-button on-tap="sendMessage" raised
+                                  disabled="[[computeDisabled(patient.messageTitle, patient.messageBody)]]">Odeslat
+                    </paper-button>
+                </div>
+            </iron-collapse>
+        </template>
+
+        <!--<div hidden="[[computeIfPatients(patientsArray)]]" class="no-patients my-list-item">-->
+            <!--<iron-icon icon="info"></iron-icon>-->
+            <!--Pro zobrazení pacientů vypnte alespoň jedno vyhledávací pole.-->
+        <!--</div>-->
+
+    </template>
 
     </template>
 
     <script>
         Polymer({
-            is: 'interface-patients-view',
+            is: 'accessed-patients-view',
 
             properties: {
                 patientsArray: {
                     type: Array,
                     computed: 'computePatientsArray(officePatients)'
-                },
-
-                selected: {
-                    type: String,
-                    value: "confirm-patients", // First selected view
-                    observer: "loadView"
                 }
-
-
             },
 
             blockPatient: function (event) {
@@ -323,10 +357,6 @@
 
             computeDisabled: function (messageTitle, messageBody) {
                 return !(!!messageTitle && !!messageBody);
-            },
-
-            loadView: function (viewName) {
-                this.importHref("/views/office_views/interface_views/interface_patients_views/" + viewName + "-view.html", null, false);
             }
 
         });

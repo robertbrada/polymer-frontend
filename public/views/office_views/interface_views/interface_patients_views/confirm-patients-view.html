@@ -9,25 +9,9 @@
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
 
-<dom-module id="confirm-view">
+<dom-module id="confirm-patients-view">
     <template>
         <style include="interface-styles button-styles">
-
-            #not-confirmed-patients {
-                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                background-color: #fff;
-                text-align: right;
-                padding: 1em;
-            }
-
-            #not-confirmed-patients a {
-                color: var(--app-green-color);
-                text-decoration: none;
-            }
-
-            #not-confirmed-patients a:hover {
-                text-decoration: underline;
-            }
 
             .no-patients {
                 height: 10em;
@@ -86,10 +70,6 @@
                            data="{{officePatientsToVerify}}">
         </firebase-document>
 
-        <div id="not-confirmed-patients">
-            <a href="#">Seznam zamítnutých pacientů</a>
-        </div>
-
         <template is="dom-repeat" items="[[patientsArray]]" as="patient">
 
             <div class="container flex-horizontal-with-ratios my-list-item">
@@ -127,11 +107,9 @@
 
     </template>
 
-    </template>
-
     <script>
         Polymer({
-            is: 'confirm-view',
+            is: 'confirm-patients-view',
 
             properties: {
                 patientsArray: {

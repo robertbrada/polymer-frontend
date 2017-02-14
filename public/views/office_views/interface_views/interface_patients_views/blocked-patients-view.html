@@ -1,0 +1,197 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
+<link rel="import" href="/styles/button-styles.html">
+<link rel="import" href="/styles/interface-styles.html">
+
+<dom-module id="blocked-patients-view">
+    <template>
+        <style include="interface-styles button-styles">
+
+            .my-list-item {
+                box-shadow: none;
+            }
+
+            /* SEARCH */
+
+            #search-button {
+                padding: 1em 3em;
+                border: none;
+            }
+
+
+            #search-bar input {
+                box-sizing: border-box;
+                border: 1px solid var(--border-color);
+                padding: 0.85em 0.5em;
+                font-size: 1em;
+                width: 100%;
+            }
+
+            #search-bar input::-webkit-input-placeholder {
+                color: #aaa;
+                font-weight: lighter;
+                letter-spacing: 0.02em;
+            }
+
+            .search-button-container {
+                text-align: right;
+            }
+
+            .flexchild:not(:last-child) {
+                margin-right: 0.5em;
+            }
+
+            /* FLEX  - not to stretch flex childs when longer content*/
+            .name, .address {
+                max-width: 25%;
+            }
+
+            paper-tab span {
+                margin-left: 0.6em;
+            }
+
+            paper-tab iron-icon {
+                height: 20px;
+                width: 20px;
+            }
+
+            /*RESPONSIVE ADDITIONS*/
+            @media only screen and (max-width: 1200px) {
+
+                .flex-horizontal-with-ratios {
+                    @apply(--layout-vertical);
+                }
+
+                .buttons {
+                    @apply(--buttons-medium-screen-layout)
+                }
+
+                .label {
+                    @apply(--label-medium-screen-layout);
+                }
+
+                .address-city {
+                    @apply(--city-medium-screen-layout);
+                }
+
+                .my-list-item {
+                    @apply(--list-medium-screen-layout);
+                }
+
+                /* space between all search-fleychild*/
+                #search-bar > .flexchild {
+                    margin: 0.3em 0;
+                }
+
+                .name, .address {
+                    max-width: 50%;
+                }
+            }
+
+            @media only screen and (max-width: 480px) {
+
+                #search-button {
+                    width: 100%;
+                }
+
+                .name, .address {
+                    max-width: 100%;
+                }
+
+                .name {
+                    margin-right: 4em;
+                }
+            }
+        </style>
+
+        <firebase-document id="patients_document" app-name="doctor-appointment-system"
+                           path="/officeBlockedPatients/[[officeId]]"
+                           data="{{officeBlockedPatients}}">
+        </firebase-document>
+
+        <iron-media-query query="max-width: 1200px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 480px" query-matches="{{mobileScreen}}"></iron-media-query>
+
+        <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
+            <div class="flexchild "><input placeholder="Jméno"></div>
+            <div class="flexchild "><input placeholder="Datum narození"></div>
+            <div class="flexchild "><input placeholder="Adresa"></div>
+            <div class="flexchild search-button-container">
+                <paper-button id="search-button" raised>
+                    <iron-icon icon="icons:search"></iron-icon>
+                    Hledat
+                </paper-button>
+            </div>
+        </paper-material>
+
+        <template is="dom-repeat" items="[[patientsArray]]" as="patient">
+            <div class="container flex-horizontal-with-ratios my-list-item">
+
+                <div class="flexchild date-of-birth"><span class="label" hidden="[[!smallScreen]]">Jméno:</span>[[computeFullName(patient.name)]]
+                </div>
+
+                <div class="flexchild name"><span class="label" hidden="[[!smallScreen]]">Datum narození:</span>[[computeDateOfBirth(patient.dateOfBirth)]]
+                </div>
+
+                <div class="flexchild address"><span class="label" hidden="[[!smallScreen]]">Adresa:</span>[[patient.address.street]]
+                    <br>
+                    <div class="address-city">[[patient.address.city]]</div>
+                </div>
+
+                <div class="flexchild buttons">
+
+                    <paper-button on-tap="#" class="confirm-button">
+                        <iron-icon icon="icons:done"></iron-icon>
+                        <span hidden="[[mobileScreen]]">Potvrdit</span>
+                    </paper-button>
+                </div>
+            </div>
+        </template>
+
+        <!--<div hidden="[[computeIfPatients(patientsArray)]]" class="no-patients my-list-item">-->
+        <!--<iron-icon icon="info"></iron-icon>-->
+        <!--Zatím nemáte žádné zámítnuté pacienty.-->
+        <!--</div>-->
+
+    </template>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'blocked-patients-view',
+
+            properties: {
+                patientsArray: {
+                    type: Array,
+                    computed: 'computePatientsArray(officeBlockedPatients)'
+                }
+            },
+
+            computePatientsArray: function (officeBlockedPatients) {
+                return Object.keys(officeBlockedPatients).map(function (key) {
+                    return {
+                        'name': officeBlockedPatients[key]['name'],
+                        'address': officeBlockedPatients[key]['address'],
+                        'dateOfBirth': officeBlockedPatients[key]['dateOfBirth'],
+                        'uid': key
+                    }
+                });
+            },
+
+            computeFullName: function (name) {
+                return name.firstName + " " + name.lastName;
+            },
+
+            computeDateOfBirth: function (dateOfBirth) {
+                return dateOfBirth.date + ". " + dateOfBirth.month + ". " + dateOfBirth.year;
+            }
+        });
+    </script>
+</dom-module>
