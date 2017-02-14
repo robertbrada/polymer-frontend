@@ -57,6 +57,9 @@
                 margin-top: 64px;
                 box-shadow: 2px 0 8px var(--border-color);
                 z-index: 2;
+                --app-drawer-content-container: {
+                    overflow: auto;
+                };
             }
 
             app-toolbar {
@@ -139,13 +142,6 @@
                     border-top: none;
                     bottom: auto;
                 }
-
-                app-drawer {
-                    overflow: auto;
-                    --app-drawer-content-container: {
-                        overflow: auto;
-                    };
-                }
             }
 
             .badge {
@@ -224,7 +220,8 @@
                     <interface-notifications-view name="notifications"
                                                   office-id="[[officeId]]"></interface-notifications-view>
                     <interface-calendar-view name="calendar" office-id="[[officeId]]"></interface-calendar-view>
-                    <interface-waiting-list-view name="waiting-list" office-id="[[officeId]]"></interface-waiting-list-view>
+                    <interface-waiting-list-view name="waiting-list"
+                                                 office-id="[[officeId]]"></interface-waiting-list-view>
                     <interface-patients-view name="patients" office-id="[[officeId]]"></interface-patients-view>
                     <interface-settings-view name="settings" office-id="[[officeId]]"></interface-settings-view>
                     <interface-help-view name="help"></interface-help-view>
