@@ -132,6 +132,8 @@
             #calendar_container {
                 text-align: center;
                 opacity: var(--calendar-opacity);
+                max-height: calc(100vh - 10em);
+                overflow: auto;
             }
 
             #calendar_container h3 {
@@ -139,7 +141,7 @@
             }
 
             #calendar_container p {
-                margin-bottom: 3em;
+                margin-bottom: 2em;
                 padding-bottom: 1em;
                 border-bottom: 1px solid #ccd;
             }
@@ -208,7 +210,7 @@
                 }
 
                 .patient-container {
-                    margin-top: 30px;
+                    margin: 0.5em auto 1.5em auto;
                 }
 
                 .order-info {
@@ -218,6 +220,10 @@
                     padding-right: 15px;
                     margin-left: -15px;
                     margin-right: -15px;
+                }
+
+                .main-frame {
+                    padding-bottom: 0;
                 }
             }
 
