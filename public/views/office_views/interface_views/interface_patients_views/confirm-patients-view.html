@@ -94,8 +94,8 @@
                         <iron-icon icon="icons:check"></iron-icon>
                         Potvrdit
                     </paper-button>
-                    <paper-button class="dismiss-button">
-                        <iron-icon icon="icons:close" on-tap="dismissUser"></iron-icon>
+                    <paper-button class="dismiss-button" on-tap="dismissUser">
+                        <iron-icon icon="icons:close"></iron-icon>
                         Zamítnout
                     </paper-button>
                 </div>
@@ -157,7 +157,7 @@
 
             dismissUser: function (event) {
                 var patientUid = event.model.patient.uid, officeId = this.officeId,
-                    db = this.$.patients_document.app.database(), objectToSave = {},
+                    db = this.$.verify_document.app.database(), objectToSave = {},
                     rootRef = db.ref('/');
 
                 objectToSave['/officeBlockedPatients/' + officeId + '/' + patientUid] = this.officePatientsToVerify[patientUid];
@@ -169,7 +169,7 @@
                     'sender': officeId
                 };
 
-                db.ref('/').update(objectToSave).then(function () {
+                rootRef.update(objectToSave).then(function () {
                     db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
                         return (currentCount === null) ? null : currentCount + 1;
                     });
