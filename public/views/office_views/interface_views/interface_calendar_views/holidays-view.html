@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/moment-element/moment-import.html">
 
 <link rel="import" href="/custom_components/moment-wrapper-cs.html">
 <link rel="import" href="/styles/button-styles.html">
@@ -36,6 +37,7 @@
             <span>startAt: [[holiday.startAt]]</span><br>
             <span>endAt: [[holiday.endAt]]</span><br>
             <span>hId: [[holiday.hId]]</span><br>
+            <button on-tap="deleteHolidays">Odstranit</button>
         </template>
     </template>
 
@@ -56,11 +58,15 @@
             },
 
             computeHolidaysArray: function (officeHolidays) {
+                var getFormattedDateTime = function (timestamp) {
+                    return moment(timestamp).format('LLLL');
+                };
+
                 return Object.keys(officeHolidays).map(function (key) {
                     return {
                         'name': officeHolidays[key]['name'],
-                        'startAt': officeHolidays[key]['startAt'],
-                        'endAt': officeHolidays[key]['endAt'],
+                        'startAt': getFormattedDateTime(officeHolidays[key]['startAt']),
+                        'endAt': getFormattedDateTime(officeHolidays[key]['endAt']),
                         'hId': key
                     }
                 });
@@ -103,6 +109,7 @@
                 };
 
                 rootRef.update(objectToSave).then().then(function () {
+                    // TODO: delete appointments
                     this.fire("show-toast", {text: "Dovolená uložena"});
                 }.bind(this), function () {
                     this.fire("show-dialog", {
@@ -113,6 +120,14 @@
                         }
                     });
                 }.bind(this));
+            },
+
+            deleteHolidays: function (event) {
+                var rootRef = this.$.holidays_document.app.database().ref("/"),
+                    holidayId = event.model.holiday.hId;
+
+                console.log("TODO");
+
             }
         });
     </script>
