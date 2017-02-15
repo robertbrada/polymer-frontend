@@ -21,11 +21,12 @@
 
             paper-icon-button {
                 color: var(--app-green-color);
+                padding: 4px;
             }
 
             #animated_calendar {
                 @apply(--layout-horizontal);
-                width: 90%;
+                width: 95%;
             }
 
             #animated_calendar > section {
@@ -33,7 +34,7 @@
             }
 
             #animated_calendar > section:not(:first-child) {
-                border-left: 2px solid #ededee;
+                border-left: 1px solid #e3e3e4;
             }
 
             .wrapper {
@@ -41,7 +42,7 @@
             }
 
             .controls {
-                padding-top: 2em;
+                padding-top: 0.4em;
             }
 
             .row {
@@ -49,8 +50,24 @@
                 @apply(--layout-center-center);
             }
 
+            .buttons {
+                max-height: 36.8em;
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding-top: 0.5em;
+
+            }
+
+            .date-container {
+                color: #fff;
+                background-color: var(--app-green-color);
+                padding: 0.35em 0;
+                font-size: 1.05em;
+                outline: 1px solid #fff;
+            }
+
             .date {
-                font-size: 0.8em;
+                font-size: 0.85em;
             }
 
             button {
@@ -90,6 +107,7 @@
                 color: grey;
             }
 
+
         </style>
 
         <firebase-document id="document" app-name="doctor-appointment-system">
@@ -101,22 +119,29 @@
                                    disabled="[[computeLeftDisabled(firstVisibleDate, officeLocalTime)]]"></paper-icon-button>
             </div>
             <div id="animated_calendar">
-                <template is="dom-repeat" items="[[computeDates(firstVisibleDate, numberOfColumns, namesOfDaysArray)]]" as="date">
+                <template is="dom-repeat" items="[[computeDates(firstVisibleDate, numberOfColumns, namesOfDaysArray)]]"
+                          as="date">
                     <section>
-                        <div class="row">
-                            [[date.nameOfTheDay]]
-                        </div>
-                        <div class="row date">
-                            [[computeDateString(date)]]
+                        <div class="date-container">
+                            <div class="row">
+                                [[date.nameOfTheDay]]
+                            </div>
+                            <div class="row date">
+                                [[computeDateString(date)]]
+                            </div>
                         </div>
 
-                        <template is="dom-repeat" items="[[computeBookingTimes(date, bookingTimesOfDates)]]" as="bookTime">
-                            <div class="row">
-                                <button on-tap="handleAppointment" data-args$="[[bookTime.id]]" disabled="[[disabled]]">
-                                    [[bookTime.buttonText]]
-                                </button>
-                            </div>
-                        </template>
+                        <div class="buttons">
+                            <template is="dom-repeat" items="[[computeBookingTimes(date, bookingTimesOfDates)]]"
+                                      as="bookTime">
+                                <div class="row">
+                                    <button on-tap="handleAppointment" data-args$="[[bookTime.id]]"
+                                            disabled="[[disabled]]">
+                                        [[bookTime.buttonText]]
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
                     </section>
                 </template>
             </div>
