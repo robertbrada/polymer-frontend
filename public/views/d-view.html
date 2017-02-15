@@ -36,7 +36,6 @@
             }
 
             .centered {
-                padding-top: 74px;
                 @apply(--layout);
                 @apply(--layout-center-justified);
             }
@@ -132,9 +131,6 @@
             #calendar_container {
                 text-align: center;
                 opacity: var(--calendar-opacity);
-                max-height: 48em;
-                overflow-y: auto;
-                overflow-x: hidden;
             }
 
             #calendar_container h3 {
@@ -150,13 +146,16 @@
             /*** FORM ***/
 
             #exit-form {
-                margin-top: 2em;
-                margin-bottom: -60px;
+                margin-top: 5em;
             }
 
             #exit-form span {
                 color: var(--app-green-color);
                 cursor: pointer;
+            }
+
+            #exit-form iron-icon {
+               margin-right: 0.4em;
             }
 
             #appointment_form paper-textarea {
@@ -225,6 +224,10 @@
 
                 .main-frame {
                     padding-bottom: 0;
+                }
+
+                #exit-form {
+                    margin-bottom: 1em;
                 }
             }
 
