@@ -112,22 +112,60 @@
                     // TODO: delete appointments
                     this.fire("show-toast", {text: "Dovolená uložena"});
                 }.bind(this), function () {
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'Při ukládání dovolené se vyskytla chyba. Zkuste to prosím znovu.',
-                            buttonText: 'Zavřít'
-                        }
-                    });
+                    this.showErrorDialog('Při ukládání dovolené se vyskytla chyba. Zkuste to prosím znovu.');
                 }.bind(this));
             },
 
             deleteHolidays: function (event) {
-                var rootRef = this.$.holidays_document.app.database().ref("/"),
-                    holidayId = event.model.holiday.hId;
+                var postData = {
+                    officeId: this.officeId,
+                    holidayId: event.model.holiday.hId
+                };
 
-                console.log("TODO");
+                this.$.holidays_document.app.auth().currentUser.getToken(true).then(function (idToken) {
+                    postData["idToken"] = idToken;
+                    this.sendDeletionRequest(postData);
+                }.bind(this)).catch(function () {
+                    this.showErrorDialog('Nepodařilo se získat autorizační token. Zkuste se odhlásit a přihlásit.');
+                }.bind(this));
+            },
 
+            sendDeletionRequest: function (postData) {
+                var request = new XMLHttpRequest(),
+                    jsonResponse;
+
+                request.onerror = function () {
+                    this.showErrorDialog('Při odstraňování dovolené se vyskytla chyba. Pravděpodobně se vyskytl problém s internetovým připojením.' +
+                        'Zkuste to prosím znovu.');
+                }.bind(this);
+
+                request.onreadystatechange = function () {
+                    if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
+                        jsonResponse = JSON.parse(request.responseText);
+                        if (jsonResponse["success"]) {
+                            this.fire("show-toast", {text: "Požadavek se zpracovává"});
+                        } else {
+                            this.showErrorDialog('Při odstraňování dovolené se vyskytla chyba. Zkuste to prosím znovu.');
+                        }
+                    }
+                }.bind(this);
+
+                // TODO: enable pre-flight request redirection when CORS standard catches up
+                request.open("POST", "https://doctor-appointment-system.appspot.com/holiday/delete", true);
+
+                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                request.send(JSON.stringify(postData));
+            },
+
+            showErrorDialog: function (message) {
+                this.fire("show-dialog", {
+                    path: "", viewName: "genericdialog", open: true,
+                    data: {
+                        text: message,
+                        buttonText: 'Zavřít'
+                    }
+                });
             }
         });
     </script>
