@@ -45,6 +45,11 @@
                 color: inherit;
             }
 
+            .side-padding{
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
             /* na desktopu se po kliknuti na mail a phone a nic neotevre,
              tak aby tam nebyla ikona ruky jako ze se ma neco stat*/
             .info-section a {
@@ -298,14 +303,14 @@
                 </section>
             </div>
 
-            <div id="appointment-container" class="main-frame">
+            <div id="appointment-container">
                 <div class="wide-container" id="main_container">
-                    <div hidden="[[loggedIn]]">
+                    <div hidden="[[loggedIn]]" class="side-padding">
                         <h3>Vyžadováno přihlášení</h3>
                         <p>Pro objednání je vyžadováno přihlášení. Můžete se přihlásit kliknutím na tlačítko níže.</p>
                         <paper-button on-tap="_logIn" raised>Přihlásit</paper-button>
                     </div>
-                    <div hidden="[[!computeVerificationVisibility(verificationRequired, loggedIn, patientStatus)]]">
+                    <div hidden="[[!computeVerificationVisibility(verificationRequired, loggedIn, patientStatus)]]" class="side-padding">
                         <h3>Vyžadováno potvrzení</h3>
                         <p>Pro objednání je nutné ověření od doktora. Doktor podle Vašich osobních údajů ověří, zda jste
                             jeho pacient. Pro ověření prosím
@@ -314,11 +319,11 @@
                         </p>
                         <paper-button on-tap="_verifyUser" raised>Požádat o potvrzení</paper-button>
                     </div>
-                    <div hidden="[[computeBlockedVisibility(patientStatus)]]">
+                    <div hidden="[[computeBlockedVisibility(patientStatus)]]" class="side-padding">
                         <h3>Přístup zablokován</h3>
                         <p>Doktor Vám zablokoval přístup k objednávání. Zřejmě nejste jeho pacientem.</p>
                     </div>
-                    <div hidden="[[computeVerificationRequestSendVisibility(patientStatus)]]">
+                    <div hidden="[[computeVerificationRequestSendVisibility(patientStatus)]]" class="side-padding">
                         <h3>Žádost odeslána</h3>
                         <p>Nyní prosím vyčkejte, než Vám doktor povolí přístup.</p>
                     </div>
