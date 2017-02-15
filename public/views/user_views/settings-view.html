@@ -17,8 +17,9 @@
             .main-frame {
                 background-color: #fff;
                 max-width: 100%;
-                margin: 0.6em auto 3em;
+                margin: 0 auto 3em;
                 padding: 1em 4.5% 3.5em 4.5%;
+                border-top: 1px solid #dadbdd;
             }
 
             #confirm_button {
@@ -30,10 +31,10 @@
             }
 
             #pass-change-container {
-                background-color: #f6f6f7;
-                border: 1px solid #ddddde;
                 margin-top: 3em;
                 padding: 2em 2em 0 2em;
+                border: 1px solid #e2e2e3;
+                background-color: #fbfbfc;
             }
 
             @media only screen and (max-width: 767px) {
@@ -66,7 +67,7 @@
 
         <date-validator validator-name="dateValidator"></date-validator>
 
-        <paper-material class="main-frame">
+        <div class="main-frame">
             <div class="subsection grid">
                 <section>
                     <form id="form1" is="iron-form">
@@ -108,7 +109,7 @@
                     změnit.</p>
                 <paper-button on-tap="passChange" raised>Poslat email</paper-button>
             </div>
-        </paper-material>
+        </div>
     </template>
 
     <script>

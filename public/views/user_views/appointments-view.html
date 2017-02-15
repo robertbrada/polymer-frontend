@@ -28,7 +28,8 @@
 
             .my-list-item {
                 padding: 1.8em;
-                margin: 0.6em auto;
+                margin: 0 auto;
+                box-shadow: none;
             }
 
             .no-appointments {
@@ -52,9 +53,16 @@
                 color: red;
             }
 
+            #message-container{
+                padding: 0 1.5em 1.5em;
+                border: 1px solid #e2e2e3;
+                margin-top: 2em;
+                background-color: #fbfbfc;
+            }
+
             #edit-message {
                 margin-top: auto;
-                margin-left: 0.5em;
+                margin-left: 1em;
             }
 
             .name, .address {
@@ -132,8 +140,8 @@
 
                 </div>
 
-                <div class="container flex-horizontal-with-ratios">
-                    <paper-textarea id="patient_message" class="flexchild" label="Zpráva lékaři" minlength="1" maxlength="200"
+                <div id="message-container" class="container flex-horizontal-with-ratios">
+                    <paper-textarea id="patient_message" class="flexchild" label="Zpráva lékaři" minlength="1" char-counter maxlength="200"
                                     value="{{appointment.message}}">
                     </paper-textarea>
                     <div id="edit-message" class="buttons">
