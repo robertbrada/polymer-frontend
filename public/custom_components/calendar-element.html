@@ -108,7 +108,6 @@
                 color: grey;
             }
 
-
             /*** CUSTOM SCROLLBAR ***/
             /* need to test on different browsers */
             /* the most important is, that it should be always visible on mobile devices when there are a lot of dates available */
@@ -182,18 +181,18 @@
 
             properties: {
 
+                officeId: {
+                    type: String,
+                    observer: 'setFirstVisibleDate'
+                },
+
                 officeLocalTime: {
                     type: Date,
                     value: new Date() // TODO: set local time based on office time zone
                 },
 
                 firstVisibleDate: {
-                    type: Date,
-                    value: function () {
-                        var d = new Date();
-                        d.setHours(0, 0, 0, 0);
-                        return d;
-                    }
+                    type: Date
                 },
 
                 lastVisibleDate: {
@@ -287,6 +286,15 @@
                 db.ref("/appointmentsPublic/" + officeId).orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
                     this.setBookingTimesOfDates(snapshot.val());
                 }.bind(this));
+            },
+
+            // officeId observer. This function sets firstVisibleDate to it's initial value when officeId changes (different profile is viewed).
+            setFirstVisibleDate: function (officeId) {
+                if (officeId !== null) {
+                    var d = new Date();
+                    d.setHours(0, 0, 0, 0);
+                    this.firstVisibleDate = d;
+                }
             },
 
             setBookingTimesOfDates: function (data) {
