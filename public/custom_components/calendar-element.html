@@ -26,7 +26,8 @@
 
             #animated_calendar {
                 @apply(--layout-horizontal);
-                width: 95%;
+                width: 100%;
+                border: 1px solid #e3e3e4;
             }
 
             #animated_calendar > section {
@@ -51,7 +52,7 @@
             }
 
             .buttons {
-                max-height: 36.8em;
+                height: 33.5em;
                 overflow-y: auto;
                 overflow-x: hidden;
                 padding-top: 0.5em;
@@ -78,14 +79,14 @@
                 width: 100%;
                 cursor: pointer;
                 line-height: 0;
-                background-color: #f3f5f6;
+                background-color: #f4f4f5;
                 margin: 0.3em 0.55em;
                 padding: 1.1em 0;
-                border: 1px solid #d8dbdc;
+                border: 1px solid #d8d8d9;
             }
 
             button:hover {
-                background-color: #d8dbdc;
+                background-color: #d0d0d1;
             }
 
             button:active {
@@ -107,6 +108,26 @@
                 color: grey;
             }
 
+
+            /*** CUSTOM SCROLLBAR ***/
+            /* need to test on different browsers */
+            /* the most important is, that it should be always visible on mobile devices when there are a lot of dates available */
+
+            ::-webkit-scrollbar {
+                -webkit-appearance: none;
+            }
+
+            ::-webkit-scrollbar:vertical {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background-color: #cacacb;
+            }
+
+            ::-webkit-scrollbar-track {
+                background-color: #f2f2f3;
+            }
 
         </style>
 

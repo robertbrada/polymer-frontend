@@ -2,43 +2,119 @@
 
 <link rel="import" href="/bower_components/paper-date-picker-item/paper-datetime-picker-item.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/moment-element/moment-import.html">
 
 <link rel="import" href="/custom_components/moment-wrapper-cs.html">
 <link rel="import" href="/styles/button-styles.html">
+<link rel="import" href="/styles/input-styles.html">
 
 <dom-module id="holidays-view">
     <template>
-        <style include="button-styles">
+        <style include="button-styles input-styles">
             .error {
                 color: red;
             }
+
+            .main-container {
+                padding: 1.5em;
+            }
+
+            paper-datetime-picker-item {
+                margin: 0 2%;
+            }
+
+            #holiday {
+                border-top: 1px solid #dadbdd;
+            }
+
+            .dismiss-button {
+                margin: auto 0 0 auto;
+                background-color: #fff;
+                color: #455A64;
+                border: 1px solid #dadbdd;
+                font-size: 0.8em;
+                padding: 0.6em 1em;
+                box-shadow: none;
+                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+            }
+
+            .dismiss-button iron-icon {
+                height: 20px;
+                width: 20px;
+                margin-right: 0.3em;
+            }
+
+            #holiday:hover .dismiss-button {
+                background-color: var(--app-red-color);
+                color: #fff;
+                border: none;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            }
+
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+            }
+
+            @media only screen and (max-width: 1250px) {
+
+                .flex-horizontal {
+                    @apply(--layout-vertical);
+                }
+
+                paper-input {
+                    margin-bottom: 1em;
+                }
+            }
+
         </style>
 
-        <firebase-document id="holidays_document" app-name="doctor-appointment-system" path="/officeHolidays/[[officeId]]"
+        <firebase-document id="holidays_document" app-name="doctor-appointment-system"
+                           path="/officeHolidays/[[officeId]]"
                            data="{{officeHolidays}}">
         </firebase-document>
 
+        <div class="main-container">
+            <div class="flex-horizontal">
+                <paper-input id="name_input" class="flexchild" label="Název dovolené" value="{{holidayName}}" auto-focus
+                             required
+                             auto-validate></paper-input>
+                <p class="error" hidden="[[hideErrorMessage]]">Začátek dovolené je před koncem.</p>
+                <paper-datetime-picker-item required icon="icons:today"
+                                            placeholder="Zadat začátek dovolené"
+                                            default-time="00:00"
+                                            locale="cs" date="{{fromDateTime}}"></paper-datetime-picker-item>
+                <paper-datetime-picker-item icon="icons:today" placeholder="Zadat konec dovolené"
+                                            default-time="23:59"
+                                            locale="cs" date="{{toDateTime}}"></paper-datetime-picker-item>
 
-        <paper-input id="name_input" label="Název dovolené" value="{{holidayName}}" auto-focus required auto-validate></paper-input>
-        <p class="error" hidden="[[hideErrorMessage]]">Začátek dovolené je před koncem.</p>
-        <paper-datetime-picker-item required icon="icons:today" placeholder="Zadat začátek dovolené" default-time="00:00"
-                                    locale="cs" date="{{fromDateTime}}"></paper-datetime-picker-item>
-        <paper-datetime-picker-item icon="icons:today" placeholder="Zadat konec dovolené" default-time="23:59"
-                                    locale="cs" date="{{toDateTime}}"></paper-datetime-picker-item>
-        <paper-button raised on-tap="addHolidays" disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
-        </paper-button>
+            </div>
+            <paper-button raised on-tap="addHolidays"
+                          disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
+            </paper-button>
+        </div>
 
         <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
-            <hr>
-            <span>name: [[holiday.name]]</span><br>
-            <span>startAt: [[holiday.startAt]]</span><br>
-            <span>endAt: [[holiday.endAt]]</span><br>
-            <span>hId: [[holiday.hId]]</span><br>
-            <button on-tap="deleteHolidays">Odstranit</button>
+            <div id="holiday" class="main-container flex-horizontal">
+                <div>
+                    <div><b>Název dovolené:</b> [[holiday.name]]</div>
+                    <div><b>Začátek:</b> [[holiday.startAt]]</div>
+                    <div><b>Konec:</b> [[holiday.endAt]]</div>
+                </div>
+                <paper-button class="dismiss-button" raised on-tap="deleteHolidays">
+                    <iron-icon icon="close"></iron-icon>
+                    Odstranit
+                </paper-button>
+            </div>
         </template>
+
     </template>
 
     <script>
