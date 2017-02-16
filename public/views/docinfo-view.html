@@ -19,8 +19,6 @@
         <style include="button-styles layout-styles input-styles">
             :host {
                 display: block;
-
-                padding: 10px 20px;
             }
 
             h1 {
@@ -75,7 +73,6 @@
             .main-frame {
                 max-width: 1350px;
                 border-bottom: 1px solid #ccc;
-                width: 100%;
             }
 
             .grid > section p {
@@ -96,26 +93,6 @@
                 border-left: 1px solid #ccc;
             }
 
-            @media (max-width: 767px) {
-
-                .grid {
-                    display: block;
-                    margin-top: 0;
-                }
-
-                .grid > section:not(:first-child) {
-                    margin-left: 0;
-                    border-left: none;
-                }
-
-                section h1 {
-                    padding-left: 0;
-                }
-
-                .grid > section p {
-                    padding: 0 0px 40px 0px;
-                }
-            }
 
             iron-icon {
                 height: 50px;
@@ -130,7 +107,37 @@
 
             #presentation section {
                 min-height: 350px;
-                /*background-color: #eee;*/
+            }
+
+            @media (max-width: 767px) {
+
+                .grid {
+                    display: block;
+                    margin-top: 0;
+                }
+
+                #head .grid > section:not(:first-child) {
+                    margin-left: 0;
+                    border-left: none;
+                }
+
+                section h1 {
+                    padding-left: 0;
+                }
+
+                .grid > section p {
+                    padding: 0 0px 40px 0px;
+                }
+
+                #no-account-section {
+                    border-bottom: 1px solid #e1e1e2;
+
+                }
+
+                #no-account-section p{
+                    text-align: center;
+                    font-size: 0.9em;
+                }
             }
 
             /**** SEARCH BAR EXAMPLE */
@@ -254,7 +261,7 @@
             <h1>Jak zaregistruji svou ordinaci?</h1>
 
             <section class="grid">
-                <section class="inner-section">
+                <section class="inner-section" id="no-account-section">
                     <h2>Ještě nemáte žádný účet?</h2>
                     <a href="/registration">
                         <paper-button raised>Založte si účet</paper-button>

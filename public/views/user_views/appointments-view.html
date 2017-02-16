@@ -53,6 +53,19 @@
                 color: red;
             }
 
+            #save-changes{
+                background-color: var(--app-green-color);
+                color: #fff;
+                border: none;
+            }
+
+            #save-changes[disabled]{
+                background-color: #f8f8f9;
+                color: #455A64;
+                border: 1px solid #dadbdd;
+                box-shadow: none;
+            }
+
             #message-container{
                 padding: 0 1.5em 1.5em;
                 border: 1px solid #e2e2e3;
@@ -81,6 +94,14 @@
                     right: 1em;
                 }
 
+                .dismiss-button span{
+                    display: none;
+                }
+
+                .dismiss-button iron-icon{
+                    margin: 0;
+                }
+
                 .my-list-item {
                     padding: 1em;
                 }
@@ -101,7 +122,13 @@
                 .name, .address {
                     max-width: 90%;
                 }
+
+                #edit-message {
+                    text-align: left;
+                    margin-left: 0;
+                }
             }
+
 
         </style>
 
@@ -127,14 +154,14 @@
                     <div class="flexchild address"><span class="label">Adresa:</span>
                         <a href="[[computeMapLink(appointment.address)]]" target="_blank" title="zobrazit na mapě">[[appointment.address.street]]
                             <br>
-                            <div class="address-city">[[appointment.address.city]]</div>
+                            <span class="address-city">[[appointment.address.city]]</span>
                         </a>
                     </div>
 
                     <div class="buttons">
                         <paper-button on-tap="deleteAppointment" class="dismiss-button">
                             <iron-icon icon="icons:close"></iron-icon>
-                            Zrušit
+                            <span>Zrušit</span>
                         </paper-button>
                     </div>
 
@@ -142,11 +169,11 @@
 
                 <div id="message-container" class="container flex-horizontal-with-ratios">
                     <paper-textarea id="patient_message" class="flexchild" label="Zpráva lékaři" minlength="1" char-counter maxlength="200"
-                                    value="{{appointment.message}}">
+                                    value="{{appointment.message}}" focused="{{appointment.messageFocused}}">
                     </paper-textarea>
                     <div id="edit-message" class="buttons">
                         <!--disabled se zruší při změně v textareře - htělo by udělat napříč celým projektem-->
-                        <paper-button id="save-changes" class="confirm-button" on-tap="saveChanges">
+                        <paper-button id="save-changes" on-tap="saveChanges" disabled="[[!appointment.messageFocused]]">
                             <iron-icon icon="icons:check"></iron-icon>
                             Uložit změny
                         </paper-button>
