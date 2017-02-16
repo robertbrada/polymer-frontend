@@ -65,7 +65,7 @@
                 return Object.keys(officeHolidays).map(function (key) {
                     return {
                         'name': officeHolidays[key]['name'],
-                        'startAt': getFormattedDateTime(officeHolidays[key]['startAt']),
+                        'startAt': getFormattedDateTime(Number(key)),
                         'endAt': getFormattedDateTime(officeHolidays[key]['endAt']),
                         'hId': key
                     }
