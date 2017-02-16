@@ -168,16 +168,32 @@
                     } else {
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/waiting-list/' + officeId});
-                        this.notifyGenerator(officeId);
+                        this.getTokenAndNotifyGenerator(officeId);
                     }
                 }.bind(this));
             },
 
-            notifyGenerator: function (officeId) {
-                var postData = {
-                        officeId: officeId
-                    },
-                    request = new XMLHttpRequest();
+            getTokenAndNotifyGenerator: function (officeId) {
+                this.$.user_document.app.auth().currentUser.getToken(true).then(function (idToken) {
+
+                    this.notifyGenerator({
+                        officeId: officeId,
+                        idToken: idToken
+                    });
+
+                }.bind(this)).catch(function () {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'V průběhu příštích 24 hodin budou vygenerovány první termíny.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            },
+
+            notifyGenerator: function (postData) {
+                var request = new XMLHttpRequest();
 
                 request.onerror = function () {
                     this.fire("show-dialog", {
