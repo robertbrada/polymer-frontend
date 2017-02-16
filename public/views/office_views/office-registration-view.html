@@ -187,7 +187,7 @@
                             buttonText: 'Zavřít'
                         }
                     });
-                };
+                }.bind(this);
 
                 // TODO: enable pre-flight request redirection when CORS standard catches up
                 request.open("POST", "https://doctor-appointment-system.appspot.com/registration/generate", true);
