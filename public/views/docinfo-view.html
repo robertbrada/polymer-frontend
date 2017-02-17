@@ -21,247 +21,224 @@
                 display: block;
             }
 
+            a {
+                text-decoration: none;
+            }
+
             h1 {
-                font-size: 2em;
+                letter-spacing: 0.02em;
+            }
+
+            .main-frame {
+                max-width: 1200px;
+                font-weight: lighter;
+                padding: 0;
+                color: #252526;
+                margin: 2em auto;
+            }
+
+            .grid section {
+                padding: 5%;
+                margin: 0 !important;
+                position: relative;
+            }
+
+            section > p {
+                font-size: 1.15em;
+                line-height: 1.65em;
+            }
+
+            section > h1 {
+                font-size: 1.6em;
+                margin-top: 0;
+            }
+
+            img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin: auto;
+                max-width: 250px;
+                max-height: 250px;
+            }
+
+            .img-section {
+                text-align: center;
+            }
+
+            .colored-section {
+                color: #fff;
+                background-color: var(--app-green-color);
+            }
+
+            .colored-section:first-child {
+                background-color: var(--app-accent-color);
+            }
+
+            .grey-section {
+                border: 1px solid #e7e7e8;
+                background-color: #fafafb;
+            }
+
+            #office-registration {
+                background-color: var(--app-accent-color);
+                color: #fff;
+                padding: 5%;
+                margin-top: 6em;
+            }
+
+            #office-registration * {
+                color: #fff;
+            }
+
+            #office-registration section {
+                text-align: center;
+                padding-top: 0;
+                padding-bottom: 2em;
+            }
+
+            #office-registration section:first-child {
+                border-right: 2px solid #374C80;
             }
 
             #office-registration h1 {
                 text-align: center;
-                margin-top: 1.5em;
+                margin-bottom: 3em;
             }
 
             #office-registration h2 {
-                margin-bottom: 0;
+                font-size: 1.5em;
+                letter-spacing: 0.02em;
+                margin-top: 0.5em;
             }
 
-            #office-registration .inner-section {
-                padding: 0 2em 2em;
+            #office-registration paper-button {
+                padding: 1.2em 2em;
+                letter-spacing: 0.08em;
+                font-weight: bold;
             }
 
             #question-container {
-                padding-top: 5em;
                 background-color: #fbfbfc;
+                padding: 3em;
+            }
+
+            #question-container h2 {
+                font-size: 1.5em;
+                letter-spacing: 0.02em;
+                margin-top: 0.5em;
             }
 
             form {
-                margin: 0 auto;
                 max-width: 500px;
+                margin: 0 auto;
             }
 
-            form h2 {
-                margin-top: 0;
-            }
-
-            h2 {
-                font-size: 1.2em;
-            }
-
-            a {
-                text-decoration: none;
-                font-weight: bold;
-                color: var(--app-green-color);
-            }
-
-            a:hover {
-                text-decoration: underline;
-            }
-
-            .grid {
-                text-align: center;
-            }
-
-            .main-frame {
-                max-width: 1350px;
-                border-bottom: 1px solid #ccc;
-            }
-
-            .grid > section p {
-                padding: 0 60px 40px 60px;
-            }
-
-            .grid > section {
-                text-align: center;
-                margin: 20px 0 30px 0;
-            }
-
-            section h1 {
-                padding-left: 60px;
-            }
-
-            #head .grid > section:not(:first-child) {
-                margin-left: 0;
-                border-left: 1px solid #ccc;
-            }
-
-
-            iron-icon {
-                height: 50px;
-                width: 50px;
-                color: var(--app-accent-color);
-            }
-
-            .grid section > p {
-                text-align: left;
-                font-size: 16px;
-            }
-
-            #presentation section {
-                min-height: 350px;
-            }
-
-            @media (max-width: 767px) {
-
-                .grid {
-                    display: block;
+            @media (max-width: 1200px) {
+                #office-registration {
                     margin-top: 0;
                 }
 
-                #head .grid > section:not(:first-child) {
-                    margin-left: 0;
-                    border-left: none;
-                }
-
-                section h1 {
-                    padding-left: 0;
-                }
-
-                .grid > section p {
-                    padding: 0 0px 40px 0px;
-                }
-
-                #no-account-section {
-                    border-bottom: 1px solid #e1e1e2;
-
-                }
-
-                #no-account-section p{
-                    text-align: center;
-                    font-size: 0.9em;
+                #last-presentation-section {
+                    margin-bottom: 0;
                 }
             }
 
-            /**** SEARCH BAR EXAMPLE */
+            @media (max-width: 716px) {
 
-            .flex-horizontal-with-ratios {
-                @apply(--layout-horizontal);
+                .grid section {
+                    padding: 7% 5%;
+                }
+
+                img {
+                    position: static;
+                    max-width: 150px;
+                    max-height: 150px;
+                }
+
+                #office-registration section:first-child {
+                    border-right: none;
+                    padding-bottom: 4em;
+                    border-bottom: 2px solid #374C80;
+                }
+
+                #office-registration section:nth-child(2) {
+                    padding-top: 4em;
+                }
+
+                #office-registration h1 {
+                    margin-bottom: 1em;
+                }
             }
 
-            .flexchild {
-                @apply(--layout-flex);
-                margin: 0 0.3em;
-                text-align: right;
-            }
-
-            .flex2child {
-                @apply(--layout-flex);
-                margin: 0 0.3em;
-            }
-
-            #search-head {
-                width: 100%;
-                height: 64px;
-                position: fixed;
-                left: 0;
-                top: 64px;
-                z-index: 1;
-                background-color: #eeeff2;
-                border-top: 1px solid #dcdce5;
-                border-bottom: 1px solid #dcdce5;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                font-size: 0.8em;
-                display: inline-block;
-            }
-
-            #search-head input {
-                min-width: 60%;
-                max-width: 300em;
-                height: 1.8em;
-                margin-top: 0.45em;
-                border: 1px solid #dcdce5;
-                padding: 0.5em 0.8em;
-                font-size: 1.4em;
-            }
-
-            #search-head input::-webkit-input-placeholder {
-                color: #aaa;
-                font-weight: lighter;
-                letter-spacing: 0.02em;
-            }
-
-            #search-head iron-icon {
-                margin-left: 1em;
-                cursor: pointer;
-            }
 
         </style>
 
-        <iron-media-query query="(max-width: 767px)" query-matches="{{smallScreen}}"></iron-media-query>
-
-        <!--<div id="search-head" class="container flex-horizontal-with-ratios" hidden="[[smallScreen]]">-->
-            <!--<div class="container flex-horizontal-with-ratios interface-div">-->
-                <!--<div class="flexchild"><input placeholder="Jméno nebo specializace"></div>-->
-                <!--<div class="flex2child"><input placeholder="Město nebo PSČ">-->
-                    <!--<iron-icon icon="icons:search"></iron-icon>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-
-        <div id="head" class="main-frame">
-            <section class="grid">
-                <section>
-                    <iron-icon icon="device:dvr"></iron-icon>
-                    <h2>Mějte přehled</h2>
-                    <p>
-                        S naším řešením budete mít dokonalý přehled o svých pacientech. Uvidíte, kdo čeká ve frontě, kdo
-                        je objednaný,...
-
-                    </p>
-                </section>
-
-                <section>
-                    <iron-icon icon="device:access-time"></iron-icon>
-                    <h2>Šetřete čas</h2>
-                    <p>
-                        Díky našemu objednávacímu systému nemusíte vyřizovat objednávky. Vaši pacienti se objednají sami
-                        a vy tak máte čas na...
-
-                    </p>
-                </section>
-
-                <section>
-                    <iron-icon icon="face"></iron-icon>
-                    <h2>Komunikace</h2>
-                    <p>
-                        S naším řešením budete mít dokonalý přehled o svých pacientech. Uvidíte, kdo čeká ve frontě, kdo
-                        je objednaný,...
-                    </p>
-                </section>
+        <section class="main-frame grid">
+            <section>
+                <h1>Co je Docta?</h1>
+                <p>Docta je systém, jehož cílem je propojit lékaře s pacienty a ulehčit tak lékařům každodenní
+                    práci v ordinaci. Jako lékař si můžete zaregistrovat svou ordinaci, která bude veřejně k zobrazení
+                    na
+                    našich stránkách. Rovněž budete mít přístup k rozhraní ordinace, kde budete mít kompletní přehled o
+                    svých pacientech.
+                </p>
             </section>
-        </div>
-
-        <div id="presentation">
-            <section class="main-frame grid"
-                     style="background-color: #172C50; color: white;  margin-top: 0; padding-top: 50px; padding-bottom: 30px">
-                <section style="text-align: left;  padding-bottom: 0">
-                    <h1 style="font-size: 24px;">Online objednání a pořadník v čekárně</h1>
-                    <p>Ačkoli finanční podmínky služby v Arnstadtu byly dobré, Bach se často dostával do konfliktu s
-                        tamní konzistoří. Kromě zmíněného svévolného prodloužení studijního pobytu u Buxtehuda nebo
-                        stížnosti na to, že Bach dovolil přístup na kůr „cizí dívce“, snad své budoucí ženě, šlo
-                        především o to, že Bachova novátorská a emotivní hudba působila na místní posluchače rušivě a
-                        rozptylovala je při bohoslužbě.</p>
-                </section>
-                <section style="border: none;">
-                    <img src="../images/mac.png" style="max-width: 350px; height: auto; width: 85%">
-                </section>
+            <section class="img-section">
+                <img src="../images/logo.png">
             </section>
-        </div>
+        </section>
 
-        <div id="office-registration" class="main-frame">
+        <section class="main-frame grid">
+            <section class="colored-section">
+                <h1>Přenechte objednání pacientům</h1>
+                <p>Šetřete svůj čas a přenechte objednání pacientům. V nastavení ordinace si budete moci určit ordinační
+                    hodiny a časové rozestupy mezi jednotlivými
+                    návštěvami, na základě toho vám vytvoříme kalendář s objednávacími časy. </p>
+            </section>
+            <section class="grey-section">
+                <h1>Mějte přehled</h1>
+                <p>K dispozici máte elektronický kalendář, kde vidíte všechny objednané pacienty. Samozřejmě máte
+                    možnost
+                    objednat i pacienty, kteří se vám ozvou po telefonu. </p>
+            </section>
+        </section>
 
-            <h1>Jak zaregistruji svou ordinaci?</h1>
+        <section class="main-frame grid">
+            <section>
+                <h1>Jen pacienti, které chcete</h1>
+                <p>Nemusíte mít strach, že se k vám bude objednávat kde kdo. Máte možnost si vybrat, jací pacienti se u
+                    vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci. Také
+                    můžete upozornit pacienty na to, zda přijímáte nové pacienty či
+                    nikoli.
+                </p>
+            </section>
+            <section class="img-section">
+                <img src="../images/patient.png">
+            </section>
+        </section>
 
-            <section class="grid">
-                <section class="inner-section" id="no-account-section">
+
+        <section class="main-frame grid" id="last-presentation-section">
+            <section class="grey-section">
+                <h1>Komunikujte s pacienty</h1>
+                <p>Potřebujete poslat pacientovi zprávu, anebo provést online konzultaci? Komunikace mezi lékařem a
+                    pacientem je plně zakomponována do našeho systému. </p>
+            </section>
+            <section class="colored-section">
+                <h1>Ovládejte odkudkoli</h1>
+                <p>Celý systém je online a plně responzivní, což znamená, že je snadno ovladatelný jak z počítače, tak
+                    telefonu nebo tabletu. Vše můžete mít pod kontrolou všude tam, kde je připojení k internetu.</p>
+            </section>
+        </section>
+
+
+        <div id="office-registration">
+            <h1>Jak zaregistruji svoji ordinaci?</h1>
+            <section class="grid main-frame">
+                <section id="no-account-section">
                     <h2>Ještě nemáte žádný účet?</h2>
                     <a href="/registration">
                         <paper-button raised>Založte si účet</paper-button>
@@ -269,8 +246,7 @@
                     <p>Po registraci obdržíte email, který vás navede na registraci vaší ordinace.
                     </p>
                 </section>
-
-                <section class="inner-section">
+                <section>
                     <h2>Už máte účet?</h2>
                     <a href="/office/registration/data">
                         <paper-button raised>Zaregistrujte ordinaci</paper-button>
@@ -279,7 +255,7 @@
             </section>
         </div>
 
-        <div class="main-frame" id="question-container">
+        <div id="question-container">
             <form>
                 <h2>Máte nějaký dotaz? Zeptejte se nás.</h2>
                 <gold-email-input id="emailID"
@@ -289,8 +265,6 @@
                 <paper-button raised>Odeslat</paper-button>
             </form>
         </div>
-
-
     </template>
 
     <script>
