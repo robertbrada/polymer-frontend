@@ -31,10 +31,6 @@
             is: 'calendar-disabled-element',
 
             properties: {
-                loggedIn: {
-                    type: Boolean,
-                    computed: 'computeLoggedInProperty(statusKnown, user)'
-                },
 
                 disabledCalendar: {
                     type: Boolean,
@@ -45,12 +41,12 @@
                     type: String,
                     value: null,
                     notify: true,
-                    computed: 'computePatientStatusProperty(userContactedOffice)',
+                    computed: 'computePatientStatusProperty(userContactedOffice)'
                 },
 
                 content: {
                     type: Object,
-                    computed: "computeContent(loggedIn, manualConfirmation, patientStatus)"
+                    computed: "computeContent(statusKnown, user, manualConfirmation, patientStatus)"
                 },
 
                 contentObjects: {
@@ -63,10 +59,18 @@
                             buttonText: "Přihlásit"
                         },
 
+                        verify: {
+                            title: "Vyžadováno potvrzení emailu",
+                            mainText: "Pro objednání je nutné, abyste potvrdili Váš email. Pokud jste se právě zaregistrovali, měl by se již email " +
+                            "s odkazem k potvrzení nacházet ve Vaší emailové schránce. Jestliže jste email neobdrželi, klikněte prosím na tlačítko níže",
+                            buttonVisibility: true,
+                            buttonText: "Poslat email"
+                        },
+
                         awaits: {
                             title: "Vyžadováno potvrzení",
                             mainText: "Pro objednání je nutné ověření od doktora. Doktor podle Vašich osobních údajů ověří, zda jste jeho pacient. " +
-                            "Pro ověření prosímklikněte na tlačítko níže. Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté se budete mociobjednat.",
+                            "Pro ověření prosím klikněte na tlačítko níže. Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté se budete mociobjednat.",
                             buttonVisibility: true,
                             buttonText: "Požádat o potvrzení"
                         },
@@ -86,12 +90,14 @@
                 }
             },
 
-            computeContent: function (loggedIn, manualConfirmation, patientStatus) {
+            computeContent: function (statusKnown, user, manualConfirmation, patientStatus) {
                 this.hidden = false;
                 this.disabledCalendar = true;
 
-                if (!loggedIn) {
+                if (!statusKnown || !(!!user)) {
                     return this.contentObjects.logIn;
+                } else if (!user.emailVerified) {
+                    return this.contentObjects.verify;
                 } else if (manualConfirmation) {
                     if (patientStatus === null) {
                         return this.contentObjects.awaits;
@@ -108,10 +114,31 @@
             },
 
             handleButtonEvent: function () {
-                if (this.loggedIn) {
-                    this.requestVerification();
-                } else {
+                var user = this.user;
+
+                if (!(!!user)) {
                     this.fire("show-dialog", {path: "", viewName: "login", open: true});
+                } else if (!user.emailVerified) {
+                    user.sendEmailVerification().then(function () {
+                        this.fire("show-dialog", {
+                            path: "", viewName: "genericdialog", open: true,
+                            data: {
+                                text: 'Na Vaší emailovou adresu byl poslán email, ve kterém je odkaz, jehož navštívením potvrdíte Vaší emailovou ' +
+                                'adresu. Po potvrzení se budete moci objednat, případně si zaregistrovat ordinaci.',
+                                buttonText: 'Zavřít'
+                            }
+                        });
+                    }.bind(this), function () {
+                        this.fire("show-dialog", {
+                            path: "", viewName: "genericdialog", open: true,
+                            data: {
+                                text: 'Při posílání emailu se vyskytla chyba. Zkuste to prosím znovu.',
+                                buttonText: 'Zavřít'
+                            }
+                        });
+                    }.bind(this));
+                } else {
+                    this.requestVerification();
                 }
             },
 
@@ -141,10 +168,6 @@
                         }
                     });
                 });
-            },
-
-            computeLoggedInProperty: function (statusKnown, user) {
-                return (statusKnown && !!user);
             },
 
             computePatientStatusProperty: function (userContactedOffice) {

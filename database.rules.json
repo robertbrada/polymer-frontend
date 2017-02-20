@@ -151,7 +151,7 @@
       "$oid": {
         ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$aid": {
-          ".write": "auth !== null && ((data.val() === true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.val() === false && root.child('appointmentsPrivate/' + $oid + '/' + $aid + '/patient').val() === auth.uid)"
+          ".write": "auth !== null && auth.token.email_verified == true && ((data.val() === true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.val() === false && root.child('appointmentsPrivate/' + $oid + '/' + $aid + '/patient').val() === auth.uid)"
         }
       }
     },
@@ -160,7 +160,7 @@
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$aid": {
-          ".write": "auth !== null && ((!data.exists() && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.child('patient').val() === auth.uid)"
+          ".write": "auth !== null && ((!data.exists() && auth.token.email_verified == true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.child('patient').val() === auth.uid)"
         }
       }
     },

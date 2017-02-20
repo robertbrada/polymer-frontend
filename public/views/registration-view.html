@@ -216,7 +216,14 @@
 
                     this.fire('change-route', {url: '/home'});
                     this.fire("show-toast", {text: "Přihlášeno"});
-                    this.fire("show-dialog", {path: "", viewName: "emaildialog", open: true});
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Na Vaší emailovou adresu byl poslán email, ve kterém je odkaz, jehož navštívením potvrdíte Vaší emailovou ' +
+                            'adresu. Po potvrzení se budete moci objednat, případně si zaregistrovat ordinaci.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
 
                     this.saveUserData(user);
 
@@ -228,7 +235,6 @@
                         default:
                             this.errorMessage = error["code"];
                     }
-                    this.fire("show-dialog", {path: "", viewName: "registration", open: true});
                 }.bind(this));
             },
 

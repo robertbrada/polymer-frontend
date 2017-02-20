@@ -49,11 +49,12 @@
 
             handleVerifyEmail: function (auth, actionCode) {
                 auth.applyActionCode(actionCode).then(function () {
+                    auth.signOut(); // User needs to reauthenticate in order to generate new id token with verified address.
                     this.fire('change-route', {url: '/home'});
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
                         data: {
-                            text: 'Váš email byl úspěšně potvrzen. Nyní se můžete objednat. V případě že jste doktor prosím pokračujte přidáním ordinace.',
+                            text: 'Váš email byl úspěšně potvrzen. Po opětovném přihlášení se můžete objednat. V případě že jste doktor prosím pokračujte přidáním ordinace.',
                             nextRoute: '/office/registration/data',
                             buttonText: 'Přidat ordinaci'
                         }
