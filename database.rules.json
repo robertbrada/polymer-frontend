@@ -116,6 +116,7 @@
         }
       }
     },
+    // Doesn't validate if email is verified. Couldn't get it working.
     "officePatientsToVerify": {
       "$oid": {
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",

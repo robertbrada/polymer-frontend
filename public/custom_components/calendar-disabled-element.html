@@ -152,12 +152,12 @@
                     objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'awaitsVerification';
                     objectToSave['/officePatientsToVerify/' + officeId + '/' + uid] = snapshot.val();
 
-                    db.ref('/').update(objectToSave).then(function () {
+                    return db.ref('/').update(objectToSave).then(function () {
                         return db.ref('/officeNumberOfNotifications/' + officeId).transaction(function (currentCount) {
                             return (currentCount === null) ? null : currentCount + 1;
                         });
                     })
-                }).then(function () {
+                }).then(function (readCountTxn) {
                     this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
@@ -167,7 +167,7 @@
                             buttonText: 'Zavřít'
                         }
                     });
-                });
+                }.bind(this));
             },
 
             computePatientStatusProperty: function (userContactedOffice) {
