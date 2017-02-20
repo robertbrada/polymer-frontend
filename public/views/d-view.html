@@ -1,10 +1,8 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="/bower_components/neon-animation/animations/slide-up-animation.html">
 <link rel="import" href="/bower_components/neon-animation/animations/slide-from-top-animation.html">
@@ -13,7 +11,10 @@
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
+
 <link rel="import" href="/custom_components/calendar-element.html">
+<link rel="import" href="/custom_components/calendar-disabled-element.html">
 
 <!--icons-->
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
@@ -45,7 +46,7 @@
                 color: inherit;
             }
 
-            .side-padding{
+            .side-padding {
                 padding-left: 24px;
                 padding-right: 24px;
             }
@@ -135,6 +136,7 @@
             #appointment-container {
                 overflow: hidden;
             }
+
             /*** CALENDAR ***/
             #calendar_container {
                 text-align: center;
@@ -163,7 +165,7 @@
             }
 
             #exit-form iron-icon {
-               margin-right: 0.4em;
+                margin-right: 0.4em;
             }
 
             #appointment_form paper-textarea {
@@ -241,14 +243,9 @@
 
         </style>
 
-        <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}" user="{{user}}"></firebase-auth>
-
-        <firebase-document id="user_contacted_document" app-name="doctor-appointment-system"
-                           path="/userContactedOffices/[[user.uid]]/[[officeId]]" data="{{userContactedOffice}}">
-        </firebase-document>
-
         <div class="centered" hidden="[[hideError]]">
-            <iron-icon icon="error"></iron-icon> Profil nenalezen
+            <iron-icon icon="error"></iron-icon>
+            Profil nenalezen
         </div>
 
         <div class="centered" hidden="[[hideSpinner]]">
@@ -308,33 +305,18 @@
 
             <div id="appointment-container">
                 <div class="wide-container" id="main_container">
-                    <div hidden="[[loggedIn]]" class="side-padding">
-                        <h3>Vyžadováno přihlášení</h3>
-                        <p>Pro objednání je vyžadováno přihlášení. Můžete se přihlásit kliknutím na tlačítko níže.</p>
-                        <paper-button on-tap="_logIn" raised>Přihlásit</paper-button>
-                    </div>
-                    <div hidden="[[!computeVerificationVisibility(verificationRequired, loggedIn, patientStatus)]]" class="side-padding">
-                        <h3>Vyžadováno potvrzení</h3>
-                        <p>Pro objednání je nutné ověření od doktora. Doktor podle Vašich osobních údajů ověří, zda jste
-                            jeho pacient. Pro ověření prosím
-                            klikněte na tlačítko níže. Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté se budete moci
-                            objednat.
-                        </p>
-                        <paper-button on-tap="_verifyUser" raised>Požádat o potvrzení</paper-button>
-                    </div>
-                    <div hidden="[[computeBlockedVisibility(patientStatus)]]" class="side-padding">
-                        <h3>Přístup zablokován</h3>
-                        <p>Doktor Vám zablokoval přístup k objednávání. Zřejmě nejste jeho pacientem.</p>
-                    </div>
-                    <div hidden="[[computeVerificationRequestSendVisibility(patientStatus)]]" class="side-padding">
-                        <h3>Žádost odeslána</h3>
-                        <p>Nyní prosím vyčkejte, než Vám doktor povolí přístup.</p>
-                    </div>
-                    <div id="calendar_container">
-                        <h3 hidden="[[!calendarVisibility]]">Kalendář</h3>
-                        <p hidden="[[!calendarVisibility]]">Pro objednání vyberte čas, na který se chcete objednat.</p>
 
-                        <calendar-element hidden="[[!calendarVisibility]]" office-id="[[officeId]]"
+                    <div class="side-padding">
+                        <calendar-disabled-element manual-confirmation="[[manualConfirmation]]"
+                                                   office-id="[[officeId]]"
+                                                   disabled-calendar="{{disabledCalendar}}"></calendar-disabled-element>
+                    </div>
+
+                    <div id="calendar_container" hidden="[[!calendarVisibility]]">
+                        <h3>Kalendář</h3>
+                        <p>Pro objednání vyberte čas, na který se chcete objednat.</p>
+
+                        <calendar-element office-id="[[officeId]]"
                                           last-generated-date-raw="[[officeData.lastGeneratedDate]]"
                                           disabled="[[disabledCalendar]]">
                         </calendar-element>
@@ -385,29 +367,17 @@
 
             properties: {
 
+                firebaseApp: {
+                    type: Object,
+                    value: firebase.apps[0]
+                },
+
                 // Computed properties
 
                 officeId: {
                     type: String,
                     computed: 'computeIdProperty(route.path)',
                     observer: 'loadOfficeData'
-                },
-
-                loggedIn: {
-                    type: Boolean,
-                    computed: 'computeLoggedInProperty(statusKnown, user)'
-                },
-
-                disabledCalendar: {
-                    type: Boolean,
-                    computed: 'computeDisabledCalendarProperty(loggedIn, verificationRequired, patientStatus)',
-                    observer: 'disabledCalendarObserver'
-                },
-
-                patientStatus: {
-                    type: String,
-                    value: null,
-                    computed: 'computePatientStatusProperty(userContactedOffice)'
                 },
 
                 hideSpinner: {
@@ -427,11 +397,6 @@
 
                 // Other
 
-                verificationRequired: {
-                    type: Boolean,
-                    value: true
-                },
-
                 specializations: {
                     type: Array,
                     value: ['Zubař', 'Rektálník', 'Gynekolog']
@@ -444,6 +409,11 @@
                 calendarVisibility: {
                     type: Boolean,
                     value: true
+                },
+
+                disabledCalendar: {
+                    type: Boolean,
+                    observer: "disabledCalendarObserver"
                 },
 
                 actionAfterAnimation: {
@@ -472,7 +442,9 @@
                             }
                         }
                     }
-                }
+                },
+
+                warningMessage: {}
             },
 
             listeners: {
@@ -480,12 +452,8 @@
                 'appointment-request': '_onAppointmentRequest'
             },
 
-            observers: [
-                'setVerificationRequired(officeData.manualConfirmation, user.uid)'
-            ],
-
             loadOfficeData: function (officeId) {
-                var db = this.$.user_contacted_document.app.database(),
+                var db = this.firebaseApp.database(),
                     officeData;
 
                 db.ref('/officeFullInfo/' + officeId).once('value').then(function (snapshot) {
@@ -511,35 +479,7 @@
                 return (path.substring(1));
             },
 
-            computeLoggedInProperty: function (statusKnown, user) {
-                return (statusKnown && !!user);
-            },
-
-            computeDisabledCalendarProperty: function (loggedIn, verificationRequired, patientStatus) {
-                return (!loggedIn || (verificationRequired && patientStatus !== 'accessed'));
-            },
-
-            computePatientStatusProperty: function (userContactedOffice) {
-                return (Object.keys(userContactedOffice).length === 1) ? userContactedOffice.status : null;
-            },
-
             // Functions called by observers
-
-            setVerificationRequired: function (manualConfirmation, uid) {
-                if (manualConfirmation !== undefined && manualConfirmation && uid != undefined) {
-                    var ref = this.$.auth.app.database().ref('/officeRegisteredPatients/' + uid);
-                    ref.on('value', function (snapshot) {
-                        if (snapshot.val() === null) {
-                            this.verificationRequired = true;
-                        } else {
-                            this.verificationRequired = false;
-                            ref.off();
-                        }
-                    }.bind(this));
-                } else {
-                    this.verificationRequired = false;
-                }
-            },
 
             onOfficeDataLoaded: function () {
                 var mapElement = this.$$("#map_element");
@@ -565,11 +505,11 @@
             // Handlers of events from UI
 
             _confirmAppointment: function () {
-                var db = this.$.user_contacted_document.app.database(),
+                var db = this.firebaseApp.database(),
                     appointmentId = this.appointmentId,
                     officeId = this.officeId,
                     officeData = this.officeData,
-                    uid = this.user.uid,
+                    uid = this.userId,
                     patientMessage = (!!this.$.patient_message.value) ? this.$.patient_message.value : null,
                     patientStatus = this.patientStatus,
                     objectToSave = {},
@@ -612,41 +552,6 @@
                     }.bind(this));
 
                 }.bind(this));
-            },
-
-
-            _verifyUser: function () {
-                var uid = this.user.uid, officeId = this.officeId,
-                    db = this.$.auth.app.database(), objectToSave = {};
-
-
-                db.ref('/userInfo/' + uid).once('value').then(function (snapshot) {
-
-                    objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'awaitsVerification';
-                    objectToSave['/officePatientsToVerify/' + officeId + '/' + uid] = snapshot.val();
-
-                    db.ref('/').update(objectToSave).then(function () {
-                        return db.ref('/officeNumberOfNotifications/' + officeId).transaction(function (currentCount) {
-                            return (currentCount === null) ? null : currentCount + 1;
-                        });
-                    })
-                }).then(function () {
-                    this.fire("show-toast", {text: "Žádost o potvrzení odeslána"});
-                }.bind(this), function (error) {
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'Při posílání žádosti o potvrzení se vyskytla chyba. Zkuste to prosím znovu.',
-                            buttonText: 'Zavřít'
-                        }
-                    });
-                });
-
-                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
-            },
-
-            _logIn: function () {
-                this.fire("show-dialog", {path: "", viewName: "login", open: true});
             },
 
             _showCalendar: function () {
@@ -702,10 +607,6 @@
                 return (this.specializations[specialization]);
             },
 
-            computeBlockedVisibility: function (patientStatus) {
-                return patientStatus !== 'blocked';
-            },
-
             computeTextAvailability: function (text) {
                 return (!!text);
             },
@@ -720,14 +621,6 @@
 
             computeMapLink: function (address) {
                 return (!!address) ? "http://maps.google.com/maps?q=" + address.city + "," + address.street : null;
-            },
-
-            computeVerificationVisibility: function (verificationRequired, loggedIn, patientStatus) {
-                return verificationRequired && loggedIn && !(!!patientStatus);
-            },
-
-            computeVerificationRequestSendVisibility: function (patientStatus) {
-                return patientStatus !== 'awaitsVerification'
             },
 
             computeContentHiddenness: function (requestFinished, wrongId) {
