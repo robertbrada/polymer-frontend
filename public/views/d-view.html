@@ -307,8 +307,9 @@
                 <div class="wide-container" id="main_container">
 
                     <div class="side-padding">
-                        <calendar-disabled-element manual-confirmation="[[manualConfirmation]]"
+                        <calendar-disabled-element manual-confirmation="[[officeData.manualConfirmation]]"
                                                    office-id="[[officeId]]"
+                                                   patient-status="{{patientStatus}}"
                                                    disabled-calendar="{{disabledCalendar}}"></calendar-disabled-element>
                     </div>
 

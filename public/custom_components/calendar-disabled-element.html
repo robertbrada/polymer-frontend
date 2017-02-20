@@ -18,27 +18,10 @@
                            path="/userContactedOffices/[[user.uid]]/[[officeId]]" data="{{userContactedOffice}}">
         </firebase-document>
 
-        <div hidden="[[loggedIn]]">
-            <h3>Vyžadováno přihlášení</h3>
-            <p>Pro objednání je vyžadováno přihlášení. Můžete se přihlásit kliknutím na tlačítko níže.</p>
-            <paper-button on-tap="_logIn" raised>Přihlásit</paper-button>
-        </div>
-        <div hidden="[[!computeVerificationVisibility(verificationRequired, loggedIn, patientStatus)]]">
-            <h3>Vyžadováno potvrzení</h3>
-            <p>Pro objednání je nutné ověření od doktora. Doktor podle Vašich osobních údajů ověří, zda jste
-                jeho pacient. Pro ověření prosím
-                klikněte na tlačítko níže. Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté se budete moci
-                objednat.
-            </p>
-            <paper-button on-tap="_verifyUser" raised>Požádat o potvrzení</paper-button>
-        </div>
-        <div hidden="[[computeBlockedVisibility(patientStatus)]]">
-            <h3>Přístup zablokován</h3>
-            <p>Doktor Vám zablokoval přístup k objednávání. Zřejmě nejste jeho pacientem.</p>
-        </div>
-        <div hidden="[[computeVerificationRequestSendVisibility(patientStatus)]]">
-            <h3>Žádost odeslána</h3>
-            <p>Nyní prosím vyčkejte, než Vám doktor povolí přístup.</p>
+        <div>
+            <h3>[[content.title]]</h3>
+            <p>[[content.mainText]]</p>
+            <paper-button hidden="[[!content.buttonVisibility]]" on-tap="handleButtonEvent" raised>[[content.buttonText]]</paper-button>
         </div>
 
     </template>
@@ -53,49 +36,86 @@
                     computed: 'computeLoggedInProperty(statusKnown, user)'
                 },
 
-                verificationRequired: {
-                    type: Boolean,
-                    value: true
-                },
-
                 disabledCalendar: {
                     type: Boolean,
-                    computed: 'computeDisabledCalendarProperty(loggedIn, verificationRequired, patientStatus)',
                     notify: true
                 },
 
                 patientStatus: {
                     type: String,
                     value: null,
-                    computed: 'computePatientStatusProperty(userContactedOffice)'
-                }
-            },
+                    notify: true,
+                    computed: 'computePatientStatusProperty(userContactedOffice)',
+                },
 
-            observers: [
-                'setVerificationRequired(officeData.manualConfirmation, userId)'
-            ],
+                content: {
+                    type: Object,
+                    computed: "computeContent(loggedIn, manualConfirmation, patientStatus)"
+                },
 
-            _logIn: function () {
-                this.fire("show-dialog", {path: "", viewName: "login", open: true});
-            },
+                contentObjects: {
+                    type: Object,
+                    value: {
+                        logIn: {
+                            title: "Vyžadováno přihlášení",
+                            mainText: "Pro objednání je vyžadováno přihlášení. Můžete se přihlásit kliknutím na tlačítko níže.",
+                            buttonVisibility: true,
+                            buttonText: "Přihlásit"
+                        },
 
-            setVerificationRequired: function (manualConfirmation, uid) {
-                if (manualConfirmation !== undefined && manualConfirmation && uid != undefined) {
-                    var ref = this.firebaseApp.database().ref('/officeRegisteredPatients/' + uid);
-                    ref.on('value', function (snapshot) {
-                        if (snapshot.val() === null) {
-                            this.verificationRequired = true;
-                        } else {
-                            this.verificationRequired = false;
-                            ref.off();
+                        awaits: {
+                            title: "Vyžadováno potvrzení",
+                            mainText: "Pro objednání je nutné ověření od doktora. Doktor podle Vašich osobních údajů ověří, zda jste jeho pacient. " +
+                            "Pro ověření prosímklikněte na tlačítko níže. Jakmile Vás doktor potvrdí, notifikujeme Vás. Poté se budete mociobjednat.",
+                            buttonVisibility: true,
+                            buttonText: "Požádat o potvrzení"
+                        },
+
+                        blocked: {
+                            title: "Přístup zablokován",
+                            mainText: "Doktor Vám zablokoval přístup k objednávání. Zřejmě nejste jeho pacientem.",
+                            buttonVisibility: false
+                        },
+
+                        sent: {
+                            title: "Žádost odeslána",
+                            mainText: "Nyní prosím vyčkejte, než Vám doktor povolí přístup.",
+                            buttonVisibility: false
                         }
-                    }.bind(this));
-                } else {
-                    this.verificationRequired = false;
+                    }
                 }
             },
 
-            _verifyUser: function () {
+            computeContent: function (loggedIn, manualConfirmation, patientStatus) {
+                this.hidden = false;
+                this.disabledCalendar = true;
+
+                if (!loggedIn) {
+                    return this.contentObjects.logIn;
+                } else if (manualConfirmation) {
+                    if (patientStatus === null) {
+                        return this.contentObjects.awaits;
+                    } else if (patientStatus === "awaitsVerification") {
+                        return this.contentObjects.sent;
+                    } else if (patientStatus === "blocked") {
+                        return this.contentObjects.blocked;
+                    }
+                }
+
+                this.disabledCalendar = false;
+                this.hidden = true;
+                return null;
+            },
+
+            handleButtonEvent: function () {
+                if (this.loggedIn) {
+                    this.requestVerification();
+                } else {
+                    this.fire("show-dialog", {path: "", viewName: "login", open: true});
+                }
+            },
+
+            requestVerification: function () {
                 var uid = this.user.uid, officeId = this.officeId,
                     db = this.$.auth.app.database(), objectToSave = {};
 
@@ -121,28 +141,10 @@
                         }
                     });
                 });
-
-                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
-            },
-
-            computeVerificationVisibility: function (verificationRequired, loggedIn, patientStatus) {
-                return verificationRequired && loggedIn && !(!!patientStatus);
-            },
-
-            computeVerificationRequestSendVisibility: function (patientStatus) {
-                return patientStatus !== 'awaitsVerification'
-            },
-
-            computeBlockedVisibility: function (patientStatus) {
-                return patientStatus !== 'blocked';
             },
 
             computeLoggedInProperty: function (statusKnown, user) {
                 return (statusKnown && !!user);
-            },
-
-            computeDisabledCalendarProperty: function (loggedIn, verificationRequired, patientStatus) {
-                return (!loggedIn || (verificationRequired && patientStatus !== 'accessed'));
             },
 
             computePatientStatusProperty: function (userContactedOffice) {
