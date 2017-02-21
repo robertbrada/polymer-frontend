@@ -6,13 +6,15 @@
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-tooltip/paper-tooltip.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/paper-date-picker-item/paper-date-picker-item.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/settings-styles.html">
 
+<link rel="import" href="/custom_components/moment-wrapper-cs.html">
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 
 <dom-module id="generator-info-view">
@@ -43,34 +45,6 @@
                 color: var(--app-green-color);
             }
 
-            #manual-change-checkbox {
-                --primary-color: var(--app-green-color);
-                margin-top: 2em;
-            }
-
-            #manual-change-input {
-                position: relative;
-                display: inline-block;
-                margin-left: 1em;
-                max-width: 11em;
-                margin-bottom: 0;
-                --paper-input-container-underline-focus: {
-                    background-color: var(--app-green-color);
-                    height: 2px;
-                };
-
-                --paper-input-container-input: {
-                    margin-bottom: 0;
-                    padding: 0;
-                };
-
-                --paper-input-container: {
-                    margin-top: 0;
-                    margin-bottom: 0;
-                    padding: 0;
-                };
-            }
-
         </style>
 
         <firebase-document id="generator_document" app-name="doctor-appointment-system" path="/generatorInfo/[[officeId]]"
@@ -87,21 +61,12 @@
             <div class="note green-container">
                 <h2>Důležité</h2>
                 <p>Vámi provedená změna se automaticky projeví až v době, kdy nebude mít vliv na žádného,
-                    již objednaného, pacienta.
-                    Pokud si přejete provést změny od konkrétního dne, tak zrušíme objednání
-                    všech pacientů,
-                    kterých se změna dotkne a pošleme jim upozornění, aby se objednali znovu.</p>
+                    již objednaného, pacienta. Pokud si přejete provést změny od konkrétního dne, tak zrušíme objednání
+                    všech pacientů, kterých se změna dotkne a pošleme jim upozornění, aby se objednali znovu.</p>
                 <div id="manual-change">
-                    <paper-checkbox id="manual-change-checkbox" checked="{{manualChange}}">Provést změny od konkrétního dne
-                    </paper-checkbox>
-                    <paper-input id="manual-change-input" disabled="[[!manualChange]]" auto-validate required="[[manualChange]]"
-                                 placeholder="den.měsíc.rok"
-                                 pattern="\d{1,2}.\d{1,2}.\d{4}"
-                                 prevent-invalid-input allowed-pattern="[\d.]">
-
-                        <!--po kliknuti na ikonu se asi zobrazi komponenta pick-up date-->
-                        <paper-icon-button icon="today" suffix></paper-icon-button>
-                    </paper-input>
+                    <paper-date-picker-item icon="icons:today"
+                                            placeholder="Vybrat konkrétní den"
+                                            locale="cs" date="{{fromDate}}"></paper-date-picker-item>
                 </div>
             </div>
 
@@ -109,16 +74,18 @@
                 <section>
 
                     <h2>Délka návštěvy<span id="visit-length-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="visit-length-tooltip" offset="0">Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
-                        hodin určíme objednávací časy.
+                    <paper-tooltip for="visit-length-tooltip" offset="0">Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a
+                        ordinačních hodin určíme objednávací časy.
                     </paper-tooltip>
                     <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
                                  value="{{copyOfGeneratorInfo.visitLength}}">
                         <div suffix>min</div>
                     </paper-input>
 
-                    <h2>Počet objednávacích dní<span id="num-of-days-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="num-of-days-tooltip" offset="0">Zadejte na jak daleko do budoucna se mohou pacienti objednat. <br><br>Pokud napíšete např. 7 dní, tak nebude možné objednat se na 8. den a dále od dnešního data.
+                    <h2>Počet objednávacích dní<span id="num-of-days-tooltip" class="tooltip"><iron-icon
+                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
+                    <paper-tooltip for="num-of-days-tooltip" offset="0">Zadejte na jak daleko do budoucna se mohou pacienti objednat. <br><br>Pokud
+                        napíšete např. 7 dní, tak nebude možné objednat se na 8. den a dále od dnešního data.
                     </paper-tooltip>
                     <paper-input type="number" label="Počet dní" min="7" max="360" required auto-validate
                                  value="{{copyOfGeneratorInfo.numberOfDays}}">
@@ -188,11 +155,14 @@
 
             saveChanges: function (updatedGeneratorInfo) {
                 var db = this.$.generator_document.app.database(),
-                    officeId = this.officeId;
+                    officeId = this.officeId,
+                    fromDate = this.fromDate;
 
                 db.ref('/generatorInfo/' + officeId).update(updatedGeneratorInfo).then(function () {
                     this.fire("show-toast", {text: "Změny uloženy"});
-                    this.regenerateExistingValues()
+                    if (fromDate !== null) {
+                        this.regenerateExistingValues(fromDate, officeId);
+                    }
                 }.bind(this), function () {
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
@@ -204,8 +174,47 @@
                 }.bind(this))
             },
 
-            regenerateExistingValues: function () {
-                // TODO: regenerate values
+            regenerateExistingValues: function (fromDate, officeId) {
+                var app = this.$.generator_document.app;
+                var postData = {
+                    officeId: officeId,
+                    generateSince: fromDate.valueOf()
+                };
+
+                app.auth().currentUser.getToken(true).then(function (idToken) {
+                    postData["idToken"] = idToken;
+                    this.sendRequest(postData);
+                }.bind(this)).catch(function () {
+                    this.showErrorDialog('Nepodařilo se získat autorizační token. Zkuste se odhlásit a přihlásit.');
+                }.bind(this));
+            },
+
+            sendRequest: function (postData) {
+                var request = new XMLHttpRequest(),
+                    jsonResponse;
+
+                request.onerror = function () {
+                    this.showErrorDialog('Při vygenerování termínů se vyskytla chyba.');
+                }.bind(this);
+
+                request.onreadystatechange = function () {
+                    if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
+                        jsonResponse = JSON.parse(request.responseText);
+                        if (jsonResponse["success"]) {
+                            this.fire("show-toast", {text: "Požadavek se zpracovává"});
+                        } else {
+                            this.showErrorDialog('Při vygenerování termínů se vyskytla chyba');
+                        }
+                    }
+                }.bind(this);
+
+                // TODO: enable pre-flight request redirection when CORS standard catches up
+//                request.open("POST", "http://localhost:8080/info/changed", true);
+                request.open("POST", "https://doctor-appointment-system.appspot.com/info/changed", true);
+
+                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                request.send(JSON.stringify(postData));
             },
 
             computeCopyOfGeneratorInfo: function (generatorInfo) {
@@ -214,6 +223,16 @@
 
             getDayName: function (dayIndex) {
                 return (this.days[dayIndex]);
+            },
+
+            showErrorDialog: function (message) {
+                this.fire("show-dialog", {
+                    path: "", viewName: "genericdialog", open: true,
+                    data: {
+                        text: message,
+                        buttonText: 'Zavřít'
+                    }
+                });
             }
         });
     </script>
