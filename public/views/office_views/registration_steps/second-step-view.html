@@ -156,6 +156,19 @@
                                                     placeholder="Vybrat datum"
                                                     default-time="00:00"
                                                     locale="cs" date="{{fromDateTime}}"></paper-datetime-picker-item>
+
+                        <h2>Manuální potvrzení při první návštěvě</h2>
+                        <p>Zaškrtněte, pokud chcete, aby pacient při
+                            prvním objednání nejprve musel zažádat o
+                            vaše potvrzení. Poté, co pacient zažádá o potvrzení, vám přijde zpráva, ve které uvidíte pacientovi osobní údaje
+                            (jméno, adresa, datum narození), na jejichž základě umožníte pacientovi objednání či naopak.
+                            <br>
+                            Při dalších návštěvách již potvrzeného pacienta nebude nutné vaše potvrzení.
+                        </p>
+
+                        <paper-checkbox checked="{{localOfficeData.manualConfirmation}}">
+                            Vyžaduji manuální potvrzení
+                        </paper-checkbox>
                     </section>
                 </div>
             </form>
