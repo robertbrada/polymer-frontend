@@ -21,6 +21,21 @@
                 display: block;
             }
 
+            .green {
+                background-color: var(--app-green-color);
+                color: #fff !important;
+            }
+
+            .blue {
+                background-color: var(--app-accent-color);
+                color: #fff !important;
+            }
+
+            .grey {
+                background-color: #fafafb;
+                border: 1px solid #e7e7e8;
+            }
+
             a {
                 text-decoration: none;
             }
@@ -64,6 +79,10 @@
                 max-height: 250px;
             }
 
+            #patient-image {
+                max-width: 150px;
+            }
+
             .img-section {
                 text-align: center;
             }
@@ -78,7 +97,7 @@
             }
 
             .grey-section {
-                border: 1px solid #e7e7e8;
+                /*border: 1px solid #e7e7e8;*/
                 background-color: #fafafb;
             }
 
@@ -134,6 +153,14 @@
             form {
                 max-width: 500px;
                 margin: 0 auto;
+            }
+
+            #first-square-section {
+                margin-bottom: 0;
+            }
+
+            #last-presentation-section {
+                margin-top: 0;
             }
 
             @media (max-width: 1200px) {
@@ -192,31 +219,45 @@
         </section>
 
         <section class="main-frame grid">
-            <section class="colored-section">
+
+            <section class="img-section">
+                <img src="../images/computer.png">
+            </section>
+            <section class="green">
+                <h1>Zdarma prezentujte svoji ordinaci </h1>
+                <p>Docta nabízí lékařům prezentovat veškeré informace o jejich ordinacích na internetu zcela zdarma
+                    napořád.
+                    Navíc máte možnost zdarma využít elektronický kalendář, kam si můžete zapisovat objednané pacienty.
+                </p>
+            </section>
+        </section>
+
+        <section class="main-frame grid">
+            <section>
                 <h1>Přenechte objednání pacientům</h1>
                 <p>Šetřete svůj čas a přenechte objednání pacientům. V nastavení ordinace si budete moci určit ordinační
                     hodiny a časové rozestupy mezi jednotlivými
-                    návštěvami, na základě toho vám vytvoříme kalendář s objednávacími časy. </p>
+                    návštěvami, na základě toho vám vytvoříme kalendář s objednávacími časy.
+                </p>
+            </section>
+            <section class="img-section">
+                <img id="patient-image" src="../images/patient.png">
+            </section>
+        </section>
+
+        <section class="main-frame grid" id="first-square-section">
+            <section class="colored-section">
+                <h1>Jen pacienti, které chcete</h1>
+                <p>Nemusíte mít strach, že se k vám bude objednávat kde kdo. Máte možnost si vybrat, jací pacienti se u
+                    vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci. Také
+                    můžete upozornit pacienty na to, zda přijímáte nové pacienty či
+                    nikoli.</p>
             </section>
             <section class="grey-section">
                 <h1>Mějte přehled</h1>
                 <p>K dispozici máte elektronický kalendář, kde vidíte všechny objednané pacienty. Samozřejmě máte
                     možnost
                     objednat i pacienty, kteří se vám ozvou po telefonu. </p>
-            </section>
-        </section>
-
-        <section class="main-frame grid">
-            <section>
-                <h1>Jen pacienti, které chcete</h1>
-                <p>Nemusíte mít strach, že se k vám bude objednávat kde kdo. Máte možnost si vybrat, jací pacienti se u
-                    vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci. Také
-                    můžete upozornit pacienty na to, zda přijímáte nové pacienty či
-                    nikoli.
-                </p>
-            </section>
-            <section class="img-section">
-                <img src="../images/patient.png">
             </section>
         </section>
 
@@ -234,6 +275,17 @@
             </section>
         </section>
 
+        <section class="main-frame grid square-section">
+            <section>
+                <h1>Platíte jen za to, co využijete</h1>
+                <p>U nás neplatíte žádné paušály, zaplatíte pouze za dny, kdy využijete našich prémiových služeb.
+                    Pokud budete na dovolené a nebudete v ordinaci, nic vám účtovat nebudeme.
+                </p>
+            </section>
+            <section class="img-section">
+                <img src="../images/logo.png">
+            </section>
+        </section>
 
         <div id="office-registration">
             <h1>Jak zaregistruji svoji ordinaci?</h1>
