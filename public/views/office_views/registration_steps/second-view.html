@@ -2,9 +2,8 @@
 
 <link rel="import" href="/bower_components/google-map/google-map.html">
 <link rel="import" href="/bower_components/google-map/google-map-marker.html">
-<link rel="import" href="/bower_components/geo-location/geo-location.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/google-apis/google-maps-api.html">
 
 <link rel="import" href="/styles/layout-styles.html">
 
@@ -27,8 +26,7 @@
 
         </style>
 
-        <geo-location latitude="{{fullInfo.coordinates.latitude}}"
-                      longitude="{{fullInfo.coordinates.longitude}}"></geo-location>
+        <google-maps-api id="map_api" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-maps-api>
 
         <div class="wide-container">
             <h3>Vyberte polohu ordinace na mapě</h3>
@@ -39,29 +37,88 @@
 
         <div class="subsection grid">
             <section>
-                <span>Zeměpisná šířka: [[fullInfo.coordinates.latitude]]</span>
+                <span>Zeměpisná šířka: [[coordinates.latitude]]</span>
             </section>
             <section>
-                <span>Zeměpisná délka: [[fullInfo.coordinates.longitude]]</span>
+                <span>Zeměpisná délka: [[coordinates.longitude]]</span>
             </section>
         </div>
 
         <div class="wide-container">
             <!--TODO: restrict API key for our domain -->
-            <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="15"
-                        latitude="[[fullInfo.coordinates.latitude]]"
-                        longitude="[[fullInfo.coordinates.longitude]]">
-                <google-map-marker latitude="{{fullInfo.coordinates.latitude}}"
-                                   longitude="{{fullInfo.coordinates.longitude}}" draggable="true">
+            <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="[[zoom]]"
+                        latitude="[[coordinates.latitude]]"
+                        longitude="[[coordinates.longitude]]">
+                <google-map-marker latitude="{{coordinates.latitude}}"
+                                   longitude="{{coordinates.longitude}}" draggable="true">
                 </google-map-marker>
             </google-map>
         </div>
+
+        <button on-tap="setCoordinates">fuu</button>
 
     </template>
 
     <script>
         Polymer({
-            is: 'second-view'
+            is: 'second-view',
+
+            properties: {
+                zoom: {
+                    type: Number,
+                    value: 15
+                }
+            },
+
+            listeners: {
+                'api-load': '_handleApiLoad'
+            },
+
+            _handleApiLoad: function () {
+                var address = this.address;
+                if (address.city !== null && address.street !== null) {
+                    this.setCoordinatesByAddress(address);
+                } else {
+                    this.setToUserlocation()
+                }
+            },
+
+            setCoordinatesByAddress: function (addressObject) {
+                var address = addressObject.city + " " + addressObject.street,
+                    api = this.$.map_api.api,
+                    geocoder = new api.Geocoder();
+
+
+                if (geocoder) {
+                    geocoder.geocode({'address': address}, function (result, status) {
+                        if (status == api.GeocoderStatus.OK && status != api.GeocoderStatus.ZERO_RESULTS) {
+                            var location = result[0].geometry.location;
+                            this.set('coordinates.latitude', location.lat());
+                            this.set('coordinates.longitude', location.lng());
+                            this.fire('register-office');
+                        } else {
+                            this.setToUserlocation();
+                        }
+                    }.bind(this));
+                } else {
+                    this.setToUserlocation();
+                }
+            },
+
+            setToUserlocation: function () {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        this.zoom = 11;
+                        this.set('coordinates.latitude', position.coords.latitude);
+                        this.set('coordinates.longitude', position.coords.longitude);
+                    }.bind(this));
+                } else {
+                    // Setting the coordinates to some reasonable value so that it doesn't end up in the ocean
+                    this.zoom = 8;
+                    this.set('coordinates.latitude', 49.8);
+                    this.set('coordinates.longitude', 15.2);
+                }
+            }
         });
     </script>
 </dom-module>

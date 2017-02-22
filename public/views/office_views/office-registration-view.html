@@ -106,8 +106,10 @@
                 attr-for-selected="name"
                 selected-attribute="visible"
                 role="main">
-            <first-view name="first" office-data="{{officeData}}"></first-view>
-            <second-view name="second" full-info="{{officeData.fullInfo}}"></second-view>
+            <first-view name="first" full-info="{{officeData.fullInfo}}"></first-view>
+            <second-view name="second"
+                         coordinates="{{officeData.fullInfo.coordinates}}"
+                         address="[[officeData.fullInfo.address]]"></second-view>
             <third-view name="third" office-data="{{officeData}}"></third-view>
             <fourth-view name="fourth" office-data="{{officeData}}"></fourth-view>
         </iron-pages>

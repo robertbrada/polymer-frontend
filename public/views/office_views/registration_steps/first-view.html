@@ -6,8 +6,6 @@
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/google-apis/google-maps-api.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="/styles/input-styles.html">
@@ -20,8 +18,6 @@
         <style include="layout-styles input-styles">
         </style>
 
-        <google-maps-api id="map_api" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-maps-api>
-
         <div class="main-frame">
             <form is="iron-form">
                 <div class="subsection grid">
@@ -30,23 +26,23 @@
                         <h2>Vaše jméno</h2>
                         <paper-input label="Jméno" minlength="1" maxlength="20" auto-validate
                                      error-message="Nelze ponechat prázdné" required
-                                     value="{{officeData.fullInfo.name.firstName}}"></paper-input>
+                                     value="{{fullInfo.name.firstName}}"></paper-input>
                         <paper-input label="Příjmení" minlength="1" auto-validate
                                      maxlength="80" error-message="Nelze ponechat prázdné"
-                                     required value="{{officeData.fullInfo.name.lastName}}"></paper-input>
+                                     required value="{{fullInfo.name.lastName}}"></paper-input>
                         <h2>Adresa ordinace</h2>
-                        <paper-input id="cinput" label="Město" value="{{officeData.fullInfo.address.city}}"
+                        <paper-input id="cinput" label="Město" value="{{fullInfo.address.city}}"
                                      minlength="1" maxlength="20" required auto-validate>
                         </paper-input>
                         <paper-input id="sinput" label="Ulice a číslo popisné"
-                                     value="{{officeData.fullInfo.address.street}}"
+                                     value="{{fullInfo.address.street}}"
                                      minlength="1" maxlength="80" required auto-validate></paper-input>
                     </section>
                     <section>
                         <h2>Vaše specializace v této ordinaci</h2>
                         <paper-dropdown-menu label="Specializace">
                             <paper-listbox class="dropdown-content"
-                                           selected="{{officeData.fullInfo.specialization}}">
+                                           selected="{{fullInfo.specialization}}">
                                 <template is="dom-repeat" items="[[specializations]]" as="entry">
                                     <paper-item>[[entry]]</paper-item>
                                 </template>
@@ -58,9 +54,9 @@
                             dobrovolné a nemusíte je tak vyplňovat. </p>
                         <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
                                           phone-number-pattern="XXX-XXX-XXX" auto-validate
-                                          value="{{officeData.fullInfo.phoneNumber}}">
+                                          value="{{fullInfo.phoneNumber}}">
                         </gold-phone-input>
-                        <gold-email-input id="email_id" label="Email" value="{{officeData.fullInfo.email}}"
+                        <gold-email-input id="email_id" label="Email" value="{{fullInfo.email}}"
                                           auto-validate></gold-email-input>
 
                     </section>
@@ -150,26 +146,6 @@
                         'Urologie',
                         'Jiné'
                     ]
-                }
-            },
-
-            setCoordinates: function (addressObject) {
-                var address = addressObject.city + " " + addressObject.street;
-                var api = this.$.map_api.api;
-                var geocoder = new api.Geocoder();
-                if (geocoder) {
-                    geocoder.geocode({'address': address}, function (result, status) {
-                        if (status == api.GeocoderStatus.OK && status != api.GeocoderStatus.ZERO_RESULTS) {
-                            var location = result[0].geometry.location;
-                            this.set('officeData.fullInfo.coordinates.latitude', location.lat());
-                            this.set('officeData.fullInfo.coordinates.longitude', location.lng());
-                            this.fire('register-office');
-                        } else {
-                            this.fire('change-route', {url: '/office/registration/coordinates'});
-                        }
-                    }.bind(this));
-                } else {
-                    this.fire('change-route', {url: '/office/registration/coordinates'});
                 }
             }
         });
