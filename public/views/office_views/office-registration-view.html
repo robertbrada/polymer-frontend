@@ -103,6 +103,7 @@
         </iron-selector>
 
         <iron-pages
+                id="registration_pages"
                 selected="[[page]]"
                 attr-for-selected="name"
                 selected-attribute="visible"
@@ -187,15 +188,18 @@
             nextStep: function () {
                 var page = this.page;
 
-                if (page === "first") {
-                    this.page = "second";
-                } else if (page === "second") {
-                    this.page = "third";
-                } else if (page === "third") {
-                    this.page = "fourth";
-                } else if (page === "fourth") {
-                    console.log("TODO: validate and register");
+                if (this.$.registration_pages.selectedItem.computeDataAndValidate()) {
+
+                    if (page === "first") {
+                        this.page = "second";
+                    } else if (page === "second") {
+                        this.page = "third";
+                    } else if (page === "third") {
+                        this.page = "fourth";
+                    } else if (page === "fourth") {
+                        console.log("TODO: register");
 //                    this.registerOffice();
+                    }
                 }
             },
 

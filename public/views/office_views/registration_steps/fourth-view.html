@@ -142,6 +142,11 @@
                 }
             },
 
+            computeDataAndValidate: function () {
+                console.log("TODO: computeDataAndValidate");
+                return true;
+            },
+
             deleteService: function (event) {
                 var service = event.model.service;
                 this.splice('servicesArray', service.index, 1);
@@ -153,7 +158,6 @@
                     name: "",
                     price: ""
                 });
-                console.log(this.servicesArray);
             }
         });
     </script>
