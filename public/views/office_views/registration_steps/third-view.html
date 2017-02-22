@@ -9,18 +9,17 @@
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 
 <dom-module id="third-view">
     <template>
-        <style include="layout-styles input-styles">
+        <style include="button-styles layout-styles input-styles">
 
             paper-checkbox#online-booking-checkbox {
-                align-self: center;
                 border: 1px solid var(--app-accent-color);
                 padding: 0.6em 1.6em;
-                font-size: 1.1em;
                 font-weight: bolder;
                 background-color: var(--app-accent-color);
                 letter-spacing: 0.03em;
@@ -30,8 +29,15 @@
                 --paper-checkbox-margin: 8px 10px 8px 0;
             }
 
+            paper-checkbox#onlineSection {
+                font-weight: bolder;
+                --paper-checkbox-unchecked-color: var(--app-green-color);
+                --paper-checkbox-label-color:  var(--app-green-color);
+                --paper-checkbox-size: 18px;
+            }
+
             #online-booking-container {
-                text-align: center;
+                text-align: left;
                 margin-bottom: 2em;
             }
 
@@ -60,6 +66,23 @@
                 }
             }
 
+            #next-step {
+                float: right;
+            }
+
+            h1 {
+                font-size: 1.3em;
+                color: var(--app-green-color);
+
+            }
+
+            #online-header{
+                margin-top: 2.5em;
+                padding-top: 1em;
+                border-top: 1px solid #d5d5d6;
+                margin-bottom: 3.5em;
+            }
+
             @media only screen and (max-width: 767px) {
 
                 .flex-horizontal {
@@ -75,6 +98,10 @@
                     margin-left: 0;
                 }
 
+                paper-button#next-step[responsive] {
+                    position: absolute;
+                }
+
             }
 
         </style>
@@ -85,7 +112,7 @@
                     <section>
                         <h2>Ordinační hodiny</h2>
                         <p>Zadejte své ordinační hodiny. Pokud máte hodiny nějak rozdělené, tak můžete úvést
-                            popis.</p>
+                            popis. Tyto informace budou k vidění na vašem profilu.</p>
                         <template is="dom-repeat" items="[[officeData.generatorInfo.officeHours]]" as="entry">
                             <div id="not-online-container" class="flex-horizontal">
                                 <paper-checkbox class="" checked="{{entry.available}}">[[getDayName(index)]]
@@ -98,15 +125,29 @@
                                 </template>
                             </div>
                         </template>
-                        <div id="online-booking-container">
-                            <paper-checkbox id="online-booking-checkbox" checked="{{onlineBooking}}">
-                                Chci využít online objednání
-                            </paper-checkbox>
-                        </div>
                     </section>
                 </div>
 
-                <div class="subsection grid" hidden="[[!onlineBooking]]">
+                <div id="online-header">
+                    <h1>Elektronický kalendář a online objednání</h1>
+
+                    <span>Elektronický kalendář je zcela <b>zdarma</b> a je tak zcela na vás, zda ho využijete.
+                        Můžete si do něj zapisovat objednané pacienty a ušetřit tak papíry.</span>
+                    <br>
+                    <br>
+                    <span>Výběrem možnosti <b>online objednání</b> zveřejníte objednávací kalendář na vašem profilu a pacienti se k vám budou moci objednat sami a online.
+                    Služba je zpoplatněna cenou <b>20Kč za objednávací den</b>.
+                    <b style="color: #26A69A">První měsíc máte online objednání zdarma</b>.</span>
+                    <br>
+                    <br>
+                    <span>Pokud o některou ze služeb máte zájem, tak prosím zaškrtněte tlačítko níže.
+                        V opačném případě jej můžete ignorovat a pokračovat na další krok.</span>
+                    <br>
+
+                    <paper-checkbox id="onlineSection" checked="{{onlineSection}}">Chci využít službu elektronického kalendáře nebo online objednání.
+                    </paper-checkbox>
+                </div>
+                <div class="subsection grid" hidden="[[!onlineSection]]">
                     <section>
                         <h2>Online objednávací hodiny</h2>
                         <p>Vyplňte v zadaném formátu hodiny, na které je možné objednat se online.</p>
@@ -126,7 +167,7 @@
                     <section>
                         <h2>Délka návštěvy</h2>
                         <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
-                            hodin určíme objednávací časy.</p>
+                            hodin určíme objednávací časy v kalendáři</p>
                         <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
                                      value="{{copyOfGeneratorInfo.visitLength}}">
                             <div suffix>min</div>
@@ -141,25 +182,35 @@
                             <div suffix>dní</div>
                         </paper-input>
 
-                        <h2>První objednávací den</h2>
-                        <p>Vyberte datum, od kdy chcete využívat online objednávání.</p>
-                        <paper-datetime-picker-item required icon="icons:today"
-                                                    placeholder="Vybrat datum"
-                                                    default-time="00:00"
-                                                    locale="cs" date="{{fromDateTime}}"></paper-datetime-picker-item>
+                        <div id="online-booking-container">
+                            <paper-checkbox id="online-booking-checkbox" checked="{{onlineBooking}}">
+                                Chci využít online objednání
+                            </paper-checkbox>
+                        </div>
+                        <div hidden="[[!onlineBooking]]">
+                            <h2>První objednávací den</h2>
+                            <p>Vyberte datum, od kdy chcete využívat online objednávání.</p>
+                            <paper-datetime-picker-item required icon="icons:today"
+                                                        placeholder="Vybrat datum"
+                                                        default-time="00:00"
+                                                        locale="cs"
+                                                        date="{{fromDateTime}}"></paper-datetime-picker-item>
 
-                        <h2>Manuální potvrzení při první návštěvě</h2>
-                        <p>Zaškrtněte, pokud chcete, aby pacient při
-                            prvním objednání nejprve musel zažádat o
-                            vaše potvrzení. Poté, co pacient zažádá o potvrzení, vám přijde zpráva, ve které uvidíte pacientovi osobní údaje
-                            (jméno, adresa, datum narození), na jejichž základě umožníte pacientovi objednání či naopak.
-                            <br>
-                            Při dalších návštěvách již potvrzeného pacienta nebude nutné vaše potvrzení.
-                        </p>
+                            <h2>Manuální potvrzení při první návštěvě</h2>
+                            <p>Zaškrtněte, pokud chcete, aby pacient při
+                                prvním objednání nejprve musel zažádat o
+                                vaše potvrzení. Poté, co pacient zažádá o potvrzení, vám přijde zpráva, ve které uvidíte
+                                pacientovi osobní údaje
+                                (jméno, adresa, datum narození), na jejichž základě umožníte pacientovi objednání či
+                                naopak.
+                                <br>
+                                Při dalších návštěvách již potvrzeného pacienta nebude nutné vaše potvrzení.
+                            </p>
 
-                        <paper-checkbox checked="{{localOfficeData.manualConfirmation}}">
-                            Vyžaduji manuální potvrzení
-                        </paper-checkbox>
+                            <paper-checkbox checked="{{localOfficeData.manualConfirmation}}">
+                                Vyžaduji manuální potvrzení
+                            </paper-checkbox>
+                        </div>
                     </section>
                 </div>
             </form>
