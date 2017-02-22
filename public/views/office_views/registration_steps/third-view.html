@@ -65,21 +65,16 @@
                 }
             }
 
-            #next-step {
-                float: right;
-            }
-
-            h1 {
-                font-size: 1.3em;
-                color: var(--app-green-color);
-
-            }
-
             #online-header{
                 margin-top: 2.5em;
                 padding-top: 1em;
                 border-top: 1px solid #d5d5d6;
                 margin-bottom: 3.5em;
+            }
+
+            #online-header  h1{
+                font-size: 1.3em;
+                color: var(--app-green-color);
             }
 
             @media only screen and (max-width: 767px) {
@@ -96,11 +91,6 @@
                 #not-online-container paper-input {
                     margin-left: 0;
                 }
-
-                paper-button#next-step[responsive] {
-                    position: absolute;
-                }
-
             }
 
         </style>
@@ -148,8 +138,8 @@
                 </div>
                 <div class="subsection grid" hidden="[[!onlineSection]]">
                     <section>
-                        <h2>Online objednávací hodiny</h2>
-                        <p>Vyplňte v zadaném formátu hodiny, na které je možné objednat se online.</p>
+                        <h2>Objednávací hodiny</h2>
+                        <p>Vyplňte v zadaném formátu hodiny, na které je možné objednat.</p>
                         <template is="dom-repeat" items="[[officeData.generatorInfo.officeHours]]" as="entry">
                             <div>
                                 <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]
