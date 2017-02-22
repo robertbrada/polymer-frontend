@@ -21,6 +21,10 @@
                 margin-top: 4em;
             }
 
+            #services p{
+                margin-bottom: 2em;
+            }
+
             .service-name {
                 margin-right: 3%;
             }
@@ -38,7 +42,12 @@
             }
 
             #services-container {
-                margin: 2em auto;
+                margin: 1.5em auto;
+            }
+
+            #service-index {
+                font-size: 1.2em;
+                margin: auto 1em 0.8em 0;
             }
 
             #price {
@@ -86,21 +95,20 @@
                     <p>Vyplňte vámi poskytované služby a jejich ceny. Jako cenu můžete uvést cokoli uznáte za vhodné
                         (Kč, Kč/min, zdarma).
                         Služby ani ceny nemusíte vyplňovat. </p>
-                    <div id="services-container" class="flex-horizontal">
-                        <paper-input class="flexchild service-name" label="Vaše služba"></paper-input>
-                        <paper-input id="price" label="Cena"></paper-input>
-                        <paper-icon-button id="delete-service" icon="icons:close" on-tap="deleteService"></paper-icon-button>
-                    </div>
 
-                    <div id="services-container" class="flex-horizontal">
-                        <paper-input class="flexchild service-name" label="Vaše služba"></paper-input>
-                        <paper-input id="price" label="Cena"></paper-input>
-                        <paper-icon-button id="delete-service" icon="icons:close" on-tap="deleteService"></paper-icon-button>
-                    </div>
+                    <template is="dom-repeat" items="[[servicesArray]]" as="service">
+                        <div id="services-container" class="flex-horizontal">
+                            <div id="service-index">[[getServiceIndex(index)]].</div>
+                            <paper-input class="flexchild service-name" label="Vaše služba"></paper-input>
+                            <paper-input id="price" label="Cena"></paper-input>
+                            <paper-icon-button id="delete-service" icon="icons:close" on-tap="deleteService"></paper-icon-button>
+                        </div>
+                    </template>
 
                     <!--TODO Dynamically add/delete services or find different way how to do it-->
-                    <button id="add-service" on-tap="addService">Přidat další službu
-                    </button>
+                    <paper-button id="add-service" on-click="addService">Přidat službu
+                    </paper-button>
+
                 </section>
             </form>
         </div>
@@ -124,8 +132,28 @@
                         '209 Zaměstnanecká pojišťovna Škoda',
                         '211 Zdravotní pojišťovna ministerstva vnitra ČR',
                         '213 Revírní bratrská pokladna, zdrav. pojišťovna']
+                },
+
+                servicesArray: {
+                    type: Array,
+                    value: []
                 }
+            },
+
+            deleteService: function (index) {
+                //removes specific service
+                this.servicesArray.splice(index, 1);
+            },
+
+            addService: function () {
+                //adds new item at the end of array
+                this.servicesArray.push('');
+            },
+
+            getServiceIndex:function (index) {
+                return index + 1;
             }
+
         });
     </script>
 </dom-module>
