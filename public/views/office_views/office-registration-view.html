@@ -9,11 +9,12 @@
 <link rel="import" href="/behaviors/routing-behavior.html">
 
 <link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/button-styles.html">
 
 
 <dom-module id="office-registration-view">
 
-    <style include="layout-styles">
+    <style include="button-styles layout-styles">
 
         header {
             padding: 0 24px;
@@ -60,6 +61,22 @@
             @apply(--layout-flex);
         }
 
+        .button-container {
+            margin: 0 auto;
+            max-width: 900px;
+        }
+
+        .button-container > paper-button {
+            float: right;
+        }
+
+        @media only screen and (max-width: 767px) {
+
+            .button-container > paper-button[responsive] {
+                position: absolute;
+            }
+        }
+
     </style>
     <template>
         <app-route
@@ -95,6 +112,9 @@
             <fourth-view name="fourth" office-data="{{officeData}}"></fourth-view>
         </iron-pages>
 
+        <div class="button-container">
+            <paper-button raised responsive on-tap="nextStep">[[computeButtonText(page)]]</paper-button>
+        </div>
 
     </template>
 
@@ -161,8 +181,27 @@
                 }
             },
 
-            listeners: {
-                'register-office': '_registerOffice'
+            nextStep: function () {
+                var page = this.page;
+
+                if (page === "first") {
+                    this.page = "second";
+                } else if (page === "second") {
+                    this.page = "third";
+                } else if (page === "third") {
+                    this.page = "fourth";
+                } else if (page === "fourth") {
+                    console.log("TODO: validate and register");
+//                    this.registerOffice();
+                }
+            },
+
+            computeButtonText: function (page) {
+                if (page === "fourth") {
+                    return "Zaregistrovat"
+                } else {
+                    return "Další krok"
+                }
             },
 
             userChange: function (data) {
@@ -175,12 +214,9 @@
                 }
             },
 
-            _registerOffice: function (event) {
+            registerOffice: function () {
                 var normalizedString = this.normalizeText(this.officeData.fullInfo.name.lastName) + "_" + this.normalizeText(this.officeData.fullInfo.address.city);
-
                 this.generateOfficeId(this.officeData, normalizedString, 0);
-
-                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             },
 
             generateOfficeId: function (data, normalizedString, increment) {

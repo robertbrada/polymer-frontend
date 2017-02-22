@@ -9,13 +9,12 @@
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
-<link rel="import" href="/styles/button-styles.html">
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 
 <dom-module id="fourth-view">
     <template>
-        <style include="button-styles layout-styles input-styles">
+        <style include="layout-styles input-styles">
 
 
             #services {
@@ -52,24 +51,6 @@
 
             .flexchild {
                 @apply(--layout-flex);
-            }
-
-            @media only screen and (min-width: 767px) {
-
-                #confirm-button {
-                    display: block;
-                    padding: 1.5em;
-                    margin: 3em 0 auto auto;
-                    text-align: center;
-                    max-width: 20em;
-                }
-            }
-
-            @media only screen and (max-width: 767px) {
-
-                #confirm-button {
-                    float: none;
-                }
             }
 
         </style>
@@ -122,11 +103,6 @@
                     </button>
                 </section>
             </form>
-
-            <paper-button responsive id="confirm-button" on-tap="confirm" raised>
-                Dokončit registraci
-            </paper-button>
-
         </div>
 
     </template>
