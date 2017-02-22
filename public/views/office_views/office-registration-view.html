@@ -18,7 +18,7 @@
         header {
             padding: 0 24px;
             max-width: 900px;
-            margin:  auto;
+            margin: auto;
             border-bottom: none;
         }
 
@@ -48,7 +48,7 @@
             background-color: #bababc;
         }
 
-        .iron-selected.step-button  {
+        .iron-selected.step-button {
             background-color: var(--app-green-color);
         }
 
@@ -78,9 +78,10 @@
         </header>
 
         <iron-selector attr-for-selected="name" selected="{{page}}" class="flex-horizontal">
-            <span name="first-step" class="step-button flexchild">1. Základní informace</span>
-            <span name="second-step" class="step-button flexchild">2. Ordinační hodiny</span>
-            <span name="third-step" class="step-button flexchild">3. Informace pro pacienty</span>
+            <span name="first" class="step-button flexchild">1. Základní informace</span>
+            <span name="second" class="step-button flexchild">2. Poloha na mapě</span>
+            <span name="third" class="step-button flexchild">3. Ordinační hodiny</span>
+            <span name="fourth" class="step-button flexchild">4. Informace pro pacienty</span>
         </iron-selector>
 
         <iron-pages
@@ -88,10 +89,10 @@
                 attr-for-selected="name"
                 selected-attribute="visible"
                 role="main">
-            <first-step-view name="first-step" office-data="{{officeData}}"></first-step-view>
-            <second-step-view name="second-step" office-data="{{officeData}}"></second-step-view>
-            <third-step-view name="third-step" office-data="{{officeData}}"></third-step-view>
-            <coordinates-view name="coordinates" full-info="{{officeData.fullInfo}}"></coordinates-view>
+            <first-view name="first" office-data="{{officeData}}"></first-view>
+            <second-view name="second" full-info="{{officeData.fullInfo}}"></second-view>
+            <third-view name="third" office-data="{{officeData}}"></third-view>
+            <fourth-view name="fourth" office-data="{{officeData}}"></fourth-view>
         </iron-pages>
 
 
