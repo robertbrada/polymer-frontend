@@ -1,0 +1,185 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-date-picker-item/paper-datetime-picker-item.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/button-styles.html">
+
+<link rel="import" href="/behaviors/form-validation-behavior.html">
+
+<dom-module id="second-step-view">
+    <template>
+        <style include="button-styles layout-styles input-styles">
+
+            paper-checkbox#online-booking-checkbox {
+                align-self: center;
+                border: 1px solid var(--app-accent-color);
+                padding: 0.6em 1.6em;
+                font-size: 1.1em;
+                font-weight: bolder;
+                background-color: var(--app-accent-color);
+                letter-spacing: 0.03em;
+                --paper-checkbox-unchecked-color: white;
+                --paper-checkbox-label-color: white;
+                --paper-checkbox-size: 22px;
+                --paper-checkbox-margin: 8px 10px 8px 0;
+            }
+
+            #online-booking-container {
+                text-align: center;
+                margin-bottom: 2em;
+            }
+
+            #not-online-container paper-checkbox {
+                width: 6em;
+                margin-top: 2em;
+            }
+
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+            }
+
+            #not-online-container paper-input {
+                width: 100%;
+                margin-left: 2em;
+                --paper-input-container: {
+                    width: 100%;
+                };
+
+                --paper-input-container-input: {
+                    width: 100%;
+                }
+            }
+
+            #next-step {
+                float: right;
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                .flex-horizontal {
+                    @apply(--layout-vertical);
+                }
+
+                #online-booking-container {
+                    text-align: center;
+                    margin-top: 2em;
+                }
+
+                #not-online-container paper-input {
+                    margin-left: 0;
+                }
+
+                paper-button#next-step[responsive] {
+                    position: absolute;
+                }
+
+            }
+
+        </style>
+
+        <div class="main-frame">
+            <form is="iron-form">
+                <div class="subsection grid">
+                    <section>
+                        <h2>Ordinační hodiny</h2>
+                        <p>Zadejte své ordinační hodiny. Pokud máte hodiny nějak rozdělené, tak můžete úvést
+                            popis.</p>
+                        <template is="dom-repeat" items="[[officeData.generatorInfo.officeHours]]" as="entry">
+                            <div id="not-online-container" class="flex-horizontal">
+                                <paper-checkbox class="" checked="{{entry.available}}">[[getDayName(index)]]
+                                </paper-checkbox>
+
+                                <template is="dom-if" if="[[entry.available]]" restamp="true">
+                                    <paper-input class=flexchild" value="{{entry.hours}}" auto-validate required
+                                                 placeholder="7:00-8:00 objednaní, 10:00-12:00 náběr krve,..."
+                                    ></paper-input>
+                                </template>
+                            </div>
+                        </template>
+                        <div id="online-booking-container">
+                            <paper-checkbox id="online-booking-checkbox" checked="{{onlineBooking}}">
+                                Chci využít online objednání
+                            </paper-checkbox>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="subsection grid" hidden="[[!onlineBooking]]">
+                    <section>
+                        <h2>Online objednávací hodiny</h2>
+                        <p>Vyplňte v zadaném formátu hodiny, na které je možné objednat se online.</p>
+                        <template is="dom-repeat" items="[[officeData.generatorInfo.officeHours]]" as="entry">
+                            <div>
+                                <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]
+                                </paper-checkbox>
+                            </div>
+                            <template is="dom-if" if="[[entry.available]]" restamp="true">
+                                <paper-input value="{{entry.hours}}" auto-validate required
+                                             placeholder="07:30-12:30,13:30-15:30"
+                                             pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](,([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])*"
+                                             prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
+                            </template>
+                        </template>
+                    </section>
+                    <section>
+                        <h2>Délka návštěvy</h2>
+                        <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
+                            hodin určíme objednávací časy.</p>
+                        <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
+                                     value="{{copyOfGeneratorInfo.visitLength}}">
+                            <div suffix>min</div>
+                        </paper-input>
+
+                        <h2>Počet objednávacích dní</h2>
+                        <p>Zadejte na jak daleko do budoucna se mohou pacienti objednat.<br>Pokud napíšete např. 7 dní,
+                            tak nebude možné objednat se na 8. den a dále od dnešního data.
+                        </p>
+                        <paper-input type="number" label="Počet dní" min="7" max="360" required auto-validate
+                                     value="{{copyOfGeneratorInfo.numberOfDays}}">
+                            <div suffix>dní</div>
+                        </paper-input>
+
+                        <h2>První objednávací den</h2>
+                        <p>Vyberte datum, od kdy chcete využívat online objednávání.</p>
+                        <paper-datetime-picker-item required icon="icons:today"
+                                                    placeholder="Vybrat datum"
+                                                    default-time="00:00"
+                                                    locale="cs" date="{{fromDateTime}}"></paper-datetime-picker-item>
+                    </section>
+                </div>
+            </form>
+
+            <paper-button id="next-step" raised responsive>Další krok</paper-button>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'second-step-view',
+
+            behaviors: [FormValidationBehavior],
+
+            properties: {
+                days: {
+                    type: Array,
+                    value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
+                }
+            },
+
+            getDayName: function (dayIndex) {
+                return (this.days[dayIndex]);
+            }
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,155 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
+<link rel="import" href="/styles/button-styles.html">
+
+<link rel="import" href="/behaviors/form-validation-behavior.html">
+
+<dom-module id="third-step-view">
+    <template>
+        <style include="button-styles layout-styles input-styles">
+
+
+            #services {
+                margin-top: 4em;
+            }
+
+            .service-name {
+                margin-right: 3%;
+            }
+
+            #add-service {
+                background-color: var(--app-accent-color);
+                font-size: 0.9em;
+                color: #fff;
+                padding: 0.8em 1em;
+            }
+
+            #delete-service {
+                color: var(--app-red-color);
+                margin: auto 0 auto 0.5em;
+            }
+
+            #services-container {
+                margin: 2em auto;
+            }
+
+            #price {
+                width: 9em;
+            }
+
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+            }
+
+            @media only screen and (min-width: 767px) {
+
+                #confirm-button {
+                    display: block;
+                    padding: 1.5em;
+                    margin: 3em 0 auto auto;
+                    text-align: center;
+                    max-width: 20em;
+                }
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                #confirm-button {
+                    float: none;
+                }
+            }
+
+        </style>
+
+        <div class="main-frame">
+            <form is="iron-form">
+                <div class="subsection grid">
+                    <section>
+                        <h2>Pojišťovny</h2>
+                        <p>Vyberte pojišťovny, se kterými máte smlouvu.</p>
+                        <template is="dom-repeat" items="[[insurance]]" as="entry">
+                            <paper-checkbox checked="{{entry.available}}">[[entry]]
+                            </paper-checkbox>
+                        </template>
+                    </section>
+                    <section>
+                        <h2>Přijímání nových pacientů</h2>
+                        <p>Zaškrtněte, pokud přijímáte nové pacienty.</p>
+                        <paper-checkbox checked="{{officeData.fullInfo.acceptingNewPatients}}">
+                            Přijímám nové pacienty
+                        </paper-checkbox>
+
+                        <h2>Text pro pacienty</h2>
+                        <p>Tento text se zobrazí na profilu ordinace.
+                            Můžete zde zadat libovolnou zprávu pacientům. Zpráva není povinná.</p>
+                        <paper-textarea label="Zpráva pro pacienty" value="{{officeData.fullInfo.patientText}}"
+                                        char-counter maxlength="800"></paper-textarea>
+                    </section>
+                </div>
+
+                <section id="services">
+                    <h2>Služby</h2>
+                    <p>Vyplňte vámi poskytované služby a jejich ceny. Jako cenu můžete uvést cokoli uznáte za vhodné
+                        (Kč, Kč/min, zdarma).
+                        Služby ani ceny nemusíte vyplňovat. </p>
+                    <div id="services-container" class="flex-horizontal">
+                        <paper-input class="flexchild service-name" label="Vaše služba"></paper-input>
+                        <paper-input id="price" label="Cena"></paper-input>
+                        <paper-icon-button id="delete-service" icon="icons:close" on-tap="deleteService"></paper-icon-button>
+                    </div>
+
+                    <div id="services-container" class="flex-horizontal">
+                        <paper-input class="flexchild service-name" label="Vaše služba"></paper-input>
+                        <paper-input id="price" label="Cena"></paper-input>
+                        <paper-icon-button id="delete-service" icon="icons:close" on-tap="deleteService"></paper-icon-button>
+                    </div>
+
+                    <!--TODO Dynamically add/delete services or find different way how to do it-->
+                    <button id="add-service" on-tap="addService">Přidat další službu
+                    </button>
+                </section>
+            </form>
+
+            <paper-button responsive id="confirm-button" on-tap="confirm" raised>
+                Dokončit registraci
+            </paper-button>
+
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'third-step-view',
+
+            behaviors: [FormValidationBehavior],
+
+            properties: {
+
+                insurance: {
+                    type: Array,
+                    value: ['111 Všeobecná zdravotní pojišťovna ČR',
+                        '201 Vojenská zdravotní pojišťovna ČR',
+                        '205 Česká průmyslová zdravotní pojišťovna',
+                        '207 Oborová zdravotní poj. zam. bank, poj. a stav.',
+                        '209 Zaměstnanecká pojišťovna Škoda',
+                        '211 Zdravotní pojišťovna ministerstva vnitra ČR',
+                        '213 Revírní bratrská pokladna, zdrav. pojišťovna']
+                }
+            }
+        });
+    </script>
+</dom-module>
