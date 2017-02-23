@@ -132,12 +132,21 @@
         ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
       }
     },
-    // TODO: It's hackable. Moving the logic to backend would solve the issue. Low priority
-    "officeNumberOfNotifications": {
+    "officeInterfaceInfo": {
       "$oid": {
-        ".read": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "!data.exists() || root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".validate": "newData.isNumber() && newData.val() >= 0"
+        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        // TODO: It's hackable. Moving the logic to backend would solve the issue. Low priority
+        "patientsToVerify": {
+          ".read": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          ".write": "!data.exists() || root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+    "officeCredits": {
+      "$oid": {
+        ".write": "!data.exists() && newData.isNumber() && newData.val() == 400"
       }
     },
     "generatorInfo": {

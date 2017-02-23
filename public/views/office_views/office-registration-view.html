@@ -116,7 +116,7 @@
                         full-info="{{officeData.fullInfo}}"
                         office-interface-info="{{officeData.officeInterfaceInfo}}"
                         generator-info="{{officeData.generatorInfo}}"></third-view>
-            <fourth-view name="fourth" office-data="{{officeData}}"></fourth-view>
+            <fourth-view name="fourth" full-info="{{officeData.fullInfo}}"></fourth-view>
         </iron-pages>
 
         <div class="button-container">
@@ -166,7 +166,17 @@
                                 {'available': true, hours: null},
                                 {'available': false, hours: null},
                                 {'available': false, hours: null}
-                            ]
+                            ],
+                            insurance: [
+                                {'id': 111, accepted: false},
+                                {'id': 201, accepted: false},
+                                {'id': 205, accepted: false},
+                                {'id': 207, accepted: false},
+                                {'id': 209, accepted: false},
+                                {'id': 211, accepted: false},
+                                {'id': 213, accepted: false}
+                            ],
+                            officeServices: []
                         },
 
                         officeInterfaceInfo: {
@@ -214,8 +224,7 @@
                     } else if (page === "third") {
                         this.page = "fourth";
                     } else if (page === "fourth") {
-                        console.log("TODO: register");
-//                    this.registerOffice();
+                        this.registerOffice();
                     }
                 } else {
                     this.fire("show-toast", {text: "Opravte prosím červeně označené chyby"});
@@ -265,10 +274,8 @@
 
                 objectToSave['/officeFullInfo/' + officeId] = data.fullInfo;
                 objectToSave['/userInterfaceInfo/' + userId + '/showOfficeInterface'] = true;
-                objectToSave['/officeNumberOfNotifications/' + officeId] = 0;
                 objectToSave['/officeAdminInfo/' + officeId] = {
-                    'users': {},
-                    'bookDevice': data.device
+                    'users': {}
                 };
                 objectToSave['/officeAdminInfo/' + officeId]['users'][this.userId] = 'admin';
                 objectToSave['/officeSearchInfo/' + officeId] = {
@@ -283,7 +290,13 @@
                     'role': 'admin',
                     'name': data.fullInfo.address.city + ', ' + data.fullInfo.address.street
                 };
-                objectToSave['/generatorInfo/' + officeId] = data.generatorInfo;
+
+                objectToSave['/officeInterfaceInfo/' + officeId] = data.officeInterfaceInfo;
+                objectToSave['/officeCredits/' + officeId] = 400; // Verified in database rules
+
+                if (data.officeInterfaceInfo.services.calendar) {
+                    objectToSave['/generatorInfo/' + officeId] = data.generatorInfo;
+                }
 
                 rootRef.update(objectToSave, function (error) {
                     if (error) {

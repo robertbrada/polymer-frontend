@@ -65,50 +65,50 @@
         </style>
 
         <div class="main-frame">
-            <form is="iron-form">
-                <div class="subsection grid">
-                    <section>
-                        <h2>Pojišťovny</h2>
-                        <p>Vyberte pojišťovny, se kterými máte smlouvu.</p>
-                        <template is="dom-repeat" items="[[insurance]]" as="entry">
-                            <paper-checkbox checked="{{entry.available}}">[[entry]]
-                            </paper-checkbox>
-                        </template>
-                    </section>
-                    <section>
-                        <h2>Přijímání nových pacientů</h2>
-                        <p>Zaškrtněte, pokud přijímáte nové pacienty.</p>
-                        <paper-checkbox checked="{{officeData.fullInfo.acceptingNewPatients}}">
-                            Přijímám nové pacienty
+            <div class="subsection grid">
+                <section>
+                    <h2>Pojišťovny</h2>
+                    <p>Vyberte pojišťovny, se kterými máte smlouvu.</p>
+                    <template is="dom-repeat" items="[[fullInfo.insurance]]" as="entry">
+                        <paper-checkbox checked="{{entry.accepted}}">[[computeInsuranceName(entry.id)]]
                         </paper-checkbox>
+                    </template>
+                </section>
+                <section>
+                    <h2>Přijímání nových pacientů</h2>
+                    <p>Zaškrtněte, pokud přijímáte nové pacienty.</p>
+                    <paper-checkbox checked="{{fullInfo.acceptingNewPatients}}">
+                        Přijímám nové pacienty
+                    </paper-checkbox>
 
-                        <h2>Text pro pacienty</h2>
-                        <p>Tento text se zobrazí na profilu ordinace.
-                            Můžete zde zadat libovolnou zprávu pacientům. Zpráva není povinná.</p>
-                        <paper-textarea label="Zpráva pro pacienty" value="{{officeData.fullInfo.patientText}}"
-                                        char-counter maxlength="800"></paper-textarea>
-                    </section>
-                </div>
+                    <h2>Text pro pacienty</h2>
+                    <p>Tento text se zobrazí na profilu ordinace.
+                        Můžete zde zadat libovolnou zprávu pacientům. Zpráva není povinná.</p>
+                    <paper-textarea label="Zpráva pro pacienty" value="{{fullInfo.patientText}}"
+                                    char-counter maxlength="800"></paper-textarea>
+                </section>
+            </div>
 
-                <section id="services">
-                    <h2>Služby</h2>
-                    <p>Vyplňte vámi poskytované služby a jejich ceny. Jako cenu můžete uvést cokoli uznáte za vhodné
-                        (Kč, Kč/min, zdarma).
-                        Služby ani ceny nemusíte vyplňovat. </p>
+            <section id="services">
+                <h2>Služby</h2>
+                <p>Vyplňte vámi poskytované služby a jejich ceny. Jako cenu můžete uvést cokoli uznáte za vhodné
+                    (Kč, Kč/min, zdarma). Služby ani ceny nemusíte vyplňovat. </p>
 
-                    <template is="dom-repeat" items="{{servicesArray}}" as="service">
+                <form id="step4_form" is="iron-form">
+                    <template is="dom-repeat" items="[[fullInfo.officeServices]]" as="service">
                         <div id="services-container" class="flex-horizontal">
-                            <paper-input class="flexchild service-name" label="Vaše služba" value="{{service.name}}"></paper-input>
-                            <paper-input id="price" label="Cena" value="{{service.price}}"></paper-input>
+                            <paper-input auto-validate required class="flexchild service-name" label="Vaše služba"
+                                         value="{{service.name}}"></paper-input>
+                            <paper-input auto-validate required id="price" label="Cena" value="{{service.price}}"></paper-input>
                             <paper-icon-button id="delete-service" icon="icons:close" on-tap="deleteService"></paper-icon-button>
                         </div>
                     </template>
+                </form>
 
-                    <paper-button id="add-service" on-click="addService">Přidat službu
-                    </paper-button>
+                <paper-button id="add-service" on-click="addService">Přidat službu
+                </paper-button>
 
-                </section>
-            </form>
+            </section>
         </div>
 
     </template>
@@ -121,44 +121,40 @@
 
             properties: {
 
-                insurance: {
-                    type: Array,
-                    value: ['111 Všeobecná zdravotní pojišťovna ČR',
-                        '201 Vojenská zdravotní pojišťovna ČR',
-                        '205 Česká průmyslová zdravotní pojišťovna',
-                        '207 Oborová zdravotní poj. zam. bank, poj. a stav.',
-                        '209 Zaměstnanecká pojišťovna Škoda',
-                        '211 Zdravotní pojišťovna ministerstva vnitra ČR',
-                        '213 Revírní bratrská pokladna, zdrav. pojišťovna']
-                },
-
-                servicesArray: {
-                    type: Array,
-                    value: [{
-                        id: 0,
-                        name: "",
-                        price: ""
-                    }]
+                insuranceNames: {
+                    type: Object,
+                    value: {
+                        111: '111 Všeobecná zdravotní pojišťovna ČR',
+                        201: '201 Vojenská zdravotní pojišťovna ČR',
+                        205: '205 Česká průmyslová zdravotní pojišťovna',
+                        207: '207 Oborová zdravotní poj. zam. bank, poj. a stav.',
+                        209: '209 Zaměstnanecká pojišťovna Škoda',
+                        211: '211 Zdravotní pojišťovna ministerstva vnitra ČR',
+                        213: '213 Revírní bratrská pokladna, zdrav. pojišťovna'
+                    }
                 }
+
             },
 
             computeDataAndValidate: function () {
-                console.log("TODO: computeDataAndValidate");
-                return true;
+                return this._validateForm(this.$.step4_form);
+            },
+
+            computeInsuranceName: function (id) {
+                return this.insuranceNames[id];
             },
 
             deleteService: function (event) {
                 var service = event.model.service;
-                this.splice('servicesArray', service.index, 1);
+                this.splice('fullInfo.officeServices', service.index, 1);
             },
 
             addService: function () {
-                this.push('servicesArray', {
-                    index: this.servicesArray.length,
+                this.push('fullInfo.officeServices', {
                     name: "",
                     price: ""
                 });
             }
-        });
+        })
     </script>
 </dom-module>
