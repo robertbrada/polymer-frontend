@@ -6,6 +6,7 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/device-icons.html">
@@ -33,7 +34,8 @@
 
             .grey {
                 background-color: #fafafb;
-                border: 1px solid #e7e7e8;
+                border-top: 1px solid #e7e7e8;
+                border-bottom: 1px solid #e7e7e8;
             }
 
             a {
@@ -83,29 +85,30 @@
                 max-width: 150px;
             }
 
+            #comp-img {
+                margin-left: 0;
+                margin-bottom: 0;
+                max-width: 480px;
+                max-height: 480px;
+            }
+
             .img-section {
                 text-align: center;
             }
 
-            .colored-section {
-                color: #fff;
+            #office-presence-section a {
+                font-weight: bold;
                 background-color: var(--app-green-color);
-            }
-
-            .colored-section:first-child {
-                background-color: var(--app-accent-color);
-            }
-
-            .grey-section {
-                /*border: 1px solid #e7e7e8;*/
-                background-color: #fafafb;
+                color: #fff;
+                padding: 0.5em 1em;
+                border-radius: 1em;
             }
 
             #office-registration {
                 background-color: var(--app-accent-color);
                 color: #fff;
                 padding: 5%;
-                margin-top: 6em;
+                margin-top: 4em;
             }
 
             #office-registration * {
@@ -163,13 +166,93 @@
                 margin-top: 0;
             }
 
-            @media (max-width: 1200px) {
-                #office-registration {
-                    margin-top: 0;
-                }
+            /*** PRICE ***/
 
-                #last-presentation-section {
-                    margin-bottom: 0;
+            .price-section {
+                max-width: 750px;
+                text-align: center;
+            }
+
+            .features-section {
+                max-width: 18em;
+                margin: 0 auto;
+                text-align: left;
+                font-size: 1.2em;
+                font-weight: bold;
+            }
+
+            .features-section > div {
+                margin: 0.8em 0;
+            }
+
+            #free-section {
+                color: var(--app-green-color);
+            }
+
+            #free-section .price-header {
+                padding: 1em 0;
+                color: var(--app-green-color);
+            }
+
+            #paid-section {
+                border-left: 1px solid #e0e0e1;
+                color: var(--app-accent-color);
+            }
+
+            .price-header {
+                text-align: center;
+                font-size: 1.5em;
+                letter-spacing: 0.03em;
+                font-weight: bold;
+                padding: 0.5em 1em;
+                max-width: 11em;
+                margin: 0 auto 1.8em auto;
+                border-radius: 4em;
+            }
+
+            .price-header .description {
+                font-size: 0.7em;
+                margin-top: 0.2em;
+                font-weight: lighter;
+            }
+
+            #pricing-headline-section {
+                padding: 0 5% 2em 5%;
+                max-width: 900px;
+                margin-top: 6em;
+                margin-bottom: 0;
+            }
+
+            #pricing-detail {
+                max-width: 600px;
+                margin: 4em auto 0 auto;
+                padding: 0 5%;
+                color: #8a8a8b;
+            }
+
+            .more-info {
+                margin-top: 3.2em;
+                font-weight: bold;
+                color: #bcbcbd;
+                letter-spacing: 0.03em;
+                cursor: pointer;
+            }
+
+            .more-info:hover {
+                text-decoration: underline;
+            }
+
+            .more-info iron-icon {
+                margin-right: 0.5em;
+                margin-top: -2px;
+            }
+
+            /******************************/
+
+            @media (max-width: 980px) {
+                #comp-img {
+                    max-width: 350px;
+                    max-height: 350px;
                 }
             }
 
@@ -196,12 +279,24 @@
                 }
 
                 #office-registration h1 {
-                    margin-bottom: 1em;
+                    margin-bottom: 1em;;
+                }
+
+                #paid-section {
+                    border-left: none;
+                    border-top: 1px solid #dededf;
+                }
+
+                .price-section {
+                    font-size: 0.9em;
                 }
             }
 
 
         </style>
+
+        <iron-media-query query="max-width:716px" query-matches="{{smallScreen}}"></iron-media-query>
+
 
         <section class="main-frame grid">
             <section>
@@ -218,16 +313,18 @@
             </section>
         </section>
 
-        <section class="main-frame grid">
-
-            <section class="img-section">
-                <img src="../images/computer.png">
+        <section class="main-frame grid grey">
+            <section class="img-section" hidden="[[smallScreen]]">
+                <img id="comp-img" src="../images/computer.png">
             </section>
-            <section class="green">
+            <section id="office-presence-section">
                 <h1>Zdarma prezentujte svoji ordinaci </h1>
                 <p>Docta nabízí lékařům prezentovat veškeré informace o jejich ordinacích na internetu zcela zdarma
                     napořád.
                     Navíc máte možnost zdarma využít elektronický kalendář, kam si můžete zapisovat objednané pacienty.
+                    <br>
+                    <br>
+                    <a href="#">Zobrazit ukázkový profil</a>
                 </p>
             </section>
         </section>
@@ -246,14 +343,14 @@
         </section>
 
         <section class="main-frame grid" id="first-square-section">
-            <section class="colored-section">
+            <section class="blue">
                 <h1>Jen pacienti, které chcete</h1>
                 <p>Nemusíte mít strach, že se k vám bude objednávat kde kdo. Máte možnost si vybrat, jací pacienti se u
                     vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci. Také
                     můžete upozornit pacienty na to, zda přijímáte nové pacienty či
                     nikoli.</p>
             </section>
-            <section class="grey-section">
+            <section class="grey">
                 <h1>Mějte přehled</h1>
                 <p>K dispozici máte elektronický kalendář, kde vidíte všechny objednané pacienty. Samozřejmě máte
                     možnost
@@ -263,28 +360,61 @@
 
 
         <section class="main-frame grid" id="last-presentation-section">
-            <section class="grey-section">
+            <section class="grey">
                 <h1>Komunikujte s pacienty</h1>
                 <p>Potřebujete poslat pacientovi zprávu, anebo provést online konzultaci? Komunikace mezi lékařem a
                     pacientem je plně zakomponována do našeho systému. </p>
             </section>
-            <section class="colored-section">
+            <section class="green">
                 <h1>Ovládejte odkudkoli</h1>
                 <p>Celý systém je online a plně responzivní, což znamená, že je snadno ovladatelný jak z počítače, tak
                     telefonu nebo tabletu. Vše můžete mít pod kontrolou všude tam, kde je připojení k internetu.</p>
             </section>
         </section>
 
-        <section class="main-frame grid square-section">
-            <section>
-                <h1>Platíte jen za to, co využijete</h1>
-                <p>U nás neplatíte žádné paušály, zaplatíte pouze za dny, kdy využijete našich prémiových služeb.
-                    Pokud budete na dovolené a nebudete v ordinaci, nic vám účtovat nebudeme.
-                </p>
+
+        <section class="main-frame" id="pricing-headline-section">
+            <h1>Platíte jen za to, co využijete</h1>
+            <p>U nás neplatíte žádné paušály, zaplatíte pouze za dny, kdy využijete našich prémiových služeb.
+                Pokud budete na dovolené a nebudete v ordinaci, nic vám účtovat nebudeme.
+            </p>
+        </section>
+
+        <section class="main-frame grid">
+            <section id="free-section" class="price-section">
+                <div class="green price-header">ZDARMA</div>
+                <div class="features-section">
+                    <div>*&nbsp; Kompletní prezentace ordinace</div>
+                    <div>*&nbsp; Elektroniký kalendář</div>
+                    <div>*&nbsp; Komunikace mezi lékaři</div>
+                    <div>*&nbsp; 1. měsíc online objednání</div>
+                </div>
+                <div class="more-info">
+                    <iron-icon icon="icons:help"></iron-icon>
+                    Více informací
+                </div>
             </section>
-            <section class="img-section">
-                <img src="../images/logo.png">
+            <section id="paid-section" class="price-section">
+                <div class="blue price-header">+ 20 Kč
+                    <div class="description">za den online objednávání</div>
+                </div>
+                <div class="features-section">
+                    <div>+ Neomezeně objednávacích časů</div>
+                    <div>+ Databáze objednaných pacientů</div>
+                    <div>+ Komunikace s pacienty v databázi</div>
+                    <div hidden="[[smallScreen]]">&nbsp;</div>
+                </div>
+                <div class="more-info">
+                    <iron-icon icon="icons:help"></iron-icon>
+                    Více informací
+                </div>
             </section>
+        </section>
+
+
+        <section id="pricing-detail">Pokud v registraci ordinace zvolíte možnost online objednání, tak je cena účtována
+            měsíčně podle toho,
+            na kolik dnů se za poslední měsíc bylo možné objednat online.
         </section>
 
         <div id="office-registration">
