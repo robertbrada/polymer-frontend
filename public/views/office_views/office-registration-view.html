@@ -112,7 +112,10 @@
             <second-view name="second"
                          coordinates="{{officeData.fullInfo.coordinates}}"
                          address="[[officeData.fullInfo.address]]"></second-view>
-            <third-view name="third" office-data="{{officeData}}"></third-view>
+            <third-view name="third"
+                        full-info="{{officeData.fullInfo}}"
+                        office-interface-info="{{officeData.officeInterfaceInfo}}"
+                        generator-info="{{officeData.generatorInfo}}"></third-view>
             <fourth-view name="fourth" office-data="{{officeData}}"></fourth-view>
         </iron-pages>
 
@@ -154,7 +157,25 @@
                             manualConfirmation: true,
                             patientText: null,
                             photoAvailability: false,
-                            acceptingNewPatients: false
+                            acceptingNewPatients: false,
+                            offlineOfficeHours: [
+                                {'available': true, hours: null}, // Monday
+                                {'available': true, hours: null},
+                                {'available': true, hours: null},
+                                {'available': true, hours: null},
+                                {'available': true, hours: null},
+                                {'available': false, hours: null},
+                                {'available': false, hours: null}
+                            ]
+                        },
+
+                        officeInterfaceInfo: {
+                            services: {
+                                calendar: false,
+                                onlineBooking: false
+                            },
+                            credits: 400,
+                            patientsToVerify: 0
                         },
 
                         generatorInfo: {
@@ -167,6 +188,7 @@
                                 {'available': false, hours: null},
                                 {'available': false, hours: null}
                             ],
+                            lastGeneratedDate: null,
                             visitLength: 40,
                             numberOfDays: 30
                         }
@@ -195,6 +217,8 @@
                         console.log("TODO: register");
 //                    this.registerOffice();
                     }
+                } else {
+                    this.fire("show-toast", {text: "Opravte prosím červeně označené chyby"});
                 }
             },
 
