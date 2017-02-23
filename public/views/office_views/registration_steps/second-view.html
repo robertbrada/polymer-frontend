@@ -29,10 +29,8 @@
         <google-maps-api id="map_api" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-maps-api>
 
         <div class="wide-container">
-            <h3>Vyberte polohu ordinace na mapě</h3>
-            <p>Bohužel se nám nepodařilo najít umístění ordinace na mapě podle adresy,
-                proto prosím přetáhněte červený špendlík na místo Vaší ordinace. Tyto údaje potřebujeme k určení časové zóny,
-                jež je potřeba pro správné zobrazení objednávacích časů.</p>
+            <h3>[[title]]</h3>
+            <p>[[message]]</p>
         </div>
 
         <div class="subsection grid">
@@ -55,8 +53,6 @@
             </google-map>
         </div>
 
-        <button on-tap="setCoordinates">fuu</button>
-
     </template>
 
     <script>
@@ -67,6 +63,14 @@
                 zoom: {
                     type: Number,
                     value: 15
+                },
+
+                title: {
+                    type: String
+                },
+
+                message: {
+                    type: String
                 }
             },
 
@@ -75,11 +79,11 @@
             },
 
             _handleApiLoad: function () {
-                var address = this.address;
-                if (address.city !== null && address.street !== null) {
-                    this.setCoordinatesByAddress(address);
+                var addressObject = this.address;
+                if (addressObject.city !== null && addressObject.street !== null) {
+                    this.setCoordinatesByAddress(addressObject);
                 } else {
-                    this.setToUserlocation()
+                    this.setToUserlocation();
                 }
             },
 
@@ -95,7 +99,10 @@
                             var location = result[0].geometry.location;
                             this.set('coordinates.latitude', location.lat());
                             this.set('coordinates.longitude', location.lng());
-                            this.fire('register-office');
+
+                            this.title = "Ověřte prosím polohu ordinace";
+                            this.message = "Podle Vámi zadané adresy jsme vyhledali pozici Vaší ordinace. Při určování polohy všal mohou vzniknout " +
+                                "nepřesnosti, proto prosím případně přesuňte červený ukazatel na správnou polohu.";
                         } else {
                             this.setToUserlocation();
                         }
@@ -106,22 +113,28 @@
             },
 
             setToUserlocation: function () {
+                this.title = "Vyberte polohu ordinace na mapě";
+
+                this.message = "Bohužel se nám nepodařilo najít umístění ordinace na mapě podle adresy, " +
+                    "proto prosím přetáhněte červený ukazatel na místo Vaší ordinace. Tyto údaje potřebujeme " +
+                    "k určení časové zóny,jež je potřeba pro správné zobrazení objednávacích časů.";
+
+                // Setting the coordinates to some reasonable value so that it doesn't end up in the ocean
+                this.zoom = 8;
+                this.set('coordinates.latitude', 49.8);
+                this.set('coordinates.longitude', 15.2);
+
+                // I am not using the error callback because it's unreliable in various browsers
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position) {
                         this.zoom = 11;
                         this.set('coordinates.latitude', position.coords.latitude);
                         this.set('coordinates.longitude', position.coords.longitude);
                     }.bind(this));
-                } else {
-                    // Setting the coordinates to some reasonable value so that it doesn't end up in the ocean
-                    this.zoom = 8;
-                    this.set('coordinates.latitude', 49.8);
-                    this.set('coordinates.longitude', 15.2);
                 }
             },
 
             computeDataAndValidate: function () {
-                console.log("TODO: computeDataAndValidate");
                 return true;
             }
         });

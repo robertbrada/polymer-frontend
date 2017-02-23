@@ -19,7 +19,7 @@
         </style>
 
         <div class="main-frame">
-            <form is="iron-form">
+            <form id="first_form" is="iron-form">
                 <div class="subsection grid">
 
                     <section>
@@ -42,9 +42,9 @@
                         <h2>Vaše specializace v této ordinaci</h2>
                         <paper-dropdown-menu label="Specializace">
                             <paper-listbox class="dropdown-content"
-                                           selected="{{fullInfo.specialization}}">
-                                <template is="dom-repeat" items="[[specializations]]" as="entry">
-                                    <paper-item>[[entry]]</paper-item>
+                                           selected="{{fullInfo.specialization}}" attr-for-selected="name">
+                                <template is="dom-repeat" items="[[specializations]]" as="specialization">
+                                    <paper-item name="[[specialization]]">[[specialization]]</paper-item>
                                 </template>
                             </paper-listbox>
                         </paper-dropdown-menu>
@@ -150,8 +150,7 @@
             },
 
             computeDataAndValidate: function () {
-                console.log("TODO: computeDataAndValidate");
-                return true;
+                return this._validateForm(this.$.first_form);
             }
         });
     </script>
