@@ -297,6 +297,8 @@
 
         <iron-media-query query="max-width:716px" query-matches="{{smallScreen}}"></iron-media-query>
 
+        <firebase-document id="docinfo_document" app-name="doctor-appointment-system">
+        </firebase-document>
 
         <section class="main-frame grid">
             <section>
@@ -440,18 +442,42 @@
         <div id="question-container">
             <form>
                 <h2>Máte nějaký dotaz? Zeptejte se nás.</h2>
-                <gold-email-input id="emailID"
-                                  label="Vaše emailová adresa"></gold-email-input>
-                <paper-textarea auto-validate id="issue_input" label="Vaše zpráva" char-counter
+                <gold-email-input id="email_input" error-message="Špatný formát" value="{{email}}"
+                                  label="Vaše emailová adresa" auto-validate required
+                                  invalid="{{invalidEmail}}">
+                </gold-email-input>
+                <paper-textarea auto-validate required id="message_input" label="Vaše zpráva"
+                                invalid="{{invalidMessage}}" char-counter
                                 maxlength="2000"></paper-textarea>
-                <paper-button raised>Odeslat</paper-button>
+                <paper-button raised on-tap="sendQuestion">Odeslat</paper-button>
             </form>
         </div>
     </template>
 
     <script>
         Polymer({
-            is: 'docinfo-view'
+            is: 'docinfo-view',
+
+            sendQuestion: function () {
+
+                var message = this.$.message_input.value,
+                    db = this.$.docinfo_document.app.database();
+
+                db.ref('/docInfoQuestions/').push({
+                    "email": this.email,
+                    "message": message
+                }).then(function () {
+                    this.fire("show-toast", {text: "Zpráva odeslána"});
+                }.bind(this), function () {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            }
         });
     </script>
 </dom-module>
