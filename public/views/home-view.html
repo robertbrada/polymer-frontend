@@ -136,7 +136,7 @@
             }
 
             #profile-photo {
-                height:100%;
+                height: 100%;
                 width: 100%;
                 border-radius: 50%;
             }
@@ -237,7 +237,7 @@
                     background-color: rgba(0, 0, 0, 0);
                     margin: 0;
                     padding: 0;
-                    top:0;
+                    top: 0;
                     left: 0;
                     right: 0;
                     bottom: 0;
@@ -301,14 +301,15 @@
                 <div class="office-element container flex-horizontal-with-ratios">
 
                     <div id="photo-container">
-                        <template is="dom-if" if="[[office.photoAvailability]]">
+                        <template is="dom-if" if="[[!office.photoAvailability]]">
+                            <!--Show icon-->
                             <img src="../images/docprofile.png" id="profile-photo">
                         </template>
                     </div>
 
                     <div id="name-address">
                         <div id="name">[[computeFullName(office.name)]]</div>
-                        <div id="specialization">[[computeSpecialization(office.specialization)]]</div>
+                        <div id="specialization">[[office.specialization]]</div>
                         <div id="street">[[office.address.street]]</div>
                         <div id="city">[[office.address.city]]</div>
                     </div>
@@ -338,12 +339,6 @@
             is: 'home-view',
 
             properties: {
-
-                specializations: {
-                    type: Array,
-                    value: ['Zubař', 'Rektálník', 'Gynekolog']
-                },
-
                 officesArray: {
                     type: Array,
                     computed: 'computeOfficesArray(officeSearchInfo)'
@@ -365,10 +360,6 @@
 
             computeFullName: function (name) {
                 return name.firstName + " " + name.lastName;
-            },
-
-            computeSpecialization: function (specialization) {
-                return this.specializations[specialization];
             }
         });
     </script>
