@@ -170,8 +170,8 @@
         </firebase-document>
 
         <!--TODO: po registraci to špatně načte data-->
-        <firebase-document app-name="doctor-appointment-system" path="/officeNumberOfNotifications/[[officeId]]"
-                           data="{{numberOfNotifications}}">
+        <firebase-document app-name="doctor-appointment-system" path="/officeInterfaceInfo/[[officeId]]"
+                           data="{{officeInterfaceInfo}}">
         </firebase-document>
 
         <app-drawer-layout fullbleed responsive-width="767px" narrow="{{narrow}}">
@@ -206,7 +206,9 @@
                     <paper-item name="calendar" class="nav">Kalendář</paper-item>
                     <paper-item name="notifications" class="nav">Upozornění</paper-item>
                     <paper-item name="patients" class="nav">Pacienti
-                        <span hidden="[[!showNotifications(numberOfNotifications)]]" class="badge">[[numberOfNotifications]]</span>
+                        <span hidden="[[!showNotifications(officeInterfaceInfo.patientsToVerify)]]" class="badge">
+                            [[officeInterfaceInfo.patientsToVerify]]
+                        </span>
                     </paper-item>
                     <paper-item name="settings" class="nav">Nastavení</paper-item>
                     <paper-item name="help" id="help-tab" class="nav bottom-link">Nápověda</paper-item>
