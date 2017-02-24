@@ -183,5 +183,17 @@
         }
       }
     }
+  },
+  "docInfoQuestions": {
+    ".read": false,
+    ".write": true,
+    "$pushId": {
+      "email": {
+        ".validate": "newData.isString()"
+      },
+      "message": {
+        ".validate": "newData.isString() && newData.val().length <= 2000"
+      }
+    }
   }
 }

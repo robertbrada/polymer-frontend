@@ -1,15 +1,15 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
-
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/iron-icons/device-icons.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
+<link rel="import" href="/bower_components/iron-form/iron-form.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-icons/device-icons.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -297,9 +297,6 @@
 
         <iron-media-query query="max-width:716px" query-matches="{{smallScreen}}"></iron-media-query>
 
-        <firebase-document id="docinfo_document" app-name="doctor-appointment-system">
-        </firebase-document>
-
         <section class="main-frame grid">
             <section>
                 <h1>Co je Docta?</h1>
@@ -440,16 +437,14 @@
         </div>
 
         <div id="question-container">
-            <form>
+            <form id="docinfo_form" is="iron-form">
                 <h2>Máte nějaký dotaz? Zeptejte se nás.</h2>
-                <gold-email-input id="email_input" error-message="Špatný formát" value="{{email}}"
-                                  label="Vaše emailová adresa" auto-validate required
-                                  invalid="{{invalidEmail}}">
+                <gold-email-input id="email_input" error-message="Špatný formát"
+                                  label="Vaše emailová adresa" required>
                 </gold-email-input>
-                <paper-textarea auto-validate required id="message_input" label="Vaše zpráva"
-                                invalid="{{invalidMessage}}" char-counter
-                                maxlength="2000"></paper-textarea>
-                <paper-button raised on-tap="sendQuestion">Odeslat</paper-button>
+                <paper-textarea id="message_input" label="Vaše zpráva" char-counter error-message="Zpráva nesmí být prázdná"
+                                maxlength="2000" required></paper-textarea>
+                <paper-button raised on-tap="send">Odeslat</paper-button>
             </form>
         </div>
     </template>
@@ -458,13 +453,21 @@
         Polymer({
             is: 'docinfo-view',
 
+            send: function () {
+                //  paper-textarea was not detected by form validation, so I'm validating the inputs manually
+                if (this.$.email_input.validate() && this.$.message_input.validate()) {
+                    this.sendQuestion();
+                }
+            },
+
             sendQuestion: function () {
 
-                var message = this.$.message_input.value,
-                    db = this.$.docinfo_document.app.database();
+                var email = this.$.email_input.value,
+                    message = this.$.message_input.value,
+                    db = firebase.apps[0].database();
 
                 db.ref('/docInfoQuestions/').push({
-                    "email": this.email,
+                    "email": email,
                     "message": message
                 }).then(function () {
                     this.fire("show-toast", {text: "Zpráva odeslána"});
