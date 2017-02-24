@@ -5,19 +5,12 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/google-apis/google-maps-api.html">
 
-<link rel="import" href="/styles/layout-styles.html">
-
 <dom-module id="second-view">
     <template>
-        <style include="layout-styles">
+        <style>
             .wide-container {
                 margin: 30px auto;
                 max-width: 900px;
-            }
-
-            section {
-                @apply(--layout);
-                @apply(--layout-center-center);
             }
 
             google-map {
@@ -31,18 +24,7 @@
         <div class="wide-container">
             <h3>[[title]]</h3>
             <p>[[message]]</p>
-        </div>
 
-        <div class="subsection grid">
-            <section>
-                <span>Zeměpisná šířka: [[coordinates.latitude]]</span>
-            </section>
-            <section>
-                <span>Zeměpisná délka: [[coordinates.longitude]]</span>
-            </section>
-        </div>
-
-        <div class="wide-container">
             <!--TODO: restrict API key for our domain -->
             <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="[[zoom]]"
                         latitude="[[coordinates.latitude]]"

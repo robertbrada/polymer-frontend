@@ -4,7 +4,7 @@
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-
+<link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
 <link rel="import" href="/behaviors/routing-behavior.html">
@@ -79,6 +79,7 @@
         }
 
     </style>
+
     <template>
         <app-route
                 route="{{route}}"
@@ -90,6 +91,8 @@
                            data="{{nameData}}">
         </firebase-document>
 
+        <iron-media-query query="max-width: 717px" query-matches="{{smallScreen}}"></iron-media-query>
+
         <header class="subsection">
             <h1>Registrace ordinace</h1>
             <span>Tyto údaje můžete později změnit v nastavení</span>
@@ -97,7 +100,7 @@
 
         <iron-selector id="main_selector" attr-for-selected="name" selected="{{page}}" class="flex-horizontal">
             <template is="dom-repeat" items="[[pages]]" as="pageObject">
-                <span name="[[pageObject.name]]" class="step-button flexchild">[[pageObject.title]]</span>
+                <span name="[[pageObject.name]]" class="step-button flexchild">[[computeTitle(pageObject, index, smallScreen)]]</span>
             </template>
         </iron-selector>
 
@@ -139,19 +142,19 @@
                     value: [
                         {
                             name: "first",
-                            title: "1. Základní informace"
+                            title: "Základní informace"
                         },
                         {
                             name: "second",
-                            title: "2. Poloha na mapě"
+                            title: "Poloha na mapě"
                         },
                         {
                             name: "third",
-                            title: "3. Ordinační hodiny"
+                            title: "Ordinační hodiny"
                         },
                         {
                             name: "fourth",
-                            title: "4. Informace pro pacienty"
+                            title: "Informace pro pacienty"
                         }
                     ]
                 },
@@ -269,6 +272,10 @@
                 }
             },
 
+            computeTitle: function (pageObject, index, smallScreen) {
+                return "" + (index + 1) + ". " + ((smallScreen) ? "" : pageObject.title);
+            },
+
             userChange: function (data) {
                 var name = this.officeData.fullInfo.name;
 
@@ -340,7 +347,9 @@
                     } else {
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/waiting-list/' + officeId});
-                        this.getTokenAndNotifyGenerator(officeId);
+                        if (data.officeInterfaceInfo.services.calendar) {
+                            this.getTokenAndNotifyGenerator(officeId);
+                        }
                     }
                 }.bind(this));
             },
@@ -378,7 +387,7 @@
                 }.bind(this);
 
                 // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("POST", "https://doctor-appointment-system.appspot.com/registration/generate", true);
+                request.open("POST", "https://doctor-appointment-system.appspot-preview.com/registration/generate", true);
 
                 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
