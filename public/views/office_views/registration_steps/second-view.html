@@ -134,8 +134,8 @@
                 }
             },
 
-            computeDataAndValidate: function () {
-                return true;
+            validate: function () {
+                return this.coordinates.latitude !== null && this.coordinates.longitude !== null;
             }
         });
     </script>

@@ -95,11 +95,10 @@
             <span>Tyto údaje můžete později změnit v nastavení</span>
         </header>
 
-        <iron-selector attr-for-selected="name" selected="{{page}}" class="flex-horizontal">
-            <span name="first" class="step-button flexchild">1. Základní informace</span>
-            <span name="second" class="step-button flexchild">2. Poloha na mapě</span>
-            <span name="third" class="step-button flexchild">3. Ordinační hodiny</span>
-            <span name="fourth" class="step-button flexchild">4. Informace pro pacienty</span>
+        <iron-selector id="main_selector" attr-for-selected="name" selected="{{page}}" class="flex-horizontal">
+            <template is="dom-repeat" items="[[pages]]" as="pageObject">
+                <span name="[[pageObject.name]]" class="step-button flexchild">[[pageObject.title]]</span>
+            </template>
         </iron-selector>
 
         <iron-pages
@@ -135,6 +134,28 @@
             validPrefix: '/office/registration',
 
             properties: {
+                pages: {
+                    type: Array,
+                    value: [
+                        {
+                            name: "first",
+                            title: "1. Základní informace"
+                        },
+                        {
+                            name: "second",
+                            title: "2. Poloha na mapě"
+                        },
+                        {
+                            name: "third",
+                            title: "3. Ordinační hodiny"
+                        },
+                        {
+                            name: "fourth",
+                            title: "4. Informace pro pacienty"
+                        }
+                    ]
+                },
+
                 officeData: {
                     type: Object,
                     value: {
@@ -215,17 +236,26 @@
             nextStep: function () {
                 var page = this.page;
 
-                if (this.$.registration_pages.selectedItem.computeDataAndValidate()) {
+                if (this.$.registration_pages.selectedItem.validate()) {
 
-                    if (page === "first") {
-                        this.page = "second";
-                    } else if (page === "second") {
-                        this.page = "third";
-                    } else if (page === "third") {
-                        this.page = "fourth";
-                    } else if (page === "fourth") {
-                        this.registerOffice();
+                    if (page === "fourth") {
+                        var pages = this.$.registration_pages.items,
+                            length = pages.length, i;
+
+                        // Validate all the steps
+                        for (i = 0; i < length; i++) {
+                            if (!(pages[i].validate !== undefined && pages[i].validate())) {
+                                this.page = this.pages[i].name;
+                                break;
+                            }
+                        }
+                        if (i === length) {
+                            this.registerOffice();
+                        }
+                    } else {
+                        this.$.main_selector.selectNext();
                     }
+
                 } else {
                     this.fire("show-toast", {text: "Opravte prosím červeně označené chyby"});
                 }
