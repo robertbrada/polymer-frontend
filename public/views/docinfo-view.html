@@ -436,7 +436,7 @@
             </section>
         </div>
 
-        <div id="question-container">
+        <div id="question-container" hidden="[[messageSent]]">
             <form id="docinfo_form" is="iron-form">
                 <h2>Máte nějaký dotaz? Zeptejte se nás.</h2>
                 <gold-email-input id="email_input" error-message="Špatný formát"
@@ -452,6 +452,13 @@
     <script>
         Polymer({
             is: 'docinfo-view',
+
+            properties: {
+                messageSent: {
+                    type: Boolean,
+                    value: false
+                }
+            },
 
             send: function () {
                 //  paper-textarea was not detected by form validation, so I'm validating the inputs manually
@@ -471,6 +478,7 @@
                     "message": message
                 }).then(function () {
                     this.fire("show-toast", {text: "Zpráva odeslána"});
+                    this.messageSent = true;
                 }.bind(this), function () {
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
