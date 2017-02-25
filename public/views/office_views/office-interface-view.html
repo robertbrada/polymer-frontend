@@ -269,6 +269,11 @@
                         "help": "Nápověda",
                         "issue": "Nahlásit problém"
                     }
+                },
+
+                officeInterfaceInfo: {
+                    type: Boolean,
+                    observer: 'observeInterfaceInfo'
                 }
             },
 
@@ -277,6 +282,13 @@
                     this.fire('change-route', {url: '/office/registration/first'});
                 } else {
                     this.set('routeData.officeId', selected);
+                }
+            },
+
+            observeInterfaceInfo: function (officeInterfaceInfo) {
+                var page = this.page;
+                if (officeInterfaceInfo.services !== undefined && (!officeInterfaceInfo.services.onlineBooking && (page !== "holidays" || page !== "settings"))) {
+                    this.page = "holidays";
                 }
             },
 
