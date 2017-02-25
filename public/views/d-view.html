@@ -19,8 +19,6 @@
 <link rel="import" href="/bower_components/iron-icons/social-icons.html">
 <link rel="import" href="/bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="/bower_components/iron-icons/maps-icons.html">
-<link rel="import" href="/bower_components/google-map/google-map.html">
-<link rel="import" href="/bower_components/google-map/google-map-marker.html">
 
 <link rel="import" href="/custom_components/moment-wrapper-cs.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -484,7 +482,7 @@
                 </section>
             </div>
             <template is="dom-if"
-                      if="[[computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
+                      if="[[computeMapAvailability(showMap, mapLoaded, mapMarkerLoaded)]]">
                 <!--TODO: restrict API key for our domain -->
                 <google-map id="map_element" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker
                             zoom="16"
@@ -604,6 +602,13 @@
                     observer: "observeOnlineBooking"
                 },
 
+                showMap: {
+                    type: Boolean,
+                    computed: "computeShowMap(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)",
+                    observer: "observerShowMap"
+                },
+
+
                 // Lazy loading
                 calendarElementLoaded: {
                     type: Boolean,
@@ -611,6 +616,16 @@
                 },
 
                 calendarDisabledElementLoaded: {
+                    type: Boolean,
+                    value: false
+                },
+
+                mapLoaded: {
+                    type: Boolean,
+                    value: false
+                },
+
+                mapMarkerLoaded: {
                     type: Boolean,
                     value: false
                 }
@@ -634,6 +649,29 @@
                     if (!this.calendarDisabledElementLoaded) {
                         this.importHref('/custom_components/calendar-disabled-element.html', function (e) {
                             this.calendarDisabledElementLoaded = true;
+                        }.bind(this), function (e) {
+                            // loading error
+                        });
+                    }
+                }
+            },
+
+            computeShowMap: function (latitude, longitude, smallScreen) {
+                return (!smallScreen && !!latitude && !!longitude);
+            },
+
+            observerShowMap: function (showMap) {
+                if (showMap) {
+                    if (!this.mapLoaded) {
+                        this.importHref('/bower_components/google-map/google-map.html', function (e) {
+                            this.mapLoaded = true;
+                        }.bind(this), function (e) {
+                            // loading error
+                        });
+                    }
+                    if (!this.mapMarkerLoaded) {
+                        this.importHref('/bower_components/google-map/google-map-marker.html', function (e) {
+                            this.mapMarkerLoaded = true;
                         }.bind(this), function (e) {
                             // loading error
                         });
@@ -830,10 +868,6 @@
                 if (file) return URL.createObjectURL(file);
             },
 
-            computeMapAvailability: function (latitude, longitude, smallScreen) {
-                return (!smallScreen && !!latitude && !!longitude);
-            },
-
             computeMapLink: function (address) {
                 return (!!address) ? "http://maps.google.com/maps?q=" + address.city + "," + address.street : null;
             },
@@ -915,6 +949,10 @@
                     }
                 }
                 return false;
+            },
+
+            computeMapAvailability: function (showMap, mapLoaded, mapMarkerLoaded) {
+                return showMap && mapLoaded && mapMarkerLoaded;
             },
 
             computeOnlineBooking: function (officeData) {
