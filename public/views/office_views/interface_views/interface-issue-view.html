@@ -15,7 +15,7 @@
             }
 
             #content {
-                background-color: #fff;
+                background-color: #fff; /* TODO: move to parent */
                 border: 1px solid #d5d9da;
                 padding: 2em;
             }
@@ -27,9 +27,9 @@
 
         <div id="content">
             <h1>Napište nám, s čím máte problém, co je potřeba zlepšit, nebo jakoukoliv jinou připomínku.</h1>
-            <paper-textarea required auto-validate id="issue_input" label="Vaše zpráva" char-counter maxlength="2000"
-                            invalid="{{invalid}}"></paper-textarea>
-            <paper-button raised on-tap="sendIssue" disabled="[[invalid]]">Odeslat</paper-button>
+            <paper-textarea required id="issue_input" label="Vaše zpráva" char-counter maxlength="2000">
+            </paper-textarea>
+            <paper-button raised on-tap="send">Odeslat</paper-button>
         </div>
     </template>
 
@@ -37,7 +37,15 @@
         Polymer({
             is: 'interface-issue-view',
 
-            sendIssue: function () {
+            send: function () {
+                if (this.$.issue_input.validate()) {
+                    this.saveIssue();
+                } else {
+                    this.fire("show-toast", {text: "Opravte prosím červeně označené chyby"});
+                }
+            },
+
+            saveIssue: function () {
                 var message = this.$.issue_input.value,
                     officeId = this.officeId,
                     db = this.$.issue_document.app.database();

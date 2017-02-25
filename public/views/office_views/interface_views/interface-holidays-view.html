@@ -7,16 +7,22 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/moment-element/moment-import.html">
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
 
 <link rel="import" href="/custom_components/moment-wrapper-cs.html">
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/input-styles.html">
 
-<dom-module id="holidays-view">
+<dom-module id="interface-holidays-view">
     <template>
         <style include="button-styles input-styles">
+
+            .main-content {
+                background-color: white; /* TODO: move to parent */
+            }
+
             .error {
-                color: red;
+                color: var(--app-red-color);
             }
 
             .main-container {
@@ -81,45 +87,47 @@
                            data="{{officeHolidays}}">
         </firebase-document>
 
-        <div class="main-container">
-            <div class="flex-horizontal">
-                <paper-input id="name_input" class="flexchild" label="Název dovolené" value="{{holidayName}}" auto-focus
-                             required
-                             auto-validate></paper-input>
-                <p class="error" hidden="[[hideErrorMessage]]">Začátek dovolené je před koncem.</p>
-                <paper-datetime-picker-item required icon="icons:today"
-                                            placeholder="Zadat začátek dovolené"
-                                            default-time="00:00"
-                                            locale="cs" date="{{fromDateTime}}"></paper-datetime-picker-item>
-                <paper-datetime-picker-item icon="icons:today" placeholder="Zadat konec dovolené"
-                                            default-time="23:59"
-                                            locale="cs" date="{{toDateTime}}"></paper-datetime-picker-item>
+        <paper-material class="main-content" elevation="1">
+            <div class="main-container">
+                <div class="flex-horizontal">
+                    <paper-input id="name_input" class="flexchild" label="Název dovolené" value="{{holidayName}}" auto-focus
+                                 required
+                                 auto-validate></paper-input>
+                    <paper-datetime-picker-item required icon="icons:today"
+                                                placeholder="Zadat začátek dovolené"
+                                                default-time="00:00"
+                                                locale="cs" date="{{fromDateTime}}"></paper-datetime-picker-item>
+                    <paper-datetime-picker-item icon="icons:today" placeholder="Zadat konec dovolené"
+                                                default-time="23:59"
+                                                locale="cs" date="{{toDateTime}}"></paper-datetime-picker-item>
 
-            </div>
-            <paper-button raised on-tap="addHolidays"
-                          disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
-            </paper-button>
-        </div>
-
-        <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
-            <div id="holiday" class="main-container flex-horizontal">
-                <div>
-                    <div><b>Název dovolené:</b> [[holiday.name]]</div>
-                    <div><b>Začátek:</b> [[holiday.startAt]]</div>
-                    <div><b>Konec:</b> [[holiday.endAt]]</div>
                 </div>
-                <paper-button class="dismiss-button" raised on-tap="deleteHolidays">
-                    <iron-icon icon="close"></iron-icon>
-                    Odstranit
+                <p class="error" hidden="[[hideErrorMessage]]">Začátek dovolené je před koncem.</p>
+                <paper-button raised on-tap="addHolidays"
+                              disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
                 </paper-button>
             </div>
-        </template>
+
+            <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
+                <div id="holiday" class="main-container flex-horizontal">
+                    <div>
+                        <div><b>Název dovolené:</b> [[holiday.name]]</div>
+                        <div><b>Začátek:</b> [[holiday.startAt]]</div>
+                        <div><b>Konec:</b> [[holiday.endAt]]</div>
+                    </div>
+                    <paper-button class="dismiss-button" raised on-tap="deleteHolidays">
+                        <iron-icon icon="close"></iron-icon>
+                        Odstranit
+                    </paper-button>
+                </div>
+            </template>
+        </paper-material>
 
     </template>
 
     <script>
         Polymer({
-            is: 'holidays-view',
+            is: 'interface-holidays-view',
 
             properties: {
                 hideErrorMessage: {
