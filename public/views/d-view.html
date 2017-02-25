@@ -372,70 +372,71 @@
             </div>
 
             <div class="subsection grid office-info-section">
-                <section id="appointment-container">
-                    <div class="wide-container" id="main_container">
+                <!--TODO dom-if destroys animations from calendar to booking confirmation -->
+                <!--<template is="dom-if" if="[[computeDataAvailability(officeData.lastGeneratedDate)]]">-->
+                    <section id="appointment-container">
+                        <div class="wide-container" id="main_container">
 
-                        <div class="side-padding">
-                            <calendar-disabled-element manual-confirmation="[[officeData.manualConfirmation]]"
-                                                       office-id="[[officeId]]"
-                                                       patient-status="{{patientStatus}}"
-                                                       disabled-calendar="{{disabledCalendar}}"></calendar-disabled-element>
-                        </div>
+                            <div class="side-padding">
+                                <calendar-disabled-element manual-confirmation="[[officeData.manualConfirmation]]"
+                                                           office-id="[[officeId]]"
+                                                           patient-status="{{patientStatus}}"
+                                                           disabled-calendar="{{disabledCalendar}}"></calendar-disabled-element>
+                            </div>
 
-                        <div id="calendar_container" hidden="[[!calendarVisibility]]">
-                            <h3>Kalendář</h3>
-                            <p>Pro objednání vyberte čas, na který se chcete objednat.</p>
+                            <div id="calendar_container" hidden="[[!calendarVisibility]]">
+                                <h3>Kalendář</h3>
+                                <p>Pro objednání vyberte čas, na který se chcete objednat.</p>
 
-                            <calendar-element office-id="[[officeId]]"
-                                              last-generated-date-raw="[[officeData.lastGeneratedDate]]"
-                                              disabled="[[disabledCalendar]]">
-                            </calendar-element>
-                        </div>
-                        <div hidden="[[calendarVisibility]]" id="appointment_form" class="side-padding">
-                            <h3>Objednat se</h3>
-                            <span>Datum objednání: <b>[[computeAppointmentDate(appointmentId)]]</b></span>
-                            <paper-textarea id="patient_message" label="Dobrovolná zpráva pro lékaře" char-counter
-                                            maxlength="200"></paper-textarea>
-                            <paper-button on-tap="_confirmAppointment" raised>Potvrdit objednání</paper-button>
-                            <div id="exit-form" class="centered" on-tap="_showCalendar">
-                                <span><iron-icon icon="today"></iron-icon>Zpět na kalendář</span>
+                                <calendar-element office-id="[[officeId]]"
+                                                  last-generated-date-raw="[[officeData.lastGeneratedDate]]"
+                                                  disabled="[[disabledCalendar]]">
+                                </calendar-element>
+                            </div>
+                            <div hidden="[[calendarVisibility]]" id="appointment_form" class="side-padding">
+                                <h3>Objednat se</h3>
+                                <span>Datum objednání: <b>[[computeAppointmentDate(appointmentId)]]</b></span>
+                                <paper-textarea id="patient_message" label="Dobrovolná zpráva pro lékaře" char-counter
+                                                maxlength="200"></paper-textarea>
+                                <paper-button on-tap="_confirmAppointment" raised>Potvrdit objednání</paper-button>
+                                <div id="exit-form" class="centered" on-tap="_showCalendar">
+                                    <span><iron-icon icon="today"></iron-icon>Zpět na kalendář</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                <!--</template>-->
 
                 <section id="no-calendar-container">
-                    <template is="dom-if" if="[[computeOfflineHoursAvailability(offlineOfficeHoursArray)]]">
-                        <div id="offline-hours">
-                            <h2>
-                                <iron-icon icon="icons:watch-later"></iron-icon>
-                                Ordinační hodiny
-                            </h2>
-                            <template is="dom-repeat" items="[[offlineOfficeHoursArray]]" as="offlineHours">
-                                <template is="dom-if" if="[[offlineHours.available]]">
-                                    <div class="day"><span>[[computeDateName(index)]] :</span><span
-                                            hidden="[[!offlineHours.available]]">
+                    <div id="offline-hours">
+                        <h2>
+                            <iron-icon icon="icons:watch-later"></iron-icon>
+                            Ordinační hodiny
+                        </h2>
+                        <template is="dom-repeat" items="[[offlineOfficeHoursArray]]" as="offlineHours">
+                            <template is="dom-if" if="[[offlineHours.available]]">
+                                <div class="day"><span>[[computeDateName(index)]] :</span><span
+                                        hidden="[[!offlineHours.available]]">
                                 [[offlineHours.hours]]</span>
-                                    </div>
-                                </template>
-                            </template>
-
-                            <template is="dom-if" if="[[computeDataAvailability(officeData.holidays)]]">
-                                <div class="holidays-container">
-                                    <b>Dovolená</b><br>
-
-                                    <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
-                                        <div class="holiday">
-                                            <span><b>Od:</b> [[holiday.startAt]] &nbsp;&nbsp; <b>Do:</b> [[holiday.endAt]]</span>
-                                            <div hidden="[[!computeTextAvailability(holiday.substituteDoctorName)]]"><b>Zastupující
-                                                lékař:</b> [[holiday.substituteDoctorName]]
-                                            </div>
-                                        </div>
-                                    </template>
                                 </div>
                             </template>
-                        </div>
-                    </template>
+                        </template>
+
+                        <template is="dom-if" if="[[computeDataAvailability(officeData.holidays)]]">
+                            <div class="holidays-container">
+                                <b>Dovolená</b><br>
+
+                                <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
+                                    <div class="holiday">
+                                        <span><b>Od:</b> [[holiday.startAt]] &nbsp;&nbsp; <b>Do:</b> [[holiday.endAt]]</span>
+                                        <div hidden="[[!computeTextAvailability(holiday.substituteDoctorName)]]"><b>Zastupující
+                                            lékař:</b> [[holiday.substituteDoctorName]]
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
 
                     <template is="dom-if" if="[[computeTextAvailability(officeData.patientText)]]">
                         <h2>
@@ -474,20 +475,18 @@
                     </template>
                 </section>
             </div>
-            <div id="map-and-patient-info">
-                <template is="dom-if"
-                          if="[[computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
-                    <!--TODO: restrict API key for our domain -->
-                    <google-map id="map_element" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker
-                                zoom="16"
-                                latitude="[[officeData.coordinates.latitude]]"
-                                longitude="[[officeData.coordinates.longitude]]">
-                        <google-map-marker latitude="[[officeData.coordinates.latitude]]"
-                                           longitude="[[officeData.coordinates.longitude]]">
-                        </google-map-marker>
-                    </google-map>
-                </template>
-            </div>
+            <template is="dom-if"
+                      if="[[computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
+                <!--TODO: restrict API key for our domain -->
+                <google-map id="map_element" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker
+                            zoom="16"
+                            latitude="[[officeData.coordinates.latitude]]"
+                            longitude="[[officeData.coordinates.longitude]]">
+                    <google-map-marker latitude="[[officeData.coordinates.latitude]]"
+                                       longitude="[[officeData.coordinates.longitude]]">
+                    </google-map-marker>
+                </google-map>
+            </template>
         </div>
     </template>
 
