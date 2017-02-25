@@ -209,7 +209,7 @@
 
             .day span:first-child {
                 font-weight: bold;
-                width: 6em;
+                width: 5em;
                 float: left;
                 font-size: 1.1em;
             }
@@ -220,7 +220,7 @@
                 margin: 0 auto;
             }
 
-            #services-container div {
+            #services-container .service-item {
                 padding: 1em;
                 text-align: left;
                 margin: 0;
@@ -231,15 +231,22 @@
                 word-break: break-all;
             }
 
-            #services-container div:nth-child(2) {
+            #services-container .service-item:nth-child(2) {
                 border-top: 1px solid #e0e0e1;
             }
 
             .service-price {
-                float: right;
                 font-weight: bold;
                 color: var(--app-green-color);
-                padding-left: 2em;
+                margin-left: 2em;
+            }
+
+            .flex-horizontal {
+                @apply(--layout-horizontal)
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
             }
 
             #appointment-container {
@@ -251,7 +258,8 @@
                 padding-left: 2%;
                 padding-top: 1em;
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-                height: 48em;
+
+                /*can't set fixed height because of patient-message that can be longer than height of calendar-> bug*/
             }
 
             .holidays-container {
@@ -467,8 +475,8 @@
                                 Poskytované služby
                             </h2>
                             <template is="dom-repeat" items="[[officeServicesArray]]" as="officeServices">
-                                <div><span class="service-name">[[officeServices.name]]</span><span
-                                        class="service-price">[[officeServices.price]]</span>
+                                <div class="flex-horizontal service-item"><div class="service-name flexchild">[[officeServices.name]]</div>
+                                    <div class="service-price">[[officeServices.price]]</div>
                                 </div>
                             </template>
                         </section>
