@@ -99,6 +99,11 @@
                 color: var(--app-red-color);
             }
 
+            .green-bold {
+                font-weight: bold;
+                color: var(--app-green-color);
+            }
+
         </style>
 
         <div class="main-frame">
@@ -124,19 +129,23 @@
                 </div>
 
                 <div class="green-header">
-                    <h1>Elektronický kalendář</h1>
+                    <h1>Online objednávání a elektronický kalendář</h1>
 
-                    <p>Elektronický kalendář je zcela <b>zdarma</b> a je tak zcela na vás, zda ho využijete.
-                        Můžete si do něj zapisovat objednané pacienty a ušetřit tak papíry. Elektronický kalendář
-                        je nutné zaškrtnout, pokud chcete využít naše <b>online objednání</b>.
+                    <p>
+                        Výběrem možnosti <b>elektronické objednávání</b> získáte přístup k elektronickému kalendáři
+                        a online objednávání. Na Vašem profilu budou zobrazeny volné termíny a pacienti se k vám budou
+                        moci objednat sami a online. Služba je zpoplatněna cenou <b>20Kč za objednávací den</b>.
+                        <span class="green-bold">První měsíc máte online objednání zdarma</span>.
                     </p>
 
-                    <paper-checkbox id="onlineSection" checked="{{officeInterfaceInfo.services.calendar}}">Chci využít službu elektronického
-                        kalendáře.
-                    </paper-checkbox>
+                    <div id="online-booking-container">
+                        <paper-checkbox id="online-booking-checkbox" checked="{{officeInterfaceInfo.services.onlineBooking}}">
+                            Chci využít objednávání a kalendář
+                        </paper-checkbox>
+                    </div>
                 </div>
 
-                <template is="dom-if" if="[[officeInterfaceInfo.services.calendar]]" restamp="true">
+                <template is="dom-if" if="[[officeInterfaceInfo.services.onlineBooking]]" restamp="true">
                     <div class="subsection grid">
                         <section>
                             <h2>Objednávací hodiny</h2>
@@ -153,16 +162,17 @@
                                                  prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
                                 </template>
                             </template>
-                        </section>
-                        <section>
+
                             <h2>Délka návštěvy</h2>
                             <p>Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a ordinačních
                                 hodin určíme objednávací časy v kalendáři</p>
                             <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
-                                         value="{{generatorInfo.visitLength}}">
+                                         value="{{visitLength}}">
                                 <div suffix>min</div>
                             </paper-input>
 
+                        </section>
+                        <section>
                             <h2>Počet objednávacích dní</h2>
                             <p>Zadejte na jak daleko do budoucna budou vytvořeny termíny. Pokud napíšete např. 7 dní,
                                 tak nebude možné objednat pacienta na 8. den a dále od dnešního data.
@@ -171,53 +181,30 @@
                                          value="{{generatorInfo.numberOfDays}}">
                                 <div suffix>dní</div>
                             </paper-input>
+                            <h2>Manuální potvrzení při první návštěvě</h2>
+                            <p>Zaškrtněte, pokud chcete, aby pacient při
+                                prvním objednání nejprve musel zažádat o
+                                vaše potvrzení. Poté, co pacient zažádá o potvrzení, vám přijde zpráva, ve které uvidíte
+                                pacientovi osobní údaje
+                                (jméno, adresa, datum narození), na jejichž základě umožníte pacientovi objednání či
+                                naopak.
+                                <br>
+                                Při dalších návštěvách již potvrzeného pacienta nebude nutné vaše potvrzení.
+                            </p>
+
+                            <paper-checkbox checked="{{fullInfo.manualConfirmation}}">
+                                Vyžaduji manuální potvrzení
+                            </paper-checkbox>
+                            <h2>První objednávací den</h2>
+                            <p>Vyberte datum, od kdy chcete využívat online objednávání.</p>
+                            <p hidden="[[hideErrorMessage]]" class="error">Datum musí být v budoucnosti.</p>
+                            <paper-date-picker-item required icon="icons:today"
+                                                    placeholder="Vybrat datum"
+                                                    locale="cs"
+                                                    date="{{lastGeneratedDateRaw}}"></paper-date-picker-item>
                         </section>
                     </div>
                 </template>
-
-                <div class="green-header" hidden="[[!officeInterfaceInfo.services.calendar]]">
-                    <h1>Online objednání</h1>
-
-                    <p>
-                        Výběrem možnosti <b>online objednání</b> zveřejníte objednávací kalendář na Vašem profilu a pacienti se k vám budou
-                        moci objednat sami a online. Služba je zpoplatněna cenou <b>20Kč za objednávací den</b>.
-                        <b style="color: #26A69A">První měsíc máte online objednání zdarma</b>.
-                    </p>
-
-                    <div id="online-booking-container">
-                        <paper-checkbox id="online-booking-checkbox" checked="{{officeInterfaceInfo.services.onlineBooking}}">
-                            Chci využít online objednání
-                        </paper-checkbox>
-                    </div>
-                </div>
-
-                <div class="subsection grid" hidden="[[!officeInterfaceInfo.services.onlineBooking]]">
-                    <section>
-                        <h2>Manuální potvrzení při první návštěvě</h2>
-                        <p>Zaškrtněte, pokud chcete, aby pacient při
-                            prvním objednání nejprve musel zažádat o
-                            vaše potvrzení. Poté, co pacient zažádá o potvrzení, vám přijde zpráva, ve které uvidíte
-                            pacientovi osobní údaje
-                            (jméno, adresa, datum narození), na jejichž základě umožníte pacientovi objednání či
-                            naopak.
-                            <br>
-                            Při dalších návštěvách již potvrzeného pacienta nebude nutné vaše potvrzení.
-                        </p>
-
-                        <paper-checkbox checked="{{fullInfo.manualConfirmation}}">
-                            Vyžaduji manuální potvrzení
-                        </paper-checkbox>
-                    </section>
-                    <section>
-                        <h2>První objednávací den</h2>
-                        <p>Vyberte datum, od kdy chcete využívat online objednávání.</p>
-                        <p hidden="[[hideErrorMessage]]" class="error">Datum musí být v budoucnosti.</p>
-                        <paper-date-picker-item required icon="icons:today"
-                                                placeholder="Vybrat datum"
-                                                locale="cs"
-                                                date="{{lastGeneratedDateRaw}}"></paper-date-picker-item>
-                    </section>
-                </div>
             </form>
         </div>
     </template>
@@ -242,12 +229,14 @@
                 hideErrorMessage: {
                     type: Boolean,
                     value: true
+                },
+
+                visitLength: {
+                    type: String,
+                    value: "40",
+                    observer: "setNumericVisitLength"
                 }
             },
-
-            observers: [
-                "observerCalendarAndSetOnlineBooking(officeInterfaceInfo.services.calendar)"
-            ],
 
             validate: function () {
                 return this._validateForm(this.$.step3_form);
@@ -272,14 +261,13 @@
                 }
             },
 
-            observerCalendarAndSetOnlineBooking: function (calendar) {
-                if (!calendar) {
-                    this.set('officeInterfaceInfo.services.onlineBooking', false);
-                }
-            },
-
             getDayName: function (dayIndex) {
                 return (this.days[dayIndex]);
+            },
+
+            // Workaround for non-numeric values in paper-input
+            setNumericVisitLength: function (visitLength) {
+                this.set("generatorInfo.visitLength", Number(visitLength));
             }
         });
     </script>

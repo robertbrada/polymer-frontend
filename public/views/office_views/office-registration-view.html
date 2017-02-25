@@ -205,7 +205,6 @@
 
                         officeInterfaceInfo: {
                             services: {
-                                calendar: false,
                                 onlineBooking: false
                             },
                             credits: 400,
@@ -331,7 +330,7 @@
                 objectToSave['/officeInterfaceInfo/' + officeId] = data.officeInterfaceInfo;
                 objectToSave['/officeCredits/' + officeId] = 400; // Verified in database rules
 
-                if (data.officeInterfaceInfo.services.calendar) {
+                if (data.officeInterfaceInfo.services.onlineBooking) {
                     objectToSave['/generatorInfo/' + officeId] = data.generatorInfo;
                 }
 
@@ -347,7 +346,7 @@
                     } else {
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/waiting-list/' + officeId});
-                        if (data.officeInterfaceInfo.services.calendar) {
+                        if (data.officeInterfaceInfo.services.onlineBooking) {
                             this.getTokenAndNotifyGenerator(officeId);
                         }
                     }
