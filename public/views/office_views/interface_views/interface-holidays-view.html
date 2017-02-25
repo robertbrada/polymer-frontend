@@ -12,10 +12,11 @@
 <link rel="import" href="/custom_components/moment-wrapper-cs.html">
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
 
 <dom-module id="interface-holidays-view">
     <template>
-        <style include="button-styles input-styles">
+        <style include="button-styles input-styles layout-styles">
 
             .main-content {
                 background-color: white; /* TODO: move to parent */
@@ -80,6 +81,16 @@
                 }
             }
 
+            .header {
+                border-top: 1px solid #d5d5d6;
+                padding-left: 1.5em;
+            }
+
+            h1 {
+                font-size: 1.3em;
+                color: var(--app-green-color);
+            }
+
         </style>
 
         <firebase-document id="holidays_document" app-name="doctor-appointment-system"
@@ -88,11 +99,20 @@
         </firebase-document>
 
         <paper-material class="main-content" elevation="1">
-            <div class="main-container">
-                <div class="flex-horizontal">
+            <div class="subsection grid main-container">
+                <section>
+                    <h1>Formulář nové dovolené</h1>
+                    <p>Tato informace je soukromá.</p>
                     <paper-input id="name_input" class="flexchild" label="Název dovolené" value="{{holidayName}}" auto-focus
-                                 required
-                                 auto-validate></paper-input>
+                                 required auto-validate></paper-input>
+                    <h2>Zastupující doktor</h2>
+                    <p>Dobrovolná informace, která se v případě vyplnění zobrazí pacientům na Vašem veřejném profilu.</p>
+                    <paper-input id="doctor_input" class="flexchild" label="Jméno" value="{{substituteDoctorName}}">
+                    </paper-input>
+                </section>
+                <section>
+                    <h2>Datum dovolené</h2>
+                    <p class="error" hidden="[[hideErrorMessage]]">Začátek dovolené je před koncem.</p>
                     <paper-datetime-picker-item required icon="icons:today"
                                                 placeholder="Zadat začátek dovolené"
                                                 default-time="00:00"
@@ -101,19 +121,22 @@
                                                 default-time="23:59"
                                                 locale="cs" date="{{toDateTime}}"></paper-datetime-picker-item>
 
-                </div>
-                <p class="error" hidden="[[hideErrorMessage]]">Začátek dovolené je před koncem.</p>
-                <paper-button raised on-tap="addHolidays"
-                              disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
-                </paper-button>
+                    <paper-button raised on-tap="addHolidays"
+                                  disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
+                    </paper-button>
+                </section>
             </div>
 
+            <div class="header">
+                <h1>Seznam dovolených</h1>
+            </div>
             <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
                 <div id="holiday" class="main-container flex-horizontal">
                     <div>
                         <div><b>Název dovolené:</b> [[holiday.name]]</div>
                         <div><b>Začátek:</b> [[holiday.startAt]]</div>
                         <div><b>Konec:</b> [[holiday.endAt]]</div>
+                        <div hidden="[[!holiday.substituteDoctorName]]"><b>Zastupující lékař:</b> [[holiday.substituteDoctorName]]</div>
                     </div>
                     <paper-button class="dismiss-button" raised on-tap="deleteHolidays">
                         <iron-icon icon="close"></iron-icon>
@@ -151,6 +174,7 @@
                         'name': officeHolidays[key]['name'],
                         'startAt': getFormattedDateTime(Number(key)),
                         'endAt': getFormattedDateTime(officeHolidays[key]['endAt']),
+                        'substituteDoctorName': officeHolidays[key]['substituteDoctorName'],
                         'hId': key
                     }
                 });
@@ -178,7 +202,8 @@
                     startAt: this.fromDateTime.valueOf(),
                     endAt: this.toDateTime.valueOf(),
                     name: this.holidayName,
-                    officeId: this.officeId
+                    officeId: this.officeId,
+                    substituteDoctorName: this.substituteDoctorName
                 };
 
                 this.getTokenAndSendRequest(postData, false);
