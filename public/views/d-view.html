@@ -14,9 +14,6 @@
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 <link rel="import" href="/bower_components/moment-element/moment-import.html">
 
-<link rel="import" href="/custom_components/calendar-element.html">
-<link rel="import" href="/custom_components/calendar-disabled-element.html">
-
 <!--icons-->
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-icons/social-icons.html">
@@ -381,7 +378,9 @@
 
             <div class="subsection grid office-info-section">
                 <!--TODO dom-if destroys animations from calendar to booking confirmation -->
-                <!--<template is="dom-if" if="[[computeDataAvailability(officeData.lastGeneratedDate)]]">-->
+                <template is="dom-if"
+                          if="[[computeIfCalendar(onlineBooking, calendarElementLoaded, calendarDisabledElementLoaded)]]"
+                          on-dom-change="_domComplete">
                     <section id="appointment-container">
                         <div class="wide-container" id="main_container">
 
@@ -404,7 +403,7 @@
                             <div hidden="[[calendarVisibility]]" id="appointment_form" class="side-padding">
                                 <h3>Objednat se</h3>
                                 <span>Datum objednání: <b>[[computeAppointmentDate(appointmentId)]]</b></span>
-                                <paper-textarea id="patient_message" label="Dobrovolná zpráva pro lékaře" char-counter
+                                <paper-textarea value="{{patientMessage}}" label="Dobrovolná zpráva pro lékaře" char-counter
                                                 maxlength="200"></paper-textarea>
                                 <paper-button on-tap="_confirmAppointment" raised>Potvrdit objednání</paper-button>
                                 <div id="exit-form" class="centered" on-tap="_showCalendar">
@@ -413,7 +412,7 @@
                             </div>
                         </div>
                     </section>
-                <!--</template>-->
+                </template>
 
                 <section id="no-calendar-container">
                     <div id="offline-hours">
@@ -475,7 +474,8 @@
                                 Poskytované služby
                             </h2>
                             <template is="dom-repeat" items="[[officeServicesArray]]" as="officeServices">
-                                <div class="flex-horizontal service-item"><div class="service-name flexchild">[[officeServices.name]]</div>
+                                <div class="flex-horizontal service-item">
+                                    <div class="service-name flexchild">[[officeServices.name]]</div>
                                     <div class="service-price">[[officeServices.price]]</div>
                                 </div>
                             </template>
@@ -595,34 +595,50 @@
                 },
 
                 animationConfig: {
-                    value: function () {
-                        return {
-                            'slideUp': {
-                                name: 'slide-up-animation',
-                                node: this.$.calendar_container
-                            },
-                            'slideFromTop': {
-                                name: 'slide-from-top-animation',
-                                node: this.$.calendar_container
-                            },
-                            'slideDown': {
-                                name: 'slide-down-animation',
-                                node: this.$.appointment_form
-                            },
-                            'slideFromBottom': {
-                                name: 'slide-from-bottom-animation',
-                                node: this.$.appointment_form
-                            }
-                        }
-                    }
+                    type: Object
                 },
 
-                warningMessage: {}
+                onlineBooking: {
+                    type: Boolean,
+                    computed: "computeOnlineBooking(officeData)",
+                    observer: "observeOnlineBooking"
+                },
+
+                // Lazy loading
+                calendarElementLoaded: {
+                    type: Boolean,
+                    value: false
+                },
+
+                calendarDisabledElementLoaded: {
+                    type: Boolean,
+                    value: false
+                }
             },
 
             listeners: {
                 'neon-animation-finish': '_onNeonAnimationFinish',
                 'appointment-request': '_onAppointmentRequest'
+            },
+
+            observeOnlineBooking: function (onlineBooking) {
+                // Lazy load the elements
+                if (onlineBooking) {
+                    if (!this.calendarElementLoaded) {
+                        this.importHref('/custom_components/calendar-element.html', function (e) {
+                            this.calendarElementLoaded = true;
+                        }.bind(this), function (e) {
+                            // loading error
+                        });
+                    }
+                    if (!this.calendarDisabledElementLoaded) {
+                        this.importHref('/custom_components/calendar-disabled-element.html', function (e) {
+                            this.calendarDisabledElementLoaded = true;
+                        }.bind(this), function (e) {
+                            // loading error
+                        });
+                    }
+                }
             },
 
             loadOfficeData: function (officeId) {
@@ -683,7 +699,7 @@
                     officeId = this.officeId,
                     officeData = this.officeData,
                     uid = this.userId,
-                    patientMessage = (!!this.$.patient_message.value) ? this.$.patient_message.value : null,
+                    patientMessage = (!!this.patientMessage) ? this.patientMessage : null,
                     patientStatus = this.patientStatus,
                     objectToSave = {},
                     userInfo;
@@ -754,6 +770,32 @@
                 this.appointmentId = Number(event.detail['appointmentId']);
 
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+            },
+
+            _domComplete: function (event) {
+                var form = this.$$("#appointment_form"),
+                    calendar = this.$$("#calendar_container");
+
+                if (form !== null && calendar !== null) {
+                    this.animationConfig = {
+                        'slideUp': {
+                            name: 'slide-up-animation',
+                            node: calendar
+                        },
+                        'slideFromTop': {
+                            name: 'slide-from-top-animation',
+                            node: calendar
+                        },
+                        'slideDown': {
+                            name: 'slide-down-animation',
+                            node: form
+                        },
+                        'slideFromBottom': {
+                            name: 'slide-from-bottom-animation',
+                            node: form
+                        }
+                    };
+                }
             },
 
             // Computed bindings
@@ -873,6 +915,14 @@
                     }
                 }
                 return false;
+            },
+
+            computeOnlineBooking: function (officeData) {
+                return !!officeData.lastGeneratedDate;
+            },
+
+            computeIfCalendar: function (onlineBooking, calendarElementLoaded, calendarDisabledElementLoaded) {
+                return onlineBooking && calendarElementLoaded && calendarDisabledElementLoaded;
             },
 
             computeDataAvailability: function (data) {
