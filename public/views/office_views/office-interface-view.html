@@ -201,9 +201,9 @@
 
 
                 <iron-selector attr-for-selected="name" selected="{{page}}" on-iron-activate="toggleDrawer">
-                    <paper-item name="waiting-list" class="nav">Pořadník</paper-item>
-                    <paper-item name="calendar" class="nav">Kalendář</paper-item>
-                    <paper-item name="patients" class="nav">Pacienti
+                    <paper-item hidden="[[!officeInterfaceInfo.services.onlineBooking]]" name="waiting-list" class="nav">Pořadník</paper-item>
+                    <paper-item hidden="[[!officeInterfaceInfo.services.onlineBooking]]" name="calendar" class="nav">Kalendář</paper-item>
+                    <paper-item hidden="[[!officeInterfaceInfo.services.onlineBooking]]" name="patients" class="nav">Pacienti
                         <span hidden="[[!showNotifications(officeInterfaceInfo.patientsToVerify)]]" class="badge">
                             [[officeInterfaceInfo.patientsToVerify]]
                         </span>
