@@ -27,7 +27,6 @@
             #animated_calendar {
                 @apply(--layout-horizontal);
                 width: 100%;
-                border: 1px solid #e3e3e4;
             }
 
             #animated_calendar > section {
@@ -52,17 +51,16 @@
             }
 
             .buttons {
-                height: 33.5em;
+                height: 30em;
                 overflow-y: auto;
                 overflow-x: hidden;
                 padding-top: 0.5em;
-
+                border-top: 2px solid #e0e0e1;
             }
 
             .date-container {
-                color: #fff;
-                background-color: var(--app-green-color);
-                padding: 0.35em 0;
+                box-sizing: border-box;
+                padding: 0 0 1em 0;
                 font-size: 1.05em;
                 outline: 1px solid #fff;
             }
@@ -72,17 +70,18 @@
             }
 
             button {
-                color: black;
+                color: #fff;
                 text-align: center;
                 text-decoration: none;
                 font-size: 1.15em;
                 width: 100%;
                 cursor: pointer;
                 line-height: 0;
-                background-color: #f4f4f5;
+                background-color: var(--app-green-color);
+                border-radius: 3px;
                 margin: 0.3em 0.55em;
-                padding: 1.1em 0;
-                border: 1px solid #d8d8d9;
+                padding: 1.25em 0;
+                border: none;
             }
 
             button:hover {
@@ -102,6 +101,7 @@
                 background-color: inherit;
                 border: none;
                 cursor: auto;
+                color: black;
             }
 
             paper-icon-button[disabled] {
