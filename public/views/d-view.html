@@ -145,12 +145,12 @@
 
             #calendar_container h3 {
                 margin-bottom: 0;
+                margin-top: 1em;
             }
 
             #calendar_container p {
-                margin-bottom: 2em;
+                margin-bottom: 3em;
                 padding-bottom: 1em;
-                border-bottom: 1px solid #ccd;
             }
 
             /*** FORM ***/
@@ -172,22 +172,10 @@
                 margin-top: 2em;
             }
 
-            /*** MAP AND PATIENT INFO ***/
-            #map-and-patient-info {
-                border-top: 1px solid #ccccd5;
-            }
-
-            .patient-container {
-                margin: 4em auto 1.5em auto;
-                text-align: justify;
-            }
-
-            .patient-container iron-icon {
-                color: var(--app-green-color);
-            }
+            /*** MAP ***/
 
             google-map {
-                height: 60vh;
+                height: 55vh;
                 border-top: 1px solid #ccccd5;
             }
 
@@ -195,6 +183,70 @@
             .centered {
                 @apply(--layout);
                 @apply(--layout-center-justified);
+            }
+
+            .office-info-section {
+                margin: 0 auto;
+                max-width: 100%;
+                padding: 0 4% 3em 4%;
+                background-color: #fbfbfc;
+            }
+
+            .office-info-section h2 {
+                font-size: 1.3em;
+                margin-bottom: 1.4em;
+            }
+
+            /* OFFICE HOURS */
+            #offline-hours div {
+                padding: 1em;
+                margin-top: 0;
+                border-top: 1px solid #e2e2e3;
+                border-top: 1px solid #e2e2e3;
+            }
+
+            .day span:first-child {
+                font-weight: bold;
+                width: 6em;
+                float: left;
+                font-size: 1.1em;
+            }
+
+            /************************/
+            #no-calendar-container {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            #services-container div {
+                padding: 1em;
+                text-align: left;
+                margin: 0;
+                background-color: #fff;
+                border-left: 1px solid #e0e0e1;
+                border-right: 1px solid #e0e0e1;
+                border-bottom: 1px solid #e0e0e1;
+                word-break: break-all;
+            }
+
+            #services-container div:nth-child(2) {
+                border-top: 1px solid #e0e0e1;
+            }
+
+            .service-price {
+                float: right;
+                font-weight: bold;
+            }
+
+            #appointment-container {
+                background-color: #fff;
+                margin-right: 3%;
+                margin-top: 3em;
+                margin-left: -2%;
+                padding-right: 2%;
+                padding-left: 2%;
+                padding-top: 1em;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
             }
 
             @media only screen and (max-width: 717px) {
@@ -219,10 +271,6 @@
                     border-top: 1px solid #fff;
                 }
 
-                .patient-container {
-                    margin: 0.5em auto 1.5em auto;
-                }
-
                 .order-info {
                     display: block;
                     padding-bottom: 1em;
@@ -232,14 +280,17 @@
                     margin-right: -15px;
                 }
 
-                .main-frame {
-                    padding-bottom: 0;
-                }
-
                 #exit-form {
                     margin-bottom: 1em;
                 }
+
+                #appointment-container {
+                    margin: 0 -4.1%;
+                    box-shadow: none;
+                    border-bottom: 1px solid #e0e0e1;
+                }
             }
+
 
         </style>
 
@@ -259,18 +310,19 @@
                         <!--<img src$="[[computePhotoURL(photoFile)]]">-->
                         <img src="../images/docprofile.png">
                         <h3>[[computeFormattedName(officeData.name.firstName, officeData.name.lastName)]]</h3>
-                        <span>[[computeSpecialization(officeData.specialization)]]</span>
+                        <span>[[officeData.specialization]]</span>
                     </template>
 
                     <div id="name-without-photo" hidden="[[officeData.photoAvailability]]">
                         <h3>[[computeFormattedName(officeData.name.firstName, officeData.name.lastName)]]</h3>
-                        <span>[[computeSpecialization(officeData.specialization)]]</span>
+                        <span>[[officeData.specialization]]</span>
                     </div>
                 </section>
 
                 <section class="info-section">
                     <div>
-                        <a target="_blank" title="Zobrazit mapu v novém okně" href="[[computeMapLink(officeData.address)]]">
+                        <a target="_blank" title="Zobrazit mapu v novém okně"
+                           href="[[computeMapLink(officeData.address)]]">
                             <iron-icon id="map-icon" icon="maps:place"></iron-icon>
                         </a>
                         [[officeData.address.street]]<br>
@@ -303,59 +355,108 @@
                 </section>
             </div>
 
-            <div id="appointment-container">
-                <div class="wide-container" id="main_container">
+            <div class="subsection grid office-info-section">
+                <section id="appointment-container">
+                    <div class="wide-container" id="main_container">
 
-                    <div class="side-padding">
-                        <calendar-disabled-element manual-confirmation="[[officeData.manualConfirmation]]"
-                                                   office-id="[[officeId]]"
-                                                   patient-status="{{patientStatus}}"
-                                                   disabled-calendar="{{disabledCalendar}}"></calendar-disabled-element>
-                    </div>
+                        <div class="side-padding">
+                            <calendar-disabled-element manual-confirmation="[[officeData.manualConfirmation]]"
+                                                       office-id="[[officeId]]"
+                                                       patient-status="{{patientStatus}}"
+                                                       disabled-calendar="{{disabledCalendar}}"></calendar-disabled-element>
+                        </div>
 
-                    <div id="calendar_container" hidden="[[!calendarVisibility]]">
-                        <h3>Kalendář</h3>
-                        <p>Pro objednání vyberte čas, na který se chcete objednat.</p>
+                        <div id="calendar_container" hidden="[[!calendarVisibility]]">
+                            <h3>Kalendář</h3>
+                            <p>Pro objednání vyberte čas, na který se chcete objednat.</p>
 
-                        <calendar-element office-id="[[officeId]]"
-                                          last-generated-date-raw="[[officeData.lastGeneratedDate]]"
-                                          disabled="[[disabledCalendar]]">
-                        </calendar-element>
-                    </div>
-                    <div hidden="[[calendarVisibility]]" id="appointment_form" class="side-padding">
-                        <h3>Objednat se</h3>
-                        <span>Datum objednání: <b>[[computeAppointmentDate(appointmentId)]]</b></span>
-                        <paper-textarea id="patient_message" label="Dobrovolná zpráva pro lékaře" char-counter
-                                        maxlength="200"></paper-textarea>
-                        <paper-button on-tap="_confirmAppointment" raised>Potvrdit objednání</paper-button>
-                        <div id="exit-form" class="centered" on-tap="_showCalendar">
-                            <span><iron-icon icon="today"></iron-icon>Zpět na kalendář</span>
+                            <calendar-element office-id="[[officeId]]"
+                                              last-generated-date-raw="[[officeData.lastGeneratedDate]]"
+                                              disabled="[[disabledCalendar]]">
+                            </calendar-element>
+                        </div>
+                        <div hidden="[[calendarVisibility]]" id="appointment_form" class="side-padding">
+                            <h3>Objednat se</h3>
+                            <span>Datum objednání: <b>[[computeAppointmentDate(appointmentId)]]</b></span>
+                            <paper-textarea id="patient_message" label="Dobrovolná zpráva pro lékaře" char-counter
+                                            maxlength="200"></paper-textarea>
+                            <paper-button on-tap="_confirmAppointment" raised>Potvrdit objednání</paper-button>
+                            <div id="exit-form" class="centered" on-tap="_showCalendar">
+                                <span><iron-icon icon="today"></iron-icon>Zpět na kalendář</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </section>
 
-            <div id="map-and-patient-info">
-                <template is="dom-if" if="[[computeTextAvailability(officeData.patientText)]]">
-                    <div class="patient-container main-frame">
-                        <h3>
+                <section id="no-calendar-container">
+                    <template is="dom-if" if="[[computeOfflineHoursAvailability(offlineOfficeHoursArray)]]">
+                        <div id="offline-hours">
+                            <h2>
+                                <iron-icon icon="icons:watch-later"></iron-icon>
+                                Ordinační hodiny
+                            </h2>
+                            <template is="dom-repeat" items="[[offlineOfficeHoursArray]]" as="offlineHours">
+                                <template id="" is="dom-if" if="[[offlineHours.available]]">
+                                    <div class="day"><span>[[computeDateName(index)]] :</span><span
+                                            hidden="[[!offlineHours.available]]">
+                                [[offlineHours.hours]]</span>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </template>
+
+                    <template is="dom-if" if="[[computeTextAvailability(officeData.patientText)]]">
+                        <h2>
                             <iron-icon icon="icons:info"></iron-icon>
                             Informace pro pacienty
-                        </h3>
-                        <p>[[officeData.patientText]]</p>
-                    </div>
-                </template>
-                <template is="dom-if"
-                          if="[[computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
-                    <!--TODO: restrict API key for our domain -->
-                    <google-map id="map_element" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="16"
-                                latitude="[[officeData.coordinates.latitude]]"
-                                longitude="[[officeData.coordinates.longitude]]">
-                        <google-map-marker latitude="[[officeData.coordinates.latitude]]"
-                                           longitude="[[officeData.coordinates.longitude]]">
-                        </google-map-marker>
-                    </google-map>
-                </template>
+                        </h2>
+                        <span>[[officeData.patientText]]</span>
+                    </template>
+
+                    <template is="dom-if" if="[[computeInsuranceAvailability(insuranceArray)]]">
+                        <section id="insurance-container">
+                            <h2>
+                                <iron-icon icon="icons:assignment"></iron-icon>
+                                Pojišťovny, se kterými máme smlouvu
+                            </h2>
+                            <template is="dom-repeat" items="[[insuranceArray]]" as="insurance">
+                                <template is="dom-if" if="[[insurance.accepted]]">
+                                    <div>[[computeInsuranceName(insurance.id)]]</div>
+                                </template>
+                            </template>
+                        </section>
+                    </template>
+
+                    <template is="dom-if" if="[[computeServicesAvailability(officeData.officeServices)]]">
+                        <section id="services-container">
+                            <h2>
+                                <iron-icon icon="icons:view-list"></iron-icon>
+                                Poskytované služby
+                            </h2>
+                            <template is="dom-repeat" items="[[officeServicesArray]]" as="officeServices">
+                                <div><span class="service-name">[[officeServices.name]]</span><span
+                                        class="service-price">[[officeServices.price]]</span>
+                                </div>
+                            </template>
+                        </section>
+                    </template>
+
+                </section>
+                <div id="map-and-patient-info">
+                    <template is="dom-if"
+                              if="[[computeMapAvailability(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)]]">
+                        <!--TODO: restrict API key for our domain -->
+                        <google-map id="map_element" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker
+                                    zoom="16"
+                                    latitude="[[officeData.coordinates.latitude]]"
+                                    longitude="[[officeData.coordinates.longitude]]">
+                            <google-map-marker latitude="[[officeData.coordinates.latitude]]"
+                                               longitude="[[officeData.coordinates.longitude]]">
+                            </google-map-marker>
+                        </google-map>
+                    </template>
+                </div>
             </div>
         </div>
     </template>
@@ -381,6 +482,22 @@
                     observer: 'loadOfficeData'
                 },
 
+
+                insuranceArray: {
+                    type: Array,
+                    computed: 'computeInsuranceArray(officeData.insurance)'
+                },
+
+                offlineOfficeHoursArray: {
+                    type: Array,
+                    computed: 'computeOfflineOfficeHoursArray(officeData.offlineOfficeHours)'
+                },
+
+                officeServicesArray: {
+                    type: Array,
+                    computed: 'computeOfficeServicesArray(officeData.officeServices)'
+                },
+
                 hideSpinner: {
                     type: Boolean,
                     value: false
@@ -398,9 +515,22 @@
 
                 // Other
 
-                specializations: {
+                insuranceNames: {
+                    type: Object,
+                    value: {
+                        111: '111 Všeobecná zdravotní pojišťovna ČR',
+                        201: '201 Vojenská zdravotní pojišťovna ČR',
+                        205: '205 Česká průmyslová zdravotní pojišťovna',
+                        207: '207 Oborová zdravotní poj. zam. bank, poj. a stav.',
+                        209: '209 Zaměstnanecká pojišťovna Škoda',
+                        211: '211 Zdravotní pojišťovna ministerstva vnitra ČR',
+                        213: '213 Revírní bratrská pokladna, zdrav. pojišťovna'
+                    }
+                },
+
+                days: {
                     type: Array,
-                    value: ['Zubař', 'Rektálník', 'Gynekolog']
+                    value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
                 },
 
                 appointmentId: {
@@ -626,6 +756,68 @@
 
             computeContentHiddenness: function (requestFinished, wrongId) {
                 return requestFinished || wrongId;
+            },
+
+
+            //COMPUTE OFFICE INFO
+
+            computeInsuranceArray: function (officeData) {
+                return Object.keys(officeData).map(function (key) {
+                    return {
+                        'accepted': officeData[key]['accepted'],
+                        'id': officeData[key]['id']
+                    }
+                });
+            },
+
+            computeOfflineOfficeHoursArray: function (officeData) {
+                return Object.keys(officeData).map(function (key) {
+                    return {
+                        'available': officeData[key]['available'],
+                        'hours': officeData[key]['hours']
+                    }
+                });
+            },
+
+            computeOfficeServicesArray: function (officeData) {
+                if (!!officeData) {
+                    return Object.keys(officeData).map(function (key) {
+                        return {
+                            'name': officeData[key]['name'],
+                            'price': officeData[key]['price']
+                        }
+                    });
+                }
+            },
+
+            computeInsuranceName: function (insuranceId) {
+                return this.insuranceNames[insuranceId];
+            },
+
+            computeDateName: function (index) {
+                return this.days[index]
+            },
+
+            computeOfflineHoursAvailability: function (array) {
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i].available == true) {
+                        return true
+                    }
+                }
+                return false;
+            },
+
+            computeInsuranceAvailability: function (array) {
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i].accepted == true) {
+                        return true
+                    }
+                }
+                return false;
+            },
+
+            computeServicesAvailability: function (services) {
+                return !!services
             }
         });
     </script>
