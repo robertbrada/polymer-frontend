@@ -1,21 +1,105 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
+<link rel="import" href="/bower_components/moment-element/moment-import.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
+<link rel="import" href="/custom_components/moment-wrapper-cs.html">
+
 
 <dom-module id="interface-calendar-view">
     <template>
         <style>
-            img {
-                max-width: 100%;
+            .main-content {
+                background-color: white; /* TODO: move to parent */
             }
+
+
         </style>
 
-        <img name="calendar" src="/images/calendar-render.png">
+        <firebase-document id="generator_document" app-name="doctor-appointment-system"
+                           path="/generatorInfo/[[officeId]]" data="{{generatorInfo}}">
+        </firebase-document>
+
+        <paper-material class="main-content" elevation="1">
+            <paper-icon-button icon="chevron-left" on-tap="previousMonth"></paper-icon-button>
+            <paper-icon-button icon="chevron-right" on-tap="nextMonth"></paper-icon-button>
+        </paper-material>
 
     </template>
 
     <script>
         Polymer({
-            is: 'interface-calendar-view'
+            is: 'interface-calendar-view',
+
+
+            properties: {
+
+                selectedMonth: {
+                    type: Number,
+                    value: function () {
+                        return new Date().getMonth();
+                    }
+                },
+
+                selectedYear: {
+                    type: Number,
+                    value: function () {
+                        return new Date().getFullYear();
+                    }
+                },
+
+                monthDateRange: {
+                    type: Object,
+                    computed: "computeMonthDateRange(selectedYear, selectedMonth)",
+                    observer: "loadData"
+                }
+            },
+
+            computeMonthDateRange: function (year, month) {
+
+                var startDate = moment([year, month]);
+
+                // Clone the value before .endOf()
+                var endDate = moment(startDate).endOf('month');
+
+                // make sure to call toDate() for plain JavaScript date type
+                return {start: startDate, end: endDate};
+            },
+
+            nextMonth: function () {
+                var nextMonth = this.selectedMonth + 1;
+
+                // Check if month index is out of range (last valid index is 11)
+                if (nextMonth === 12) {
+                    this.selectedYear = this.selectedYear + 1;
+                    this.selectedMonth = 0;
+                } else {
+                    this.selectedMonth = nextMonth;
+                }
+
+            },
+
+            previousMonth: function () {
+                var previousMonth = this.selectedMonth - 1;
+
+                // Check if month index is out of range (smallest valid index is 0)
+                if (previousMonth === -1) {
+                    this.selectedYear = this.selectedYear - 1;
+                    this.selectedMonth = 11;
+                } else {
+                    this.selectedMonth = previousMonth;
+                }
+            },
+
+            loadData: function (monthDateRange) {
+                var db = this.$.generator_document.app.database();
+                console.log(monthDateRange);
+            }
+
+
         });
     </script>
 </dom-module>

@@ -375,7 +375,6 @@
             </div>
 
             <div class="subsection grid office-info-section">
-                <!--TODO dom-if destroys animations from calendar to booking confirmation -->
                 <template is="dom-if"
                           if="[[computeIfCalendar(onlineBooking, calendarElementLoaded, calendarDisabledElementLoaded)]]"
                           on-dom-change="_domComplete">

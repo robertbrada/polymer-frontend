@@ -4,7 +4,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="/bower_components/neon-animation/animations/slide-from-right-animation.html">
@@ -130,9 +130,6 @@
             }
 
         </style>
-
-        <firebase-document id="document" app-name="doctor-appointment-system">
-        </firebase-document>
 
         <div class="wrapper">
             <div class="controls">
@@ -282,7 +279,7 @@
 
             // I am using the firebase API directly, because the firebase-query element was extremely retarded
             fetchData: function (dateInterval, officeId) {
-                var db = this.$.document.app.database();
+                var db = firebase.apps[0].database();
 
                 db.ref("/appointmentsPublic/" + officeId).orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
                     this.setBookingTimesOfDates(snapshot.val());
