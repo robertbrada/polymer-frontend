@@ -25,7 +25,28 @@
 
         <paper-material class="main-content" elevation="1">
             <paper-icon-button icon="chevron-left" on-tap="previousMonth"></paper-icon-button>
+            <span>[[computeMonthYear(selectedMonth, selectedYear)]]</span>
             <paper-icon-button icon="chevron-right" on-tap="nextMonth"></paper-icon-button>
+            <table>
+                <tr>
+                    <template is="dom-repeat" items="[[dayShortNames]]" as="dayShortName">
+                        <th>
+                            [[dayShortName]]
+                        </th>
+                    </template>
+                </tr>
+                <template is="dom-repeat" items="[[weeks]]" as="week">
+                    <tr>
+                        <template is="dom-repeat" items="[[week]]" as="dayOfWeek">
+                            <td>
+                                <span hidden="[[dayOfWeek.disabled]]">[[dayOfWeek.date]]</span>
+                                <br>
+                                <span hidden="[[!dayOfWeek.free]]">[[dayOfWeek.free]] volných</span>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </table>
         </paper-material>
 
     </template>
@@ -58,7 +79,12 @@
                 },
 
                 weeks: {
-                    type: Object
+                    type: Array
+                },
+
+                dayShortNames: {
+                    type: Array,
+                    value: ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"]
                 }
             },
 
@@ -105,7 +131,7 @@
 
                 db.ref("/appointmentsPublic/" + this.officeId).orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
                     bookingTimes = this.computeBookingTimesOfDates(snapshot.val());
-                    this.week = this.computeWeeks(bookingTimes, monthDateRange);
+                    this.weeks = this.computeWeeks(bookingTimes, monthDateRange);
                 }.bind(this));
             },
 
@@ -115,16 +141,24 @@
                     key, value, newDateId;
 
                 for (key in data) {
-                    value = data[key];
-                    if (data.hasOwnProperty(key) && value === true) { // TODO: find a way to query only true values
+                    if (data.hasOwnProperty(key)) {
+                        value = data[key];
                         newDateId = key.substr(0, 8);
                         if (newDateId !== dateId) {
                             dateId = newDateId;
-                            bookingTimesOfDates[dateId] = [];
+                            bookingTimesOfDates[dateId] = {
+                                times: [],
+                                free: 0
+                            };
                         }
 
-                        bookingTimesOfDates[newDateId].push({
-                            id: key
+                        if (value) {
+                            bookingTimesOfDates[newDateId].free = bookingTimesOfDates[newDateId].free + 1;
+                        }
+
+                        bookingTimesOfDates[newDateId].times.push({
+                            id: key,
+                            occupied: !value
                         });
                     }
                 }
@@ -134,27 +168,63 @@
 
             computeWeeks: function (bookingTimes, monthDateRange) {
                 var weeks = [],
-                    startOfFirstWeek = monthDateRange.start.startOf('week'),
-                    endOfLastWeek = monthDateRange.end.endOf('week');
+                    currentWeek = [],
+                    currentMoment = monthDateRange.start.clone().startOf('week'), // I am cloning the moment to avoid unwanted mutability
+                    endOfLastWeek = monthDateRange.end.endOf('week'),
+                    month = this.selectedMonth,
+                    dateId, dateObject;
+
+                do {
+                    dateId = this.getDateId(currentMoment);
+                    dateObject = {
+                        disabled: currentMoment.month() !== month,
+                        dateId: dateId,
+                        date: currentMoment.date(),
+                        free: 0
+                    };
+
+                    if (bookingTimes[dateId] !== undefined) {
+                        dateObject["free"] = bookingTimes[dateId].free;
+                    }
+
+                    currentWeek.push(dateObject);
+
+                    if (currentWeek.length === 7) {
+                        weeks.push(currentWeek);
+                        currentWeek = [];
+                    }
+
+                } while (currentMoment.add(1, 'days').diff(endOfLastWeek) < 0);
 
                 return weeks;
             },
 
-            getDateTimeId: function (moment) {
+            getDateId: function (moment) {
                 var month = moment.month() + 1,
-                    dayDate = moment.date(),
-                    hours = moment.hour(),
-                    minutes = moment.minute();
+                    dayDate = moment.date();
 
                 if (month < 10) month = "0" + month;
                 if (dayDate < 10) dayDate = "0" + dayDate;
+
+                return "" + moment.year() + month + dayDate;
+            },
+
+            getDateTimeId: function (moment, stripHoursAndMinutes) {
+
+                if (stripHoursAndMinutes) return (this.getDateId(moment) + "0000");
+
+                var hours = moment.hour(),
+                    minutes = moment.minute();
+
                 if (hours < 10) hours = "0" + hours;
                 if (minutes < 10) minutes = "0" + minutes;
 
-                return "" + moment.year() + month + dayDate + hours + minutes;
+                return this.getDateId(moment) + hours + minutes;
+            },
+
+            computeMonthYear: function (selectedMonth, selectedYear) {
+                return "" + moment.months()[selectedMonth] + " " + selectedYear;
             }
-
-
         });
     </script>
 </dom-module>
