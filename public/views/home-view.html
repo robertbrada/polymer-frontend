@@ -20,98 +20,27 @@
         <style include="button-styles input-styles layout-styles">
             :host {
                 display: block;
-                background-color: var(--app-background-color);
                 --large-photo-width: 105px;
                 --small-photo-width: 85px;
             }
 
+            #logo {
+                max-width: 150px;
+            }
+
             #head {
-                padding: 70px 0 140px 0;
-                margin: 0 auto;
-                background-color: var(--app-accent-color);
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-            }
-
-            /* prepsane nektere vlastnosti naimportovane z input styles - specificke pro home-view input */
-            paper-input {
-                --paper-input-container-label: {
-                    font-weight: lighter;
-                    font-size: 18px;
-                };
-
-                --paper-input-container-underline-focus: {
-                    background-color: var(--app-accent-color);
-                    height: 4px;
-                };
-
-                --paper-input-container-input: {
-                    margin-bottom: 7px;
-                };
-            }
-
-            #head h1 {
-                text-align: center;
-                margin: 0 20px;
-                letter-spacing: 0.03em;
-                font-size: 30px;
-                color: #fff;
-            }
-
-            #search-div {
-                background-color: white;
-                max-width: 1150px;
-                margin: 60px auto 0 auto;
-                padding: 60px;
-                box-shadow: 0 14px 28px rgba(0, 0, 0, 0.48), 0 10px 10px rgba(0, 0, 0, 0.45);
-                /*box-shadow: 0 0 0 8px #172C50, 0 0 0 10px white;*/
-            }
-
-            #search_button {
-                width: 220px;
-                text-align: center;
-                height: 64px;
-                font-size: 1.2em;
-            }
-
-            /* aby bly inputy stejne zarovnany s tlacitkem */
-            .grid > section:not(:last-child) {
-                margin-top: 12px;
-            }
-
-            .grid > section:last-child {
-                text-align: center;
-            }
-
-            /* aby mezi sekcema nebyly puvodní 80px mezery naimporotvane z layout-styles */
-            .grid > section:not(:first-child) {
-                margin-left: 30px;
+                margin: 0 auto 4em auto;
+                font-size: 0.7em;
             }
 
             @media only screen and (max-width: 767px) {
 
                 #head {
-                    padding-bottom: 0;
-                }
-
-                #search-div {
-                    box-shadow: none;
-                    padding: 20px 30px 40px;
+                    padding: 1em 5%;
                 }
 
                 h1 {
                     font-size: 22px;
-                }
-
-                #search_button {
-                    width: 100%;
-                }
-
-                .grid > section {
-                    margin-top: 30px;
-                }
-
-                .grid > section:not(:first-child) {
-                    margin-left: 0;
                 }
             }
 
@@ -128,11 +57,10 @@
             }
 
             .office-element {
-                padding: 1.5em;
-                border-top: 1px solid #ccccce;
-                background-color: #fff;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-                font-size: 0.95em;
+                padding: 2em;
+                border: 1px solid #e1e1e2;
+                background-color: #fbfbfc;
+                margin: 1em auto;
             }
 
             #profile-photo {
@@ -209,6 +137,7 @@
                 @apply(--layout-horizontal);
             }
 
+
             @media only screen and (max-width: 767px) {
 
                 .main-frame {
@@ -224,6 +153,10 @@
                     font-size: 0.88em;
                     padding-top: 1em;
                     padding-bottom: 1em;
+                    background: #fff;
+                    margin: 0;
+                    border: none;
+                    border-top: 1px solid #e2e2e3;
                 }
 
                 #name-address {
@@ -263,39 +196,11 @@
 
         <iron-media-query query="max-width: 585px" query-matches="{{mobileScreen}}"></iron-media-query>
 
-        <div id="head">
-
-            <h1>Objednejte se online a bez čekání</h1>
-
-            <div id="search-div">
-                <div class="subsection grid">
-                    <section>
-                        <paper-input id="search_input_doctor" label="Jméno nebo specializace" type="search"
-                                     focused="{{focused1}}" always-float-label="[[focused1]]">
-                        </paper-input>
-                    </section>
-
-                    <section>
-                        <paper-input id="search_input_place" label="Město nebo PSČ" type="search"
-                                     focused="{{focused2}}" always-float-label="[[focused2]]">
-                        </paper-input>
-                    </section>
-
-                    <section>
-                        <paper-button id="search_button" raised>
-                            <iron-icon icon="search"></iron-icon>
-                            Hledat
-                        </paper-button>
-                    </section>
-                </div>
-                <paper-checkbox id="accepting-new-checkbox">Najít pouze lékaře přijímající nové pacienty
-                </paper-checkbox>
-            </div>
-
-        </div>
-
-
         <div id="main-container" class="main-frame container flex-horizontal">
+            <div id="head">
+                <img id="logo" src="../images/logo.png">
+                <h1>Seznam registrovaných ordinací</h1>
+            </div>
 
             <template is="dom-repeat" items="[[officesArray]]" as="office">
                 <div class="office-element container flex-horizontal-with-ratios">
@@ -326,7 +231,7 @@
                         </div>
 
                         <a href="/d/[[office.officeId]]" id="show-profile">
-                            <paper-button hidden="[[mobileScreen]]" raised>Objednat se</paper-button>
+                            <paper-button hidden="[[mobileScreen]]" raised>Zobrazit profil</paper-button>
                         </a>
                     </div>
                 </div>
