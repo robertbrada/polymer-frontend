@@ -15,8 +15,6 @@
             .main-content {
                 background-color: white; /* TODO: move to parent */
             }
-
-
         </style>
 
         <firebase-document id="generator_document" app-name="doctor-appointment-system"
@@ -38,7 +36,7 @@
                 <template is="dom-repeat" items="[[weeks]]" as="week">
                     <tr>
                         <template is="dom-repeat" items="[[week]]" as="dayOfWeek">
-                            <td>
+                            <td on-tap="selectDate">
                                 <span hidden="[[dayOfWeek.disabled]]">[[dayOfWeek.date]]</span>
                                 <br>
                                 <span hidden="[[!dayOfWeek.free]]">[[dayOfWeek.free]] volných</span>
@@ -86,6 +84,14 @@
                     type: Array,
                     value: ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"]
                 }
+            },
+
+            selectDate: function (event) {
+                var dayOfWeek = event.model.dayOfWeek,
+                    element = Polymer.dom(event).localTarget;
+
+                console.log(dayOfWeek);
+                element.style.backgroundColor = "red";
             },
 
             computeMonthDateRange: function (year, month) {
