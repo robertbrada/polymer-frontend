@@ -18,12 +18,14 @@
         <paper-material elevation="1">
             <paper-tabs focused selected="{{selected}}" attr-for-selected="name">
                 <paper-tab name="office-info">Obecné</paper-tab>
+                <paper-tab name="patient-info">Informace pro pacienty</paper-tab>
                 <paper-tab name="generator-info">Ordinační hodiny</paper-tab>
             </paper-tabs>
 
 
             <iron-pages selected="[[selected]]" attr-for-selected="name">
                 <office-info-view name="office-info" office-id="[[officeId]]"></office-info-view>
+                <patient-info-view name="patient-info" office-id="[[officeId]]"></patient-info-view>
                 <generator-info-view name="generator-info" office-id="[[officeId]]"></generator-info-view>
             </iron-pages>
         </paper-material>
