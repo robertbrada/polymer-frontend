@@ -54,7 +54,11 @@
                 monthDateRange: {
                     type: Object,
                     computed: "computeMonthDateRange(selectedYear, selectedMonth)",
-                    observer: "loadData"
+                    observer: "fetchData"
+                },
+
+                weeks: {
+                    type: Object
                 }
             },
 
@@ -65,7 +69,6 @@
                 // Clone the value before .endOf()
                 var endDate = moment(startDate).endOf('month');
 
-                // make sure to call toDate() for plain JavaScript date type
                 return {start: startDate, end: endDate};
             },
 
@@ -94,9 +97,61 @@
                 }
             },
 
-            loadData: function (monthDateRange) {
-                var db = this.$.generator_document.app.database();
-                console.log(monthDateRange);
+            fetchData: function (monthDateRange) {
+                var db = this.$.generator_document.app.database(),
+                    startOfRange = this.getDateTimeId(monthDateRange.start),
+                    endOfRange = this.getDateTimeId(monthDateRange.end),
+                    bookingTimes;
+
+                db.ref("/appointmentsPublic/" + this.officeId).orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
+                    bookingTimes = this.computeBookingTimesOfDates(snapshot.val());
+                    this.week = this.computeWeeks(bookingTimes, monthDateRange);
+                }.bind(this));
+            },
+
+            computeBookingTimesOfDates: function (data) {
+                var bookingTimesOfDates = {},
+                    dateId = null,
+                    key, value, newDateId;
+
+                for (key in data) {
+                    value = data[key];
+                    if (data.hasOwnProperty(key) && value === true) { // TODO: find a way to query only true values
+                        newDateId = key.substr(0, 8);
+                        if (newDateId !== dateId) {
+                            dateId = newDateId;
+                            bookingTimesOfDates[dateId] = [];
+                        }
+
+                        bookingTimesOfDates[newDateId].push({
+                            id: key
+                        });
+                    }
+                }
+
+                return bookingTimesOfDates;
+            },
+
+            computeWeeks: function (bookingTimes, monthDateRange) {
+                var weeks = [],
+                    startOfFirstWeek = monthDateRange.start.startOf('week'),
+                    endOfLastWeek = monthDateRange.end.endOf('week');
+
+                return weeks;
+            },
+
+            getDateTimeId: function (moment) {
+                var month = moment.month() + 1,
+                    dayDate = moment.date(),
+                    hours = moment.hour(),
+                    minutes = moment.minute();
+
+                if (month < 10) month = "0" + month;
+                if (dayDate < 10) dayDate = "0" + dayDate;
+                if (hours < 10) hours = "0" + hours;
+                if (minutes < 10) minutes = "0" + minutes;
+
+                return "" + moment.year() + month + dayDate + hours + minutes;
             }
 
 
