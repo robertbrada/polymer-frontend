@@ -1,7 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
-<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
@@ -9,7 +8,6 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/paper-tooltip/paper-tooltip.html">
 <!--<link rel="import" href="/bower_components/file-input/file-input.html">-->
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
@@ -42,46 +40,9 @@
                     <paper-input label="Ulice a číslo popisné" value="{{localOfficeData.address.street}}"
                                  minlength="1" maxlength="80" required auto-validate></paper-input>
 
-                    <h2>Vaše specializace v této ordinaci</h2>
-                    <paper-dropdown-menu label="Specializace">
-                        <paper-listbox class="dropdown-content" selected="{{localOfficeData.specialization}}">
-                            <template is="dom-repeat" items="[[specializations]]" as="entry">
-                                <paper-item>[[entry]]</paper-item>
-                            </template>
-                        </paper-listbox>
-                    </paper-dropdown-menu>
-
-                    <h2>Přijímání nových pacientů<span id="accept-new-tooltip" class="tooltip"><iron-icon
-                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="accept-new-tooltip" offset="0">Zaškrtněte, pokud přijímáte nové pacienty.
-                    </paper-tooltip>
-                    <paper-checkbox checked="{{localOfficeData.acceptingNewPatients}}">
-                        Přijímám nové pacienty
-                    </paper-checkbox>
-
-                    <h2>Manuální potvrzení při první návštěvě<span id="manual-confirm-tooltip" class="tooltip"><iron-icon
-                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="manual-confirm-tooltip" offset="0">Zaškrtněte, pokud chcete, aby pacient při
-                        prvním objednání nejprve musel zažádat o
-                        vaše potvrzení. Poté, co pacient zažádá o potvrzení, vám přijde zpráva, ve které uvidíte pacientovi osobní údaje
-                        (jméno, adresa, datum narození), na jejichž základě umožníte pacientovi objednání či naopak.
-                        <br>
-                        Při dalších návštěvách již potvrzeného pacienta nebude nutné vaše potvrzení.
-                    </paper-tooltip>
-
-                    <paper-checkbox checked="{{localOfficeData.manualConfirmation}}">
-                        Vyžaduji manuální potvrzení
-                    </paper-checkbox>
-                </section>
-                <section>
-
-                    <h2>Vřejné informace profilu<span id="contact-info-tooltip" class="tooltip"><iron-icon
-                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="contact-info-tooltip" offset="0">Zadejte údaje, které si přejete zobrazit na
-                        profilu ordinace. Údaje jsou
-                        dobrovolné a nemusíte je tak vyplňovat/nahrávat. <br>
-                        Pokud chcete pacientům umožnit objednání přes telefon, tak jej vyplňte.
-                    </paper-tooltip>
+                    <h2>Vřejné informace profilu</h2>
+                    <p>Informace budou veřejně k vidění na vašem profilu. Údaje jsou
+                        dobrovolné a nemusíte je tak vyplňovat. </p>
                     <gold-phone-input country-code="420" label="Telefonní číslo"
                                       phone-number-pattern="XXX-XXX-XXX" auto-validate
                                       value="{{localOfficeData.phoneNumber}}">
@@ -89,13 +50,21 @@
                     <gold-email-input label="Email" value="{{localOfficeData.email}}"
                                       auto-validate></gold-email-input>
 
-                    <h2>Text pro pacienty<span id="patient-text-tooltip" class="tooltip"><iron-icon
-                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="patient-text-tooltip" offset="0">Tento text se zobrazí na profilu ordinace.
-                        Můžete zde zadat libovolnou zprávu pacientům. Zpráva není povinná.
-                    </paper-tooltip>
-                    <paper-textarea label="Zpráva pro pacienty" value="{{localOfficeData.patientText}}"
-                                    char-counter maxlength="800"></paper-textarea>
+                </section>
+                <section>
+                    <h2>Vaše specializace v této ordinaci</h2>
+                    <paper-dropdown-menu label="Specializace">
+                        <paper-listbox class="dropdown-content" selected="{{localOfficeData.specialization}}" attr-for-selected="name">
+                            <template is="dom-repeat" items="[[specializations]]" as="specialization">
+                                <paper-item name="[[specialization]]">[[specialization]]</paper-item>
+                            </template>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+
+                    <h2>Přijímání nových pacientů</h2>
+                    <paper-checkbox checked="{{localOfficeData.acceptingNewPatients}}">
+                        Přijímám nové pacienty
+                    </paper-checkbox>
                 </section>
             </div>
 
@@ -115,7 +84,78 @@
             properties: {
                 specializations: {
                     type: Array,
-                    value: ['Zubař', 'Rektálník', 'Gynekolog']
+                    value: ['Adiktologie',
+                        'Alergologie',
+                        'Algeziologie',
+                        'Anesteziologie',
+                        'Angiologie',
+                        'Cévní chirurgie',
+                        'Cytologie',
+                        'Dermatologie',
+                        'Dermatovenerologie',
+                        'Dětská a dorostová psychiatrie',
+                        'Dětská dermatologie',
+                        'Dětská gynekologie',
+                        'Dětská chirurgie',
+                        'Dětská kardiologie',
+                        'Dětská neurologie',
+                        'Dětská otorinolaryngologie',
+                        'Dětská psychologie',
+                        'Dětská urologie',
+                        'Dětské lékařství',
+                        'Diabetologie',
+                        'Dorostové lékařství',
+                        'Endokrinologie',
+                        'Ergoterapeut',
+                        'Foniatrie',
+                        'Fyzioterapeut',
+                        'Gastroenterologie',
+                        'Genetika',
+                        'Geriatrie',
+                        'Gynekologie a porodnictví',
+                        'Hematologie',
+                        'Hrudní chirurgie',
+                        'Chirurgie',
+                        'Infekční lékařství',
+                        'Kardiochirurgie',
+                        'Kardiologie',
+                        'Logopedie',
+                        'Imunologie',
+                        'Nefrologie',
+                        'Neonatologie',
+                        'Neurochirurgie',
+                        'Neurologie',
+                        'Nukleární medicína',
+                        'Nutriční terapeut',
+                        'Oční lékař',
+                        'Oftalmologie',
+                        'Orální a maxilofaciální chirurgie',
+                        'Ortodoncie',
+                        'Ortopedie',
+                        'Otorinolaryngologie',
+                        'Paliativní medicína',
+                        'Patologická anatomie',
+                        'Patologie',
+                        'Plastická chirurgie',
+                        'Pneumologie a ftizeologie',
+                        'Popáleninová medicína',
+                        'Porodní asistentka',
+                        'Praktické lékařství pro děti a dorost',
+                        'Praktické lékařství pro dospělé',
+                        'Psychiatrie',
+                        'Psychologie',
+                        'Psychoterapie',
+                        'Onkologie',
+                        'Sexuologie',
+                        'Soudní lékařství',
+                        'Stomatologie',
+                        'Tělovýchovné lékařství',
+                        'Transfúzní lékařství',
+                        'Úrazová chirurgie',
+                        'Urgentní medicína',
+                        'Urologie',
+                        'Jiné'
+                    ]
                 },
 
                 localOfficeData: {
