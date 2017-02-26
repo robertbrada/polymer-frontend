@@ -84,7 +84,7 @@
                 @apply(--layout-flex);
             }
 
-            @media only screen and (max-width: 767px) {
+            @media only screen and (max-width: 1000px) {
 
                 .flex-horizontal {
                     @apply(--layout-vertical);
@@ -93,6 +93,9 @@
                 #office-hour-item paper-input {
                     margin-left: 0;
                 }
+            }
+
+            @media only screen and (max-width: 767px) {
 
                 .service-price {
                     width: 100%;
@@ -110,7 +113,7 @@
                            data="{{officeFullInfo}}">
         </firebase-document>
 
-        <div class="main-frame">
+        <form id="general_form" is="iron-form" class="main-frame">
             <div class="subsection grid">
                 <section>
                     <h2>Ordinační hodiny</h2>
@@ -139,13 +142,8 @@
                     </template>
                 </section>
             </div>
-            <form id="general_form" is="iron-form">
                 <section>
-                    <h2>Text pro pacienty<span id="patient-text-tooltip" class="tooltip"><iron-icon
-                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="patient-text-tooltip" offset="0">Tento text se zobrazí na profilu ordinace.
-                        Můžete zde zadat libovolnou zprávu pacientům. Zpráva není povinná.
-                    </paper-tooltip>
+                    <h2>Libovolná zpráva pacientům</h2>
                     <paper-textarea label="Zpráva pro pacienty" value="{{localOfficeData.patientText}}"
                                     char-counter maxlength="800"></paper-textarea>
                 </section>
@@ -171,12 +169,12 @@
                     </paper-button>
 
                 </section>
-            </form>
+
             </section>
             <paper-button id="confirm-button" on-tap="confirm" responsive raised>
                 Uložit změny
             </paper-button>
-        </div>
+        </form>
 
     </template>
 

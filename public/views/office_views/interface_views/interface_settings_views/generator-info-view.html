@@ -56,7 +56,7 @@
                 <h2>Poznámka</h2>
                 <p>Toto nastavení slouží k nastavení dlouhodobé, nebo trvalé změny.
                     Pokud chcete upravit např. pouze konkrétní den, týden (dovolená), tak doporučujeme provést změnu v
-                    <a href="#">kalendáři</a>.</p>
+                    <a href="../holidays/[[officeId]]">nastavení dovolené</a>.</p>
             </div>
             <div class="note green-container">
                 <h2>Důležité</h2>
@@ -92,7 +92,20 @@
                         <div suffix>dní</div>
                     </paper-input>
 
+                    <!--TODO don't know what is the best way how to save it to database (import another firebase document with officeFullinfo?)-->
+                    <h2>Manuální potvrzení při první návštěvě<span id="manual-confirmation-tooltip" class="tooltip">Vysvětlení<iron-icon
+                            icon="icons:help"></iron-icon></span></h2>
+                    <paper-tooltip for="manual-confirmation-tooltip" offset="0">Zaškrtněte, pokud chcete, aby pacient při prvním objednání nejprve musel zažádat o Vaše potvrzení.
+                        Poté, co pacient zažádá o potvrzení, Vám zobrazíme nového pacienta v sekci „Pacienti k potvrzení“
+                        ve které uvidíte pacientovi osobní údaje (jméno, adresa, datum narození), na jejichž základě
+                        umožníte pacientovi objednání či naopak.
+                        <br>
+                        Při opětovných návštěvách pacienta již nebude Vaše potvrzení nutné.
+                    </paper-tooltip>
 
+                    <paper-checkbox checked="{{fullInfo.manualConfirmation}}">
+                        Vyžaduji manuální potvrzení
+                    </paper-checkbox>
                 </section>
 
                 <section>
