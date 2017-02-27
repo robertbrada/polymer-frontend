@@ -125,6 +125,15 @@
 
                 selectedElement: {
                     value: null
+                },
+
+                // The Firebase reference is saved globally, so that it can be disabled after the new date is selected
+                currentPrivateRef: {
+                    type: Object
+                },
+
+                currentPublicRef: {
+                    type: Object
                 }
             },
 
@@ -154,13 +163,17 @@
             },
 
             fetchPrivateData: function (dateId) {
-                var db = this.firebaseApp.database(),
+                var privateRef = this.firebaseApp.database().ref("/appointmentsPrivate/" + this.officeId),
                     startOfRange = dateId + "0000",
                     endOfRange = dateId + "2359";
 
-                db.ref("/appointmentsPrivate/" + this.officeId).orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
-                    this.dayBookingTimes = this.computeDayBookingTimes(snapshot.val(), dateId);
+                if (!!this.currentPrivateRef) this.currentPrivateRef.off();
+
+                privateRef.orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
+                    this.set("dayBookingTimes", this.computeDayBookingTimes(snapshot.val(), dateId));
                 }.bind(this));
+
+                this.currentPrivateRef = privateRef;
             },
 
             computeDayBookingTimes: function (data, dateId) {
@@ -172,7 +185,11 @@
                 for (i = 0; i < times.length; i++) {
                     time = times[i];
                     if (time.occupied) {
-                        time.appointmentData = data[time.id];
+                        if (data === null) {
+                            time.occupied = false;
+                        } else {
+                            time.appointmentData = data[time.id];
+                        }
                     }
                 }
 
@@ -224,13 +241,17 @@
             },
 
             fetchPublicData: function (monthDateRange) {
-                var db = this.firebaseApp.database(),
+                var publicRef = this.firebaseApp.database().ref("/appointmentsPublic/" + this.officeId),
                     startOfRange = this.getDateTimeId(monthDateRange.start),
                     endOfRange = this.getDateTimeId(monthDateRange.end);
 
-                db.ref("/appointmentsPublic/" + this.officeId).orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
+                if (!!this.currentPublicRef) this.currentPublicRef.off();
+
+                publicRef.orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
                     this.bookingTimes = this.computeBookingTimesOfDates(snapshot.val());
                 }.bind(this));
+
+                this.currentPublicRef = publicRef;
             },
 
             computeBookingTimesOfDates: function (data) {
@@ -343,7 +364,7 @@
             computeDayTitle: function (selectedDate, selectedMonth, selectedYear) {
                 if (selectedDate === null) return null;
 
-                return "" + selectedDate.date + "." + selectedMonth + "." + selectedYear + ", " + selectedDate.name;
+                return "" + selectedDate.date + "." + (selectedMonth + 1) + "." + selectedYear + ", " + selectedDate.name;
             }
         });
     </script>

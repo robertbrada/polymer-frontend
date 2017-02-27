@@ -53,20 +53,20 @@
                 color: red;
             }
 
-            #save-changes{
+            #save-changes {
                 background-color: var(--app-green-color);
                 color: #fff;
                 border: none;
             }
 
-            #save-changes[disabled]{
+            #save-changes[disabled] {
                 background-color: #f8f8f9;
                 color: #455A64;
                 border: 1px solid #dadbdd;
                 box-shadow: none;
             }
 
-            #message-container{
+            #message-container {
                 padding: 0 1.5em 1.5em;
                 border: 1px solid #e2e2e3;
                 margin-top: 2em;
@@ -94,11 +94,11 @@
                     right: 1em;
                 }
 
-                .dismiss-button span{
+                .dismiss-button span {
                     display: none;
                 }
 
-                .dismiss-button iron-icon{
+                .dismiss-button iron-icon {
                     margin: 0;
                 }
 
@@ -169,11 +169,10 @@
 
                 <div id="message-container" class="container flex-horizontal-with-ratios">
                     <paper-textarea id="patient_message" class="flexchild" label="Zpráva lékaři" minlength="1" char-counter maxlength="200"
-                                    value="{{appointment.message}}" focused="{{appointment.messageFocused}}">
+                                    value="{{appointment.message}}" on-input="enableButton">
                     </paper-textarea>
                     <div id="edit-message" class="buttons">
-                        <!--disabled se zruší při změně v textareře - htělo by udělat napříč celým projektem-->
-                        <paper-button id="save-changes" on-tap="saveChanges" disabled="[[!appointment.messageFocused]]">
+                        <paper-button id="save-changes" on-tap="saveChanges" disabled="[[appointment.disabledButton]]">
                             <iron-icon icon="icons:check"></iron-icon>
                             Uložit změny
                         </paper-button>
@@ -210,6 +209,7 @@
                     appointmentsArray = Object.keys(appointmentsRaw).map(function (key) {
                         convertedAppointment = appointmentsRaw[key];
                         convertedAppointment["appointmentId"] = key;
+                        convertedAppointment["disabledButton"] = true;
                         return convertedAppointment;
                     });
 
@@ -258,7 +258,6 @@
             },
 
             deleteAppointment: function (event) {
-
                 var db = this.$.appointment_document.app.database(),
                     appointment = event.model.appointment,
                     userId = this.userId,
@@ -286,6 +285,10 @@
                         }
                     });
                 }.bind(this));
+            },
+
+            enableButton: function (event) {
+                event.model.set("appointment.disabledButton", false);
             }
         });
     </script>
