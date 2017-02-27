@@ -43,6 +43,8 @@
             </table>
 
             <div>
+                [[computeDayTitle(selectedDate, selectedMonth, selectedYear)]]
+                <br>
                 <template is="dom-repeat" items="[[dayBookingTimes]]" as="time">
                     time: [[computeTime(time.id)]]
                     <template is="dom-if" if="[[time.occupied]]">
@@ -116,6 +118,11 @@
                     value: ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"]
                 },
 
+                dayFullNames: {
+                    type: Array,
+                    value: ["Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota", "Neděle"]
+                },
+
                 selectedElement: {
                     value: null
                 }
@@ -124,10 +131,14 @@
 
             selectDate: function (event) {
                 var dayOfWeek = event.model.dayOfWeek,
+                    index = event.model.index,
                     element = Polymer.dom(event).localTarget;
 
                 // Make it impossible to select disabled element
                 if (dayOfWeek.disabled) return;
+
+                // This name is used in day's title
+                dayOfWeek["name"] = this.dayFullNames[index];
 
                 this.fetchPrivateData(dayOfWeek.dateId);
                 this.selectedDate = dayOfWeek;
@@ -329,6 +340,12 @@
             computeName: function (name) {
                 if (name === undefined) return;
                 return name.firstName + " " + name.lastName;
+            },
+
+            computeDayTitle: function (selectedDate, selectedMonth, selectedYear) {
+                if (selectedDate === null) return null;
+
+                return "" + selectedDate.date + "." + selectedMonth + "." + selectedYear + ", " + selectedDate.name;
             }
         });
     </script>
