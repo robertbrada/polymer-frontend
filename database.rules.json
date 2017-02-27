@@ -149,6 +149,7 @@
         ".write": "!data.exists() && newData.isNumber() && newData.val() == 400"
       }
     },
+    // TODO: Bug fix - unauthorized user might activate onlineBooking.
     "generatorInfo": {
       "$oid": {
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",

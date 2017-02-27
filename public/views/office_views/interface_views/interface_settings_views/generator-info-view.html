@@ -1,6 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
@@ -8,6 +7,7 @@
 <link rel="import" href="/bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-date-picker-item/paper-date-picker-item.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -45,92 +45,118 @@
                 color: var(--app-green-color);
             }
 
+            .green-header {
+                padding: 0px 24px 48px 24px;
+            }
+
+            .green-header h1 {
+                font-size: 1.3em;
+                color: var(--app-green-color);
+            }
+
         </style>
 
-        <firebase-document id="generator_document" app-name="doctor-appointment-system" path="/generatorInfo/[[officeId]]"
-                           data="{{generatorInfo}}">
-        </firebase-document>
+        <template is="dom-if" if="[[!onlineBooking]]">
+            <div class="green-header">
+                <h1>Online objednávání a elektronický kalendář</h1>
 
-        <form id="generator_form" is="iron-form" class="main-frame">
-            <div class="note">
-                <h2>Poznámka</h2>
-                <p>Toto nastavení slouží k nastavení dlouhodobé, nebo trvalé změny.
-                    Pokud chcete upravit např. pouze konkrétní den, týden (dovolená), tak doporučujeme provést změnu v
-                    <a href="../holidays/[[officeId]]">nastavení dovolené</a>.</p>
+                <p>
+                    Výběrem možnosti <b>elektronické objednávání</b> získáte přístup k elektronickému kalendáři
+                    a online objednávání. Na Vašem profilu budou zobrazeny volné termíny a pacienti se k Vám budou
+                    moci objednat sami a online. Služba je zpoplatněna cenou <b>20Kč za objednávací den</b>.
+                    <span class="green-bold">Prvních 20 objednávacích dní máte online objednání zdarma</span>.
+                </p>
+
+                <paper-button raised on-tap="activateOnlineBooking">
+                    Aktivovat online objednávání
+                </paper-button>
             </div>
-            <div class="note green-container">
-                <h2>Důležité</h2>
-                <p>Vámi provedená změna se automaticky projeví až v době, kdy nebude mít vliv na žádného,
-                    již objednaného, pacienta. Pokud si přejete provést změny od konkrétního dne, tak zrušíme objednání
-                    všech pacientů, kterých se změna dotkne a pošleme jim upozornění, aby se objednali znovu.</p>
-                <div id="manual-change">
-                    <paper-date-picker-item icon="icons:today"
-                                            placeholder="Vybrat konkrétní den"
-                                            locale="cs" date="{{fromDate}}"></paper-date-picker-item>
+        </template>
+
+        <template is="dom-if" if="[[onlineBooking]]">
+            <form id="generator_form" is="iron-form" class="main-frame">
+                <div class="note" hidden="[[bookingActivation]]">
+                    <h2>Poznámka</h2>
+                    <p>Toto nastavení slouží k nastavení dlouhodobé, nebo trvalé změny.
+                        Pokud chcete upravit např. pouze konkrétní den, týden (dovolená), tak doporučujeme provést změnu v
+                        <a href="../holidays/[[officeId]]">nastavení dovolené</a>.</p>
                 </div>
-            </div>
+                <div class="note green-container" hidden="[[bookingActivation]]">
+                    <h2>Důležité</h2>
+                    <p>Vámi provedená změna se automaticky projeví až v době, kdy nebude mít vliv na žádného,
+                        již objednaného, pacienta. Pokud si přejete provést změny od konkrétního dne, tak zrušíme objednání
+                        všech pacientů, kterých se změna dotkne a pošleme jim upozornění, aby se objednali znovu.</p>
+                    <div id="manual-change">
+                        <paper-date-picker-item icon="icons:today"
+                                                placeholder="Vybrat konkrétní den"
+                                                locale="cs" date="{{fromDate}}"></paper-date-picker-item>
+                    </div>
+                </div>
 
-            <div class="subsection grid">
-                <section>
+                <div class="subsection grid">
+                    <section>
 
-                    <h2>Délka návštěvy<span id="visit-length-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="visit-length-tooltip" offset="0">Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty a
-                        ordinačních hodin určíme objednávací časy.
-                    </paper-tooltip>
-                    <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
-                                 value="{{copyOfGeneratorInfo.visitLength}}">
-                        <div suffix>min</div>
-                    </paper-input>
+                        <h2>Délka návštěvy<span id="visit-length-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Vysvětlení</span>
+                        </h2>
+                        <paper-tooltip for="visit-length-tooltip" offset="0">Zde zadejte odhad délky návštěvy pacienta v minutách. Podle této hodnoty
+                            a
+                            ordinačních hodin určíme objednávací časy.
+                        </paper-tooltip>
+                        <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
+                                     value="{{generatorInfo.visitLength}}">
+                            <div suffix>min</div>
+                        </paper-input>
 
-                    <h2>Počet objednávacích dní<span id="num-of-days-tooltip" class="tooltip"><iron-icon
-                            icon="icons:help"></iron-icon>Vysvětlení</span></h2>
-                    <paper-tooltip for="num-of-days-tooltip" offset="0">Zadejte na jak daleko do budoucna se mohou pacienti objednat. <br><br>Pokud
-                        napíšete např. 7 dní, tak nebude možné objednat se na 8. den a dále od dnešního data.
-                    </paper-tooltip>
-                    <paper-input type="number" label="Počet dní" min="7" max="360" required auto-validate
-                                 value="{{copyOfGeneratorInfo.numberOfDays}}">
-                        <div suffix>dní</div>
-                    </paper-input>
+                        <h2>Počet objednávacích dní<span id="num-of-days-tooltip" class="tooltip"><iron-icon
+                                icon="icons:help"></iron-icon>Vysvětlení</span></h2>
+                        <paper-tooltip for="num-of-days-tooltip" offset="0">Zadejte na jak daleko do budoucna se mohou pacienti objednat. <br><br>Pokud
+                            napíšete např. 7 dní, tak nebude možné objednat se na 8. den a dále od dnešního data.
+                        </paper-tooltip>
+                        <paper-input type="number" label="Počet dní" min="7" max="360" required auto-validate
+                                     value="{{generatorInfo.numberOfDays}}">
+                            <div suffix>dní</div>
+                        </paper-input>
 
-                    <!--TODO don't know what is the best way how to save it to database (import another firebase document with officeFullinfo?)-->
-                    <h2>Manuální potvrzení při první návštěvě<span id="manual-confirmation-tooltip" class="tooltip">Vysvětlení<iron-icon
-                            icon="icons:help"></iron-icon></span></h2>
-                    <paper-tooltip for="manual-confirmation-tooltip" offset="0">Zaškrtněte, pokud chcete, aby pacient při prvním objednání nejprve musel zažádat o Vaše potvrzení.
-                        Poté, co pacient zažádá o potvrzení, Vám zobrazíme nového pacienta v sekci „Pacienti k potvrzení“
-                        ve které uvidíte pacientovi osobní údaje (jméno, adresa, datum narození), na jejichž základě
-                        umožníte pacientovi objednání či naopak.
-                        <br>
-                        Při opětovných návštěvách pacienta již nebude Vaše potvrzení nutné.
-                    </paper-tooltip>
+                        <h2>Manuální potvrzení při první návštěvě<span id="manual-confirmation-tooltip" class="tooltip">Vysvětlení<iron-icon
+                                icon="icons:help"></iron-icon></span></h2>
+                        <paper-tooltip for="manual-confirmation-tooltip" offset="0">Zaškrtněte, pokud chcete, aby pacient při prvním objednání nejprve
+                            musel zažádat o Vaše potvrzení.
+                            Poté, co pacient zažádá o potvrzení, Vám zobrazíme nového pacienta v sekci „Pacienti k potvrzení“
+                            ve které uvidíte pacientovi osobní údaje (jméno, adresa, datum narození), na jejichž základě
+                            umožníte pacientovi objednání či naopak.
+                            <br>
+                            Při opětovných návštěvách pacienta již nebude Vaše potvrzení nutné.
+                        </paper-tooltip>
 
-                    <paper-checkbox checked="{{fullInfo.manualConfirmation}}">
-                        Vyžaduji manuální potvrzení
-                    </paper-checkbox>
-                </section>
+                        <paper-checkbox checked="{{manualConfirmation}}">
+                            Vyžaduji manuální potvrzení
+                        </paper-checkbox>
+                    </section>
 
-                <section>
-                    <h2>Ordinační hodiny</h2>
+                    <section>
+                        <h2>Ordinační hodiny</h2>
 
-                    <template is="dom-repeat" items="[[copyOfGeneratorInfo.officeHours]]" as="entry">
-                        <div>
-                            <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]</paper-checkbox>
+                        <template is="dom-repeat" items="[[generatorInfo.officeHours]]" as="entry">
+                            <div>
+                                <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]</paper-checkbox>
 
-                            <template is="dom-if" if="[[entry.available]]">
-                                <paper-input value="{{entry.hours}}" auto-validate required
-                                             placeholder="07:30-12:30,13:30-15:30"
-                                             pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](,([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])*"
-                                             prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
-                            </template>
-                        </div>
-                    </template>
-                </section>
-            </div>
+                                <template is="dom-if" if="[[entry.available]]">
+                                    <paper-input value="{{entry.hours}}" auto-validate required
+                                                 placeholder="07:30-12:30,13:30-15:30"
+                                                 pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](,([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])*"
+                                                 prevent-invalid-input allowed-pattern="[0-9,-:]"></paper-input>
+                                </template>
+                            </div>
+                        </template>
+                    </section>
+                </div>
 
-            <paper-button id="confirm-button" on-tap="confirm" responsive raised>
-                Uložit změny
-            </paper-button>
+                <paper-button id="confirm-button" on-tap="confirm" responsive raised>
+                    [[computeButtonText(bookingActivation)]]
+                </paper-button>
+            </form>
+        </template>
 
-        </form>
     </template>
 
     <script>
@@ -140,9 +166,19 @@
             behaviors: [FormValidationBehavior],
 
             properties: {
+                firebaseApp: {
+                    type: Object,
+                    value: firebase.apps[0]
+                },
+
                 days: {
                     type: Array,
                     value: ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle']
+                },
+
+                officeId: {
+                    type: String,
+                    observer: "fetchData"
                 },
 
                 manualChange: {
@@ -150,31 +186,102 @@
                     value: false
                 },
 
-                // The generatorInfo is copied so that the changes are saved after the button is pressed.
-                copyOfGeneratorInfo: {
-                    type: Object,
-                    computed: 'computeCopyOfGeneratorInfo(generatorInfo)'
+                generatorInfo: {
+                    type: Object
+                },
+
+                onlineBooking: {
+                    type: Boolean,
+                    value: false
+                },
+
+                bookingActivation: {
+                    type: Boolean,
+                    value: false
+                },
+
+                manualConfirmation: {
+                    type: Boolean,
+                    value: false
                 }
+            },
+
+            activateOnlineBooking: function () {
+                this.generatorInfo = {
+                    officeHours: [
+                        {'available': true, hours: null}, // Monday
+                        {'available': true, hours: null},
+                        {'available': true, hours: null},
+                        {'available': true, hours: null},
+                        {'available': true, hours: null},
+                        {'available': false, hours: null},
+                        {'available': false, hours: null}
+                    ],
+                    lastGeneratedDate: null,
+                    visitLength: 40,
+                    numberOfDays: 30
+                };
+                this.bookingActivation = true;
+                this.onlineBooking = true;
+            },
+
+            fetchData: function () {
+                var db = this.firebaseApp.database(),
+                    generatorInfo;
+
+                db.ref("/generatorInfo/" + this.officeId).once('value').then(function (snapshot) {
+                    generatorInfo = snapshot.val();
+                    if (generatorInfo === null) {
+                        this.onlineBooking = false
+                    } else {
+                        this.generatorInfo = generatorInfo;
+                        this.onlineBooking = true;
+                    }
+                }.bind(this));
+
+                db.ref("/officeFullInfo/" + this.officeId + "/manualConfirmation").once('value').then(function (snapshot) {
+                    this.manualConfirmation = snapshot.val();
+                }.bind(this));
 
             },
 
             confirm: function () {
-                if (this._validateForm(this.$.generator_form)) {
-                    this.saveChanges(this.copyOfGeneratorInfo);
+                if (this._validateForm(this.$$("#generator_form"))) {
+                    this.saveChanges(this.generatorInfo, this.manualConfirmation);
                 } else {
                     this.fire("show-toast", {text: "Chybný formát"});
                 }
             },
 
-            saveChanges: function (updatedGeneratorInfo) {
-                var db = this.$.generator_document.app.database(),
+            saveChanges: function (generatorInfo, manualConfirmation) {
+                var db = this.firebaseApp.database(),
                     officeId = this.officeId,
-                    fromDate = this.fromDate;
+                    fromDate = this.fromDate,
+                    objectToSave = {},
+                    bookingActivation = this.bookingActivation;
 
-                db.ref('/generatorInfo/' + officeId).update(updatedGeneratorInfo).then(function () {
-                    this.fire("show-toast", {text: "Změny uloženy"});
-                    if (fromDate !== null) {
-                        this.regenerateExistingValues(fromDate, officeId);
+                objectToSave['/generatorInfo/' + officeId] = generatorInfo;
+                objectToSave['/officeFullInfo/' + officeId + '/manualConfirmation'] = manualConfirmation;
+
+                if (bookingActivation) {
+                    objectToSave['/officeInterfaceInfo/' + officeId + '/services/onlineBooking'] = true;
+                }
+
+                db.ref('/').update(objectToSave).then(function () {
+                    if (bookingActivation) {
+                        this.bookingActivation = false;
+                        this.fire("show-dialog", {
+                            path: "", viewName: "genericdialog", open: true,
+                            data: {
+                                text: 'Online objednávání bylo úspěšně aktivováno. Během příštích 24 hodin Vám vygenerujeme první termíny.',
+                                buttonText: 'Zavřít'
+                            }
+                        });
+                    } else {
+                        this.fire("show-toast", {text: "Změny uloženy"});
+                        if (fromDate !== null) {
+                            this.regenerateExistingValues(fromDate, officeId);
+                        }
                     }
                 }.bind(this), function () {
                     this.fire("show-dialog", {
@@ -188,11 +295,11 @@
             },
 
             regenerateExistingValues: function (fromDate, officeId) {
-                var app = this.$.generator_document.app;
-                var postData = {
-                    officeId: officeId,
-                    generateSince: fromDate.valueOf()
-                };
+                var app = this.firebaseApp,
+                    postData = {
+                        officeId: officeId,
+                        generateSince: fromDate.valueOf()
+                    };
 
                 app.auth().currentUser.getToken(true).then(function (idToken) {
                     postData["idToken"] = idToken;
@@ -230,10 +337,6 @@
                 request.send(JSON.stringify(postData));
             },
 
-            computeCopyOfGeneratorInfo: function (generatorInfo) {
-                return generatorInfo;
-            },
-
             getDayName: function (dayIndex) {
                 return (this.days[dayIndex]);
             },
@@ -246,6 +349,10 @@
                         buttonText: 'Zavřít'
                     }
                 });
+            },
+
+            computeButtonText: function (bookingActivation) {
+                return (bookingActivation) ? "Aktivovat objednání" : "Uložit změny";
             }
         });
     </script>
