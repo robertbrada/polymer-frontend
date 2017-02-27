@@ -1,6 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-material/paper-material.html">
 <link rel="import" href="/bower_components/moment-element/moment-import.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
@@ -12,55 +11,181 @@
 <dom-module id="interface-calendar-view">
     <template>
         <style>
-            .main-content {
-                background-color: white; /* TODO: move to parent */
+
+            /*** CALENDAR CONTAINER */
+
+            #calendar-container {
+                margin-right: 1.5em;
             }
+
+            table {
+                background-color: #fff;
+                width: 100%;
+                border-collapse: collapse;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+            }
+
+            #month-container {
+                background-color: var(--app-accent-color);
+                color: #fff;
+                text-align: center;
+            }
+
+            #day-name-row {
+                background-color: var(--app-green-color);
+                height: 3em;
+                color: #fff;
+            }
+
+            #day-name-row:not(:first-child) {
+                border-left: 1px solid white;
+            }
+
+            td {
+                width: 6em;
+                height: 4.7em;
+                font-size: 1.35em;
+                font-weight: bold;
+                border-left: 2px solid #ecedf0;
+                border-top: 2px solid #ecedf0;
+                text-align: center;
+                cursor: pointer;
+                position: relative;
+            }
+
+            td:first-child {
+                border-left: none;
+            }
+
+            td:hover {
+                background-color: #ecedf0;
+            }
+
+            #free {
+                font-size: 0.7em;
+                color: #fff;
+                background-color: var(--app-green-color);
+                padding: 0.1em 0.4em;
+                border-radius: 20px;
+                margin: 0.5em auto 0 auto;
+                position: absolute;
+                left: 5px;
+                top: 0;
+            }
+
+            /*** DAY DETAIL ***/
+
+            #day-detail-container {
+                background-color: #fff;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            }
+
+            #selected-day {
+                background-color: var(--app-accent-color);
+                color: #fff;
+                height: 2.9em;
+                text-align: center;
+                vertical-align: bottom;
+                line-height: 2.8em;
+            }
+
+            #patients-container {
+                padding: 0.6em 1.45em 1.45em 1.45em;
+                font-size: 1.1em;
+                max-height: calc(100vh - 64px - 2.8em - 5em); /* 100vh - header -dayName - some space*/
+                overflow-y: auto;
+            }
+
+            #patient-item {
+                margin: 0.5em auto;
+                padding: 1em;
+                border: 1px solid #e2e2e3;
+                background-color: #f9f9fa;
+            }
+
+            /*** OTHER ***/
+
+            .green-bold{
+                color: var(--app-green-color);
+                font-weight: 600;
+            }
+
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+            }
+
+            @media only screen and (max-width: 1050px) {
+
+                .flex-horizontal {
+                    @apply(--layout-vertical);
+                }
+
+                #calendar-container {
+                    margin-right: 0;
+                    margin-bottom: 1.5em;
+                }
+            }
+
+            @media only screen and (max-width: 767px) {
+
+                td {
+                    font-size: 1.1em;
+                }
+            }
+
         </style>
 
-        <paper-material class="main-content" elevation="1">
-            <paper-icon-button icon="chevron-left" on-tap="previousMonth"></paper-icon-button>
-            <span>[[computeMonthYear(selectedMonth, selectedYear)]]</span>
-            <paper-icon-button icon="chevron-right" on-tap="nextMonth"></paper-icon-button>
-            <table>
-                <tr>
-                    <template is="dom-repeat" items="[[dayShortNames]]" as="dayShortName">
-                        <th>
-                            [[dayShortName]]
-                        </th>
-                    </template>
-                </tr>
-                <template is="dom-repeat" items="[[weeks]]" as="week">
+        <div class="flex-horizontal">
+            <div id="calendar-container" class="flexchild">
+                <div id="month-container">
+                    <paper-icon-button icon="chevron-left" on-tap="previousMonth"></paper-icon-button>
+                    <span>[[computeMonthYear(selectedMonth, selectedYear)]]</span>
+                    <paper-icon-button icon="chevron-right" on-tap="nextMonth"></paper-icon-button>
+                </div>
+                <table>
                     <tr>
-                        <template is="dom-repeat" items="[[week]]" as="dayOfWeek">
-                            <td on-tap="selectDate">
-                                <span hidden="[[dayOfWeek.disabled]]">[[dayOfWeek.date]]</span>
-                                <br>
-                                <span hidden="[[!dayOfWeek.free]]">[[dayOfWeek.free]] volných</span>
-                            </td>
+                        <template is="dom-repeat" items="[[dayShortNames]]" as="dayShortName">
+                            <th id="day-name-row">
+                                [[dayShortName]]
+                            </th>
                         </template>
                     </tr>
-                </template>
-            </table>
-
-            <div>
-                [[computeDayTitle(selectedDate, selectedMonth, selectedYear)]]
-                <br>
-                <template is="dom-repeat" items="[[dayBookingTimes]]" as="time">
-                    time: [[computeTime(time.id)]]
-                    <template is="dom-if" if="[[time.occupied]]">
-                        Jméno: [[computeName(time.appointmentData.userInfo.name)]]
-                        Zpráva: [[time.appointmentData.message]]
+                    <template is="dom-repeat" items="[[weeks]]" as="week">
+                        <tr id="days-row">
+                            <template is="dom-repeat" items="[[week]]" as="dayOfWeek">
+                                <td on-tap="selectDate">
+                                    <span id="date" hidden="[[dayOfWeek.disabled]]">[[dayOfWeek.date]]</span>
+                                    <br>
+                                    <span id="free" hidden="[[!dayOfWeek.free]]">[[dayOfWeek.free]]</span>
+                                </td>
+                            </template>
+                        </tr>
                     </template>
-
-                    <br>
-
-                </template>
+                </table>
             </div>
 
-        </paper-material>
+            <div id="day-detail-container" class="flexchild">
+                <div id="selected-day">[[computeDayTitle(selectedDate, selectedMonth, selectedYear)]]</div>
 
+                <div id="patients-container">
+                    <template is="dom-repeat" items="[[dayBookingTimes]]" as="time">
+                        <div id="patient-item">
+                            <span class="green-bold">[[computeTime(time.id)]]</span>
+                            <template is="dom-if" if="[[time.occupied]]">
+                                <br><b>[[computeName(time.appointmentData.userInfo.name)]]</b><br>
+                                <b>Zpráva:</b> [[time.appointmentData.message]]
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
     </template>
-
     <script>
         Polymer({
             is: 'interface-calendar-view',
@@ -159,6 +284,7 @@
 
                 // I was not able to apply the var(--app-red-color) property to td element programmatically, so I'm using the hardocded value for now
                 element.style.backgroundColor = "#E91E63";
+                element.style.color = "#fff";
                 this.selectedElement = element;
             },
 
@@ -199,6 +325,7 @@
             resetSelectedElementColor: function () {
                 if (this.selectedElement !== null) {
                     this.selectedElement.style.backgroundColor = "inherit";
+                    this.selectedElement.style.color = "inherit";
                 }
             },
 
