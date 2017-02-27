@@ -156,21 +156,19 @@
             fetchPrivateData: function (dateId) {
                 var db = this.firebaseApp.database(),
                     startOfRange = dateId + "0000",
-                    endOfRange = dateId + "2359",
-                    rawDayBookingTimes = this.bookingTimes[dateId];
+                    endOfRange = dateId + "2359";
 
-                if (rawDayBookingTimes === undefined) {
-                    this.dayBookingTimes = null;
-                } else {
-                    db.ref("/appointmentsPrivate/" + this.officeId).orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
-                        this.dayBookingTimes = this.computeDayBookingTimes(snapshot.val(), rawDayBookingTimes);
-                    }.bind(this));
-                }
+                db.ref("/appointmentsPrivate/" + this.officeId).orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
+                    this.dayBookingTimes = this.computeDayBookingTimes(snapshot.val(), dateId);
+                }.bind(this));
             },
 
-            computeDayBookingTimes: function (data, dayBookingTimes) {
-                var i, times = dayBookingTimes.times, time;
+            computeDayBookingTimes: function (data, dateId) {
+                var i, rawBookingTimes = this.bookingTimes[dateId], times, time;
 
+                if (rawBookingTimes === undefined) return [];
+
+                times = rawBookingTimes.times;
                 for (i = 0; i < times.length; i++) {
                     time = times[i];
                     if (time.occupied) {
