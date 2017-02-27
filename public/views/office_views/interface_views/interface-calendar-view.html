@@ -4,7 +4,7 @@
 <link rel="import" href="/bower_components/moment-element/moment-import.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/custom_components/moment-wrapper-cs.html">
 
@@ -16,10 +16,6 @@
                 background-color: white; /* TODO: move to parent */
             }
         </style>
-
-        <firebase-document id="generator_document" app-name="doctor-appointment-system"
-                           path="/generatorInfo/[[officeId]]" data="{{generatorInfo}}">
-        </firebase-document>
 
         <paper-material class="main-content" elevation="1">
             <paper-icon-button icon="chevron-left" on-tap="previousMonth"></paper-icon-button>
@@ -47,7 +43,16 @@
             </table>
 
             <div>
+                <template is="dom-repeat" items="[[dayBookingTimes]]" as="time">
+                    time: [[computeTime(time.id)]]
+                    <template is="dom-if" if="[[time.occupied]]">
+                        Jméno: [[computeName(time.appointmentData.userInfo.name)]]
+                        Zpráva: [[time.appointmentData.message]]
+                    </template>
 
+                    <br>
+
+                </template>
             </div>
 
         </paper-material>
@@ -60,6 +65,11 @@
 
 
             properties: {
+
+                firebaseApp: {
+                    type: Object,
+                    value: firebase.apps[0]
+                },
 
                 selectedMonth: {
                     type: Number,
@@ -80,14 +90,25 @@
                     value: null
                 },
 
+                // booking times for the whole month, computed by computeBookingTimesOfDates method
+                bookingTimes: {
+                    type: Object
+                },
+
+                // booking times for the day, computed by computeDayBookingTimes method
+                dayBookingTimes: {
+                    type: Object
+                },
+
                 monthDateRange: {
                     type: Object,
                     computed: "computeMonthDateRange(selectedYear, selectedMonth)",
-                    observer: "fetchData"
+                    observer: "fetchPublicData"
                 },
 
                 weeks: {
-                    type: Array
+                    type: Array,
+                    computed: "computeWeeks(bookingTimes, monthDateRange)"
                 },
 
                 dayShortNames: {
@@ -108,8 +129,8 @@
                 // Make it impossible to select disabled element
                 if (dayOfWeek.disabled) return;
 
-                this.loadPrivateData(dayOfWeek);
-                this.selectDate = dayOfWeek;
+                this.fetchPrivateData(dayOfWeek.dateId);
+                this.selectedDate = dayOfWeek;
 
                 // Might cause problems if there was more than one nested element inside <td>
                 if (element.tagName !== "TD") element = element.parentElement;
@@ -121,8 +142,32 @@
                 this.selectedElement = element;
             },
 
-            loadPrivateData: function (selectDate) {
-                // TODO
+            fetchPrivateData: function (dateId) {
+                var db = this.firebaseApp.database(),
+                    startOfRange = dateId + "0000",
+                    endOfRange = dateId + "2359",
+                    rawDayBookingTimes = this.bookingTimes[dateId];
+
+                if (rawDayBookingTimes === undefined) {
+                    this.dayBookingTimes = null;
+                } else {
+                    db.ref("/appointmentsPrivate/" + this.officeId).orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
+                        this.dayBookingTimes = this.computeDayBookingTimes(snapshot.val(), rawDayBookingTimes);
+                    }.bind(this));
+                }
+            },
+
+            computeDayBookingTimes: function (data, dayBookingTimes) {
+                var i, times = dayBookingTimes.times, time;
+
+                for (i = 0; i < times.length; i++) {
+                    time = times[i];
+                    if (time.occupied) {
+                        time.appointmentData = data[time.id];
+                    }
+                }
+
+                return times;
             },
 
             resetSelectedElementColor: function () {
@@ -169,15 +214,13 @@
                 this.resetSelectedElementColor();
             },
 
-            fetchData: function (monthDateRange) {
-                var db = this.$.generator_document.app.database(),
+            fetchPublicData: function (monthDateRange) {
+                var db = this.firebaseApp.database(),
                     startOfRange = this.getDateTimeId(monthDateRange.start),
-                    endOfRange = this.getDateTimeId(monthDateRange.end),
-                    bookingTimes;
+                    endOfRange = this.getDateTimeId(monthDateRange.end);
 
                 db.ref("/appointmentsPublic/" + this.officeId).orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
-                    bookingTimes = this.computeBookingTimesOfDates(snapshot.val());
-                    this.weeks = this.computeWeeks(bookingTimes, monthDateRange);
+                    this.bookingTimes = this.computeBookingTimesOfDates(snapshot.val());
                 }.bind(this));
             },
 
@@ -270,6 +313,22 @@
 
             computeMonthYear: function (selectedMonth, selectedYear) {
                 return "" + moment.months()[selectedMonth] + " " + selectedYear;
+            },
+
+            // Day view methods
+
+            computeTime: function (appointmentId) {
+                var hours, minutes;
+
+                hours = Number(appointmentId.substring(8, 10));
+                minutes = appointmentId.substring(10, 12);
+
+                return "" + hours + ":" + minutes;
+            },
+
+            computeName: function (name) {
+                if (name === undefined) return;
+                return name.firstName + " " + name.lastName;
             }
         });
     </script>
