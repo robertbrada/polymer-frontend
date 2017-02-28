@@ -8,8 +8,7 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<!--<link rel="import" href="/bower_components/file-input/file-input.html">-->
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -18,43 +17,44 @@
 
 <link rel="import" href="/behaviors/form-validation-behavior.html">
 
-<!--TODO: name, coordinates, photo-->
+<!--TODO: coordinates, photo-->
 
 <dom-module id="office-info-view">
     <template>
         <style include="button-styles layout-styles input-styles settings-styles">
         </style>
 
-        <firebase-document id="office_document" app-name="doctor-appointment-system" path="/officeFullInfo/[[officeId]]"
-                           data="{{officeFullInfo}}">
-        </firebase-document>
-
         <form id="general_form" is="iron-form" class="main-frame">
             <div class="subsection grid">
 
                 <section>
+                    <h2>Vaše jméno</h2>
+                    <paper-input label="Jméno" minlength="1" maxlength="20" auto-validate
+                                 error-message="Nelze ponechat prázdné" required
+                                 value="{{officeFullInfo.name.firstName}}"></paper-input>
+                    <paper-input label="Příjmení" minlength="1" auto-validate
+                                 maxlength="80" error-message="Nelze ponechat prázdné"
+                                 required value="{{officeFullInfo.name.lastName}}"></paper-input>
                     <h2>Adresa ordinace</h2>
-                    <paper-input label="Město" value="{{localOfficeData.address.city}}"
+                    <paper-input label="Město" value="{{officeFullInfo.address.city}}"
                                  minlength="1" maxlength="20" auto-validate>
                     </paper-input>
-                    <paper-input label="Ulice a číslo popisné" value="{{localOfficeData.address.street}}"
+                    <paper-input label="Ulice a číslo popisné" value="{{officeFullInfo.address.street}}"
                                  minlength="1" maxlength="80" required auto-validate></paper-input>
-
+                </section>
+                <section>
                     <h2>Vřejné informace profilu</h2>
                     <p>Informace budou veřejně k vidění na vašem profilu. Údaje jsou
                         dobrovolné a nemusíte je tak vyplňovat. </p>
                     <gold-phone-input country-code="420" label="Telefonní číslo"
                                       phone-number-pattern="XXX-XXX-XXX" auto-validate
-                                      value="{{localOfficeData.phoneNumber}}">
+                                      value="{{officeFullInfo.phoneNumber}}">
                     </gold-phone-input>
-                    <gold-email-input label="Email" value="{{localOfficeData.email}}"
+                    <gold-email-input label="Email" value="{{officeFullInfo.email}}"
                                       auto-validate></gold-email-input>
-
-                </section>
-                <section>
                     <h2>Vaše specializace v této ordinaci</h2>
                     <paper-dropdown-menu label="Specializace">
-                        <paper-listbox class="dropdown-content" selected="{{localOfficeData.specialization}}" attr-for-selected="name">
+                        <paper-listbox class="dropdown-content" selected="{{officeFullInfo.specialization}}" attr-for-selected="name">
                             <template is="dom-repeat" items="[[specializations]]" as="specialization">
                                 <paper-item name="[[specialization]]">[[specialization]]</paper-item>
                             </template>
@@ -62,7 +62,7 @@
                     </paper-dropdown-menu>
 
                     <h2>Přijímání nových pacientů</h2>
-                    <paper-checkbox checked="{{localOfficeData.acceptingNewPatients}}">
+                    <paper-checkbox checked="{{officeFullInfo.acceptingNewPatients}}">
                         Přijímám nové pacienty
                     </paper-checkbox>
                 </section>
@@ -82,6 +82,16 @@
             behaviors: [FormValidationBehavior],
 
             properties: {
+                firebaseApp: {
+                    type: Object,
+                    value: firebase.apps[0]
+                },
+
+                officeId: {
+                    type: String,
+                    observer: "fetchData"
+                },
+
                 specializations: {
                     type: Array,
                     value: ['Adiktologie',
@@ -158,43 +168,47 @@
                     ]
                 },
 
-                localOfficeData: {
-                    type: Object,
-                    computed: "computeLocalOfficeData(officeFullInfo)"
+                officeFullInfo: {
+                    type: Object
                 }
             },
 
-            computeLocalOfficeData: function (officeData) {
-                return officeData;
+            fetchData: function () {
+                var db = this.firebaseApp.database();
+
+                db.ref("/officeFullInfo/" + this.officeId).once('value').then(function (snapshot) {
+                    this.officeFullInfo = snapshot.val();
+                }.bind(this));
+
             },
 
             confirm: function () {
                 if (this._validateForm(this.$.general_form)) {
-                    this.updateOfficeData(this.localOfficeData)
+                    this.updateOfficeData(this.officeFullInfo)
                 }
             },
 
-            updateOfficeData: function (localOfficeData) {
-                var db = this.$.office_document.app.database(),
+            updateOfficeData: function (officeFullInfo) {
+                var db = this.firebaseApp.database(),
                     objectToSave = {}, officeId = this.officeId,
                     officeUserIds = null, i, officeName = '';
 
                 db.ref('/officeAdminInfo/' + officeId + '/users').once('value').then(function (snapshot) {
                     officeUserIds = Object.keys(snapshot.val());
-                    officeName = localOfficeData.address.city + ', ' + localOfficeData.address.street;
+                    officeName = officeFullInfo.address.city + ', ' + officeFullInfo.address.street;
 
                     for (i = 0; i < officeUserIds.length; i++) {
                         objectToSave['/userOffices/' + officeUserIds[i] + '/' + officeId + '/name'] = officeName;
                     }
 
-                    objectToSave['/officeFullInfo/' + officeId] = localOfficeData;
+                    objectToSave['/officeFullInfo/' + officeId] = officeFullInfo;
                     objectToSave['/officeSearchInfo/' + officeId] = {
-                        'name': localOfficeData.name,
-                        'address': localOfficeData.address,
-                        'coordinates': localOfficeData.coordinates,
-                        'acceptingNewPatients': localOfficeData.acceptingNewPatients,
-                        'specialization': localOfficeData.specialization,
-                        'photoAvailability': localOfficeData.photoAvailability
+                        'name': officeFullInfo.name,
+                        'address': officeFullInfo.address,
+                        'coordinates': officeFullInfo.coordinates,
+                        'acceptingNewPatients': officeFullInfo.acceptingNewPatients,
+                        'specialization': officeFullInfo.specialization,
+                        'photoAvailability': officeFullInfo.photoAvailability
                     };
 
                     db.ref('/').update(objectToSave);

@@ -81,7 +81,8 @@
                         Pokud chcete upravit např. pouze konkrétní den, týden (dovolená), tak doporučujeme provést změnu v
                         <a href="../holidays/[[officeId]]">nastavení dovolené</a>.</p>
                 </div>
-                <div class="note green-container" hidden="[[bookingActivation]]">
+                <!--TODO-->
+<!--                <div class="note green-container" hidden="[[bookingActivation]]">
                     <h2>Důležité</h2>
                     <p>Vámi provedená změna se automaticky projeví až v době, kdy nebude mít vliv na žádného,
                         již objednaného, pacienta. Pokud si přejete provést změny od konkrétního dne, tak zrušíme objednání
@@ -91,7 +92,7 @@
                                                 placeholder="Vybrat konkrétní den"
                                                 locale="cs" date="{{fromDate}}"></paper-date-picker-item>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="subsection grid">
                     <section>
@@ -296,7 +297,7 @@
                     } else {
                         this.fire("show-toast", {text: "Změny uloženy"});
                         if (fromDate !== null) {
-                            this.regenerateExistingValues(fromDate, officeId);
+//                            this.regenerateExistingValues(fromDate, officeId);
                         }
                     }
                 }.bind(this), function () {
