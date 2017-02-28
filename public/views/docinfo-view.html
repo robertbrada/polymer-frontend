@@ -166,6 +166,10 @@
                 margin-top: 0;
             }
 
+            #no-contract-section {
+                box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 18px 10px rgba(0, 0, 0, 0.22);
+            }
+
             /*** PRICE ***/
 
             .price-section {
@@ -174,7 +178,7 @@
             }
 
             .features-section {
-                max-width: 18em;
+                max-width: 20em;
                 margin: 0 auto;
                 text-align: left;
                 font-size: 1.2em;
@@ -230,23 +234,6 @@
                 color: #8a8a8b;
             }
 
-            .more-info {
-                margin-top: 3.2em;
-                font-weight: bold;
-                color: #bcbcbd;
-                letter-spacing: 0.03em;
-                cursor: pointer;
-            }
-
-            .more-info:hover {
-                text-decoration: underline;
-            }
-
-            .more-info iron-icon {
-                margin-right: 0.5em;
-                margin-top: -2px;
-            }
-
             /******************************/
 
             @media (max-width: 980px) {
@@ -292,6 +279,26 @@
                 }
             }
 
+            @media (min-width: 767px) {
+                paper-button, a {
+                    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+                }
+
+                paper-button:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+                }
+
+                a:hover {
+                    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+                }
+
+                #presentation-detail {
+                    margin-left: 1.8em;
+                    font-size: 0.95em;
+                }
+            }
 
         </style>
 
@@ -300,11 +307,11 @@
         <section class="main-frame grid">
             <section>
                 <h1>Co je Docta?</h1>
-                <p>Docta je systém, jehož cílem je propojit lékaře s pacienty a ulehčit tak lékařům každodenní
-                    práci v ordinaci. Jako lékař si můžete zaregistrovat svou ordinaci, která bude veřejně k zobrazení
-                    na
+                <p>Docta je moderní nástroj, který spojuje lékaře s pacienty a usnadňuje lékařům práci.
+                    Jako lékař si zaregistrujete svou ordinaci, která bude veřejně k zobrazení na
                     našich stránkách. Rovněž budete mít přístup k rozhraní ordinace, kde budete mít kompletní přehled o
-                    svých pacientech.
+                    svých pacientech.<br>
+                    <b>TODO s mírou přehajpovaná sekce</b>
                 </p>
             </section>
             <section class="img-section">
@@ -317,10 +324,9 @@
                 <img id="comp-img" src="../images/computer.png">
             </section>
             <section id="office-presence-section">
-                <h1>Zdarma prezentujte svoji ordinaci </h1>
-                <p>Docta nabízí lékařům prezentovat veškeré informace o jejich ordinacích na internetu zcela zdarma
+                <h1>Kompletní prezentace ordinace zdarma</h1>
+                <p>Na Docta.cz můžete prezentovat všechny důležité informace o vaší ordinaci zcela zdarma a
                     napořád.
-                    Navíc máte možnost zdarma využít elektronický kalendář, kam si můžete zapisovat objednané pacienty.
                     <br>
                     <br>
                     <a href="#">Zobrazit ukázkový profil</a>
@@ -331,9 +337,9 @@
         <section class="main-frame grid">
             <section>
                 <h1>Přenechte objednání pacientům</h1>
-                <p>Šetřete svůj čas a přenechte objednání pacientům. V nastavení ordinace si budete moci určit ordinační
-                    hodiny a časové rozestupy mezi jednotlivými
-                    návštěvami, na základě toho vám vytvoříme kalendář s objednávacími časy.
+                <p>Odprostěte se od telefonátů a nechte pacienty, ať se objednají sami.
+                    V ordinaci se tak můžete nerušeně věnovat své práci.
+                    Podle Vašich objednávacích hodin Vám vytvoříme kalendář na míru.
                 </p>
             </section>
             <section class="img-section">
@@ -343,39 +349,42 @@
 
         <section class="main-frame grid" id="first-square-section">
             <section class="blue">
-                <h1>Jen pacienti, které chcete</h1>
-                <p>Nemusíte mít strach, že se k vám bude objednávat kde kdo. Máte možnost si vybrat, jací pacienti se u
-                    vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci. Také
-                    můžete upozornit pacienty na to, zda přijímáte nové pacienty či
-                    nikoli.</p>
+                <h1>Máte kontrolu nad pacienty</h1>
+                <p>Nemusíte mít strach, že se k vám bude objednávat kde kdo. Můžete si vybrat si, jací pacienti se u
+                    vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci.</p>
             </section>
             <section class="grey">
-                <h1>Mějte přehled</h1>
-                <p>K dispozici máte elektronický kalendář, kde vidíte všechny objednané pacienty. Samozřejmě máte
-                    možnost
-                    objednat i pacienty, kteří se vám ozvou po telefonu. </p>
+                <h1>Vše na jednom místě</h1>
+                <p>V rozhraní Vaší ordinace máte elektronický kalendář, kde máte přehled o všech objednaných pacientech.
+                    Samozřejmě můžete objednat i pacienty, kteří se vám ozvou po telefonu.</p>
             </section>
         </section>
 
 
         <section class="main-frame grid" id="last-presentation-section">
             <section class="grey">
-                <h1>Komunikujte s pacienty</h1>
-                <p>Potřebujete poslat pacientovi zprávu, anebo provést online konzultaci? Komunikace mezi lékařem a
-                    pacientem je plně zakomponována do našeho systému. </p>
+                <h1>Spolupracujte s Vašimi kolegy</h1>
+                <p>Do balíčku zdarma je zahrnuta komunikace s Vašimi kolegy.
+                    Můžete tak sdílet informace, ušetřit si čas a zefektivnit léčbu.
+                    Součástí našich prémiových služeb je pak komunikace i s vašimi pacienty.</p>
             </section>
-            <section class="green">
-                <h1>Ovládejte odkudkoli</h1>
-                <p>Celý systém je online a plně responzivní, což znamená, že je snadno ovladatelný jak z počítače, tak
-                    telefonu nebo tabletu. Vše můžete mít pod kontrolou všude tam, kde je připojení k internetu.</p>
+            <section class="green" id="no-contract-section">
+                <h1>Bez smlouvy a závazků</h1>
+                <p>Všechny naše služby můžete začít využívat ihned a bez závazků.
+                    Prémiové služby můžete využívat hned od druhého dne, nemusíte se nám nijak zavazovat a je tak zcela
+                    na vás,jak budete našich služeb využívat.
+                </p>
             </section>
         </section>
 
 
         <section class="main-frame" id="pricing-headline-section">
-            <h1>Platíte jen za to, co využijete</h1>
-            <p>U nás neplatíte žádné paušály, zaplatíte pouze za dny, kdy využijete našich prémiových služeb.
-                Pokud budete na dovolené a nebudete v ordinaci, nic vám účtovat nebudeme.
+            <h1>Neplatíte za pacienty ani paušály</h1>
+            <p>U nás zaplatíte pouze za dny, kdy využijete našich placených služeb.
+                Pokud budete na dovolené a nebo zrovna nebudete tyto služby využívat, nic vám účtovat
+                nebudeme. Pokdu si přijete online objednávání, tak můžete přijímat kolik pacientů chcete a nic navíc
+                neplatíte.
+                <b>Jako bonus od nás dostanete kredit 400 Kč na naše služby zcela zdarma.</b>
             </p>
         </section>
 
@@ -383,37 +392,33 @@
             <section id="free-section" class="price-section">
                 <div class="green price-header">ZDARMA</div>
                 <div class="features-section">
-                    <div>*&nbsp; Kompletní prezentace ordinace</div>
-                    <div>*&nbsp; Elektroniký kalendář</div>
-                    <div>*&nbsp; Komunikace mezi lékaři</div>
-                    <div>*&nbsp; 1. měsíc online objednání</div>
-                </div>
-                <div class="more-info">
-                    <iron-icon icon="icons:help"></iron-icon>
-                    Více informací
+                    <div>&#8226;&nbsp; Kompletní prezentace Vaší ordinace</div>
+                    <div id="presentation-detail" hidden="[[smallScreen]]">
+                        <div>&#8226; &nbsp; Kontaktní informace</div>
+                        <div>&#8226; &nbsp; Seznam smluvních pojišťoven</div>
+                        <div>&#8226; &nbsp; Ceník poskytovaných služeb</div>
+                        <div>&#8226; &nbsp; Upozornění na dovolenou</div>
+                    </div>
+                    <div>&#8226;&nbsp; Komunikace s Vašimi kolegy</div>
+                    <div>&#8226;&nbsp; Naše prémiové služby v hodnotě 400 Kč</div>
                 </div>
             </section>
             <section id="paid-section" class="price-section">
-                <div class="blue price-header">+ 20 Kč
-                    <div class="description">za den online objednávání</div>
+                <div class="blue price-header">PREMIUM
+                    <div class="description">+ 20 Kč za den online objednávání</div>
                 </div>
                 <div class="features-section">
-                    <div>+ Neomezeně objednávacích časů</div>
-                    <div>+ Databáze objednaných pacientů</div>
-                    <div>+ Komunikace s pacienty v databázi</div>
-                    <div hidden="[[smallScreen]]">&nbsp;</div>
-                </div>
-                <div class="more-info">
-                    <iron-icon icon="icons:help"></iron-icon>
-                    Více informací
+                    <div>+ Online objednávání pacientů</div>
+                    <div>+ Kontrola nad objednanými pacienty</div>
+                    <div>+ Elektronický kalendář</div>
+                    <div>+ Komunikace s pacienty</div>
                 </div>
             </section>
         </section>
 
 
         <section id="pricing-detail">Pokud v registraci ordinace zvolíte možnost online objednání, tak je cena účtována
-            měsíčně podle toho,
-            na kolik dnů se za poslední měsíc bylo možné objednat online.
+            měsíčně podle toho, na kolik dnů se za poslední měsíc bylo možné objednat online.
         </section>
 
         <div id="office-registration">
@@ -442,7 +447,8 @@
                 <gold-email-input id="email_input" error-message="Špatný formát"
                                   label="Vaše emailová adresa" required>
                 </gold-email-input>
-                <paper-textarea id="message_input" label="Vaše zpráva" char-counter error-message="Zpráva nesmí být prázdná"
+                <paper-textarea id="message_input" label="Vaše zpráva" char-counter
+                                error-message="Zpráva nesmí být prázdná"
                                 maxlength="2000" required></paper-textarea>
                 <paper-button raised on-tap="send">Odeslat</paper-button>
             </form>
