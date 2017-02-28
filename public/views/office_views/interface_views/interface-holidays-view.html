@@ -127,7 +127,7 @@
                 </section>
             </div>
 
-            <div class="header">
+            <div class="header" hidden="[[computeIfEmpty(holidaysArray)]]">
                 <h1>Seznam dovolených</h1>
             </div>
             <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
@@ -295,6 +295,10 @@
                         buttonText: 'Zavřít'
                     }
                 });
+            },
+
+            computeIfEmpty: function (holidaysArray) {
+                return holidaysArray.length === 0;
             }
         });
     </script>
