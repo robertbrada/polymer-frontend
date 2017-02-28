@@ -179,7 +179,7 @@
                                 tak nebude možné objednat pacienta na 8. den a dále od dnešního data.
                             </p>
                             <paper-input type="number" label="Počet dní" min="7" max="360" required auto-validate
-                                         value="{{generatorInfo.numberOfDays}}">
+                                         value="{{numberOfDays}}">
                                 <div suffix>dní</div>
                             </paper-input>
                             <h2>Manuální potvrzení při první návštěvě</h2>
@@ -231,10 +231,17 @@
                     value: true
                 },
 
+                // Workaround for String representation of number in paper-input
                 visitLength: {
                     type: String,
                     value: "40",
                     observer: "setNumericVisitLength"
+                },
+
+                numberOfDays: {
+                    type: String,
+                    value: "30",
+                    observer: "setNumericNumberOfDays"
                 }
             },
 
@@ -269,6 +276,10 @@
             // Workaround for non-numeric values in paper-input
             setNumericVisitLength: function (visitLength) {
                 this.set("generatorInfo.visitLength", Number(visitLength));
+            },
+
+            setNumericNumberOfDays: function (numberOfDays) {
+                this.set("generatorInfo.numberOfDays", Number(numberOfDays));
             }
         });
     </script>

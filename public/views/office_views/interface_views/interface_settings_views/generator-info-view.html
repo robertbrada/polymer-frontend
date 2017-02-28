@@ -103,7 +103,7 @@
                             ordinačních hodin určíme objednávací časy.
                         </paper-tooltip>
                         <paper-input type="number" label="Délka návštěvy" min="1" max="360" required auto-validate
-                                     value="{{generatorInfo.visitLength}}">
+                                     value="{{visitLength}}">
                             <div suffix>min</div>
                         </paper-input>
 
@@ -113,7 +113,7 @@
                             napíšete např. 7 dní, tak nebude možné objednat se na 8. den a dále od dnešního data.
                         </paper-tooltip>
                         <paper-input type="number" label="Počet dní" min="7" max="360" required auto-validate
-                                     value="{{generatorInfo.numberOfDays}}">
+                                     value="{{numberOfDays}}">
                             <div suffix>dní</div>
                         </paper-input>
 
@@ -203,6 +203,19 @@
                 manualConfirmation: {
                     type: Boolean,
                     value: false
+                },
+
+                // Workaround for String representation of number in paper-input
+                visitLength: {
+                    type: String,
+                    value: "40",
+                    observer: "setNumericVisitLength"
+                },
+
+                numberOfDays: {
+                    type: String,
+                    value: "30",
+                    observer: "setNumericNumberOfDays"
                 }
             },
 
@@ -231,6 +244,9 @@
 
                 db.ref("/generatorInfo/" + this.officeId).once('value').then(function (snapshot) {
                     generatorInfo = snapshot.val();
+                    this.numberOfDays = "" + generatorInfo.numberOfDays;
+                    this.visitLength = "" + generatorInfo.visitLength;
+
                     if (generatorInfo === null) {
                         this.onlineBooking = false
                     } else {
@@ -353,6 +369,15 @@
 
             computeButtonText: function (bookingActivation) {
                 return (bookingActivation) ? "Aktivovat objednání" : "Uložit změny";
+            },
+
+            // Workaround for non-numeric values in paper-input
+            setNumericVisitLength: function (visitLength) {
+                this.set("generatorInfo.visitLength", Number(visitLength));
+            },
+
+            setNumericNumberOfDays: function (numberOfDays) {
+                this.set("generatorInfo.numberOfDays", Number(numberOfDays));
             }
         });
     </script>
