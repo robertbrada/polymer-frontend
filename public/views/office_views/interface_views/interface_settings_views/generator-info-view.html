@@ -244,12 +244,12 @@
 
                 db.ref("/generatorInfo/" + this.officeId).once('value').then(function (snapshot) {
                     generatorInfo = snapshot.val();
-                    this.numberOfDays = "" + generatorInfo.numberOfDays;
-                    this.visitLength = "" + generatorInfo.visitLength;
 
                     if (generatorInfo === null) {
                         this.onlineBooking = false
                     } else {
+                        this.numberOfDays = "" + generatorInfo.numberOfDays;
+                        this.visitLength = "" + generatorInfo.visitLength;
                         this.generatorInfo = generatorInfo;
                         this.onlineBooking = true;
                     }

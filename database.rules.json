@@ -153,7 +153,36 @@
     "generatorInfo": {
       "$oid": {
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        "officeHours": {
+          "dayIndex": {
+            "available": {
+              ".validate": "newData.isNumber() && newData.val() <= 360 && newData.val() >= 7"
+            },
+            "hours": {
+              ".validate": "newData.isString()"
+            },
+            "visitLength": {
+              ".validate": "newData.isNumber() && newData.val() <= 360 && newData.val() >= 1"
+            },
+            "lastGeneratedDate": {
+              "year": {
+                ".validate": "newData.isNumber() && newData.val() >= 2017"
+              },
+              "month": {
+                ".validate": "newData.isNumber()"
+              },
+              "date": {
+                ".validate": "newData.isNumber() && newData.val() <= 31 && newData.val() > 0"
+              }
+            },
+            "holidays": {
+              "$hId": {
+                ".validate": "newData.isNumber()"
+              }
+            }
+          }
+        }
       }
     },
     // TODO: Limit to number of appointments is not yet enforced, requires backend. Low priority
