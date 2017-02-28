@@ -118,8 +118,8 @@
                             <div suffix>dní</div>
                         </paper-input>
 
-                        <h2>Manuální potvrzení při první návštěvě<span id="manual-confirmation-tooltip" class="tooltip">Vysvětlení<iron-icon
-                                icon="icons:help"></iron-icon></span></h2>
+                        <h2>Manuální potvrzení při první návštěvě<span id="manual-confirmation-tooltip" class="tooltip"><iron-icon
+                                icon="icons:help"></iron-icon>Vysvětlení</span></h2>
                         <paper-tooltip for="manual-confirmation-tooltip" offset="0">Zaškrtněte, pokud chcete, aby pacient při prvním objednání nejprve
                             musel zažádat o Vaše potvrzení.
                             Poté, co pacient zažádá o potvrzení, Vám zobrazíme nového pacienta v sekci „Pacienti k potvrzení“
@@ -135,7 +135,8 @@
                     </section>
 
                     <section>
-                        <h2>Ordinační hodiny</h2>
+                        <h2>Objednávací hodiny</h2>
+                        <p>Zadejte dny a hodiny, kdy se mohou pacienti objednat.</p>
 
                         <template is="dom-repeat" items="[[generatorInfo.officeHours]]" as="entry">
                             <div>

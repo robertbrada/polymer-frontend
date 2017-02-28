@@ -3,14 +3,17 @@
 <link rel="import" href="/bower_components/moment-element/moment-import.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/custom_components/moment-wrapper-cs.html">
 
+<link rel="import" href="/styles/input-styles.html">
 
 <dom-module id="interface-calendar-view">
     <template>
-        <style>
+        <style include="input-styles">
 
             /*** CALENDAR CONTAINER */
 
@@ -91,25 +94,64 @@
             }
 
             #patients-container {
-                padding: 0.6em 1.45em 1.45em 1.45em;
+                padding: 0.8em 1.45em 1.45em 1.45em;
                 font-size: 1.1em;
                 max-height: calc(100vh - 64px - 2.8em - 5em); /* 100vh - header -dayName - some space*/
                 overflow-y: auto;
             }
 
             #patient-item {
+                position: relative;
                 margin: 0.5em auto;
                 padding: 1em;
                 border: 1px solid #e2e2e3;
                 background-color: #f9f9fa;
             }
 
-            /*** OTHER ***/
+            /** BUTTONS ***/
 
-            .green-bold{
-                color: var(--app-green-color);
-                font-weight: 600;
+            /******************************/
+
+            paper-button {
+                font-size: 0.85em;
+                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
             }
+
+            paper-button iron-icon {
+                height: 20px;
+                width: 20px;
+            }
+
+            #add-booking-btn {
+                background-color: var(--app-green-color);
+                color: #fff;
+            }
+
+            .dismiss-button {
+                background-color: #fff;
+                color: #9a9a9b;
+                border: 1px solid #c2c2c3;
+                position: absolute;
+                top: 1em;
+                right: 1em;
+                margin: 0;
+                padding: 0.4em 0.7em 0.4em 0.3em;
+            }
+
+            #booking-time {
+                font-weight: bold;
+                margin: auto 1em auto 0;
+                display: inline-block;
+                color: var(--app-green-color);
+            }
+
+            #patient-item:hover .dismiss-button {
+                background-color: var(--app-red-color);
+                border-color: var(--app-red-color);
+                color: #fff;
+            }
+
+            /*** OTHER ***/
 
             .flex-horizontal {
                 @apply(--layout-horizontal);
@@ -129,6 +171,10 @@
                     margin-right: 0;
                     margin-bottom: 1.5em;
                 }
+
+                #patients-container {
+                    max-height: 100%;
+                }
             }
 
             @media only screen and (max-width: 767px) {
@@ -136,7 +182,15 @@
                 td {
                     font-size: 1.1em;
                 }
+
+                .dismiss-button {
+                    background-color: var(--app-red-color);
+                    border-color: var(--app-red-color);
+                    color: #fff;
+                }
             }
+
+
 
         </style>
 
@@ -175,12 +229,34 @@
                 <div id="patients-container">
                     <template is="dom-repeat" items="[[dayBookingTimes]]" as="time">
                         <div id="patient-item">
-                            <span class="green-bold">[[computeTime(time.id)]]</span>
+                            <div id="booking-time">[[computeTime(time.id)]]</div>
+
                             <template is="dom-if" if="[[time.occupied]]">
-                                <br><b>[[computeName(time.appointmentData.userInfo.name)]]</b><br>
-                                <b>Zpráva:</b> [[time.appointmentData.message]]
+                                <div class="flex-horizontal">
+                                    <b>[[computeName(time.appointmentData.userInfo.name)]]</b><br>
+                                    <paper-button class="dismiss-button">
+                                        <iron-icon icon="icons:close"></iron-icon>
+                                        Zrušit objednání
+                                    </paper-button>
+                                </div>
+                                <b>Zpráva: </b>[[time.appointmentData.message]]
+                            </template>
+
+                            <template is="dom-if" if="[[!time.occupied]]">
+                                <paper-button class="dismiss-button">
+                                    <iron-icon icon="icons:close"></iron-icon>
+                                    Zrušit termín
+                                </paper-button>
+                                <br>
+                                <paper-input label="Jméno a příjmení pacienta" min="1" max="80" required auto-validate
+                                             value="{{patientName}}"> </paper-input>
+                                <paper-textarea label="Dobrovolná poznámka" char-counter
+                                                maxlength="200"></paper-textarea>
+                                <paper-button id="add-booking-btn">+ Přidat objednání</paper-button>
+
                             </template>
                         </div>
+
                     </template>
                 </div>
             </div>
