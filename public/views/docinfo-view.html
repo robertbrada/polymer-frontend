@@ -307,11 +307,7 @@
         <section class="main-frame grid">
             <section>
                 <h1>Co je Docta?</h1>
-                <p>Docta je moderní nástroj, který spojuje lékaře s pacienty a usnadňuje lékařům práci.
-                    Jako lékař si zaregistrujete svou ordinaci, která bude veřejně k zobrazení na
-                    našich stránkách. Rovněž budete mít přístup k rozhraní ordinace, kde budete mít kompletní přehled o
-                    svých pacientech.<br>
-                    <b>TODO s mírou přehajpovaná sekce</b>
+                <p>Docta je moderní nástroj, který zpříjemní Vaší práci i život Vašich pacientů.<br>
                 </p>
             </section>
             <section class="img-section">
@@ -325,11 +321,11 @@
             </section>
             <section id="office-presence-section">
                 <h1>Kompletní prezentace ordinace zdarma</h1>
-                <p>Na Docta.cz můžete prezentovat všechny důležité informace o vaší ordinaci zcela zdarma a
+                <p>Na Docta.cz můžete prezentovat všechny důležité informace o Vaší ordinaci zcela zdarma a
                     napořád.
                     <br>
                     <br>
-                    <a href="#">Zobrazit ukázkový profil</a>
+                    <a href="/d/strakova_plzen">Zobrazit ukázkový profil</a>
                 </p>
             </section>
         </section>
@@ -337,7 +333,7 @@
         <section class="main-frame grid">
             <section>
                 <h1>Přenechte objednání pacientům</h1>
-                <p>Odprostěte se od telefonátů a nechte pacienty, ať se objednají sami.
+                <p>Nemarněte čas vyřizováním telefonátů a nechte pacienty, ať se objednají sami.
                     V ordinaci se tak můžete nerušeně věnovat své práci.
                     Podle Vašich objednávacích hodin Vám vytvoříme kalendář na míru.
                 </p>
@@ -350,40 +346,39 @@
         <section class="main-frame grid" id="first-square-section">
             <section class="blue">
                 <h1>Máte kontrolu nad pacienty</h1>
-                <p>Nemusíte mít strach, že se k vám bude objednávat kde kdo. Můžete si vybrat, kteří pacienti se u
-                    vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci.</p>
+                <p>Nemusíte mít strach, že se k Vám bude objednávat kdokoliv. Můžete si vybrat, kteří pacienti se u
+                    Vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci.</p>
             </section>
             <section class="grey">
                 <h1>Vše na jednom místě</h1>
-                <p>V rozhraní Vaší ordinace máte elektronický kalendář, kde máte přehled o všech objednaných pacientech.
-                    Samozřejmě můžete objednat i pacienty, kteří se Vám ozvou po telefonu.</p>
+                <p>V rozhraní Vaší ordinace máte elektronický kalendář, který přehledně reprezentuje Vaše objednané pacienty.
+                </p>
             </section>
         </section>
 
 
         <section class="main-frame grid" id="last-presentation-section">
             <section class="grey">
-                <h1>Spolupracujte s Vašimi kolegy</h1>
-                <p>Do balíčku zdarma je zahrnuta komunikace s Vašimi kolegy.
-                    Můžete tak sdílet informace, ušetřit si čas a zefektivnit léčbu.
-                    Součástí našich prémiových služeb je pak komunikace i s vašimi pacienty.</p>
+                <h1>Komunikujte bez papíru</h1>
+                <p>Přenechte pozvánky na preventivní prohlídky na nás a komunikujte s pacienty prostřednictvím internetu.
+                    To vše máte po ruce v rozhraní Vaší ordinace.</p>
             </section>
             <section class="green" id="no-contract-section">
                 <h1>Bez smlouvy a závazků</h1>
                 <p>Všechny naše služby můžete začít využívat ihned a bez závazků.
-                    Prémiové služby můžete využívat hned od druhého dne, nemusíte se nám nijak zavazovat a je tak zcela
-                    na vás, jak budete našich služeb využívat.
+                    Nemusíte se nám nijak zavazovat a je tak zcela
+                    na Vás, jak budete našich služeb využívat.
                 </p>
             </section>
         </section>
 
 
         <section class="main-frame" id="pricing-headline-section">
-            <h1>Neplatíte za pacienty ani paušály</h1>
-            <p>U nás zaplatíte pouze za dny, kdy využijete našich placených služeb.
-                Pokud budete na dovolené a nebo zrovna nebudete tyto služby využívat, nic vám účtovat
+            <h1>Plaťte jen za to co využijete</h1>
+            <p>U nás zaplatíte pouze za dny, kdy využijete našich premiových služeb.
+                Pokud budete na dovolené a nebo zrovna nebudete tyto služby využívat, nic Vám účtovat
                 nebudeme.
-                <b>Po registraci obrdžíte 400 kreditů.</b>
+                <b>Po registraci obrdžíte 400 kreditů.</b> Máte tak možnost si vyzkoušet naše služby bez placení.
             </p>
         </section>
 
@@ -411,6 +406,7 @@
                     <div>+ Kontrola nad objednanými pacienty</div>
                     <div>+ Elektronický kalendář</div>
                     <div>+ Komunikace s pacienty</div>
+                    <div>+ Pozvánky na preventivní prohlídky</div>
                 </div>
             </section>
         </section>
@@ -463,6 +459,15 @@
                     type: Boolean,
                     value: false
                 }
+            },
+
+            observers: [
+                "routePathObserver(route.path)"
+            ],
+
+            routePathObserver: function (path) {
+                if (path.length < 2) return null;
+                firebase.apps[0].database().ref("/docInfoVisitors").push(path.substring(1));
             },
 
             send: function () {

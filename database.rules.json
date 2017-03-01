@@ -230,6 +230,10 @@
           ".validate": "newData.isString() && newData.val().length <= 2000"
         }
       }
+    },
+    "docInfoVisitors": {
+      ".read": false,
+      ".write": true
     }
   }
 }
