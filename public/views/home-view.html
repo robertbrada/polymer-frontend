@@ -24,10 +24,6 @@
                 --small-photo-width: 85px;
             }
 
-            #logo {
-                max-width: 150px;
-            }
-
             #head {
                 margin: 0 auto 4em auto;
                 font-size: 0.7em;
@@ -198,7 +194,6 @@
 
         <div id="main-container" class="main-frame container flex-horizontal">
             <div id="head">
-                <img id="logo" src="../images/logo.png">
                 <h1>Seznam registrovaných ordinací</h1>
             </div>
 
@@ -208,7 +203,7 @@
                     <div id="photo-container">
                         <template is="dom-if" if="[[!office.photoAvailability]]">
                             <!--Show icon-->
-                            <img src="../images/docprofile.png" id="profile-photo">
+                            <img src="../images/doctor-[[office.sex]].png" id="profile-photo">
                         </template>
                     </div>
 
@@ -254,6 +249,7 @@
                 return Object.keys(officeSearchInfo).map(function (key) {
                     return {
                         'name': officeSearchInfo[key]['name'],
+                        'sex': officeSearchInfo[key]['sex'],
                         'address': officeSearchInfo[key]['address'],
                         'specialization': officeSearchInfo[key]['specialization'],
                         'photoAvailability': officeSearchInfo[key]['photoAvailability'],

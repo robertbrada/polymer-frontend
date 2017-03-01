@@ -30,6 +30,9 @@
           "year": {
             ".validate": "newData.isNumber() && newData.val() >= 1900  && newData.val() <= 2020"
           }
+        },
+        "sex": {
+          ".validate": "newData.isString() && (newData.val() === 'female' || newData.val() === 'male')"
         }
       }
     },

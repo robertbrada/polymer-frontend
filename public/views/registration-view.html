@@ -2,6 +2,8 @@
 
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="/bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
@@ -125,15 +127,23 @@
                         <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
                                      maxlength="30" error-message="Nelze ponechat prázdné"
                                      required></paper-input>
+
+                        <paper-radio-group id="sex" selected="female">
+                            <paper-radio-button name="female">Žena</paper-radio-button>
+                            <paper-radio-button name="male">Muž</paper-radio-button>
+                        </paper-radio-group>
+
                         <paper-input id="dinput" label="Datum narození" auto-validate required placeholder="DD.MM.RRRR"
                                      pattern="[0-9]{1,2}[.][0-9]{1,2}[.][0-9]{4}" prevent-invalid-input
                                      allowed-pattern="[0-9.]" validator="dateValidator">
                         </paper-input>
 
+
                         <span id="birth-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést své datum narození?</span>
                         <paper-tooltip for="birth-tooltip" offset="0">Vaše datum narození slouží lékaři k tomu, aby
                             ověřil vaši totožnost a mohl vás tak přijmout jako svého pacienta.
                         </paper-tooltip>
+
 
                         <h2>
                             <iron-icon icon="icons:mail"></iron-icon>
@@ -256,7 +266,8 @@
                         date: Number(dateArray[0]),
                         month: Number(dateArray[1]),
                         year: Number(dateArray[2])
-                    }
+                    },
+                    sex: this.$.sex.selected
                 };
 
                 objectToSave['/userInterfaceInfo/' + user.uid] = {

@@ -30,6 +30,12 @@
                         <paper-input label="Příjmení" minlength="1" auto-validate
                                      maxlength="80" error-message="Nelze ponechat prázdné"
                                      required value="{{fullInfo.name.lastName}}"></paper-input>
+
+                        <paper-radio-group id="sex" selected="{{fullInfo.sex}}">
+                            <paper-radio-button name="female">Žena</paper-radio-button>
+                            <paper-radio-button name="male">Muž</paper-radio-button>
+                        </paper-radio-group>
+
                         <h2>Adresa ordinace</h2>
                         <paper-input id="cinput" label="Město" value="{{fullInfo.address.city}}"
                                      minlength="1" maxlength="20" required auto-validate>

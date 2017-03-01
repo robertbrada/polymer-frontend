@@ -3,6 +3,8 @@
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -27,7 +29,7 @@
             }
 
             #pass-change-container h2 {
-               margin-top: 0;
+                margin-top: 0;
             }
 
             #pass-change-container {
@@ -99,12 +101,19 @@
                         </paper-input>
                         <paper-input id="sinput" label="Ulice a číslo popisné" minlength="3" maxlength="80"
                                      value="[[userInfo.address.street]]" required auto-validate></paper-input>
+                        <paper-radio-group id="sex" selected="[[userInfo.sex]]">
+                            <paper-radio-button name="female">Žena</paper-radio-button>
+                            <paper-radio-button name="male">Muž</paper-radio-button>
+                        </paper-radio-group>
                         <paper-button id="confirm_button" on-tap="confirm" raised>Uložit změny</paper-button>
                     </form>
                 </section>
             </div>
             <div id="pass-change-container">
-                <h2><iron-icon icon="icons:lock"></iron-icon>Změna hesla</h2>
+                <h2>
+                    <iron-icon icon="icons:lock"></iron-icon>
+                    Změna hesla
+                </h2>
                 <p>Pro změnu hesla Vám zašleme email. V emailové zprávě bude odkaz, na kterém bude možno heslo
                     změnit.</p>
                 <paper-button on-tap="passChange" raised>Poslat email</paper-button>
@@ -148,6 +157,7 @@
                             'firstName': this.$.fninput.value,
                             'lastName': this.$.lninput.value
                         },
+                        'sex': this.$.sex.selected,
                         'address': {
                             'city': this.$.cinput.value,
                             'street': this.$.sinput.value

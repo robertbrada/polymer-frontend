@@ -4,8 +4,10 @@
 <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/behaviors/routing-behavior.html">
 
@@ -87,10 +89,6 @@
                 data="{{routeData}}"
                 tail="{{subRoute}}"></app-route>
 
-        <firebase-document id="user_document" app-name="doctor-appointment-system" path="/userInfo/[[userId]]/name"
-                           data="{{nameData}}">
-        </firebase-document>
-
         <iron-media-query query="max-width: 717px" query-matches="{{smallScreen}}"></iron-media-query>
 
         <header class="subsection">
@@ -137,6 +135,12 @@
             validPrefix: '/office/registration',
 
             properties: {
+
+                firebaseDatabase: {
+                    type: Object,
+                    value: firebase.apps[0].database()
+                },
+
                 pages: {
                     type: Array,
                     value: [
@@ -167,6 +171,7 @@
                                 firstName: null,
                                 lastName: null
                             },
+                            sex: null,
                             address: {
                                 city: null,
                                 street: null
@@ -226,12 +231,31 @@
                         }
 
                     }
-                },
-
-                nameData: {
-                    type: Object,
-                    observer: 'userChange'
                 }
+            },
+
+            ready: function () {
+                var db = this.firebaseDatabase,
+                    userInfo, fullInfo = this.officeData.fullInfo;
+
+                db.ref("/userInfo/" + this.userId).once('value').then(function (snapshot) {
+                    userInfo = snapshot.val();
+                    if (userInfo !== null) {
+                        if (fullInfo.name.firstName === null) {
+                            this.set('officeData.fullInfo.name.firstName', userInfo.name.firstName);
+                        }
+                        if (fullInfo.name.lastName === null) {
+                            this.set('officeData.fullInfo.name.lastName', userInfo.name.lastName);
+                        }
+                        if (fullInfo.sex === null) {
+                            this.set('officeData.fullInfo.sex', userInfo.sex);
+                        }
+                        if (fullInfo.address.city === null) {
+                            this.set('officeData.fullInfo.address.city', userInfo.address.city);
+                        }
+                    }
+
+                }.bind(this));
             },
 
             nextStep: function () {
@@ -274,26 +298,17 @@
                 return "" + (index + 1) + ". " + ((smallScreen) ? "" : pageObject.title);
             },
 
-            userChange: function (data) {
-                var name = this.officeData.fullInfo.name;
-
-                if (name.firstName === null && name.lastName === null && !!data.firstName && !!data.lastName) {
-                    this.set('officeData.fullInfo.name.firstName', data.firstName);
-                    this.set('officeData.fullInfo.name.lastName', data.lastName);
-                    this.$.user_document.ref.off();
-                }
-            },
-
             registerOffice: function () {
                 var normalizedString = this.normalizeText(this.officeData.fullInfo.name.lastName) + "_" + this.normalizeText(this.officeData.fullInfo.address.city);
                 this.generateOfficeId(this.officeData, normalizedString, 0);
             },
 
             generateOfficeId: function (data, normalizedString, increment) {
-                var officeId = (increment === 0) ? normalizedString : normalizedString + "_" + increment;
+                var db = this.firebaseDatabase,
+                    officeId = (increment === 0) ? normalizedString : normalizedString + "_" + increment;
 
                 // I am initializing the reference multiple times because it somehow converted to number in recursive calls
-                this.$.user_document.app.database().ref('/officeSearchInfo/' + officeId).once('value', function (snapshot) {
+                db.ref('/officeSearchInfo/' + officeId).once('value', function (snapshot) {
                     if (snapshot.val() === null) {
                         this.saveOffice(data, officeId, this.userId);
                         this.savePhoto(data, officeId);
@@ -305,7 +320,7 @@
 
             saveOffice: function (data, officeId, userId) {
                 var objectToSave = {},
-                    rootRef = this.$.user_document.app.database().ref('/');
+                    rootRef = this.firebaseDatabase.ref('/');
 
                 objectToSave['/officeFullInfo/' + officeId] = data.fullInfo;
                 objectToSave['/userInterfaceInfo/' + userId + '/showOfficeInterface'] = true;
@@ -315,6 +330,7 @@
                 objectToSave['/officeAdminInfo/' + officeId]['users'][this.userId] = 'admin';
                 objectToSave['/officeSearchInfo/' + officeId] = {
                     'name': data.fullInfo.name,
+                    'sex': data.fullInfo.sex,
                     'address': data.fullInfo.address,
                     'coordinates': data.fullInfo.coordinates,
                     'acceptingNewPatients': data.fullInfo.acceptingNewPatients,
@@ -353,7 +369,7 @@
             },
 
             getTokenAndNotifyGenerator: function (officeId) {
-                this.$.user_document.app.auth().currentUser.getToken(true).then(function (idToken) {
+                firebase.apps[0].auth().currentUser.getToken(true).then(function (idToken) {
 
                     this.notifyGenerator({
                         officeId: officeId,
