@@ -203,7 +203,10 @@
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$aid": {
-          ".write": "auth !== null && ((!data.exists() && auth.token.email_verified == true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.child('patient').val() === auth.uid)"
+          ".write": "auth !== null && ((!data.exists() && auth.token.email_verified == true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.child('patient').val() === auth.uid)",
+          "source": {
+            ".validate": "newData.isString() && (newData.val() == 'online' || newData.val() == 'calendar' || newData.val() == 'waitingRoom')"
+          }
         }
       }
     },

@@ -265,6 +265,11 @@
                 userAction: {
                     type: Boolean,
                     value: false
+                },
+
+                // The Firebase reference is saved globally, so that it can be disabled after the new date is selected
+                currentPublicRef: {
+                    type: Object
                 }
             },
 
@@ -279,11 +284,15 @@
 
             // I am using the firebase API directly, because the firebase-query element was extremely retarded
             fetchData: function (dateInterval, officeId) {
-                var db = firebase.apps[0].database();
+                var publicRef = firebase.apps[0].database().ref("/appointmentsPublic/" + officeId);
 
-                db.ref("/appointmentsPublic/" + officeId).orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
+                if (!!this.currentPublicRef) this.currentPublicRef.off();
+
+                publicRef.orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
                     this.setBookingTimesOfDates(snapshot.val());
                 }.bind(this));
+
+                this.currentPublicRef = publicRef;
             },
 
             // officeId observer. This function sets firstVisibleDate to it's initial value when officeId changes (different profile is viewed).
