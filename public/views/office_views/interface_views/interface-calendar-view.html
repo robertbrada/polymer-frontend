@@ -2,9 +2,7 @@
 
 <link rel="import" href="/bower_components/moment-element/moment-import.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="/bower_components/paper-input/paper-input.html">
-<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/custom_components/moment-wrapper-cs.html">
@@ -14,6 +12,22 @@
 <dom-module id="interface-calendar-view">
     <template>
         <style include="input-styles">
+
+            .red {
+                background-color: var(--app-red-color);
+                color: #fff;
+            }
+
+            .green {
+                background-color: var(--app-green-color);
+                color: #fff;
+            }
+
+            .vertical-aligh {
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+
 
             /*** CALENDAR CONTAINER */
 
@@ -94,7 +108,7 @@
             }
 
             #patients-container {
-                padding: 0.8em 1.45em 1.45em 1.45em;
+                padding: 0;
                 font-size: 1.1em;
                 max-height: calc(100vh - 64px - 2.8em - 5em); /* 100vh - header -dayName - some space*/
                 overflow-y: auto;
@@ -102,19 +116,24 @@
 
             #patient-item {
                 position: relative;
-                margin: 0.5em auto;
+                margin: 0;
                 padding: 1em;
-                border: 1px solid #e2e2e3;
-                background-color: #f9f9fa;
+                border-top: 1px solid #e2e2e3;
+                background-color: #fff;
+            }
+
+            .collapse-content {
+                padding: 1em;
+                background-color: #fff;
+
             }
 
             /** BUTTONS ***/
 
-            /******************************/
-
             paper-button {
                 font-size: 0.85em;
                 transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+                text-align: center;
             }
 
             paper-button iron-icon {
@@ -122,27 +141,20 @@
                 width: 20px;
             }
 
-            #add-booking-btn {
-                background-color: var(--app-green-color);
-                color: #fff;
+            .dismiss-appointment {
+                height: 3em;
             }
 
-            .dismiss-button {
+            .hover-button {
                 background-color: #fff;
                 color: #9a9a9b;
                 border: 1px solid #c2c2c3;
-                position: absolute;
-                top: 1em;
-                right: 1em;
-                margin: 0;
-                padding: 0.4em 0.7em 0.4em 0.3em;
             }
 
             #booking-time {
                 font-weight: bold;
-                margin: auto 1em auto 0;
-                display: inline-block;
                 color: var(--app-green-color);
+                margin-right: 1em;
             }
 
             #patient-item:hover .dismiss-button {
@@ -151,9 +163,15 @@
                 color: #fff;
             }
 
-            /*** OTHER ***/
+            #patient-item:hover .details-button {
+                background-color: var(--app-accent-color);
+                border-color: var(--app-accent-color);
+                color: #fff;
+            }
 
-            .flex-horizontal {
+            /*** LAYOUT ***/
+
+            .flex-horizontal, .flex-horizontal-buttons {
                 @apply(--layout-horizontal);
             }
 
@@ -161,7 +179,7 @@
                 @apply(--layout-flex);
             }
 
-            @media only screen and (max-width: 1050px) {
+            @media only screen and (max-width: 1100px) {
 
                 .flex-horizontal {
                     @apply(--layout-vertical);
@@ -188,8 +206,13 @@
                     border-color: var(--app-red-color);
                     color: #fff;
                 }
-            }
 
+                .details-button {
+                    background-color: var(--app-accent-color);
+                    border-color: var(--app-accent-color);
+                    color: #fff;
+                }
+            }
 
 
         </style>
@@ -227,35 +250,42 @@
                 <div id="selected-day">[[computeDayTitle(selectedDate, selectedMonth, selectedYear)]]</div>
 
                 <div id="patients-container">
+
                     <template is="dom-repeat" items="[[dayBookingTimes]]" as="time">
-                        <div id="patient-item">
-                            <div id="booking-time">[[computeTime(time.id)]]</div>
+                        <div id="patient-item" class="flex-horizontal-buttons">
+                            <div id="booking-time" class="vertical-aligh">[[computeTime(time.id)]]</div>
 
                             <template is="dom-if" if="[[time.occupied]]">
-                                <div class="flex-horizontal">
-                                    <b>[[computeName(time.appointmentData.userInfo.name)]]</b><br>
-                                    <paper-button class="dismiss-button">
-                                        <iron-icon icon="icons:close"></iron-icon>
-                                        Zrušit objednání
-                                    </paper-button>
+                                <div class="flexchild vertical-aligh">
+                                    [[computeName(time.appointmentData.userInfo.name)]]
                                 </div>
-                                <b>Zpráva: </b>[[time.appointmentData.message]]
+                                <paper-button class="details-button hover-button" on-click="handleDetail">Podrobnosti
+                                </paper-button>
                             </template>
 
                             <template is="dom-if" if="[[!time.occupied]]">
-                                <paper-button class="dismiss-button">
-                                    <iron-icon icon="icons:close"></iron-icon>
+                                <div class="flexchild">
+                                    <paper-button class="green" on-tap="addBooking" raised>+ Přidat objednání
+                                    </paper-button>
+                                </div>
+                                <paper-button class="dismiss-button hover-button">
                                     Zrušit termín
                                 </paper-button>
-                                <br>
-                                <paper-input label="Jméno a příjmení pacienta" min="1" max="80" required auto-validate
-                                             value="{{patientName}}"> </paper-input>
-                                <paper-textarea label="Dobrovolná poznámka" char-counter
-                                                maxlength="200"></paper-textarea>
-                                <paper-button id="add-booking-btn">+ Přidat objednání</paper-button>
 
                             </template>
                         </div>
+
+                        <!-- detail about patient is placed here, because of easier layout styling-->
+                        <template is="dom-if" if="[[time.occupied]]">
+                            <iron-collapse opened="[[time.infoOpened]]">
+                                <div class="collapse-content flex-horizontal-buttons">
+                                    <div class="flexchild"><b>Zpráva: </b>[[time.appointmentData.message]]</div>
+                                    <paper-button class="red dismiss-appointment">
+                                        Zrušit objednání
+                                    </paper-button>
+                                </div>
+                            </iron-collapse>
+                        </template>
 
                     </template>
                 </div>
@@ -568,7 +598,17 @@
                 if (selectedDate === null) return null;
 
                 return "" + selectedDate.date + "." + (selectedMonth + 1) + "." + selectedYear + ", " + selectedDate.name;
+            },
+
+            addBooking: function () {
+                this.fire("show-dialog", {path: "", viewName: "booking", open: true});
+            },
+
+            handleDetail: function (event) {
+                var infoOpened = event.model.time.infoOpened;
+                event.model.set('time.infoOpened', !infoOpened);
             }
+
         });
     </script>
 </dom-module>
