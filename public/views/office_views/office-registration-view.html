@@ -343,7 +343,6 @@
                 };
 
                 objectToSave['/officeInterfaceInfo/' + officeId] = data.officeInterfaceInfo;
-                objectToSave['/officeCredits/' + officeId] = 400; // Verified in database rules
 
                 if (data.officeInterfaceInfo.services.onlineBooking) {
                     objectToSave['/generatorInfo/' + officeId] = data.generatorInfo;
