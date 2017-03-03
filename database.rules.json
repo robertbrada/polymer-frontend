@@ -86,7 +86,13 @@
     "officeFullInfo": {
       "$oid": {
         ".read": true,
-        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        "holidays": {
+          ".write": "auth.uid === 'my-service-worker'"
+        },
+        "lastGeneratedDate": {
+          ".write": "auth.uid === 'my-service-worker'"
+        }
       }
     },
     "officeSearchInfo": {
@@ -132,7 +138,7 @@
     "officeHolidays": {
       "$oid": {
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
-        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+        ".write": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
       }
     },
     "officeInterfaceInfo": {
@@ -149,6 +155,7 @@
     },
     // TODO: Bug fix - unauthorized user might activate onlineBooking.
     "generatorInfo": {
+      ".read": "auth.uid === 'my-service-worker'",
       "$oid": {
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
@@ -164,6 +171,7 @@
               ".validate": "newData.isNumber() && newData.val() <= 360 && newData.val() >= 1"
             },
             "lastGeneratedDate": {
+              ".write": "auth.uid === 'my-service-worker'",
               "year": {
                 ".validate": "newData.isNumber() && newData.val() >= 2017"
               },
@@ -175,6 +183,7 @@
               }
             },
             "holidays": {
+              ".write": "auth.uid === 'my-service-worker'",
               "$hId": {
                 ".validate": "newData.isNumber()"
               }
@@ -187,7 +196,7 @@
     "appointmentsPublic": {
       ".read": true,
       "$oid": {
-        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$aid": {
           ".write": "auth !== null && auth.token.email_verified == true && ((data.val() === true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.val() === false && root.child('appointmentsPrivate/' + $oid + '/' + $aid + '/patient').val() === auth.uid)"
         }
@@ -195,8 +204,8 @@
     },
     "appointmentsPrivate": {
       "$oid": {
-        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".read": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
         "$aid": {
           ".write": "auth !== null && ((!data.exists() && auth.token.email_verified == true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.child('patient').val() === auth.uid)",
           "source": {
