@@ -48,7 +48,7 @@
         ".write": "$uid === auth.uid",
         "numberOfNotifications": {
           ".read": "root.child('userOffices/' + auth.uid).exists()",
-          ".write": "root.child('userOffices/' + auth.uid).exists()",
+          ".write": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".validate": "newData.isNumber() && newData.val() >= 0"
         }
       }
@@ -66,6 +66,7 @@
       }
     },
     "userAppointments": {
+      ".write": "auth.uid === 'my-service-worker'",
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
