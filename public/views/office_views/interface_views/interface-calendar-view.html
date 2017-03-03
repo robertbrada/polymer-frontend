@@ -23,11 +23,10 @@
                 color: #fff;
             }
 
-            .vertical-aligh {
+            .vertical-align {
                 margin-top: auto;
                 margin-bottom: auto;
             }
-
 
             /*** CALENDAR CONTAINER */
 
@@ -253,13 +252,13 @@
 
                     <template is="dom-repeat" items="[[dayBookingTimes]]" as="time">
                         <div id="patient-item" class="flex-horizontal-buttons">
-                            <div id="booking-time" class="vertical-aligh">[[computeTime(time.id)]]</div>
+                            <div id="booking-time" class="vertical-align">[[computeTime(time.id)]]</div>
 
                             <template is="dom-if" if="[[time.occupied]]">
-                                <div class="flexchild vertical-aligh">
+                                <div class="flexchild vertical-align">
                                     [[computeName(time.appointmentData.userInfo.name)]]
                                 </div>
-                                <paper-button class="details-button hover-button" on-click="handleDetail">Podrobnosti
+                                <paper-button class="details-button hover-button" on-tap="handleDetail">Podrobnosti
                                 </paper-button>
                             </template>
 
@@ -268,7 +267,8 @@
                                     <paper-button class="green" on-tap="addBooking" raised>+ Přidat objednání
                                     </paper-button>
                                 </div>
-                                <paper-button class="dismiss-button hover-button">
+                                <paper-button class="dismiss-button hover-button" args=[[time.id]]
+                                              on-tap="deleteBooking">
                                     Zrušit termín
                                 </paper-button>
 
@@ -280,7 +280,7 @@
                             <iron-collapse opened="[[time.infoOpened]]">
                                 <div class="collapse-content flex-horizontal-buttons">
                                     <div class="flexchild"><b>Zpráva: </b>[[time.appointmentData.message]]</div>
-                                    <paper-button class="red dismiss-appointment">
+                                    <paper-button class="red dismiss-appointment" on-tap="deleteAppointment">
                                         Zrušit objednání
                                     </paper-button>
                                 </div>
@@ -600,6 +600,16 @@
                 return "" + selectedDate.date + "." + (selectedMonth + 1) + "." + selectedYear + ", " + selectedDate.name;
             },
 
+            computeAppointmentDate: function (stringId) {
+                date = Number(stringId.substring(6, 8));
+                year = stringId.substring(0, 4);
+                month = Number(stringId.substring(4, 6));
+                hours = Number(stringId.substring(8, 10));
+                minutes = stringId.substring(10, 12);
+
+                return "" + date + "." + month + "." + year + " v " + hours + ":" + minutes;
+            },
+
             addBooking: function () {
                 this.fire("show-dialog", {path: "", viewName: "booking", open: true});
             },
@@ -607,8 +617,75 @@
             handleDetail: function (event) {
                 var infoOpened = event.model.time.infoOpened;
                 event.model.set('time.infoOpened', !infoOpened);
-            }
+            },
 
+            deleteBooking: function (event) {
+                //TODO data are deleted from database but disappears from interface only after refresh
+                var db = this.firebaseApp.database(),
+                    time = event.model.time,
+                    officeId = this.officeId,
+                    objectToSave = {};
+
+                objectToSave['/appointmentsPublic/' + officeId + '/' + time.id] = null;
+
+                db.ref("/").update(objectToSave).then(function () {
+                    this.fire("show-toast", {text: "Termín zrušen"});
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při odstraňování termínu se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            },
+
+            deleteAppointment: function (event) {
+                /*TODO data are deleted from database but disappears from interface only after refresh
+                  Button sometimes does not respond correctly:
+                  paper-toast not shown and notification not incremented, but data are changed and massage sent*/
+
+                var db = this.firebaseApp.database(),
+                    time = event.model.time,
+                    officeId = this.officeId,
+                    rootRef = db.ref('/'),
+                    objectToSave = {};
+
+                //makes booking time available
+                objectToSave['/appointmentsPublic/' + officeId + '/' + time.id] = true;
+
+                //deletes booking from doctor data
+                objectToSave['/appointmentsPrivate/' + officeId + '/' + time.id] = null;
+
+                //deletes booking from patient data
+                objectToSave['/userAppointments/' + time.appointmentData.patient + '/' + time.id] = null;
+
+                //message to patient, that booking appointment canceled
+                objectToSave['/userNotifications/' + time.appointmentData.patient + '/' + rootRef.push().key] = {
+                    'title': 'Zrušené objednání',
+                    'message': 'Doktor zrušil vaše objednání dohodnuté na termín: ' + this.computeAppointmentDate(time.id),
+                    'sender': officeId
+                };
+
+
+                db.ref("/").update(objectToSave).then(function () {
+                    db.ref('/userInterfaceInfo/' + time.appointmentData.patient + '/numberOfNotifications').transaction(function (currentCount) {
+                        return (currentCount === null) ? null : currentCount + 1;
+                    });
+                }).then(function () {
+                    this.fire("show-toast", {text: "Objednání zrušeno"});
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při odstraňování objednání se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+
+                    }.bind(this));
+                });
+            }
         });
     </script>
 </dom-module>
