@@ -163,32 +163,35 @@
         "officeHours": {
           "dayIndex": {
             "available": {
-              ".validate": "newData.isNumber() && newData.val() <= 360 && newData.val() >= 7"
+              ".validate": "newData.isBoolean()"
             },
             "hours": {
               ".validate": "newData.isString()"
-            },
-            "visitLength": {
-              ".validate": "newData.isNumber() && newData.val() <= 360 && newData.val() >= 1"
-            },
-            "lastGeneratedDate": {
-              ".write": "auth.uid === 'my-service-worker'",
-              "year": {
-                ".validate": "newData.isNumber() && newData.val() >= 2017"
-              },
-              "month": {
-                ".validate": "newData.isNumber()"
-              },
-              "date": {
-                ".validate": "newData.isNumber() && newData.val() <= 31 && newData.val() > 0"
-              }
-            },
-            "holidays": {
-              ".write": "auth.uid === 'my-service-worker'",
-              "$hId": {
-                ".validate": "newData.isNumber()"
-              }
             }
+          }
+        },
+        "visitLength": {
+          ".validate": "newData.isNumber() && newData.val() <= 360 && newData.val() >= 1"
+        },
+        "numberOfDays": {
+          ".validate": "newData.isNumber() && newData.val() <= 360 && newData.val() >= 7"
+        },
+        "lastGeneratedDate": {
+          ".write": "auth.uid === 'my-service-worker'",
+          "year": {
+            ".validate": "newData.isNumber() && newData.val() >= 2017"
+          },
+          "month": {
+            ".validate": "newData.isNumber()"
+          },
+          "date": {
+            ".validate": "newData.isNumber() && newData.val() <= 31 && newData.val() > 0"
+          }
+        },
+        "holidays": {
+          ".write": "auth.uid === 'my-service-worker'",
+          "$hId": {
+            ".validate": "newData.isNumber()"
           }
         }
       }
