@@ -57,15 +57,21 @@
             },
 
             listeners: {
-                'api-load': '_handleApiLoad'
+                'api-load': 'apiReady'
             },
 
-            _handleApiLoad: function () {
+            ready: function () {
+                if (typeof google === 'object' && typeof google.maps === 'object') {
+                    this.apiReady();
+                }
+            },
+
+            apiReady: function () {
                 var addressObject = this.address;
                 if (addressObject.city !== null && addressObject.street !== null) {
                     this.setCoordinatesByAddress(addressObject);
                 } else {
-                    this.setToUserlocation();
+                    this.setToUserLocation();
                 }
             },
 
@@ -86,15 +92,15 @@
                             this.message = "Podle Vámi zadané adresy jsme vyhledali pozici Vaší ordinace. Při určování polohy všal mohou vzniknout " +
                                 "nepřesnosti, proto prosím případně přesuňte červený ukazatel na správnou polohu.";
                         } else {
-                            this.setToUserlocation();
+                            this.setToUserLocation();
                         }
                     }.bind(this));
                 } else {
-                    this.setToUserlocation();
+                    this.setToUserLocation();
                 }
             },
 
-            setToUserlocation: function () {
+            setToUserLocation: function () {
                 this.title = "Vyberte polohu ordinace na mapě";
 
                 this.message = "Bohužel se nám nepodařilo najít umístění ordinace na mapě podle adresy, " +
