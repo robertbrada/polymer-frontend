@@ -4,6 +4,8 @@
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
+
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
@@ -20,21 +22,21 @@
                     width: 350px;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    height: 50vh
+                    max-height: 40vh
                 }
             }
         </style>
 
-        <span>Čas objednání:<br><b>Čtvrtek 12. 5. 2017 v 14:20</b></span><br>
+        <span>Datum objednání:<br><b>[[data.formatedDate]]</b></span><br>
 
         <form id="main_form" is="iron-form">
             <paper-input label="Jméno a příjmení pacienta" min="1" max="80" required auto-validate
                          value="{{patientName}}"> </paper-input>
-            <paper-textarea label="Dobrovolná poznámka" char-counter
+            <paper-textarea label="Dobrovolná poznámka" value="{{patientMessage}}" char-counter
                             maxlength="200"></paper-textarea>
         </form>
 
-        <paper-button responsive id="dialog-button" on-tap="confirm" raised>
+        <paper-button responsive id="dialog-button" on-tap="confirmAppointment" raised>
             Objednat pacienta
         </paper-button>
 
@@ -44,7 +46,11 @@
         Polymer({
             is: 'booking-view',
 
-            behaviors: [FormValidationBehavior]
+            behaviors: [FormValidationBehavior],
+
+            validate: function () {
+                return this._validateForm(this.$.main_form);
+            }
         });
 
     </script>

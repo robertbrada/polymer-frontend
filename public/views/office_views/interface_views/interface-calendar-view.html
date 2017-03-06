@@ -32,6 +32,7 @@
 
             #calendar-container {
                 margin-right: 1.5em;
+                height: calc(100vh - 64px - 2.8em - 5em);  /* affect patient.container height */
             }
 
             table {
@@ -123,7 +124,8 @@
 
             .collapse-content {
                 padding: 1em;
-                background-color: #fff;
+                background-color: #fbfbfc;
+                border-top: 1px solid #f2f2f3;
 
             }
 
@@ -279,7 +281,11 @@
                         <template is="dom-if" if="[[time.occupied]]">
                             <iron-collapse opened="[[time.infoOpened]]">
                                 <div class="collapse-content flex-horizontal-buttons">
-                                    <div class="flexchild"><b>Zpráva: </b>[[time.appointmentData.message]]</div>
+                                    <div class="flexchild">
+                                        <b>Datum narození: </b>[[computeDateOfBirth(time.appointmentData.userInfo.dateOfBirth)]]<br>
+                                        <b>Adresa: </b>[[computeAddress(time.appointmentData.userInfo.address)]]<br>
+                                        <b>Zpráva: </b>[[time.appointmentData.message]]
+                                    </div>
                                     <paper-button class="red dismiss-appointment" on-tap="deleteAppointment">
                                         Zrušit objednání
                                     </paper-button>
@@ -594,6 +600,16 @@
                 return name.firstName + " " + name.lastName;
             },
 
+            computeAddress: function (address) {
+                if (address === undefined) return;
+                return address.city + ", " + address.street;
+            },
+
+            computeDateOfBirth: function (dateOfBirth) {
+                if (dateOfBirth === undefined) return;
+                return dateOfBirth.date + ". " + dateOfBirth.month + ". " + dateOfBirth.year;
+            },
+
             computeDayTitle: function (selectedDate, selectedMonth, selectedYear) {
                 if (selectedDate === null) return null;
 
@@ -610,8 +626,15 @@
                 return "" + date + "." + month + "." + year + " v " + hours + ":" + minutes;
             },
 
-            addBooking: function () {
-                this.fire("show-dialog", {path: "", viewName: "booking", open: true});
+            addBooking: function (event) {
+                var timeId = event.model.time.id;
+                this.fire("show-dialog", {
+                    path: "", viewName: "booking", open: true, data: {
+                        formatedDate: this.computeAppointmentDate(timeId),
+                        appointmentId: timeId,
+                        officeId: this.officeId
+                    }
+                });
             },
 
             handleDetail: function (event) {
@@ -620,15 +643,11 @@
             },
 
             deleteBooking: function (event) {
-                //TODO data are deleted from database but disappears from interface only after refresh
-                var db = this.firebaseApp.database(),
-                    time = event.model.time,
-                    officeId = this.officeId,
-                    objectToSave = {};
 
-                objectToSave['/appointmentsPublic/' + officeId + '/' + time.id] = null;
+                //TODO realtime interface changes
+                var time = event.model.time, officeId = this.officeId, timeId = time.id;
 
-                db.ref("/").update(objectToSave).then(function () {
+                this.firebaseApp.database().ref('/appointmentsPublic/' + officeId + '/' + timeId).set(null).then(function () {
                     this.fire("show-toast", {text: "Termín zrušen"});
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
@@ -642,35 +661,35 @@
             },
 
             deleteAppointment: function (event) {
-                /*TODO data are deleted from database but disappears from interface only after refresh
-                  Button sometimes does not respond correctly:
-                  paper-toast not shown and notification not incremented, but data are changed and massage sent*/
 
+                //TODO realtime interface changes
                 var db = this.firebaseApp.database(),
                     time = event.model.time,
+                    timeId = time.id,
                     officeId = this.officeId,
+                    patientUid = time.appointmentData.patient,
                     rootRef = db.ref('/'),
                     objectToSave = {};
 
                 //makes booking time available
-                objectToSave['/appointmentsPublic/' + officeId + '/' + time.id] = true;
+                objectToSave['/appointmentsPublic/' + officeId + '/' + timeId] = true;
 
                 //deletes booking from doctor data
-                objectToSave['/appointmentsPrivate/' + officeId + '/' + time.id] = null;
+                objectToSave['/appointmentsPrivate/' + officeId + '/' + timeId] = null;
 
                 //deletes booking from patient data
-                objectToSave['/userAppointments/' + time.appointmentData.patient + '/' + time.id] = null;
+                objectToSave['/userAppointments/' + patientUid + '/' + timeId] = null;
 
                 //message to patient, that booking appointment canceled
-                objectToSave['/userNotifications/' + time.appointmentData.patient + '/' + rootRef.push().key] = {
+                objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
                     'title': 'Zrušené objednání',
-                    'message': 'Doktor zrušil vaše objednání dohodnuté na termín: ' + this.computeAppointmentDate(time.id),
+                    'message': 'Doktor zrušil vaše objednání dohodnuté na termín: ' + this.computeAppointmentDate(timeId),
                     'sender': officeId
                 };
 
 
-                db.ref("/").update(objectToSave).then(function () {
-                    db.ref('/userInterfaceInfo/' + time.appointmentData.patient + '/numberOfNotifications').transaction(function (currentCount) {
+                db.ref('/').update(objectToSave).then(function () {
+                    db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
                         return (currentCount === null) ? null : currentCount + 1;
                     });
                 }).then(function () {
@@ -679,12 +698,11 @@
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
                         data: {
-                            text: 'Při odstraňování objednání se vyskytla chyba. Zkuste to prosím znovu.',
+                            text: 'Při rušení objednání se vyskytla chyba. Zkuste to prosím znovu.',
                             buttonText: 'Zavřít'
                         }
-
-                    }.bind(this));
-                });
+                    });
+                }.bind(this));
             }
         });
     </script>

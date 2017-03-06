@@ -39,11 +39,9 @@
                     left: 0;
                     right: 0;
                     bottom: 0;
-
                     padding-left: 5%;
                     padding-right: 5%;
                     padding-top: 2%;
-
                     width: 100%;
                 }
             }
@@ -53,7 +51,7 @@
 
         <iron-pages id="main-pages" selected="{{viewName}}" attr-for-selected="name">
             <login-view name="login"></login-view>
-            <booking-view name="booking"></booking-view>
+            <booking-view name="booking" data="[[dialogData.booking]]"></booking-view>
             <actionerror-view name="actionerror"></actionerror-view>
             <emailinput-view name="emailinput"></emailinput-view>
             <passreset-view name="passreset" data="[[dialogData.passreset]]"></passreset-view>
