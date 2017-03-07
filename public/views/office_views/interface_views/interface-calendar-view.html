@@ -689,11 +689,10 @@
 
 
                 db.ref('/').update(objectToSave).then(function () {
+                    this.fire("show-toast", {text: "Objednání zrušeno"});
                     db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
                         return (currentCount === null) ? null : currentCount + 1;
                     });
-                }).then(function () {
-                    this.fire("show-toast", {text: "Objednání zrušeno"});
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
