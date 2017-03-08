@@ -737,10 +737,11 @@
                     }
 
                     objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
+                        'source': 'online',
                         'message': patientMessage,
                         'patient': uid,
-                        'userInfo': userInfo,
-                        'source': 'online'
+                        'fullName': userInfo.name.firstName + " " + userInfo.name.lastName,
+                        'address': userInfo.address
                     };
 
                     // Save the appointment + optionally patientInfo
