@@ -4,8 +4,6 @@
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
-
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
@@ -30,8 +28,7 @@
         <span>Datum objednání:<br><b>[[data.formatedDate]]</b></span><br>
 
         <form id="main_form" is="iron-form">
-            <paper-input id="fname_input" label="Jméno pacienta" max="80" auto-validate></paper-input>
-            <paper-input id="lname_input" label="Příjmení pacienta" min="1" max="80" auto-validate required></paper-input>
+            <paper-input id="name_input" label="Jméno a příjmení pacienta" min="1" max="80" auto-validate required></paper-input>
             <paper-textarea id="message_input" label="Dobrovolná poznámka" value="{{patientMessage}}" char-counter
                             maxlength="200"></paper-textarea>
         </form>
@@ -63,19 +60,13 @@
                     officeId = this.data.officeId,
                     appointmentId = this.data.appointmentId,
                     message = (!!this.$.message_input.value) ? this.$.message_input.value : null,
-                    firstName = (!!this.$.fname_input.value) ? this.$.fname_input.value : null,
-                    lastName = this.$.lname_input.value, //required
+                    fullName = this.$.name_input.value, //required
                     objectToSave = {};
 
                 objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
                     'message': message,
                     'source': 'calendar',
-                    'userInfo': {
-                        'name': {
-                            'firstName': firstName,
-                            'lastName': lastName
-                        }
-                    }
+                    'fullName': fullName
                 };
 
                 objectToSave['/appointmentsPublic/' + officeId + '/' + appointmentId] = false;
