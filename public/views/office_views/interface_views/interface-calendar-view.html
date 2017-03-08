@@ -374,7 +374,6 @@
                 }
             },
 
-
             selectDate: function (event) {
                 var dayOfWeek = event.model.dayOfWeek,
                     index = event.model.index,
@@ -671,21 +670,17 @@
                     rootRef = db.ref('/'),
                     objectToSave = {};
 
-                //makes booking time available
                 objectToSave['/appointmentsPublic/' + officeId + '/' + timeId] = true;
-
-                //deletes booking from doctor data
                 objectToSave['/appointmentsPrivate/' + officeId + '/' + timeId] = null;
 
-                //deletes booking from patient data
-                objectToSave['/userAppointments/' + patientUid + '/' + timeId] = null;
-
-                //message to patient, that booking appointment canceled
-                objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
-                    'title': 'Zrušené objednání',
-                    'message': 'Doktor zrušil vaše objednání dohodnuté na termín: ' + this.computeAppointmentDate(timeId),
-                    'sender': officeId
-                };
+                if(!!patientUid) { //patients from calendar does not have Uid
+                    objectToSave['/userAppointments/' + patientUid + '/' + timeId] = null;
+                    objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
+                        'title': 'Zrušené objednání',
+                        'message': 'Doktor zrušil vaše objednání dohodnuté na termín: ' + this.computeAppointmentDate(timeId),
+                        'sender': officeId
+                    };
+                }
 
 
                 db.ref('/').update(objectToSave).then(function () {
