@@ -258,7 +258,7 @@
 
                             <template is="dom-if" if="[[time.occupied]]">
                                 <div class="flexchild vertical-align">
-                                    [[computeName(time.appointmentData.userInfo.name)]]
+                                    [[time.appointmentData.fullName]]
                                 </div>
                                 <paper-button class="details-button hover-button" on-tap="handleDetail">Podrobnosti
                                 </paper-button>
@@ -283,7 +283,7 @@
                                 <div class="collapse-content flex-horizontal-buttons">
                                     <div class="flexchild">
                                         <b>Datum narození: </b>[[computeDateOfBirth(time.appointmentData.userInfo.dateOfBirth)]]<br>
-                                        <b>Adresa: </b>[[computeAddress(time.appointmentData.userInfo.address)]]<br>
+                                        <b>Adresa: </b>[[computeAddress(time.appointmentData.address)]]<br>
                                         <b>Zpráva: </b>[[time.appointmentData.message]]
                                     </div>
                                     <paper-button class="red dismiss-appointment" on-tap="deleteAppointment">
@@ -592,11 +592,6 @@
                 minutes = appointmentId.substring(10, 12);
 
                 return "" + hours + ":" + minutes;
-            },
-
-            computeName: function (name) {
-                if (name === undefined) return;
-                return name.firstName + " " + name.lastName;
             },
 
             computeAddress: function (address) {
