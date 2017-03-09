@@ -7,9 +7,6 @@
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
-<link rel="import" href="/behaviors/form-validation-behavior.html">
-
-
 <dom-module id="booking-view">
     <template>
         <style include="input-styles button-styles">
@@ -28,8 +25,9 @@
         <span>Datum objednání:<br><b>[[data.formatedDate]]</b></span><br>
 
         <form id="main_form" is="iron-form">
-            <paper-input id="name_input" label="Jméno a příjmení pacienta" min="1" max="80" auto-validate required></paper-input>
-            <paper-textarea id="message_input" label="Dobrovolná poznámka" value="{{patientMessage}}" char-counter
+            <paper-input id="name_input" label="Jméno a příjmení pacienta" error-message="Nelze ponechat prázdné"
+                         minlength="1" maxlength="60" required auto-validate></paper-input>
+            <paper-textarea id="message_input" label="Dobrovolná poznámka" char-counter
                             maxlength="200"></paper-textarea>
         </form>
 
@@ -43,13 +41,11 @@
         Polymer({
             is: 'booking-view',
 
-            behaviors: [FormValidationBehavior],
-
-//          TODO Delete dialog data when confirmed. Realtime interface change
+//          TODO Realtime interface change
 
             confirm: function () {
-                // have to check if textarea validated
-                if (this._validateForm(this.$.main_form)) {
+
+                if (this.$.name_input.validate() && this.$.message_input.validate()) {
                     this.confirmAppointment();
                     this.fire('dialog-confirm');
                 }
@@ -73,6 +69,12 @@
 
                 db.ref('/').update(objectToSave).then(function () {
                     this.fire("show-toast", {text: "Objednání potvrzeno"});
+
+                    //clear dialog when confirmed
+                    this.$.name_input.value = ''; //to not flow label when opened again. Form.reset() leaves floating label
+                    this.$.message_input.value = '';
+                    this.$.name_input.invalid = false; //to not show error when dialog opened again
+
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
