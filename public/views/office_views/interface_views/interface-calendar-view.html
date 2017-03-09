@@ -32,7 +32,7 @@
 
             #calendar-container {
                 margin-right: 1.5em;
-                height: calc(100vh - 64px - 2.8em - 5em);  /* affect patient.container height */
+                height: calc(100vh - 64px - 2.8em - 5em); /* affect patient.container height */
             }
 
             table {
@@ -661,14 +661,15 @@
                     time = event.model.time,
                     timeId = time.id,
                     officeId = this.officeId,
-                    patientUid = time.appointmentData.patient,
+                    source = time.appointmentData.source,
                     rootRef = db.ref('/'),
                     objectToSave = {};
 
                 objectToSave['/appointmentsPublic/' + officeId + '/' + timeId] = true;
                 objectToSave['/appointmentsPrivate/' + officeId + '/' + timeId] = null;
 
-                if(!!patientUid) { //patients from calendar does not have Uid
+                if (source == 'online'){
+                    var patientUid = time.appointmentData.patient;
                     objectToSave['/userAppointments/' + patientUid + '/' + timeId] = null;
                     objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
                         'title': 'Zrušené objednání',
@@ -677,12 +678,13 @@
                     };
                 }
 
-
                 db.ref('/').update(objectToSave).then(function () {
                     this.fire("show-toast", {text: "Objednání zrušeno"});
-                    db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
-                        return (currentCount === null) ? null : currentCount + 1;
-                    });
+                    if (source == 'online') {
+                        db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
+                            return (currentCount === null) ? null : currentCount + 1;
+                        });
+                    }
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,

@@ -15,8 +15,14 @@
         <style include="interface-styles button-styles">
 
             .my-list-item {
-                border: 1px solid var(--border-color);
                 margin: 1.2em 0 0 0;
+                border: none !important
+            }
+
+            .collapse-content {
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                background-color: #fafafb;
+                border-top: 1px solid var(--border-color);
             }
 
             #current_patient {
@@ -164,12 +170,13 @@
                 <div class="flexchild name"><span class="label">Jméno:</span>[[appointment.name]]
                 </div>
 
-                <div class="flex3child in-waiting-room" hidden="[[!appointment.waitRoom]]">Pacient v čekárně</div>
+                <div class="flex3child in-waiting-room" hidden="[[appointment.online]]">[[computeInfoMessage(appointment.source)]]</div>
 
-                <div class="flexchild date-of-birth" hidden="[[appointment.waitRoom]]"><span class="label">Datum narození:</span>[[appointment.dateOfBirth]]
+                <div class="flexchild date-of-birth" hidden="[[!appointment.online]]"><span class="label">Datum narození:</span>
+                    [[appointment.dateOfBirth.date]]. [[appointment.dateOfBirth.month]]. [[appointment.dateOfBirth.year]]
                 </div>
 
-                <div class="flex2child address" hidden="[[appointment.waitRoom]]"><span class="label">Adresa:</span>[[appointment.address.street]]
+                <div class="flex2child address" hidden="[[!appointment.online]]"><span class="label">Adresa:</span>[[appointment.address.street]]
                     <br>
                     <div class="address-city">[[appointment.address.city]]</div>
                 </div>
@@ -259,7 +266,7 @@
                 objectToSave['/appointmentsPrivate/' + officeId + '/' + appointment.id] = null;
                 objectToSave['/appointmentsPublic/' + officeId + '/' + appointment.id] = null;
 
-                if(!appointment.waitRoom) {
+                if(appointment.online) {
                     objectToSave['/userAppointments/' + appointment.patientId + '/' + appointment.id] = null;
                 }
 
@@ -289,6 +296,8 @@
                         this.appointmentsAvailable = false;
                     }
                 }.bind(this));
+
+                console.log("appointments: " + this.appointmentsArray);
             },
 
             setAppointments: function (data) {
@@ -297,27 +306,34 @@
                 this.appointmentsArray = Object.keys(data).map(function (key) {
                     appointmentData = data[key];
 
-                    if (!!appointmentData.patient) {
-                        // Booked online
-                        userInfo = appointmentData.userInfo;
-
+                    if (appointmentData.source == 'online') { //booked online
                         convertedAppointment = {
-                            waitRoom: false,
+                            online: true,
+                            source: appointmentData.source,
                             patientId: appointmentData.patient,
-                            name: userInfo.name.lastName + " " + userInfo.name.firstName,
-                            dateOfBirth: userInfo.dateOfBirth.date + "." + userInfo.dateOfBirth.month + "." + userInfo.dateOfBirth.year,
-                            address: appointmentData.userInfo.address,
+                            name: appointmentData.fullName,
+                            dateOfBirth: appointmentData.dateOfBirth, //why dateOfBirth.date + ... does not work?
+                            address: appointmentData.address,
                             message: appointmentData.message,
                             showMessage: !!appointmentData.message,
                             viewMessage: false
                         };
-                    } else {
-                        // Booked in wait room
+                    } else if(appointmentData.source == 'calendar') { //booked in interface calendar
                         convertedAppointment = {
-                            waitRoom: true,
-                            name: appointmentData.name,
-                            showMessage: false
+                            online: false,
+                            source: appointmentData.source,
+                            name: appointmentData.fullName,
+                            message: appointmentData.message,
+                            showMessage: !!appointmentData.message,
+                            viewMessage: false
                         };
+                    } else if(appointmentData.source == 'waitroom'){ //in waitroom
+                        convertedAppointment = {
+                            online: false,
+                            source: appointmentData.source,
+                            name: appointmentData.fullName,
+                            showMessage: false
+                        }
                     }
 
                     convertedAppointment["id"] = key;
@@ -341,6 +357,14 @@
 
             computeText: function (viewMessage) {
                 return (viewMessage) ? "Skrýt" : "Zobrazit";
+            },
+
+            computeInfoMessage: function (appointmentSource) {
+                if(appointmentSource == 'calendar'){
+                    return 'Pacient objednaný v kalendáři.';
+                } else if (appointmentSource == 'waitroom'){
+                    return 'Pacient v čekárně.';
+                }
             },
 
             handleDetail: function (event) {
