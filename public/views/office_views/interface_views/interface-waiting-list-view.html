@@ -33,6 +33,12 @@
                 margin-bottom: -1px;
             }
 
+            #toastButton {
+                font-weight: bolder;
+                padding: 0.5em 0.8em;
+                margin: 0 0 0 2em;
+            }
+
             .time {
                 margin-right: 2em;
                 font-size: 1.1em;
@@ -170,10 +176,13 @@
                 <div class="flexchild name"><span class="label">Jméno:</span>[[appointment.name]]
                 </div>
 
-                <div class="flex3child in-waiting-room" hidden="[[appointment.online]]">[[computeInfoMessage(appointment.source)]]</div>
+                <div class="flex3child in-waiting-room" hidden="[[appointment.online]]">
+                    [[computeInfoMessage(appointment.source)]]
+                </div>
 
                 <div class="flexchild date-of-birth" hidden="[[!appointment.online]]"><span class="label">Datum narození:</span>
-                    [[appointment.dateOfBirth.date]]. [[appointment.dateOfBirth.month]]. [[appointment.dateOfBirth.year]]
+                    [[appointment.dateOfBirth.date]]. [[appointment.dateOfBirth.month]].
+                    [[appointment.dateOfBirth.year]]
                 </div>
 
                 <div class="flex2child address" hidden="[[!appointment.online]]"><span class="label">Adresa:</span>[[appointment.address.street]]
@@ -195,6 +204,10 @@
                         <span hidden="[[mobileScreen]]">Nedorazil</span></paper-button>
                 </div>
             </div>
+
+            <paper-toast id="toast" duration="0" text="Pacient bude smazán" opened="{{appointment.toastOpened}}">
+                <paper-button id="toastButton" on-tap="undoDeleting">Vrátit zpět</paper-button>
+            </paper-toast>
 
             <iron-collapse opened="[[appointment.viewMessage]]">
                 <div class="collapse-content">
@@ -258,6 +271,42 @@
             },
 
             buttonEventHandler: function (event, noArrival) {
+                event.model.set('appointment.lastCall', new Date().getTime());
+                // time when button clicked. Needed when user repeatedly selects dismiss user and undo changes
+
+                event.model.set('appointment.toastOpened', true);
+                event.model.set('appointment.deletePatient', true);
+                var deletePatient = event.model.appointment.deletePatient,
+                    toastTime = 5000, // millis, how log should be dialog visible
+                    patientElement;
+
+                // Finds and hide clicked patient
+                // Don't know if user click on <span> or <iron-icon> or <paper-button>. So it "goes up the DOM tree"
+                // until it finds element with "my-list-item" class
+                var i = 0;
+                while (!event.path[i].classList.contains('my-list-item')) {
+                    i++
+                }
+                patientElement = event.path[i];
+
+                patientElement.style.backgroundColor = "black"; //represents waiting if deleted
+                // element.style.visibility = "hidden";
+
+                setTimeout(
+                    function () {
+                        var difference = new Date().getTime() - event.model.appointment.lastCall;
+                            if (deletePatient && (difference >= toastTime)) {
+
+                            // DELETE PATIENT HERE
+
+                            event.model.set('appointment.toastOpened', false);
+                            patientElement.style.backgroundColor = "red"; //represents deleted
+                            // element.style.visibility = "hidden"; //represents invisible
+                        }
+                    }, toastTime);
+            },
+
+            appointmentFinished: function (event) {
                 var appointment = event.model.appointment,
                     db = this.$.document.app.database(),
                     officeId = this.officeId,
@@ -266,7 +315,7 @@
                 objectToSave['/appointmentsPrivate/' + officeId + '/' + appointment.id] = null;
                 objectToSave['/appointmentsPublic/' + officeId + '/' + appointment.id] = null;
 
-                if(appointment.online) {
+                if (appointment.online) {
                     objectToSave['/userAppointments/' + appointment.patientId + '/' + appointment.id] = null;
                 }
 
@@ -281,7 +330,20 @@
                         }
                     });
                 }.bind(this));
+            },
 
+            undoDeleting: function (event) {
+
+                event.model.set('appointment.deletePatient', false);
+                event.model.set('appointment.toastOpened', false);
+
+                // selects patient ".container". Should find general way how to do it. (_children array?)"
+                var patientElement = Polymer.dom(event).localTarget.parentNode.previousElementSibling;
+
+                patientElement.style.backgroundColor = "blue"; //represents deleting canceled
+                // element.style.visibility = "visible";
+
+                event.model.set('appointment.lastCall', new Date().getTime());
             },
 
             fetchData: function (dateInterval, officeId) {
@@ -296,8 +358,6 @@
                         this.appointmentsAvailable = false;
                     }
                 }.bind(this));
-
-                console.log("appointments: " + this.appointmentsArray);
             },
 
             setAppointments: function (data) {
@@ -318,7 +378,7 @@
                             showMessage: !!appointmentData.message,
                             viewMessage: false
                         };
-                    } else if(appointmentData.source == 'calendar') { //booked in interface calendar
+                    } else if (appointmentData.source == 'calendar') { //booked in interface calendar
                         convertedAppointment = {
                             online: false,
                             source: appointmentData.source,
@@ -327,7 +387,7 @@
                             showMessage: !!appointmentData.message,
                             viewMessage: false
                         };
-                    } else if(appointmentData.source == 'waitroom'){ //in waitroom
+                    } else if (appointmentData.source == 'waitroom') { //in waitroom
                         convertedAppointment = {
                             online: false,
                             source: appointmentData.source,
@@ -341,8 +401,6 @@
 
                     return convertedAppointment;
                 });
-
-
             },
 
             getDateTimeIdAtNoon: function (date) {
@@ -360,9 +418,9 @@
             },
 
             computeInfoMessage: function (appointmentSource) {
-                if(appointmentSource == 'calendar'){
+                if (appointmentSource == 'calendar') {
                     return 'Pacient objednaný v kalendáři.';
-                } else if (appointmentSource == 'waitroom'){
+                } else if (appointmentSource == 'waitroom') {
                     return 'Pacient v čekárně.';
                 }
             },
