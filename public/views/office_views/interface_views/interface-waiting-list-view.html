@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
@@ -16,7 +17,7 @@
 
             .my-list-item {
                 margin: 1.2em 0 0 0;
-                border: none !important
+                border: none !important;
             }
 
             .collapse-content {
@@ -205,8 +206,8 @@
                 </div>
             </div>
 
-            <paper-toast id="toast" duration="0" text="Pacient bude smazán" opened="{{appointment.toastOpened}}">
-                <paper-button id="toastButton" on-tap="undoDeleting">Vrátit zpět</paper-button>
+            <paper-toast id="toast" duration="5000" text="Pacient bude smazán" opened="{{appointment.toastOpened}}">
+                <paper-button id="toastButton" on-tap="undoDelete">Vrátit zpět</paper-button>
             </paper-toast>
 
             <iron-collapse opened="[[appointment.viewMessage]]">
@@ -262,6 +263,26 @@
                 'fetchData(dateInterval, officeId)'
             ],
 
+            listeners: {
+                'iron-overlay-closed': 'ironOverlayClosedHandler'
+            },
+
+            ironOverlayClosedHandler: function (event) {
+
+                console.log(event);
+                var patientContainer = event.srcElement.previousElementSibling,
+                    toast = event.srcElement;
+
+                if (toast.canceled) { //was closed using toast-button
+                    patientContainer.style.opacity = "1"
+                } else {
+                    // patientContainer.style.backgroundColor = "red"; //represents deleted, WORKS OK
+
+                    // TODO event handling bugs when patient deleted
+                    this.appointmentFinished(event);
+                }
+            },
+
             noArrivalButtonEvent: function (event) {
                 this.buttonEventHandler(event, true)
             },
@@ -271,14 +292,8 @@
             },
 
             buttonEventHandler: function (event, noArrival) {
-                event.model.set('appointment.lastCall', new Date().getTime());
-                // time when button clicked. Needed when user repeatedly selects dismiss user and undo changes
 
-                event.model.set('appointment.toastOpened', true);
-                event.model.set('appointment.deletePatient', true);
-                var deletePatient = event.model.appointment.deletePatient,
-                    toastTime = 5000, // millis, how log should be dialog visible
-                    patientElement;
+                event.model.set('appointment.toastOpened', true); //opens toast
 
                 // Finds and hide clicked patient
                 // Don't know if user click on <span> or <iron-icon> or <paper-button>. So it "goes up the DOM tree"
@@ -287,27 +302,11 @@
                 while (!event.path[i].classList.contains('my-list-item')) {
                     i++
                 }
-                patientElement = event.path[i];
-
-                patientElement.style.backgroundColor = "black"; //represents waiting if deleted
-                // element.style.visibility = "hidden";
-
-                setTimeout(
-                    function () {
-                        var difference = new Date().getTime() - event.model.appointment.lastCall;
-                            if (deletePatient && (difference >= toastTime)) {
-
-                            // DELETE PATIENT HERE
-
-                            event.model.set('appointment.toastOpened', false);
-                            patientElement.style.backgroundColor = "red"; //represents deleted
-                            // element.style.visibility = "hidden"; //represents invisible
-                        }
-                    }, toastTime);
+                event.path[i].style.opacity = "0.3"; // ( = patientContainer) much faster reaction than waiting for OverlayOpened Event
             },
 
             appointmentFinished: function (event) {
-                var appointment = event.model.appointment,
+                var appointment = event.srcElement._templateInstance.__data__.appointment, //not sure if the best solution
                     db = this.$.document.app.database(),
                     officeId = this.officeId,
                     objectToSave = {};
@@ -320,7 +319,7 @@
                 }
 
                 db.ref("/").update(objectToSave).then(function () {
-                    this.fire("show-toast", {text: "Vyřízeno"});
+                    this.fire("show-toast", {text: "Pacient vyřízen"});
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
@@ -332,18 +331,8 @@
                 }.bind(this));
             },
 
-            undoDeleting: function (event) {
-
-                event.model.set('appointment.deletePatient', false);
-                event.model.set('appointment.toastOpened', false);
-
-                // selects patient ".container". Should find general way how to do it. (_children array?)"
-                var patientElement = Polymer.dom(event).localTarget.parentNode.previousElementSibling;
-
-                patientElement.style.backgroundColor = "blue"; //represents deleting canceled
-                // element.style.visibility = "visible";
-
-                event.model.set('appointment.lastCall', new Date().getTime());
+            undoDelete: function (event) {
+                event.srcElement.parentElement.cancel();
             },
 
             fetchData: function (dateInterval, officeId) {
