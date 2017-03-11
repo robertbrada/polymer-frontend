@@ -5,7 +5,7 @@
 <link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="/styles/button-styles.html">
@@ -162,9 +162,6 @@
 
         </style>
 
-        <firebase-document id="document" app-name="doctor-appointment-system">
-        </firebase-document>
-
         <iron-media-query query="max-width: 435px" query-matches="{{mobileScreen}}"></iron-media-query>
 
         <div id="current_patient" hidden="[[!appointmentsAvailable]]">Pacient na řadě</div>
@@ -231,6 +228,11 @@
             is: 'interface-waiting-list-view',
 
             properties: {
+                firebaseDatabase: {
+                    type: Object,
+                    value: firebase.apps[0].database()
+                },
+
                 appointmentsArray: {
                     type: Array
                 },
@@ -307,7 +309,7 @@
 
             appointmentFinished: function (event) {
                 var appointment = event.srcElement._templateInstance.__data__.appointment, //not sure if the best solution
-                    db = this.$.document.app.database(),
+                    db = this.firebaseDatabase,
                     officeId = this.officeId,
                     objectToSave = {};
 
@@ -336,9 +338,7 @@
             },
 
             fetchData: function (dateInterval, officeId) {
-                var db = this.$.document.app.database();
-
-                db.ref("/appointmentsPrivate/" + officeId).orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
+                this.firebaseDatabase.ref("/appointmentsPrivate/" + officeId).orderByKey().startAt(dateInterval.startAt).endAt(dateInterval.endAt).on('value', function (snapshot) {
                     if (snapshot.exists()) {
                         this.setAppointments(snapshot.val());
                         this.appointmentsAvailable = true;
