@@ -320,7 +320,16 @@
 
             saveOffice: function (data, officeId, userId) {
                 var objectToSave = {},
-                    rootRef = this.firebaseDatabase.ref('/');
+                    rootRef = this.firebaseDatabase.ref('/'),
+                    indexAndSearchInfo = {
+                        'name': data.fullInfo.name,
+                        'sex': data.fullInfo.sex,
+                        'address': data.fullInfo.address,
+                        'coordinates': data.fullInfo.coordinates,
+                        'acceptingNewPatients': data.fullInfo.acceptingNewPatients,
+                        'specialization': data.fullInfo.specialization,
+                        'photoAvailability': data.fullInfo.photoAvailability
+                    };
 
                 objectToSave['/officeFullInfo/' + officeId] = data.fullInfo;
                 objectToSave['/userInterfaceInfo/' + userId + '/showOfficeInterface'] = true;
@@ -328,15 +337,8 @@
                     'users': {}
                 };
                 objectToSave['/officeAdminInfo/' + officeId]['users'][this.userId] = 'admin';
-                objectToSave['/officeSearchInfo/' + officeId] = {
-                    'name': data.fullInfo.name,
-                    'sex': data.fullInfo.sex,
-                    'address': data.fullInfo.address,
-                    'coordinates': data.fullInfo.coordinates,
-                    'acceptingNewPatients': data.fullInfo.acceptingNewPatients,
-                    'specialization': data.fullInfo.specialization,
-                    'photoAvailability': data.fullInfo.photoAvailability
-                };
+                objectToSave['/officeSearchInfo/' + officeId] = indexAndSearchInfo;
+                objectToSave['/awaitsIndexing/' + officeId] = indexAndSearchInfo;
                 objectToSave['/userOffices/' + userId + '/' + officeId] = {
                     'role': 'admin',
                     'name': data.fullInfo.address.city + ', ' + data.fullInfo.address.street

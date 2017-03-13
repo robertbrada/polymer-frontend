@@ -102,6 +102,13 @@
         ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
       }
     },
+    "awaitsIndexing": {
+      ".read": "auth.uid === 'my-service-worker'",
+      ".write": "auth.uid === 'my-service-worker'",
+      "$oid": {
+        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+      }
+    },
     "officeAdminInfo": {
       "$oid": {
         ".read": "data.child('users/' + auth.uid).val() === 'admin'",
