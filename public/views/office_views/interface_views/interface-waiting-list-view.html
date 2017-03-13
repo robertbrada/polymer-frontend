@@ -58,28 +58,28 @@
 
             /* FIRST PATIENT CSS DIFFERENCES */
 
-            .my-list-item:nth-child(4) {
+            .my-list-item:nth-child(3) {
                 margin-top: 0;
                 box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.12);
             }
 
-            .my-list-item:nth-child(4) paper-button {
+            .my-list-item:nth-child(3) paper-button {
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
 
-            .my-list-item:nth-child(4) .confirm-button {
+            .my-list-item:nth-child(3) .confirm-button {
                 background-color: var(--app-green-color);
                 border-color: var(--app-green-color);
                 color: #fff;
             }
 
-            .my-list-item:nth-child(4) .dismiss-button {
+            .my-list-item:nth-child(3) .dismiss-button {
                 background-color: var(--app-red-color);
                 border-color: var(--app-red-color);
                 color: #fff;
             }
 
-            .my-list-item:nth-child(4) .details-button {
+            .my-list-item:nth-child(3) .details-button {
                 background-color: var(--app-accent-color);
                 border-color: var(--app-accent-color);
                 color: #fff;
@@ -203,7 +203,7 @@
                 </div>
             </div>
 
-            <paper-toast id="toast" duration="5000" text="Pacient bude smazán" opened="{{appointment.toastOpened}}">
+            <paper-toast id="toast" duration="5500" text="Pacient bude smazán" opened="{{appointment.toastOpened}}">
                 <paper-button id="toastButton" on-tap="undoDelete">Vrátit zpět</paper-button>
             </paper-toast>
 
@@ -218,8 +218,6 @@
             <iron-icon icon="info"></iron-icon>
             Dnes nemáte žádné objednané pacienty
         </div>
-
-        <!--TODO: paper-toast-->
 
     </template>
 
@@ -240,6 +238,25 @@
                 appointmentsAvailable: {
                     type: Boolean,
                     value: false
+                },
+
+                // PROPERTIES FOR PAPER-TOAST
+
+                objectsToSave: {   //appointments that are ready to delete
+                    type: Array,
+                    value: []
+                },
+
+                EventsToReset: {  //events that has to be reset when patients deleted
+                    type: Array,
+                    value: []
+                },
+
+                //has to be set after objectsToSave property!
+                numWaitingToDelete: {  //num of appointments, that are waiting to be deleted - toast button visible and "undo" available
+                    type: Number,
+                    value: 0,
+                    observer: "updateDatabase"
                 },
 
                 /**
@@ -269,20 +286,8 @@
                 'iron-overlay-closed': 'ironOverlayClosedHandler'
             },
 
-            ironOverlayClosedHandler: function (event) {
-
-                console.log(event);
-                var patientContainer = event.srcElement.previousElementSibling,
-                    toast = event.srcElement;
-
-                if (toast.canceled) { //was closed using toast-button
-                    patientContainer.style.opacity = "1"
-                } else {
-                    // patientContainer.style.backgroundColor = "red"; //represents deleted, WORKS OK
-
-                    // TODO event handling bugs when patient deleted
-                    this.appointmentFinished(event);
-                }
+            undoDelete: function (event) {
+                event.srcElement.parentElement.cancel();
             },
 
             noArrivalButtonEvent: function (event) {
@@ -294,7 +299,6 @@
             },
 
             buttonEventHandler: function (event, noArrival) {
-
                 event.model.set('appointment.toastOpened', true); //opens toast
 
                 // Finds and hide clicked patient
@@ -304,12 +308,36 @@
                 while (!event.path[i].classList.contains('my-list-item')) {
                     i++
                 }
-                event.path[i].style.opacity = "0.3"; // ( = patientContainer) much faster reaction than waiting for OverlayOpened Event
+
+                event.path[i].style.opacity = "0.35"; // ( = patientContainer) much faster reaction than waiting for OverlayOpened Event
+                this.numWaitingToDelete++;
             },
 
-            appointmentFinished: function (event) {
+            ironOverlayClosedHandler: function (event) {
+
+                var patientContainer = event.srcElement.previousElementSibling,
+                    toast = event.srcElement;
+
+                if (toast.canceled) { //was closed using toast-button
+                    patientContainer.style.opacity = "1"
+                } else {
+                    this.appointmentFinished(event); //adds appointment to objectsToSave array, where are patients ready to delete
+                    this.EventsToReset.push(event);
+                    patientContainer.style.opacity = "0"; //appointment that will be deleted
+
+                    var i = 0, numOfButtons = 3; //buttons in ".buttons" container
+
+                    //disables buttons when opacity is 0 and patients is ready to delete. "display:none" and "visibility:hidden" does't work good
+                    for (i = 0; i < numOfButtons; i++) {
+                        event.srcElement.previousElementSibling.children[5].children[i].disabled = true;
+                    }
+                }
+                this.numWaitingToDelete--;
+            },
+
+
+            appointmentFinished: function (event) { //creates appointment object, that will be deleted
                 var appointment = event.srcElement._templateInstance.__data__.appointment, //not sure if the best solution
-                    db = this.firebaseDatabase,
                     officeId = this.officeId,
                     objectToSave = {};
 
@@ -320,21 +348,49 @@
                     objectToSave['/userAppointments/' + appointment.patientId + '/' + appointment.id] = null;
                 }
 
-                db.ref("/").update(objectToSave).then(function () {
-                    this.fire("show-toast", {text: "Pacient vyřízen"});
-                }.bind(this), function (error) {
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'Při ukládání změn se vyskytla chyba. Zkuste to prosím znovu.',
-                            buttonText: 'Zavřít'
-                        }
-                    });
-                }.bind(this));
+                this.objectsToSave.push(objectToSave);
             },
 
-            undoDelete: function (event) {
-                event.srcElement.parentElement.cancel();
+            updateDatabase: function () { //deletes "ready to delete" appointments from database
+
+                var lenOfObjectArray = this.objectsToSave.length;
+
+                if (this.numWaitingToDelete == 0 && lenOfObjectArray != 0) { //lenOfObjectArray != 0 means not to check when page loaded
+                    var db = this.firebaseDatabase,
+                        i = 0;
+
+                    for (i; i < lenOfObjectArray; i++) {
+                        db.ref("/").update(this.objectsToSave[i]).then(function () {
+                            this.fire("show-toast", {text: "Změny provedeny"});
+                        }.bind(this), function (error) {
+                            this.fire("show-dialog", {
+                                path: "", viewName: "genericdialog", open: true,
+                                data: {
+                                    text: 'Při ukládání změn se vyskytla chyba. Zkuste to prosím znovu.',
+                                    buttonText: 'Zavřít'
+                                }
+                            });
+                        }.bind(this));
+                    }
+
+                    this.objectsToSave = []; //clear appointments to be deleted;
+                    this.resetStyles(); //reset styles on events, where patients where deleted
+                }
+            },
+
+            resetStyles: function () { //reset styles on events, that were affected by patient deleting
+
+                var i = 0,
+                    eventsArrayLength = this.EventsToReset.length,
+                    numOfButtons = 3; //buttons in ".buttons" container
+
+                for (i; i < eventsArrayLength; i++) {
+                    this.EventsToReset[i].srcElement.previousElementSibling.style.opacity = "1";
+                    for (var j = 0; j < numOfButtons; j++) { //makes buttons "not disabled"
+                        this.EventsToReset[i].srcElement.previousElementSibling.children[5].children[j].disabled = false;
+                    }
+                }
+                this.EventsToReset = []; //clear events
             },
 
             fetchData: function (dateInterval, officeId) {
