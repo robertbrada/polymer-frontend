@@ -95,6 +95,7 @@
             #day-detail-container {
                 background-color: #fff;
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                max-width: 50%;
             }
 
             #selected-day {
@@ -193,6 +194,10 @@
                 #patients-container {
                     max-height: 100%;
                 }
+
+                #day-detail-container {
+                    max-width: 100%;
+                }
             }
 
             @media only screen and (max-width: 767px) {
@@ -281,9 +286,14 @@
                             <iron-collapse opened="[[time.infoOpened]]">
                                 <div class="collapse-content flex-horizontal-buttons">
                                     <div class="flexchild">
-                                        <b>Datum narození: </b>[[computeDateOfBirth(time.appointmentData.userInfo.dateOfBirth)]]<br>
-                                        <b>Adresa: </b>[[computeAddress(time.appointmentData.address)]]<br>
-                                        <b>Zpráva: </b>[[time.appointmentData.message]]
+                                        <template is="dom-if" if="[[computeIfOnlinePatient(time.appointmentData.source)]]">
+                                            <b>Datum narození: </b>[[computeDateOfBirth(time.appointmentData.dateOfBirth)]]<br>
+                                            <b>Adresa: </b>[[computeAddress(time.appointmentData.address)]]<br>
+                                        </template>
+
+                                        <template is="dom-if" if="[[computeTextAvailability(time.appointmentData.message)]]">
+                                            <b>Zpráva: </b>[[time.appointmentData.message]]
+                                        </template>
                                     </div>
                                     <paper-button class="red dismiss-appointment" on-tap="deleteAppointment">
                                         Zrušit objednání
@@ -300,7 +310,6 @@
     <script>
         Polymer({
             is: 'interface-calendar-view',
-
 
             properties: {
 
@@ -440,7 +449,6 @@
             },
 
             computeMonthDateRange: function (year, month) {
-
                 var startDate = moment([year, month]);
 
                 // Clone the value before .endOf()
@@ -566,7 +574,6 @@
             },
 
             getDateTimeId: function (moment, stripHoursAndMinutes) {
-
                 if (stripHoursAndMinutes) return (this.getDateId(moment) + "0000");
 
                 var hours = moment.hour(),
@@ -619,6 +626,20 @@
                 return "" + date + "." + month + "." + year + " v " + hours + ":" + minutes;
             },
 
+
+            computeTextAvailability: function (text) {
+                return !!text;
+            },
+
+            computeIfOnlinePatient: function (source) {
+                return source == 'online'
+            },
+
+            handleDetail: function (event) {
+                var infoOpened = event.model.time.infoOpened;
+                event.model.set('time.infoOpened', !infoOpened);
+            },
+
             addBooking: function (event) {
                 var timeId = event.model.time.id;
                 this.fire("show-dialog", {
@@ -630,13 +651,7 @@
                 });
             },
 
-            handleDetail: function (event) {
-                var infoOpened = event.model.time.infoOpened;
-                event.model.set('time.infoOpened', !infoOpened);
-            },
-
             deleteBooking: function (event) {
-
                 //TODO realtime interface changes
                 var time = event.model.time, officeId = this.officeId, timeId = time.id;
 
@@ -654,7 +669,6 @@
             },
 
             deleteAppointment: function (event) {
-
                 //TODO realtime interface changes
                 var db = this.firebaseApp.database(),
                     time = event.model.time,
@@ -667,7 +681,7 @@
                 objectToSave['/appointmentsPublic/' + officeId + '/' + timeId] = true;
                 objectToSave['/appointmentsPrivate/' + officeId + '/' + timeId] = null;
 
-                if (source == 'online'){
+                if (source == 'online') {
                     var patientUid = time.appointmentData.patient;
                     objectToSave['/userAppointments/' + patientUid + '/' + timeId] = null;
                     objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
