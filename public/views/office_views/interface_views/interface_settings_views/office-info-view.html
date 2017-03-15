@@ -92,9 +92,9 @@
             behaviors: [FormValidationBehavior],
 
             properties: {
-                firebaseApp: {
+                firebaseDatabase: {
                     type: Object,
-                    value: firebase.apps[0]
+                    value: firebase.apps[0].database()
                 },
 
                 officeId: {
@@ -184,9 +184,7 @@
             },
 
             fetchData: function () {
-                var db = this.firebaseApp.database();
-
-                db.ref("/officeFullInfo/" + this.officeId).once('value').then(function (snapshot) {
+                this.firebaseDatabase.ref("/officeFullInfo/" + this.officeId).once('value').then(function (snapshot) {
                     this.officeFullInfo = snapshot.val();
                 }.bind(this));
 
@@ -199,9 +197,18 @@
             },
 
             updateOfficeData: function (officeFullInfo) {
-                var db = this.firebaseApp.database(),
+                var db = this.firebaseDatabase,
                     objectToSave = {}, officeId = this.officeId,
-                    officeUserIds = null, i, officeName = '';
+                    officeUserIds = null, i, officeName = '',
+                    indexAndSearchInfo = {
+                        'name': officeFullInfo.name,
+                        'address': officeFullInfo.address,
+                        'coordinates': officeFullInfo.coordinates,
+                        'acceptingNewPatients': officeFullInfo.acceptingNewPatients,
+                        'specialization': officeFullInfo.specialization,
+                        'photoAvailability': officeFullInfo.photoAvailability,
+                        'sex': officeFullInfo.sex
+                    };
 
                 db.ref('/officeAdminInfo/' + officeId + '/users').once('value').then(function (snapshot) {
                     officeUserIds = Object.keys(snapshot.val());
@@ -212,15 +219,8 @@
                     }
 
                     objectToSave['/officeFullInfo/' + officeId] = officeFullInfo;
-                    objectToSave['/officeSearchInfo/' + officeId] = {
-                        'name': officeFullInfo.name,
-                        'address': officeFullInfo.address,
-                        'coordinates': officeFullInfo.coordinates,
-                        'acceptingNewPatients': officeFullInfo.acceptingNewPatients,
-                        'specialization': officeFullInfo.specialization,
-                        'photoAvailability': officeFullInfo.photoAvailability,
-                        'sex': officeFullInfo.sex
-                    };
+                    objectToSave['/officeSearchInfo/' + officeId] = indexAndSearchInfo;
+                    objectToSave['/awaitsIndexing/' + officeId] = indexAndSearchInfo;
 
                     db.ref('/').update(objectToSave);
 
