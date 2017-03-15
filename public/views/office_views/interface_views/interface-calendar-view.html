@@ -126,7 +126,7 @@
                 padding: 1em;
                 background-color: #fbfbfc;
                 border-top: 1px solid #f2f2f3;
-
+                word-break: break-all;
             }
 
             /** BUTTONS ***/
@@ -380,6 +380,12 @@
                 currentPublicRef: {
                     type: Object
                 }
+
+                //TODO change calendar data when office changed. Problems with publicData loading when used officeId property
+//                officeId: {
+//                    type: String,
+//                    observer: "officeChangedHandler"
+//                }
             },
 
             selectDate: function (event) {
@@ -422,6 +428,11 @@
             },
 
             computeDayBookingTimes: function (data, dateId) {
+
+                //Solves realtime when appointment created/deleted.
+                //Not works for booking time deleted
+                this.fetchPublicData(this.monthDateRange);
+
                 var i, rawBookingTimes = this.bookingTimes[dateId], times, time;
 
                 if (rawBookingTimes === undefined) return [];
@@ -652,11 +663,14 @@
             },
 
             deleteBooking: function (event) {
-                //TODO realtime interface changes
                 var time = event.model.time, officeId = this.officeId, timeId = time.id;
 
                 this.firebaseApp.database().ref('/appointmentsPublic/' + officeId + '/' + timeId).set(null).then(function () {
                     this.fire("show-toast", {text: "Termín zrušen"});
+
+                    //TODO not solves realtime changes when calendar opened in two windows
+                    this.fetchPrivateData(this.selectedDate.dateId);
+
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
@@ -669,7 +683,6 @@
             },
 
             deleteAppointment: function (event) {
-                //TODO realtime interface changes
                 var db = this.firebaseApp.database(),
                     time = event.model.time,
                     timeId = time.id,
