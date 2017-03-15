@@ -227,8 +227,8 @@
                 </div>
             </template>
             <div>
-                <paper-button raised on-tap="previous">Předchozí</paper-button>
-                <paper-button raised style="float: right" on-tap="next">Další</paper-button>
+                <paper-button raised on-tap="previous" disabled="[[computeDisabledPrevious(selectedIdIndex)]]">Předchozí</paper-button>
+                <paper-button raised style="float: right" on-tap="next" disabled="[[computeDisabledNext(officesArray)]]">Další</paper-button>
             </div>
         </div>
     </template>
@@ -249,52 +249,62 @@
                 // Number of offices to fetch on one page
                 numberToFetch: {
                     type: Number,
-                    value: 2
+                    value: 10
                 },
 
                 visitedIds: {
                     type: Array,
                     value: []
+                },
+
+                selectedIdIndex: {
+                    type: Number
                 }
             },
 
             ready: function () {
-                var officesArray, numberToFetch = this.numberToFetch;
+                var officesArray, numberToFetch = this.numberToFetch, searchData;
 
                 this.firebaseDatabase.ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).once('value').then(function (snapshot) {
                     searchData = snapshot.val();
 
-                    if (searchData === null) {
-                        // TODO: handle error
-                    } else {
-                        this.officesArray = this.computeOfficesArray(searchData);
+                    if (searchData !== null) {
+                        officesArray = this.computeOfficesArray(searchData);
+                        this.selectedIdIndex = 0;
+                        this.push('visitedIds', officesArray[0].officeId);
+                        this.set('officesArray', officesArray);
                     }
                 }.bind(this));
             },
 
             next: function () {
                 var officesArray = this.officesArray,
+                    selectedIdIndex = this.selectedIdIndex,
                     key = officesArray[officesArray.length - 1].officeId;
 
-//                console.log(key);
-                this.visitedIds.push(key);
-                this.fetchData(key);
+                if (selectedIdIndex === this.visitedIds.length - 1) this.push('visitedIds', key);
+
+                this.fetchData(key, 1);
             },
 
             previous: function () {
+                var selectedIdIndex = this.selectedIdIndex - 1;
+
+                if (selectedIdIndex >= 0) {
+                    this.fetchData(this.visitedIds[selectedIdIndex], -1);
+                }
 
             },
 
-            fetchData: function (startKey) {
-                var numberToFetch = this.numberToFetch;
+            fetchData: function (startKey, indexDifference) {
+                var numberToFetch = this.numberToFetch, searchData;
 
                 this.firebaseDatabase.ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).startAt(startKey).once('value').then(function (snapshot) {
                     searchData = snapshot.val();
 
-                    if (searchData === null) {
-                        // TODO: handle error
-                    } else {
-                        this.officesArray = this.computeOfficesArray(searchData);
+                    if (searchData !== null) {
+                        this.set('officesArray', this.computeOfficesArray(searchData));
+                        this.selectedIdIndex = this.selectedIdIndex + indexDifference;
                     }
                 }.bind(this));
             },
@@ -315,6 +325,14 @@
 
             computeFullName: function (name) {
                 return name.firstName + " " + name.lastName;
+            },
+
+            computeDisabledPrevious: function (selectedIdIndex) {
+                return selectedIdIndex === 0;
+            },
+
+            computeDisabledNext: function (officesArray) {
+                return this.numberToFetch !== officesArray.length;
             }
         });
     </script>

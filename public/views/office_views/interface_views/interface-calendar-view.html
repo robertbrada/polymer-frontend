@@ -429,10 +429,6 @@
 
             computeDayBookingTimes: function (data, dateId) {
 
-                //Solves realtime when appointment created/deleted.
-                //Not works for booking time deleted
-                this.fetchPublicData(this.monthDateRange);
-
                 var i, rawBookingTimes = this.bookingTimes[dateId], times, time;
 
                 if (rawBookingTimes === undefined) return [];
@@ -667,10 +663,6 @@
 
                 this.firebaseApp.database().ref('/appointmentsPublic/' + officeId + '/' + timeId).set(null).then(function () {
                     this.fire("show-toast", {text: "Termín zrušen"});
-
-                    //TODO not solves realtime changes when calendar opened in two windows
-                    this.fetchPrivateData(this.selectedDate.dateId);
-
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
