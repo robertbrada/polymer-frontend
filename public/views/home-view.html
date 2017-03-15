@@ -1,4 +1,5 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
@@ -9,7 +10,7 @@
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../bower_components/iron-icons/maps-icons.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -133,7 +134,6 @@
                 @apply(--layout-horizontal);
             }
 
-
             @media only screen and (max-width: 767px) {
 
                 .main-frame {
@@ -185,11 +185,6 @@
 
         </style>
 
-
-        <firebase-document app-name="doctor-appointment-system" path="/officeSearchInfo"
-                           data="{{officeSearchInfo}}">
-        </firebase-document>
-
         <iron-media-query query="max-width: 585px" query-matches="{{mobileScreen}}"></iron-media-query>
 
         <div id="main-container" class="main-frame container flex-horizontal">
@@ -231,18 +226,77 @@
                     </div>
                 </div>
             </template>
+            <div>
+                <paper-button raised on-tap="previous">Předchozí</paper-button>
+                <paper-button raised style="float: right" on-tap="next">Další</paper-button>
+            </div>
         </div>
-
     </template>
     <script>
         Polymer({
             is: 'home-view',
 
             properties: {
+                firebaseDatabase: {
+                    type: Object,
+                    value: firebase.apps[0].database()
+                },
+
                 officesArray: {
+                    type: Array
+                },
+
+                // Number of offices to fetch on one page
+                numberToFetch: {
+                    type: Number,
+                    value: 2
+                },
+
+                visitedIds: {
                     type: Array,
-                    computed: 'computeOfficesArray(officeSearchInfo)'
+                    value: []
                 }
+            },
+
+            ready: function () {
+                var officesArray, numberToFetch = this.numberToFetch;
+
+                this.firebaseDatabase.ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).once('value').then(function (snapshot) {
+                    searchData = snapshot.val();
+
+                    if (searchData === null) {
+                        // TODO: handle error
+                    } else {
+                        this.officesArray = this.computeOfficesArray(searchData);
+                    }
+                }.bind(this));
+            },
+
+            next: function () {
+                var officesArray = this.officesArray,
+                    key = officesArray[officesArray.length - 1].officeId;
+
+//                console.log(key);
+                this.visitedIds.push(key);
+                this.fetchData(key);
+            },
+
+            previous: function () {
+
+            },
+
+            fetchData: function (startKey) {
+                var numberToFetch = this.numberToFetch;
+
+                this.firebaseDatabase.ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).startAt(startKey).once('value').then(function (snapshot) {
+                    searchData = snapshot.val();
+
+                    if (searchData === null) {
+                        // TODO: handle error
+                    } else {
+                        this.officesArray = this.computeOfficesArray(searchData);
+                    }
+                }.bind(this));
             },
 
             computeOfficesArray: function (officeSearchInfo) {
