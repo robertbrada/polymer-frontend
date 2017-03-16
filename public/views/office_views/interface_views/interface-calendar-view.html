@@ -256,7 +256,7 @@
 
                 <div id="patients-container">
 
-                    <template is="dom-repeat" items="[[dayBookingTimes]]" as="time">
+                    <template is="dom-repeat" items="[[selectedDateTimes]]" as="time">
                         <div id="patient-item" class="flex-horizontal-buttons">
                             <div id="booking-time" class="vertical-align">[[computeTime(time.id)]]</div>
 
@@ -318,6 +318,10 @@
                     value: firebase.apps[0]
                 },
 
+                officeId: {
+                    type: String
+                },
+
                 selectedMonth: {
                     type: Number,
                     value: function () {
@@ -337,25 +341,30 @@
                     value: null
                 },
 
-                // booking times for the whole month, computed by computeBookingTimesOfDates method
-                bookingTimes: {
+                // booking times for the whole month, computed by computeMonthTimes method
+                monthTimes: {
                     type: Object
                 },
 
-                // booking times for the day, computed by computeDayBookingTimes method
-                dayBookingTimes: {
+                // Set directly by fetchPrivateData
+                rawPrivate: {
                     type: Object
+                },
+
+                // booking times for the day
+                selectedDateTimes: {
+                    type: Object,
+                    computed: "computeSelectedDateTimes(rawPrivate, monthTimes, selectedDate)"
                 },
 
                 monthDateRange: {
                     type: Object,
-                    computed: "computeMonthDateRange(selectedYear, selectedMonth)",
-                    observer: "fetchPublicData"
+                    computed: "computeMonthDateRange(selectedYear, selectedMonth)"
                 },
 
                 weeks: {
                     type: Array,
-                    computed: "computeWeeks(bookingTimes, monthDateRange)"
+                    computed: "computeWeeks(monthTimes, monthDateRange)"
                 },
 
                 dayShortNames: {
@@ -380,12 +389,55 @@
                 currentPublicRef: {
                     type: Object
                 }
+            },
 
-                //TODO change calendar data when office changed. Problems with publicData loading when used officeId property
-//                officeId: {
-//                    type: String,
-//                    observer: "officeChangedHandler"
-//                }
+            observers: [
+                'fetchPublicData(monthDateRange, officeId)'
+            ],
+
+            fetchPublicData: function (monthDateRange, officeId) {
+                var publicRef = this.firebaseApp.database().ref("/appointmentsPublic/" + officeId),
+                    startOfRange = this.getDateTimeId(monthDateRange.start),
+                    endOfRange = this.getDateTimeId(monthDateRange.end);
+
+                if (!!this.currentPublicRef) this.currentPublicRef.off();
+
+                publicRef.orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
+                    this.monthTimes = this.computeMonthTimes(snapshot.val());
+                }.bind(this));
+
+                this.currentPublicRef = publicRef;
+            },
+
+            computeMonthTimes: function (data) {
+                var monthTimes = {},
+                    dateId = null,
+                    key, value, newDateId;
+
+                for (key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        value = data[key];
+                        newDateId = key.substr(0, 8);
+                        if (newDateId !== dateId) {
+                            dateId = newDateId;
+                            monthTimes[dateId] = {
+                                times: [],
+                                free: 0
+                            };
+                        }
+
+                        if (value) {
+                            monthTimes[newDateId].free = monthTimes[newDateId].free + 1;
+                        }
+
+                        monthTimes[newDateId].times.push({
+                            id: key,
+                            occupied: !value
+                        });
+                    }
+                }
+
+                return monthTimes;
             },
 
             selectDate: function (event) {
@@ -421,26 +473,25 @@
                 if (!!this.currentPrivateRef) this.currentPrivateRef.off();
 
                 privateRef.orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
-                    this.set("dayBookingTimes", this.computeDayBookingTimes(snapshot.val(), dateId));
+                    this.set("rawPrivate", snapshot.val());
                 }.bind(this));
 
                 this.currentPrivateRef = privateRef;
             },
 
-            computeDayBookingTimes: function (data, dateId) {
+            computeSelectedDateTimes: function (rawPrivate, monthTimes, selectedDate) {
+                var i, rawTimes = monthTimes[selectedDate.dateId], times, time;
 
-                var i, rawBookingTimes = this.bookingTimes[dateId], times, time;
+                if (rawTimes === undefined) return [];
 
-                if (rawBookingTimes === undefined) return [];
-
-                times = rawBookingTimes.times;
+                times = rawTimes.times;
                 for (i = 0; i < times.length; i++) {
                     time = times[i];
                     if (time.occupied) {
-                        if (data === null) {
+                        if (rawPrivate === null) {
                             time.occupied = false;
                         } else {
-                            time.appointmentData = data[time.id];
+                            time.appointmentData = rawPrivate[time.id];
                         }
                     }
                 }
@@ -492,52 +543,7 @@
                 this.resetSelectedElementColor();
             },
 
-            fetchPublicData: function (monthDateRange) {
-                var publicRef = this.firebaseApp.database().ref("/appointmentsPublic/" + this.officeId),
-                    startOfRange = this.getDateTimeId(monthDateRange.start),
-                    endOfRange = this.getDateTimeId(monthDateRange.end);
-
-                if (!!this.currentPublicRef) this.currentPublicRef.off();
-
-                publicRef.orderByKey().startAt(startOfRange).endAt(endOfRange).on('value', function (snapshot) {
-                    this.bookingTimes = this.computeBookingTimesOfDates(snapshot.val());
-                }.bind(this));
-
-                this.currentPublicRef = publicRef;
-            },
-
-            computeBookingTimesOfDates: function (data) {
-                var bookingTimesOfDates = {},
-                    dateId = null,
-                    key, value, newDateId;
-
-                for (key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        value = data[key];
-                        newDateId = key.substr(0, 8);
-                        if (newDateId !== dateId) {
-                            dateId = newDateId;
-                            bookingTimesOfDates[dateId] = {
-                                times: [],
-                                free: 0
-                            };
-                        }
-
-                        if (value) {
-                            bookingTimesOfDates[newDateId].free = bookingTimesOfDates[newDateId].free + 1;
-                        }
-
-                        bookingTimesOfDates[newDateId].times.push({
-                            id: key,
-                            occupied: !value
-                        });
-                    }
-                }
-
-                return bookingTimesOfDates;
-            },
-
-            computeWeeks: function (bookingTimes, monthDateRange) {
+            computeWeeks: function (monthTimes, monthDateRange) {
                 var weeks = [],
                     currentWeek = [],
                     currentMoment = monthDateRange.start.clone().startOf('week'), // I am cloning the moment to avoid unwanted mutability
@@ -554,8 +560,8 @@
                         free: 0
                     };
 
-                    if (bookingTimes[dateId] !== undefined) {
-                        dateObject["free"] = bookingTimes[dateId].free;
+                    if (monthTimes[dateId] !== undefined) {
+                        dateObject["free"] = monthTimes[dateId].free;
                     }
 
                     currentWeek.push(dateObject);
