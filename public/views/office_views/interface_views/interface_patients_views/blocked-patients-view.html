@@ -2,7 +2,8 @@
 
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/styles/button-styles.html">
 <link rel="import" href="/styles/interface-styles.html">
@@ -15,35 +16,6 @@
                 box-shadow: none;
             }
 
-            /* SEARCH */
-
-            #search-bar {
-                background-color: #fafafb;
-            }
-
-            #search-button {
-                padding: 1em 3em;
-                border: none;
-            }
-
-            #search-bar input {
-                box-sizing: border-box;
-                border: 1px solid var(--border-color);
-                padding: 0.85em 0.5em;
-                font-size: 1em;
-                width: 100%;
-            }
-
-            #search-bar input::-webkit-input-placeholder {
-                color: #aaa;
-                font-weight: lighter;
-                letter-spacing: 0.02em;
-            }
-
-            .search-button-container {
-                text-align: right;
-            }
-
             .flexchild:not(:last-child) {
                 margin-right: 0.5em;
             }
@@ -51,6 +23,10 @@
             /* FLEX  - not to stretch flex childs when longer content*/
             .name, .address {
                 max-width: 25%;
+            }
+
+            .pagination-buttons {
+                padding: 1em;
             }
 
             /*RESPONSIVE ADDITIONS*/
@@ -76,21 +52,12 @@
                     @apply(--list-medium-screen-layout);
                 }
 
-                /* space between all search-flexchild*/
-                #search-bar > .flexchild {
-                    margin: 0.3em 0;
-                }
-
                 .name, .address {
                     max-width: 50%;
                 }
             }
 
             @media only screen and (max-width: 480px) {
-
-                #search-button {
-                    width: 100%;
-                }
 
                 .name, .address {
                     max-width: calc(100% - 5em);
@@ -100,31 +67,14 @@
                     margin-right: 4em;
                 }
 
-                paper-button > iron-icon{
+                paper-button > iron-icon {
                     margin: 0;
                 }
             }
         </style>
 
-        <firebase-document id="patients_document" app-name="doctor-appointment-system"
-                           path="/officeBlockedPatients/[[officeId]]"
-                           data="{{officeBlockedPatients}}">
-        </firebase-document>
-
         <iron-media-query query="max-width: 1200px" query-matches="{{smallScreen}}"></iron-media-query>
         <iron-media-query query="max-width: 480px" query-matches="{{mobileScreen}}"></iron-media-query>
-
-        <paper-material id="search-bar" class="flex-horizontal-with-ratios my-list-item">
-            <div class="flexchild "><input placeholder="Jméno"></div>
-            <div class="flexchild "><input placeholder="Datum narození"></div>
-            <div class="flexchild "><input placeholder="Adresa"></div>
-            <div class="flexchild search-button-container">
-                <paper-button id="search-button" raised>
-                    <iron-icon icon="icons:search"></iron-icon>
-                    Hledat
-                </paper-button>
-            </div>
-        </paper-material>
 
         <template is="dom-repeat" items="[[patientsArray]]" as="patient">
             <div class="container flex-horizontal-with-ratios my-list-item">
@@ -150,12 +100,10 @@
             </div>
         </template>
 
-        <!--<div class="no-patients my-list-item">-->
-            <!--<iron-icon icon="info"></iron-icon>-->
-            <!--Zatím nemáte žádné zámítnuté pacienty.-->
-        <!--</div>-->
-
-    </template>
+        <div class="pagination-buttons">
+            <paper-button raised on-tap="previous" disabled="[[computeDisabledPrevious(selectedIdIndex)]]">Předchozí</paper-button>
+            <paper-button raised style="float: right" on-tap="next" disabled="[[computeDisabledNext(patientsArray)]]">Další</paper-button>
+        </div>
 
     </template>
 
@@ -164,10 +112,92 @@
             is: 'blocked-patients-view',
 
             properties: {
+                firebaseDatabase: {
+                    type: Object,
+                    value: firebase.apps[0].database()
+                },
+
                 patientsArray: {
+                    type: Array
+                },
+
+                rawPatients: {
+                    type: Object
+                },
+
+                // Number of patients to fetch on one page
+                numberToFetch: {
+                    type: Number,
+                    value: 10
+                },
+
+                officeId: {
+                    type: String,
+                    observer: 'officeIdObserver'
+                },
+
+                visitedIds: {
                     type: Array,
-                    computed: 'computePatientsArray(officeBlockedPatients)'
+                    value: []
+                },
+
+                selectedIdIndex: {
+                    type: Number,
+                    value: null
                 }
+            },
+
+            officeIdObserver: function (officeId) {
+                var numberToFetch = this.numberToFetch, patientData, patientsArray;
+
+                this.firebaseDatabase.ref('/officeBlockedPatients/' + officeId).orderByKey().limitToFirst(numberToFetch).once('value').then(function (snapshot) {
+                    patientData = snapshot.val();
+
+                    if (patientData !== null) {
+                        this.set('visitedIds', []);
+                        this.set('selectedIdIndex', null);
+                        this.selectedIdIndex = 0;
+
+                        this.rawPatients = patientData;
+                        patientsArray = this.computePatientsArray(patientData);
+                        this.push('visitedIds', patientsArray[0].uid);
+                        this.set('patientsArray', patientsArray);
+                    } else {
+                        this.set("patientsArray", []);
+                    }
+                }.bind(this));
+            },
+
+            next: function () {
+                var patientsArray = this.patientsArray,
+                    selectedIdIndex = this.selectedIdIndex,
+                    key = patientsArray[patientsArray.length - 1].uid;
+
+                if (selectedIdIndex === this.visitedIds.length - 1) this.push('visitedIds', key);
+
+                this.fetchData(key, 1);
+            },
+
+            previous: function () {
+                var selectedIdIndex = this.selectedIdIndex - 1;
+
+                if (selectedIdIndex >= 0) {
+                    this.fetchData(this.visitedIds[selectedIdIndex], -1);
+                }
+            },
+
+            fetchData: function (startKey, indexDifference) {
+                var numberToFetch = this.numberToFetch, officeId = this.officeId, searchData;
+
+                this.firebaseDatabase.ref('/officeBlockedPatients/' + officeId).orderByKey().limitToFirst(numberToFetch).startAt(startKey).once('value').then(function (snapshot) {
+                    searchData = snapshot.val();
+
+                    if (searchData !== null) {
+                        this.rawPatients = searchData;
+                        this.set('patientsArray', this.computePatientsArray(searchData));
+                        this.selectedIdIndex = this.selectedIdIndex + indexDifference;
+                    }
+                }.bind(this));
             },
 
             computePatientsArray: function (officeBlockedPatients) {
@@ -182,13 +212,13 @@
             },
 
             confirmUser: function (event) {
-                var db = this.$.patients_document.app.database(),
+                var db = this.firebaseDatabase,
                     patientUid = event.model.patient.uid,
                     officeId = this.officeId,
                     objectToSave = {},
                     rootRef = db.ref('/');
 
-                objectToSave['/officePatients/' + officeId + '/' + patientUid] = this.officeBlockedPatients[patientUid];
+                objectToSave['/officePatients/' + officeId + '/' + patientUid] = this.rawPatients[patientUid];
                 objectToSave['/officeBlockedPatients/' + officeId + '/' + patientUid] = null;
                 objectToSave['/userContactedOffices/' + patientUid + '/' + officeId + '/status'] = 'accessed';
                 objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
@@ -201,7 +231,7 @@
                     db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
                         return (currentCount === null) ? null : currentCount + 1;
                     });
-                }).then(function () {
+                    this.officeIdObserver(officeId); // Refresh the UI
                     this.fire("show-toast", {text: "Pacientovi byl udělen přístup"});
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
@@ -220,6 +250,14 @@
 
             computeDateOfBirth: function (dateOfBirth) {
                 return dateOfBirth.date + ". " + dateOfBirth.month + ". " + dateOfBirth.year;
+            },
+
+            computeDisabledPrevious: function (selectedIdIndex) {
+                return selectedIdIndex === 0;
+            },
+
+            computeDisabledNext: function (patientsArray) {
+                return this.numberToFetch !== patientsArray.length;
             }
         });
     </script>
