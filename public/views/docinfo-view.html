@@ -462,12 +462,15 @@
             },
 
             observers: [
-                "routePathObserver(route.path)"
+                "routePathObserver(route)"
             ],
 
-            routePathObserver: function (path) {
-                if (path.length < 2) return null;
-                firebase.apps[0].database().ref("/docInfoVisitors").push(path.substring(1));
+            routePathObserver: function (route) {
+                var path = route.path;
+
+                if (route.prefix === "/docinfo" && path.length > 1) {
+                    firebase.apps[0].database().ref("/docInfoVisitors").push(path.substring(1));
+                }
             },
 
             send: function () {
