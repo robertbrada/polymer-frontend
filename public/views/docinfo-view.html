@@ -32,6 +32,14 @@
                 color: #fff !important;
             }
 
+            .green-text {
+                color: var(--app-green-color);
+            }
+
+            .blue-text {
+                color: var(--app-accent-color);
+            }
+
             .grey {
                 background-color: #fafafb;
                 border-top: 1px solid #e7e7e8;
@@ -44,6 +52,11 @@
 
             h1 {
                 letter-spacing: 0.02em;
+            }
+
+            paper-button, a {
+                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
 
             .main-frame {
@@ -70,15 +83,13 @@
                 margin-top: 0;
             }
 
-            img {
+            .presentation-img {
                 position: absolute;
                 top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
                 margin: auto;
-                max-width: 250px;
-                max-height: 250px;
             }
 
             #patient-image {
@@ -96,6 +107,55 @@
                 text-align: center;
             }
 
+            /*** ABOUT ***/
+
+            #profile-images-section {
+                margin-left: 5em;
+                max-width: 160px;
+                padding-left: 5em;
+                padding-right: 5em;
+                border-left: 1px solid #e2e2e3;
+
+            }
+
+            .profile-image {
+                position: static;
+                max-width: 170px;
+                max-height: 170px;
+            }
+
+            #about-section {
+                margin-bottom: 0;
+            }
+
+            /***** WHAT WE OFFER HEADER *******/
+
+            #what-we-offer {
+                text-align: center;
+                margin: 2em auto 4em auto;
+            }
+
+            #what-we-offer h1 {
+                color: var(--app-accent-color);
+                display: inline-block;
+                font-size: 2.2em;
+                margin: 1em auto 0;
+                padding: 0 1.3em 0.2em 1.3em;
+                position: relative;
+            }
+
+            #arrow-image {
+                max-height: 40px;
+                display: inline-block;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                left: auto;
+                top: auto;
+            }
+
+            /***** OFFICE PRESENTATION ********/
+
             #office-presence-section a {
                 font-weight: bold;
                 background-color: var(--app-green-color);
@@ -103,6 +163,8 @@
                 padding: 0.5em 1em;
                 border-radius: 1em;
             }
+
+            /*** OFFICE REGITRATION ***/
 
             #office-registration {
                 background-color: var(--app-accent-color);
@@ -142,6 +204,8 @@
                 font-weight: bold;
             }
 
+            /*** QUESTION FORM ***/
+
             #question-container {
                 background-color: #fbfbfc;
                 padding: 3em;
@@ -158,6 +222,9 @@
                 margin: 0 auto;
             }
 
+
+            /** SQUARES SECTION **/
+
             #first-square-section {
                 margin-bottom: 0;
             }
@@ -170,68 +237,32 @@
                 box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 18px 10px rgba(0, 0, 0, 0.22);
             }
 
-            /*** PRICE ***/
-
-            .price-section {
-                max-width: 750px;
-                text-align: center;
+            #office-presence-main-section {
+                margin-top: 0;
             }
 
+            /*** FEATURES ***/
+
             .features-section {
-                max-width: 20em;
-                margin: 0 auto;
-                text-align: left;
-                font-size: 1.2em;
-                font-weight: bold;
+                text-align: center;
+                padding-top: 2em !important;
+                padding-bottom: 2em;
+            !important;
             }
 
             .features-section > div {
-                margin: 0.8em 0;
+                margin: 0.7em 0;
             }
 
-            #free-section {
-                color: var(--app-green-color);
+            .features-section p {
+                display: inline-block;
+                text-align: left;
             }
 
-            #free-section .price-header {
-                padding: 1em 0;
-                color: var(--app-green-color);
-            }
-
-            #paid-section {
-                border-left: 1px solid #e0e0e1;
-                color: var(--app-accent-color);
-            }
-
-            .price-header {
+            #all-features-description {
+                margin: 3em auto;
                 text-align: center;
-                font-size: 1.5em;
-                letter-spacing: 0.03em;
-                font-weight: bold;
-                padding: 0.5em 1em;
-                max-width: 11em;
-                margin: 0 auto 1.8em auto;
-                border-radius: 4em;
-            }
-
-            .price-header .description {
-                font-size: 0.7em;
-                margin-top: 0.2em;
-                font-weight: lighter;
-            }
-
-            #pricing-headline-section {
-                padding: 0 5% 2em 5%;
-                max-width: 900px;
-                margin-top: 6em;
-                margin-bottom: 0;
-            }
-
-            #pricing-detail {
-                max-width: 600px;
-                margin: 4em auto 0 auto;
-                padding: 0 5%;
-                color: #8a8a8b;
+                border-bottom: 1px solid #e2e2e3;
             }
 
             /******************************/
@@ -249,10 +280,19 @@
                     padding: 7% 5%;
                 }
 
-                img {
+                .presentation-img {
                     position: static;
                     max-width: 150px;
                     max-height: 150px;
+                }
+
+                #profile-images-section {
+                    margin: 0;
+                    padding-left: 0;
+                    padding-right: 0;
+                    border: none;
+                    text-align: center;
+                    max-width: 100%;
                 }
 
                 #office-registration section:first-child {
@@ -269,21 +309,12 @@
                     margin-bottom: 1em;;
                 }
 
-                #paid-section {
-                    border-left: none;
-                    border-top: 1px solid #dededf;
-                }
-
-                .price-section {
-                    font-size: 0.9em;
+                #all-features-description {
+                    text-align: left;
                 }
             }
 
             @media (min-width: 767px) {
-                paper-button, a {
-                    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-                }
 
                 paper-button:hover {
                     transform: scale(1.1);
@@ -293,34 +324,44 @@
                 a:hover {
                     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
                 }
-
-                #presentation-detail {
-                    margin-left: 1.8em;
-                    font-size: 0.95em;
-                }
             }
+
 
         </style>
 
         <iron-media-query query="max-width:716px" query-matches="{{smallScreen}}"></iron-media-query>
 
-        <section class="main-frame grid">
+        <section id="about-section" class="main-frame grid">
             <section>
-                <h1>Co je Docta?</h1>
-                <p>Docta je moderní nástroj, který zpříjemní Vaší práci i život Vašich pacientů.<br>
+                <h1>Kdo jsme a co děláme</h1>
+                <p>
+                    Jsme dva studenti kybernetiky a víme, že největším problémem moderních technologií je jejich
+                    složitost. Často pak nejsou využívány tam, kde to má největší smysl. <br><br>
+
+                    Naším cílem je, aby se online interakce ve zdravotnictví stala samozřejmostí. Chceme aby naše práce
+                    a úsilí mělo smysl, a proto upřednostňujeme úspěch našeho produktu před finančním ziskem.<br><br>
+
+                    Uvědomujeme si, že naše služby jsou užitečné nejen pro lékaře, ale i pacienty. Je tak nelogické, aby
+                    lékaři podepisovali nesmyslné smlouvy a platili za pohodlí pacientů.
+                    Proto za náš systém nebudete muset nikdy platit.
                 </p>
             </section>
-            <section class="img-section">
-                <img src="../images/logo.png">
+            <section id="profile-images-section" class="">
+                <img src="../images/docinfo/jan.jpg" class="profile-image">
+                <img src="../images/docinfo/robert.jpg" class="profile-image">
             </section>
         </section>
 
-        <section class="main-frame grid grey">
+        <section id="what-we-offer" class="main-frame">
+            <h1>Co nabízíme?<img src="../images/docinfo/arrow.png" id="arrow-image"></h1>
+        </section>
+
+        <section class="main-frame grid grey" id="office-presence-main-section">
             <section class="img-section" hidden="[[smallScreen]]">
-                <img id="comp-img" src="../images/computer.png">
+                <img id="comp-img" class="presentation-img" src="../images/docinfo/computer.png" >
             </section>
             <section id="office-presence-section">
-                <h1>Kompletní prezentace ordinace zdarma</h1>
+                <h1>Kompletní prezentace ordinace</h1>
                 <p>Na Docta.cz můžete prezentovat všechny důležité informace o Vaší ordinaci zcela zdarma a
                     napořád.
                     <br>
@@ -339,7 +380,7 @@
                 </p>
             </section>
             <section class="img-section">
-                <img id="patient-image" src="../images/patient.png">
+                <img id="patient-image" src="../images/docinfo/patient.png">
             </section>
         </section>
 
@@ -351,69 +392,53 @@
             </section>
             <section class="grey">
                 <h1>Vše na jednom místě</h1>
-                <p>V rozhraní Vaší ordinace máte elektronický kalendář, který přehledně reprezentuje Vaše objednané pacienty.
+                <p>V rozhraní Vaší ordinace máte vše, co potřebujete. Elektronický kalendář, seznam objednaných pacientů, nastavení ordinace, dovolené a další.
                 </p>
             </section>
         </section>
 
-
         <section class="main-frame grid" id="last-presentation-section">
             <section class="grey">
-                <h1>Komunikujte bez papíru</h1>
-                <p>Přenechte pozvánky na preventivní prohlídky na nás a komunikujte s pacienty prostřednictvím internetu.
-                    To vše máte po ruce v rozhraní Vaší ordinace.</p>
+                <h1>Objednávejte jednoduše</h1>
+                <p>Elektronický kalendář přehledně reprezentuje Vaše objednané pacienty. Můžete snadno objednávat nové pacienty, anebo i rušit schůzky.</p>
             </section>
             <section class="green" id="no-contract-section">
                 <h1>Bez smlouvy a závazků</h1>
-                <p>Všechny naše služby můžete začít využívat ihned a bez závazků.
+                <p>Vše, co nabízíme, můžete začít používat ihned a bez placení.
                     Nemusíte se nám nijak zavazovat a je tak zcela
                     na Vás, jak budete našich služeb využívat.
                 </p>
             </section>
         </section>
 
-
-        <section class="main-frame" id="pricing-headline-section">
-            <h1>Plaťte jen za to co využijete</h1>
-            <p>U nás zaplatíte pouze za dny, kdy využijete našich premiových služeb.
-                Pokud budete na dovolené a nebo zrovna nebudete tyto služby využívat, nic Vám účtovat
-                nebudeme.
-                <b>Po registraci obrdžíte 400 kreditů.</b> Máte tak možnost si vyzkoušet naše služby bez placení.
-            </p>
-        </section>
-
-        <section class="main-frame grid">
-            <section id="free-section" class="price-section">
-                <div class="green price-header">ZDARMA</div>
-                <div class="features-section">
-                    <div>&#8226;&nbsp; Kompletní prezentace Vaší ordinace</div>
-                    <div id="presentation-detail" hidden="[[smallScreen]]">
-                        <div>&#8226; &nbsp; Kontaktní informace</div>
-                        <div>&#8226; &nbsp; Seznam smluvních pojišťoven</div>
-                        <div>&#8226; &nbsp; Ceník poskytovaných služeb</div>
-                        <div>&#8226; &nbsp; Upozornění na dovolenou</div>
-                    </div>
-                    <div>&#8226;&nbsp; Komunikace s Vašimi kolegy</div>
-                    <div>&#8226;&nbsp; Naše prémiové služby v hodnotě 400 Kč</div>
-                </div>
-            </section>
-            <section id="paid-section" class="price-section">
-                <div class="blue price-header">PREMIUM
-                    <div class="description">20 Kč za den online objednávání</div>
-                </div>
-                <div class="features-section">
-                    <div>+ Online objednávání pacientů</div>
-                    <div>+ Kontrola nad objednanými pacienty</div>
-                    <div>+ Elektronický kalendář</div>
-                    <div>+ Komunikace s pacienty</div>
-                    <div>+ Pozvánky na preventivní prohlídky</div>
-                </div>
+        <section id="all-features-description" class="main-frame grid">
+            <section>
+                <h1>Kompletní přehled služeb</h1>
+                <p>Všechny služby jsou k dispozici bez poplatků a další budou přibývat.
+                    <br>Přáli byste si nějakou další službu? Dejte nám vědět a pomozte tak ke zlepšení systému.
+                </p>
             </section>
         </section>
 
+        <section id="all-features-container" class="main-frame grid">
+            <section class="features-section green-text">
+                <h1>Prezentace ordinace</h1>
+                <p>
+                    &#8226; &nbsp; Kontaktní informace<br>
+                    &#8226; &nbsp; Seznam smluvních pojišťoven<br>
+                    &#8226; &nbsp; Ceník poskytovaných služeb<br>
+                    &#8226; &nbsp; Upozornění na dovolenou
+                </p>
+            </section>
+            <section class="features-section blue-text">
 
-        <section id="pricing-detail">Pokud v registraci ordinace zvolíte možnost online objednání, tak je cena účtována
-            měsíčně podle toho, na kolik dnů se za poslední měsíc bylo možné objednat online.
+                <h1>Online objednání</h1>
+                <p>
+                    &#8226; &nbsp; Online objednávání pacientů<br>
+                    &#8226; &nbsp; Kontrola nad objednanými pacienty<br>
+                    &#8226; &nbsp; Elektronický kalendář
+                </p>
+            </section>
         </section>
 
         <div id="office-registration">
