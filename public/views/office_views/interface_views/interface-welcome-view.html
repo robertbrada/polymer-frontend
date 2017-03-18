@@ -1,0 +1,69 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
+
+<dom-module id="interface-welcome-view">
+    <template>
+        <style>
+
+            #main-container {
+                background-color: #fff;
+                padding: 2em;
+                font-size: 1.2em;
+                font-weight: 100;
+            }
+
+            h2 {
+                margin: 0 auto 0.9em 0;
+                padding-bottom: 0.5em;
+                font-weight: 100;
+                font-size: 1.5em;
+                display: inline-block;
+                border-bottom: 1px solid #dededf;
+            }
+
+            p {
+                line-height: 1.7em;
+            }
+
+            a {
+                color: var(--app-green-color);
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+        </style>
+
+        <paper-material elevation="1" id="main-container">
+
+            <h2>Vítejte v systému Docta.</h2>
+
+            <p>Váš veřejný profil je dostupný na adrese <a href="/d/[[officeId]]">www.docta.cz/d/[[officeId]]</a>.</p>
+
+            <p>
+                Doporučujeme Vám zviditelnit adresu Vašeho profilu ve Vaší čekárně a na internetu
+                (<a href="https://www.firmy.cz">Seznam</a>, <a href="https://www.google.cz/business/">Google</a>). Čím
+                více
+                lidí bude používat náš systém online, tím větším přínosem pro Vás budeme.</p>
+
+            <p>
+                Pokud máte nápad na vylepšení nebo narazíte na problém, neváhejte a <a href="../contact/[[officeId]]">kontaktujte
+                nás</a>.
+                Pro seznámení se systémem doporučujeme projít si <a href="../help/[[officeId]]">nápovědu</a>.</p>
+
+            <br><p> Děkujeme za registraci v našem systému a doufáme, že budete spokojeni. </p><br>
+
+            Robert Brada & Jan Beneš
+        </paper-material>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'interface-welcome-view'
+        });
+    </script>
+</dom-module>

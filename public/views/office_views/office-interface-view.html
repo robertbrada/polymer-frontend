@@ -10,6 +10,7 @@
 <link rel="import" href="/bower_components/iron-icons/av-icons.html">
 <link rel="import" href="/bower_components/iron-icons/social-icons.html">
 <link rel="import" href="/bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="/bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="/bower_components/app-layout/app-layout.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 
@@ -115,11 +116,11 @@
             }
 
             #help-tab {
-                bottom: calc(120px + 49px); /* top padding of drawer + height of issue-tab */
+                bottom: calc(120px + 49px); /* top padding of drawer + height of contact-tab */
 
             }
 
-            #issue-tab {
+            #contact-tab {
                 bottom: 120px; /* top padding of drawer */
             }
 
@@ -230,7 +231,7 @@
                     <paper-item name="holidays" class="nav"><iron-icon icon="av:snooze"></iron-icon>Dovolená</paper-item>
                     <paper-item name="settings" class="nav"><iron-icon icon="icons:settings"></iron-icon>Nastavení</paper-item>
                     <paper-item name="help" id="help-tab" class="nav bottom-link"><iron-icon icon="icons:help"></iron-icon>Nápověda</paper-item>
-                    <paper-item name="issue" id="issue-tab" class="nav bottom-link"><iron-icon icon="icons:report-problem"></iron-icon>Nahlásit problém
+                    <paper-item name="contact" id="contact-tab" class="nav bottom-link"><iron-icon icon="communication:message"></iron-icon>Kontakt
                     </paper-item>
                 </iron-selector>
             </app-drawer>
@@ -245,7 +246,8 @@
                     <interface-holidays-view name="holidays" office-id="[[officeId]]"></interface-holidays-view>
                     <interface-settings-view name="settings" office-id="[[officeId]]"></interface-settings-view>
                     <interface-help-view name="help" online-booking="[[officeInterfaceInfo.services.onlineBooking]]"></interface-help-view>
-                    <interface-issue-view name="issue" office-id="[[officeId]]"></interface-issue-view>
+                    <interface-contact-view name="contact" office-id="[[officeId]]"></interface-contact-view>
+                    <interface-welcome-view name="welcome" office-id="[[officeId]]"></interface-welcome-view>
                 </iron-pages>
             </div>
         </app-drawer-layout>
@@ -287,7 +289,7 @@
                         "holidays": "Dovolená",
                         "settings": "Nastavení",
                         "help": "Nápověda",
-                        "issue": "Nahlásit problém"
+                        "contact": "Kontakt"
                     }
                 },
 
@@ -307,7 +309,7 @@
 
             observeInterfaceInfo: function (officeInterfaceInfo) {
                 var page = this.page;
-                if (officeInterfaceInfo.services !== undefined && (!officeInterfaceInfo.services.onlineBooking && (page !== "holidays" || page !== "settings"))) {
+                if (page !== "welcome" && officeInterfaceInfo.services !== undefined && (!officeInterfaceInfo.services.onlineBooking && (page !== "holidays" || page !== "settings"))) {
                     this.page = "settings";
                 }
             },

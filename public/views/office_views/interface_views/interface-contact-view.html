@@ -1,22 +1,25 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
 
-<dom-module id="interface-issue-view">
+<dom-module id="interface-contact-view">
     <template>
         <style include="input-styles button-styles">
 
             h1 {
-                font-size: 1em;
+                font-size: 1.2em;
+                font-weight: 100;
+                margin-bottom: 1.5em;
             }
 
             #content {
                 background-color: #fff; /* TODO: move to parent */
-                border: 1px solid #d5d9da;
                 padding: 2em;
             }
 
@@ -25,17 +28,17 @@
         <firebase-document id="issue_document" app-name="doctor-appointment-system">
         </firebase-document>
 
-        <div id="content">
+        <paper-material id="content" elevation="1">
             <h1>Napište nám, s čím máte problém, co je potřeba zlepšit, nebo jakoukoliv jinou připomínku.</h1>
             <paper-textarea required id="issue_input" label="Vaše zpráva" char-counter maxlength="2000">
             </paper-textarea>
             <paper-button raised on-tap="send">Odeslat</paper-button>
-        </div>
+        </paper-material>
     </template>
 
     <script>
         Polymer({
-            is: 'interface-issue-view',
+            is: 'interface-contact-view',
 
             send: function () {
                 if (this.$.issue_input.validate()) {
