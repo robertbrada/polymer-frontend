@@ -157,8 +157,8 @@
             },
 
             deleteService: function (event) {
-                var service = event.model.service;
-                this.splice('fullInfo.officeServices', service.index, 1);
+                var index = event.model.__data__.index;
+                this.splice('fullInfo.officeServices', index, 1);
             },
 
             addService: function () {

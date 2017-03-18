@@ -121,7 +121,7 @@
                         popis. Tyto informace budou k vidění na vašem profilu.</p>
                     <template is="dom-repeat" items="[[localOfficeData.offlineOfficeHours]]" as="entry">
                         <div id="office-hour-item" class="flex-horizontal">
-                            <paper-checkbox checked="{{entry.available}}"><b>[[getDayName(index)]]:</b>
+                            <paper-checkbox checked="{{entry.available}}">[[getDayName(index)]]:
                             </paper-checkbox>
 
                             <template is="dom-if" if="[[entry.available]]" restamp="true">
@@ -142,33 +142,33 @@
                     </template>
                 </section>
             </div>
-                <section>
-                    <h2>Libovolná zpráva pacientům</h2>
-                    <paper-textarea label="Zpráva pro pacienty" value="{{localOfficeData.patientText}}"
-                                    char-counter maxlength="800"></paper-textarea>
-                </section>
+            <section>
+                <h2>Libovolná zpráva pacientům</h2>
+                <paper-textarea label="Zpráva pro pacienty" value="{{localOfficeData.patientText}}"
+                                char-counter maxlength="800"></paper-textarea>
+            </section>
 
-                <section id="services-section">
-                    <h2>Služby</h2>
-                    <p>Vyplňte vámi poskytované služby a jejich ceny. Jako cenu můžete uvést cokoli uznáte za vhodné
-                        (Kč, Kč/min, zdarma). Služby ani ceny nemusíte vyplňovat. </p>
+            <section id="services-section">
+                <h2>Služby</h2>
+                <p>Vyplňte vámi poskytované služby a jejich ceny. Jako cenu můžete uvést cokoli uznáte za vhodné
+                    (Kč, Kč/min, zdarma). Služby ani ceny nemusíte vyplňovat. </p>
 
 
-                    <template is="dom-repeat" items="[[localOfficeData.officeServices]]" as="service">
-                        <div id="services-container" class="flex-horizontal">
-                            <paper-input auto-validate required class="flexchild service-name" label="Vaše služba"
-                                         value="{{service.name}}"></paper-input>
-                            <paper-input auto-validate required class="service-price" label="Cena"
-                                         value="{{service.price}}"></paper-input>
-                            <paper-icon-button id="delete-service" icon="icons:close"
-                                               on-tap="deleteService"></paper-icon-button>
-                        </div>
-                    </template>
+                <template is="dom-repeat" items="[[localOfficeData.officeServices]]" as="service">
+                    <div id="services-container" class="flex-horizontal">
+                        <paper-input auto-validate required class="flexchild service-name" label="Vaše služba"
+                                     value="{{service.name}}"></paper-input>
+                        <paper-input auto-validate required class="service-price" label="Cena"
+                                     value="{{service.price}}"></paper-input>
+                        <paper-icon-button id="delete-service" icon="icons:close"
+                                           on-tap="deleteService"></paper-icon-button>
+                    </div>
+                </template>
 
-                    <paper-button id="add-service" on-click="addService">Přidat službu
-                    </paper-button>
+                <paper-button id="add-service" on-click="addService">Přidat službu
+                </paper-button>
 
-                </section>
+            </section>
 
             </section>
             <paper-button id="confirm-button" on-tap="confirm" responsive raised>
@@ -211,6 +211,9 @@
             },
 
             computeLocalOfficeData: function (officeData) {
+                if (officeData.officeServices == undefined) { //fixes bug: "add service when no service in array yet" (cannot read length of undefined)
+                    officeData.officeServices = [];
+                }
                 return officeData;
             },
 
@@ -244,8 +247,8 @@
             },
 
             deleteService: function (event) {
-                var service = event.model.service;
-                this.splice('localOfficeData.officeServices', service.index, 1);
+                var index = event.model.__data__.index;
+                this.splice('localOfficeData.officeServices', index, 1);
             },
 
             addService: function () {
