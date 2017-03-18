@@ -18,20 +18,82 @@
     <template>
         <style include="button-styles input-styles layout-styles">
 
-            .main-content {
-                background-color: white; /* TODO: move to parent */
+            /*** GENERAL ***/
+
+            h1 {
+                font-size: 1.1em;
+                margin: 0;
+                padding: 0.7em 1em;
+                color: #fff;
+                letter-spacing: 0.02em;
+                font-weight: 500;
             }
 
-            .error {
-                color: var(--app-red-color);
+            paper-material {
+                background-color: #fff;
             }
 
             .main-container {
                 padding: 1.5em;
             }
 
+            .error {
+                color: var(--app-red-color);
+            }
+
+            /** NEW HOLIDAY **/
+
+            #new-holiday-container h1 {
+                background-color: var(--app-green-color);
+            }
+
+            section h2:first-child {
+                margin-top: 1em;
+            }
+
+            /* to align inputs */
+            #inputs-container section {
+                position: relative;
+            }
+
+            #inputs-container paper-input {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                left: 0;
+            }
+
             paper-datetime-picker-item {
-                margin: 0 2%;
+                padding: 0;
+                margin-bottom: 0.8em;
+                margin-left: -16px;
+            }
+
+            #button-section {
+                text-align: right;
+                border-top: 1px solid #e2e2e3;
+                background-color: #fafafb;
+            }
+
+            #button-section paper-button {
+                margin: 0;
+            }
+
+            /*** HOLIDAY LIST ***/
+
+            #holidays-list-container h1 {
+                background-color: var(--app-accent-color);
+            }
+
+            #holidays-list-container {
+                margin-top: 2em;
+            }
+
+            #holiday-name {
+                color: var(--app-green-color);
+                font-size: 1.1em;
+                font-weight: bold;
+                margin-bottom: 0.6em;
             }
 
             #holiday {
@@ -76,19 +138,25 @@
                     @apply(--layout-vertical);
                 }
 
+                section {
+                    margin-left: 0 !important;
+                }
+
+                .main-container {
+                    padding: 1em;
+                }
+
                 paper-input {
                     margin-bottom: 1em;
                 }
-            }
 
-            .header {
-                border-top: 1px solid #d5d5d6;
-                padding: 1em 1.5em;
-            }
+                .dismiss-button {
+                    margin-top: 1em;
+                }
 
-            h1 {
-                font-size: 1.3em;
-                color: var(--app-green-color);
+                #inputs-container paper-input {
+                    position: static;
+                }
             }
 
         </style>
@@ -98,18 +166,24 @@
                            data="{{officeHolidays}}">
         </firebase-document>
 
-        <paper-material class="main-content" elevation="1">
-            <div class="subsection grid main-container">
+        <paper-material id="new-holiday-container" class="main-content" elevation="1">
+            <h1>Formulář nové dovolené</h1>
+            <div id="inputs-container" class="subsection grid main-container flex-horizontal">
                 <section>
-                    <h1>Formulář nové dovolené</h1>
-                    <p>Tato informace je soukromá.</p>
-                    <paper-input id="name_input" class="flexchild" label="Název dovolené" value="{{holidayName}}" auto-focus
+                    <h2>Název dovolené</h2>
+                    <p>Tuto informaci uvidíte pouze vy.</p>
+                    <paper-input id="name_input" class="flexchild" label="Název dovolené" value="{{holidayName}}"
+                                 auto-focus
                                  required auto-validate></paper-input>
+                </section>
+                <section>
                     <h2>Zastupující doktor</h2>
-                    <p>Dobrovolná informace, která se v případě vyplnění zobrazí pacientům na Vašem veřejném profilu.</p>
+                    <p>Dobrovolná informace, která se v případě vyplnění zobrazí pacientům na Vašem veřejném
+                        profilu.</p>
                     <paper-input id="doctor_input" class="flexchild" label="Jméno" value="{{substituteDoctorName}}">
                     </paper-input>
                 </section>
+
                 <section>
                     <h2>Datum dovolené</h2>
                     <p class="error" hidden="[[hideErrorMessage]]">Začátek dovolené je před koncem.</p>
@@ -120,23 +194,27 @@
                     <paper-datetime-picker-item icon="icons:today" placeholder="Zadat konec dovolené"
                                                 default-time="23:59"
                                                 locale="cs" date="{{toDateTime}}"></paper-datetime-picker-item>
-
-                    <paper-button raised on-tap="addHolidays"
-                                  disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
-                    </paper-button>
                 </section>
             </div>
 
-            <div class="header" hidden="[[computeIfEmpty(holidaysArray)]]">
-                <h1>Seznam dovolených</h1>
-            </div>
+            <section id="button-section" class="main-container">
+                <paper-button id="add-holiday-btn" raised on-tap="addHolidays"
+                              disabled="[[computeDisabled(fromDateTime, toDateTime, holidayName)]]">Přidat dovolenou
+                </paper-button>
+            </section>
+
+        </paper-material>
+        <paper-material id="holidays-list-container" elevation="1" hidden="[[computeIfEmpty(holidaysArray)]]">
+            <h1>Seznam dovolených</h1>
             <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
                 <div id="holiday" class="main-container flex-horizontal">
                     <div>
-                        <div><b>Název dovolené:</b> [[holiday.name]]</div>
+                        <div id="holiday-name">[[holiday.name]]</div>
                         <div><b>Začátek:</b> [[holiday.startAt]]</div>
                         <div><b>Konec:</b> [[holiday.endAt]]</div>
-                        <div hidden="[[!holiday.substituteDoctorName]]"><b>Zastupující lékař:</b> [[holiday.substituteDoctorName]]</div>
+                        <div hidden="[[!holiday.substituteDoctorName]]"><b>Zastupující lékař:</b>
+                            [[holiday.substituteDoctorName]]
+                        </div>
                     </div>
                     <paper-button class="dismiss-button" raised on-tap="deleteHolidays">
                         <iron-icon icon="close"></iron-icon>
