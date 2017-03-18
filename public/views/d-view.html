@@ -313,7 +313,7 @@
 
                     <img src$="[[computePhotoURL(officeData.photoAvailability, officeData.sex, officeId)]]">
 
-                    <h3>[[computeFormattedName(officeData.name.firstName, officeData.name.lastName)]]</h3>
+                    <h3>[[computeFormattedName(officeData.title, officeData.name.firstName, officeData.name.lastName)]]</h3>
                     <span>[[officeData.specialization]]</span>
                 </section>
 
@@ -833,8 +833,10 @@
             },
 
 
-            computeFormattedName: function (first, last) {
-                return (first + " " + last);
+            computeFormattedName: function (title, first, last) {
+                var fullName = (title === 'Žádný') ? "" : (title + " ");
+
+                return (fullName + first + " " + last);
             },
 
             computeSpecialization: function (specialization) {

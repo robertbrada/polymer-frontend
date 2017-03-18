@@ -25,7 +25,15 @@
                 <div class="subsection grid">
 
                     <section>
-                        <h2>Vaše jméno</h2>
+                        <h2>Váš titul a jméno</h2>
+                        <paper-dropdown-menu label="Titul">
+                            <paper-listbox class="dropdown-content"
+                                           selected="{{fullInfo.title}}" attr-for-selected="name">
+                                <template is="dom-repeat" items="[[titles]]" as="title">
+                                    <paper-item name="[[title]]">[[title]]</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
                         <paper-input label="Jméno" minlength="1" maxlength="20" auto-validate
                                      error-message="Nelze ponechat prázdné" required
                                      value="{{fullInfo.name.firstName}}"></paper-input>
@@ -126,6 +134,27 @@
                         'veterinář',
                         'zubař',
                         'jiné' // TODO: pokud používáno, tak rozšířit specializace
+                    ]
+                },
+
+                titles: {
+                    type: Array,
+                    value: [
+                        'MUDr.',
+                        'MDDr.',
+                        'MVDr.',
+                        'Mgr.',
+                        'PhDr.',
+                        'prof.',
+                        'doc.',
+                        'Prim. MUDr.',
+                        'Dent.',
+                        'Doc. MUDr.',
+                        'Prof. MUDr.',
+                        'PaedDr.',
+                        'Bc.',
+                        'Dr.',
+                        'Žádný'
                     ]
                 }
             },
