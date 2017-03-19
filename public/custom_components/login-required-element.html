@@ -1,69 +1,71 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
-<link rel="import" href="/behaviors/form-validation-behavior.html">
-<link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
-<link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
-
-<link rel="import" href="/styles/input-styles.html">
-<link rel="import" href="/styles/layout-styles.html">
-<link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="login-required-element">
     <template>
-        <style include="input-styles button-styles layout-styles">
-
-            .controls {
-                @apply(--layout);
+        <style>
+            :host {
+                display: block;
+                padding: 10px 20px;
+                text-align: center;
             }
 
-            .controls > button {
-                text-align: left;
+            h1 {
+                font-size: 2.8em;
+                color: #aaaaab;
+                margin-bottom: 0.8em;
+                margin-top: 10vh;
+                letter-spacing: 0.02em;
+                font-weight: 100;
+                display: inline-block;
+                padding: 0.2em 0.5em;
+                border-bottom: 1px solid #e0e0e1;
             }
 
-            .controls > button, paper-button {
-                flex: 50%;
+            paper-button {
+                margin: 1em auto;
+                width: 12em;
+                display: block;
+                background-color: var(--app-green-color);
+                color: #fff;
             }
 
-            .controls > paper-button {
-                max-width: 15em;
+            #no-account-label {
+                color: #aaaaab;
+                margin: 5.5em auto 0.2em auto;
             }
 
-            @media only screen and (min-width: 767px) {
+            a {
+                text-decoration: none;
+                color: var(--app-green-color);
+                font-size: 1.35em;
+            }
 
-                .main-frame {
-                    padding-top: 4em;
+            a:hover {
+                text-decoration: underline;
+            }
+
+            @media only screen and (max-width: 767px) {
+                h1 {
+                    font-size: 1.5em;
+                    margin-top: 1em;
+                    padding-bottom: 0.65em;
                 }
             }
 
         </style>
 
-        <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}" user="{{user}}"></firebase-auth>
+        <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}"
+                       user="{{user}}"></firebase-auth>
 
-        <div class="main-frame" hidden="[[loggedIn]]">
-            <header>
-                <h1>Vyžadováno přihlášení</h1>
-                <span>Pro vstup na následující stránku je nutné se přihlásit.</span>
-            </header>
-            <form id="main_form" is="iron-form">
-                <p class="error">{{errorMessage}}</p>
-                <gold-email-input id="emailID" error-message="Špatný formát" value="{{email}}"
-                                  label="Vaše emailová adresa" required autofocus auto-validate>
-                </gold-email-input>
-                <paper-input id="passID" value="{{password}}" label="Heslo" type="password" auto-validate
-                             error-message="Neplatné heslo" minlength="6" maxlength="48" required>
-                </paper-input>
-            </form>
-            <div class="controls">
-                <button on-tap="passReset">
-                    Zapomněli jste heslo?
-                </button>
-                <paper-button on-tap="confirm" raised>
-                    Přihlásit
-                </paper-button>
-            </div>
+        <div hidden="[[loggedIn]]">
+            <h1>Tato stránka využaduje přihlášení</h1>
+            <br>
+            <paper-button raised on-tap="showLoginDialog">Přihlásit se</paper-button>
+            <div id="no-account-label">Nemáte účet?</div>
+            <a href="/registration">Zaregistrujte se</a>
         </div>
 
     </template>
@@ -71,8 +73,6 @@
     <script>
         Polymer({
             is: 'login-required-element',
-
-            behaviors: [FormValidationBehavior],
 
             properties: {
                 loggedIn: {
@@ -86,36 +86,12 @@
                 }
             },
 
-            confirm: function () {
-                if (this._validateForm(this.$.main_form)) {
-                    this.signInWithEmailAndPassword();
-                }
-            },
-
-            signInWithEmailAndPassword: function () {
-                this.$.auth.signInWithEmailAndPassword(this.email, this.password).then(function () {
-                    this.fire("show-toast", {text: "Přihlášeno"});
-                }.bind(this)).catch(function (error) {
-                    switch (error["code"]) {
-                        case "auth/wrong-password":
-                            this.errorMessage = "Špatné heslo";
-                            break;
-                        case "auth/user-not-found":
-                        case "auth/invalid-email":
-                            this.errorMessage = "Uživatelské jméno nenalezeno";
-                            break;
-                        default:
-                            this.errorMessage = error["code"];
-                    }
-                }.bind(this));
-            },
-
             computeLoggedInProperty: function (statusKnown, user) {
                 return (statusKnown && !!user);
             },
 
-            passReset: function () {
-                this.fire("show-dialog", {path: "", viewName: "emailinput", open: true});
+            showLoginDialog: function () {
+                this.fire("show-dialog", {path: "", viewName: "login", open: true})
             }
         });
     </script>
