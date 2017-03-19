@@ -248,6 +248,19 @@
                 holidaysArray: {
                     type: Array,
                     computed: 'computeHolidaysArray(officeHolidays)'
+                },
+
+                fromDateTime: {
+                    type: Date,
+                    observer: "observeFromDateTime"
+                }
+            },
+
+            observeFromDateTime: function (fromDateTime) {
+                if (!!fromDateTime && !(!!this.toDateTime)) {
+                    var toDateTime = new Date(fromDateTime);
+                    toDateTime.setDate(toDateTime.getDate() + 1);
+                    this.toDateTime = toDateTime;
                 }
             },
 

@@ -68,7 +68,7 @@
                 box-shadow: 2px -2px 8px rgba(0, 0, 0, 0.1);
             }
 
-            #profile-underline{
+            #profile-underline {
                 display: none;
             }
 
@@ -264,7 +264,7 @@
                     padding-bottom: 0;
                 }
 
-                #profile-underline{
+                #profile-underline {
                     display: block;
                     height: 2px;
                     width: 10%;
@@ -396,7 +396,8 @@
                     </section>
                 </template>
 
-                <template is="dom-if" if="[[computeIfInfoSection(offlineHoursAvailable, holidayAvailable, insuranceAvailable, patientTextAvailable, servicesAvailable)]]">
+                <template is="dom-if"
+                          if="[[computeIfInfoSection(offlineHoursAvailable, holidayAvailable, insuranceAvailable, patientTextAvailable, servicesAvailable)]]">
                     <section id="no-calendar-container">
 
                         <template is="dom-if" if="[[offlineHoursAvailable]]">
@@ -661,14 +662,14 @@
                         this.importHref('/custom_components/calendar-element.html', function (e) {
                             this.calendarElementLoaded = true;
                         }.bind(this), function (e) {
-                            // loading error
+                            console.log(e);
                         });
                     }
                     if (!this.calendarDisabledElementLoaded) {
                         this.importHref('/custom_components/calendar-disabled-element.html', function (e) {
                             this.calendarDisabledElementLoaded = true;
                         }.bind(this), function (e) {
-                            // loading error
+                            console.log(e);
                         });
                     }
                 }
@@ -684,14 +685,14 @@
                         this.importHref('/bower_components/google-map/google-map.html', function (e) {
                             this.mapLoaded = true;
                         }.bind(this), function (e) {
-                            // loading error
+                            console.log(e);
                         });
                     }
                     if (!this.mapMarkerLoaded) {
                         this.importHref('/bower_components/google-map/google-map-marker.html', function (e) {
                             this.mapMarkerLoaded = true;
                         }.bind(this), function (e) {
-                            // loading error
+                            console.log(e);
                         });
                     }
                 }
@@ -978,11 +979,11 @@
             },
 
             computeDataAvailability: function (data) {
-                return !!data
+                return !!data;
             },
 
-            computeIfInfoSection: function(offlineHoursAvailable, holidayAvailable, insuranceAvailable, patientTextAvailable, servicesAvailable) {
-                return offlineHoursAvailable || holidayAvailable || insuranceAvailable || patientTextAvailable || servicesAvailable
+            computeIfInfoSection: function (offlineHoursAvailable, holidayAvailable, insuranceAvailable, patientTextAvailable, servicesAvailable) {
+                return offlineHoursAvailable || holidayAvailable || insuranceAvailable || patientTextAvailable || servicesAvailable;
             }
         });
     </script>
