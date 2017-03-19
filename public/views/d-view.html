@@ -68,9 +68,13 @@
                 box-shadow: 2px -2px 8px rgba(0, 0, 0, 0.1);
             }
 
+            #profile-underline{
+                display: none;
+            }
+
             section > div {
                 text-align: left;
-                margin-top: 1.5em;
+                margin-top: 1.6em;
             }
 
             .photo-name-section {
@@ -164,7 +168,6 @@
 
             google-map {
                 height: 55vh;
-                border-top: 1px solid #ccccd5;
             }
 
             /*** OTHER ***/
@@ -176,8 +179,8 @@
             .office-info-section {
                 margin: 0 auto;
                 max-width: 100%;
-                padding: 0 4% 3em 4%;
-                background-color: #fbfbfc;
+                padding: 0 4%;
+                background-color: #fcfcfd;
             }
 
             .office-info-section h2 {
@@ -189,7 +192,6 @@
             #offline-hours .day {
                 padding: 1em;
                 margin-top: 0;
-                border-top: 1px solid #e2e2e3;
                 border-top: 1px solid #e2e2e3;
             }
 
@@ -203,7 +205,7 @@
             /************************/
             #no-calendar-container {
                 max-width: 900px;
-                margin: 0 auto;
+                margin: 0 auto 3em;
             }
 
             #services-container .service-item {
@@ -236,9 +238,7 @@
 
             #appointment-container {
                 background-color: #fff;
-                margin-right: 3%;
-                margin-top: 3em;
-                margin-left: -2%;
+                margin: 3em 3% 3em -2%;
                 padding-right: 2%;
                 padding-left: 2%;
                 padding-top: 1em;
@@ -264,15 +264,18 @@
                     padding-bottom: 0;
                 }
 
+                #profile-underline{
+                    display: block;
+                    height: 2px;
+                    width: 10%;
+                    background-color: #fff;
+                    margin: 2em auto 2.5em auto;
+                    border-radius: 5px;
+                }
+
                 .photo-name-section img {
                     width: 100px;
                     height: 100px;
-                }
-
-                .info-section {
-                    margin-top: 1.7em;
-                    padding-top: 2em;
-                    border-top: 1px solid #fff;
                 }
 
                 .order-info {
@@ -313,10 +316,12 @@
 
                     <img src$="[[computePhotoURL(officeData.photoAvailability, officeData.sex, officeId)]]">
 
-                    <h3>[[computeFormattedName(officeData.title, officeData.name.firstName, officeData.name.lastName)]]</h3>
+                    <h3>[[computeFormattedName(officeData.title, officeData.name.firstName,
+                        officeData.name.lastName)]]</h3>
                     <span>[[officeData.specialization]]</span>
                 </section>
 
+                <div id="profile-underline"></div>
                 <section class="info-section">
                     <div>
                         <a target="_blank" title="Zobrazit mapu v novém okně"
@@ -379,7 +384,8 @@
                             <div hidden="[[calendarVisibility]]" id="appointment_form" class="side-padding">
                                 <h3>Objednat se</h3>
                                 <span>Datum objednání: <b>[[computeAppointmentDate(appointmentId)]]</b></span>
-                                <paper-textarea value="{{patientMessage}}" label="Dobrovolná zpráva pro lékaře" char-counter
+                                <paper-textarea value="{{patientMessage}}" label="Dobrovolná zpráva pro lékaře"
+                                                char-counter
                                                 maxlength="200"></paper-textarea>
                                 <paper-button on-tap="_confirmAppointment" raised>Potvrdit objednání</paper-button>
                                 <div id="exit-form" class="centered" on-tap="_showCalendar">
@@ -390,22 +396,27 @@
                     </section>
                 </template>
 
-                <section id="no-calendar-container">
-                    <div id="offline-hours">
-                        <h2>
-                            <iron-icon icon="icons:watch-later"></iron-icon>
-                            Ordinační hodiny
-                        </h2>
-                        <template is="dom-repeat" items="[[offlineOfficeHoursArray]]" as="offlineHours">
-                            <template is="dom-if" if="[[offlineHours.available]]">
-                                <div class="day"><span>[[computeDateName(index)]] :</span><span
-                                        hidden="[[!offlineHours.available]]">
+                <template is="dom-if" if="[[computeIfInfoSection(offlineHoursAvailable, holidayAvailable, insuranceAvailable, patientTextAvailable, servicesAvailable)]]">
+                    <section id="no-calendar-container">
+
+                        <template is="dom-if" if="[[offlineHoursAvailable]]">
+                            <div id="offline-hours">
+                                <h2>
+                                    <iron-icon icon="icons:watch-later"></iron-icon>
+                                    Ordinační hodiny
+                                </h2>
+                                <template is="dom-repeat" items="[[offlineOfficeHoursArray]]" as="offlineHours">
+                                    <template is="dom-if" if="[[offlineHours.available]]">
+                                        <div class="day"><span>[[computeDateName(index)]] :</span><span
+                                                hidden="[[!offlineHours.available]]">
                                 [[offlineHours.hours]]</span>
-                                </div>
-                            </template>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
                         </template>
 
-                        <template is="dom-if" if="[[computeDataAvailability(officeData.holidays)]]">
+                        <template is="dom-if" if="[[holidayAvailable]]">
                             <div class="holidays-container">
                                 <b>Dovolená</b><br>
 
@@ -419,45 +430,46 @@
                                 </template>
                             </div>
                         </template>
-                    </div>
 
-                    <template is="dom-if" if="[[computeTextAvailability(officeData.patientText)]]">
-                        <h2>
-                            <iron-icon icon="icons:info"></iron-icon>
-                            Informace pro pacienty
-                        </h2>
-                        <span>[[officeData.patientText]]</span>
-                    </template>
 
-                    <template is="dom-if" if="[[computeInsuranceAvailability(insuranceArray)]]">
-                        <section id="insurance-container">
+                        <template is="dom-if" if="[[patientTextAvailable]]">
                             <h2>
-                                <iron-icon icon="icons:assignment"></iron-icon>
-                                Pojišťovny, se kterými máme smlouvu
+                                <iron-icon icon="icons:info"></iron-icon>
+                                Informace pro pacienty
                             </h2>
-                            <template is="dom-repeat" items="[[insuranceArray]]" as="insurance">
-                                <template is="dom-if" if="[[insurance.accepted]]">
-                                    <div>[[computeInsuranceName(insurance.id)]]</div>
+                            <span>[[officeData.patientText]]</span>
+                        </template>
+
+                        <template is="dom-if" if="[[insuranceAvailable]]">
+                            <section id="insurance-container">
+                                <h2>
+                                    <iron-icon icon="icons:assignment"></iron-icon>
+                                    Pojišťovny, se kterými máme smlouvu
+                                </h2>
+                                <template is="dom-repeat" items="[[insuranceArray]]" as="insurance">
+                                    <template is="dom-if" if="[[insurance.accepted]]">
+                                        <div>[[computeInsuranceName(insurance.id)]]</div>
+                                    </template>
                                 </template>
-                            </template>
-                        </section>
-                    </template>
+                            </section>
+                        </template>
 
-                    <template is="dom-if" if="[[computeDataAvailability(officeData.officeServices)]]">
-                        <section id="services-container">
-                            <h2>
-                                <iron-icon icon="icons:view-list"></iron-icon>
-                                Poskytované služby
-                            </h2>
-                            <template is="dom-repeat" items="[[officeServicesArray]]" as="officeServices">
-                                <div class="flex-horizontal service-item">
-                                    <div class="service-name flexchild">[[officeServices.name]]</div>
-                                    <div class="service-price">[[officeServices.price]]</div>
-                                </div>
-                            </template>
-                        </section>
-                    </template>
-                </section>
+                        <template is="dom-if" if="[[servicesAvailable]]">
+                            <section id="services-container">
+                                <h2>
+                                    <iron-icon icon="icons:view-list"></iron-icon>
+                                    Poskytované služby
+                                </h2>
+                                <template is="dom-repeat" items="[[officeServicesArray]]" as="officeServices">
+                                    <div class="flex-horizontal service-item">
+                                        <div class="service-name flexchild">[[officeServices.name]]</div>
+                                        <div class="service-price">[[officeServices.price]]</div>
+                                    </div>
+                                </template>
+                            </section>
+                        </template>
+                    </section>
+                </template>
             </div>
             <template is="dom-if"
                       if="[[computeMapAvailability(showMap, mapLoaded, mapMarkerLoaded)]]">
@@ -584,6 +596,34 @@
                     type: Boolean,
                     computed: "computeShowMap(officeData.coordinates.latitude, officeData.coordinates.longitude, smallScreen)",
                     observer: "observerShowMap"
+                },
+
+                // Info section
+
+                offlineHoursAvailable: {
+                    type: Boolean,
+                    computed: "computeArrayDataAvailability(officeData.offlineOfficeHours)"
+
+                },
+
+                insuranceAvailable: {
+                    type: Boolean,
+                    computed: "computeArrayDataAvailability(insuranceArray)"
+                },
+
+                patientTextAvailable: {
+                    type: Boolean,
+                    computed: "computeTextAvailability(officeData.patientText)"
+                },
+
+                servicesAvailable: {
+                    type: Boolean,
+                    computed: "computeDataAvailability(officeData.officeServices)"
+                },
+
+                holidayAvailable: {
+                    type: Boolean,
+                    computed: "computeDataAvailability(officeData.holidays)"
                 },
 
 
@@ -916,18 +956,9 @@
                 return this.days[index]
             },
 
-            computeOfflineHoursAvailability: function (array) {
+            computeArrayDataAvailability: function (array) {
                 for (var i = 0; i < array.length; i++) {
                     if (array[i].available == true) {
-                        return true
-                    }
-                }
-                return false;
-            },
-
-            computeInsuranceAvailability: function (array) {
-                for (var i = 0; i < array.length; i++) {
-                    if (array[i].accepted == true) {
                         return true
                     }
                 }
@@ -948,6 +979,10 @@
 
             computeDataAvailability: function (data) {
                 return !!data
+            },
+
+            computeIfInfoSection: function(offlineHoursAvailable, holidayAvailable, insuranceAvailable, patientTextAvailable, servicesAvailable) {
+                return offlineHoursAvailable || holidayAvailable || insuranceAvailable || patientTextAvailable || servicesAvailable
             }
         });
     </script>
