@@ -1,17 +1,52 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
 <dom-module id="e404-view">
     <template>
         <style>
             :host {
                 display: block;
-
                 padding: 10px 20px;
+                text-align: center;
             }
 
+            h1 {
+                font-size: 3em;
+                color: #aaaaab;
+                margin-bottom: 1.5em;
+                margin-top: 15vh;
+                letter-spacing: 0.02em;
+                font-weight: 100;
+                display: inline-block;
+                padding: 0.2em 0.5em;
+                border-bottom: 1px solid #e0e0e1;
+            }
+
+            a {
+                font-size: 1.3em;
+                text-decoration: none;
+                background-color: var(--app-green-color);
+                color: #fff;
+                padding: 0.8em 1.5em;
+                border-radius: 3em;
+            }
+
+            @media only screen and (max-width: 767px) {
+                a {
+                   font-size: 1em;
+                }
+
+                h1 {
+                    font-size: 1.8em;
+                    margin-top: 1em;
+                }
+            }
         </style>
 
-        You hit a 404. <a href="/home">Head back to home</a>
+        <h1>Tato stránka neexistuje</h1>
+        <br>
+        <a href="/home">Přejít na domovskou stránku.</a>
+
     </template>
 
     <script>
