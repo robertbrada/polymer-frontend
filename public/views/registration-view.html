@@ -112,7 +112,7 @@
 
         <div class="main-frame">
             <header>
-                <h1>Registrace</h1>
+                <h1>Registrace nového uživatele</h1>
             </header>
             <div class="subsection grid">
                 <section>
@@ -122,22 +122,21 @@
                             <iron-icon icon="icons:account-circle"></iron-icon>
                             Základní informace
                         </h2>
-                        <paper-input id="fninput" label="Jméno" minlength="1" maxlength="30" auto-validate
+                        <paper-input id="fninput" label="Vaše jméno" minlength="1" maxlength="30" auto-validate
                                      error-message="Nelze ponechat prázdné" required></paper-input>
-                        <paper-input id="lninput" label="Příjmení" minlength="1" auto-validate
+                        <paper-input id="lninput" label="Vaše příjmení" minlength="1" auto-validate
                                      maxlength="30" error-message="Nelze ponechat prázdné"
                                      required></paper-input>
-
-                        <paper-radio-group id="sex" selected="female">
-                            <paper-radio-button name="female">Žena</paper-radio-button>
-                            <paper-radio-button name="male">Muž</paper-radio-button>
-                        </paper-radio-group>
 
                         <paper-input id="dinput" label="Datum narození" auto-validate required placeholder="DD.MM.RRRR"
                                      pattern="[0-9]{1,2}[.][0-9]{1,2}[.][0-9]{4}" prevent-invalid-input
                                      allowed-pattern="[0-9.]" validator="dateValidator">
                         </paper-input>
 
+                        <paper-radio-group id="sex" selected="female">
+                            <paper-radio-button name="female">Žena</paper-radio-button>
+                            <paper-radio-button name="male">Muž</paper-radio-button>
+                        </paper-radio-group>
 
                         <span id="birth-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést své datum narození?</span>
                         <paper-tooltip for="birth-tooltip" offset="0">Vaše datum narození slouží lékaři k tomu, aby
@@ -161,9 +160,9 @@
                             <iron-icon icon="maps:place"></iron-icon>
                             Adresa
                         </h2>
-                        <paper-input id="cinput" label="Město" minlength="1" maxlength="30" auto-validate required>
+                        <paper-input id="cinput" label="Město" minlength="1" maxlength="40" auto-validate required>
                         </paper-input>
-                        <paper-input id="sinput" label="Ulice a číslo popisné" minlength="3" maxlength="80"
+                        <paper-input id="sinput" label="Ulice a číslo popisné" minlength="1" maxlength="80"
                                      auto-validate required>
                         </paper-input>
 
@@ -183,12 +182,11 @@
                         </paper-input>
 
                         <gold-phone-input id="phone_id" country-code="420" label="Telefonní číslo"
-                                          phone-number-pattern="XXX-XXX-XXX" auto-validate
+                                          phone-number-pattern="XXX-XXX-XXX" required auto-validate
                                           value="{{officeData.information.phoneNumber}}">
                         </gold-phone-input>
                         <span id="phone-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést své telefonní číslo?</span>
-                        <paper-tooltip for="phone-tooltip" offset="0">Telefonní číslo slouží k ověření a
-                            upozornění na návštěvy u lékaře. Číslo uvidí pouze váši lékaři.
+                        <paper-tooltip for="phone-tooltip" offset="0">Telefonní číslo slouží k lepšímu zabezpečení účtu a pro lékaře, aby Vás mohl kontaktovat.
                         </paper-tooltip>
                     </form>
                 </section>
