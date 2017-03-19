@@ -1,10 +1,10 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
+
 
 <dom-module id="emailaction-view">
     <template>
-        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
     </template>
 
     <script>
@@ -12,10 +12,8 @@
             is: 'emailaction-view',
 
             ready: function () {
-
-                var actionCode = this.route.__queryParams["oobCode"];
-
-                var auth = this.$.auth.auth;
+                var actionCode = this.route.__queryParams["oobCode"],
+                    auth = firebase.apps[0].auth();
 
                 switch (this.route.__queryParams["mode"]) {
                     case 'resetPassword':
@@ -28,19 +26,19 @@
                         this.handleVerifyEmail(auth, actionCode);
                         break;
                     default:
-                        this.fire('change-route', {url: '/home'});
                         this.fire("show-dialog", {path: "emailactions/", viewName: "actionerror", open: true});
+                        this.fire('change-route', {url: '/home'});
                 }
             },
 
             handleResetPassword: function (actionCode) {
-                this.fire('change-route', {url: '/home'});
                 this.fire("show-dialog", {
                     path: "emailactions/", viewName: "passreset", open: true,
                     data: {
                         actionCode: actionCode
                     }
                 });
+                this.fire('change-route', {url: '/home'});
             },
 
             handleRecoverEmail: function (auth, actionCode) {
@@ -50,7 +48,6 @@
             handleVerifyEmail: function (auth, actionCode) {
                 auth.applyActionCode(actionCode).then(function () {
                     auth.signOut(); // User needs to reauthenticate in order to generate new id token with verified address.
-                    this.fire('change-route', {url: '/home'});
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
                         data: {
@@ -59,9 +56,13 @@
                             buttonText: 'Přidat ordinaci'
                         }
                     });
-                }.bind(this)).catch(function () {
+                    // Route change has to take place after the dialog event is fired. Otherwise the dialog wouldn't select any page
+                    // Source of potential instabilities TODO: Find a cause and ensure the bug is properly fixed
                     this.fire('change-route', {url: '/home'});
-                    this.fire("show-dialog", {path: "emailactions/", viewName: "actionerror", open: true})
+                }.bind(this)).catch(function () {
+                    this.fire("show-dialog", {path: "emailactions/", viewName: "actionerror", open: true});
+                    //
+                    this.fire('change-route', {url: '/home'});
                 }.bind(this));
             }
         });
