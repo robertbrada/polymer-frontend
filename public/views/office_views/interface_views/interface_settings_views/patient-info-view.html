@@ -209,10 +209,10 @@
             },
 
             computeLocalOfficeData: function (officeData) {
-                if (officeData.officeServices == undefined) { //fixes bug: "add service when no service in array yet" (cannot read length of undefined)
-                    officeData.officeServices = [];
+                if (userInterfaceInfo.officeServices == undefined) { //fixes bug: "add service when no service in array yet" (cannot read length of undefined)
+                    userInterfaceInfo.officeServices = [];
                 }
-                return officeData;
+                return userInterfaceInfo;
             },
 
             confirm: function () {

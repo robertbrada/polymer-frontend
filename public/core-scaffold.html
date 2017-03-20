@@ -1,6 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="/bower_components/app-route/app-location.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/app-layout/app-header/app-header.html">
@@ -19,6 +18,8 @@
 <link rel="import" href="/custom_components/custom-dialog.html">
 <!--Shouldn't be necessary-->
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="/firebase-settings.html">
 
 <dom-module id="core-scaffold">
     <template>
@@ -157,10 +158,6 @@
         <firebase-auth id="auth" user="{{user}}" app-name="doctor-appointment-system" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
 
-        <firebase-document app-name="doctor-appointment-system" path="/userInterfaceInfo/[[user.uid]]"
-                           data="{{userInterfaceInfo}}">
-        </firebase-document>
-
         <app-location route="{{route}}"></app-location>
 
         <app-route
@@ -249,6 +246,25 @@
                     type: Boolean,
                     value: false,
                     computed: '_computeOfficeVisibility(userInterfaceInfo.showOfficeInterface, signedIn)'
+                },
+
+                auth: {
+                    type: Object,
+                    value: function () {
+                        return fAppSingleton.getAuth();
+                    }
+                },
+
+                user: {
+                    type: Object,
+                    value: null,
+                    computed: "computeUser(auth)",
+                    observer: "fetchInterfaceInfo"
+                },
+
+                signedIn: {
+                    type: Boolean,
+                    value: false
                 }
             },
 
@@ -262,6 +278,23 @@
                 'show-toast': '_showToast',
                 'change-route': '_changeRoute',
                 'close-drawer': '_closeDrawer'
+            },
+
+            computeUser: function (auth) {
+                console.log(auth.currentUser);
+                return auth.currentUser;
+            },
+
+            fetchInterfaceInfo: function (user) {
+                if (user !== null) {
+                    fAppSingleton.getDatabase().ref("/userInterfaceInfo/" + user.uid).once('value').then(function (snapshot) {
+                        userInterfaceInfo = snapshot.val();
+
+                        if (userInterfaceInfo !== null) {
+                            this.userInterfaceInfo = userInterfaceInfo;
+                        }
+                    }.bind(this));
+                }
             },
 
             _loginButtonHandler: function () {

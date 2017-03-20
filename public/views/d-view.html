@@ -703,12 +703,12 @@
                     officeData;
 
                 db.ref('/officeFullInfo/' + officeId).once('value').then(function (snapshot) {
-                    officeData = snapshot.val();
+                    userInterfaceInfo = snapshot.val();
 
-                    if (officeData === null) {
+                    if (userInterfaceInfo === null) {
                         this.hideError = false;
                     } else {
-                        this.officeData = officeData;
+                        this.userInterfaceInfo = userInterfaceInfo;
                         this.hideContent = false;
                         this.hideError = true;
                         this.onOfficeDataLoaded();
@@ -754,7 +754,7 @@
                 var db = this.firebaseApp.database(),
                     appointmentId = this.appointmentId,
                     officeId = this.officeId,
-                    officeData = this.officeData,
+                    officeData = this.userInterfaceInfo,
                     uid = this.userId,
                     patientMessage = (!!this.patientMessage) ? this.patientMessage : null,
                     patientStatus = this.patientStatus,
@@ -765,8 +765,8 @@
                 objectToSave['/userAppointments/' + uid + '/' + appointmentId] = {
                     'message': patientMessage,
                     'officeId': officeId,
-                    'address': officeData.address,
-                    'name': officeData.name
+                    'address': userInterfaceInfo.address,
+                    'name': userInterfaceInfo.name
                 };
 
                 db.ref("/userInfo/" + uid).once("value").then(function (snapshot) {
@@ -904,29 +904,29 @@
             //COMPUTE OFFICE INFO
 
             computeInsuranceArray: function (officeData) {
-                return Object.keys(officeData).map(function (key) {
+                return Object.keys(userInterfaceInfo).map(function (key) {
                     return {
-                        'accepted': officeData[key]['accepted'],
-                        'id': officeData[key]['id']
+                        'accepted': userInterfaceInfo[key]['accepted'],
+                        'id': userInterfaceInfo[key]['id']
                     }
                 });
             },
 
             computeOfflineOfficeHoursArray: function (officeData) {
-                return Object.keys(officeData).map(function (key) {
+                return Object.keys(userInterfaceInfo).map(function (key) {
                     return {
-                        'available': officeData[key]['available'],
-                        'hours': officeData[key]['hours']
+                        'available': userInterfaceInfo[key]['available'],
+                        'hours': userInterfaceInfo[key]['hours']
                     }
                 });
             },
 
             computeOfficeServicesArray: function (officeData) {
-                if (!!officeData) {
-                    return Object.keys(officeData).map(function (key) {
+                if (!!userInterfaceInfo) {
+                    return Object.keys(userInterfaceInfo).map(function (key) {
                         return {
-                            'name': officeData[key]['name'],
-                            'price': officeData[key]['price']
+                            'name': userInterfaceInfo[key]['name'],
+                            'price': userInterfaceInfo[key]['price']
                         }
                     });
                 }
@@ -971,7 +971,7 @@
             },
 
             computeOnlineBooking: function (officeData) {
-                return !!officeData.lastGeneratedDate;
+                return !!userInterfaceInfo.lastGeneratedDate;
             },
 
             computeIfCalendar: function (onlineBooking, calendarElementLoaded, calendarDisabledElementLoaded) {

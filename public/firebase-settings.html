@@ -1,0 +1,44 @@
+<script src="/bower_components/firebase/firebase-app.js"></script>
+<script src="/bower_components/firebase/firebase-database.js"></script>
+<script src="/bower_components/firebase/firebase-auth.js"></script>
+
+<script>
+    var fAppSingleton = (function () {
+        var instance;
+
+        function getConfig() {
+            var projectName = "doctor-appointment-system",
+                config = {
+                    apiKey: "AIzaSyAGllVgFQns9sv__I2MjU0WzWttC-5c4Cc",
+                    authDomain: projectName + ".firebaseapp.com",
+                    databaseURL: "https://" + projectName + ".firebaseio.com",
+                    storageBucket: projectName + ".appspot.com"
+                };
+
+            return config;
+        }
+
+        function createInstance() {
+            firebase.initializeApp(getConfig(), "docta");
+
+            return firebase.app("docta");
+        }
+
+        return {
+            getInstance: function () {
+                if (!instance) {
+                    instance = createInstance();
+                }
+                return instance;
+            },
+
+            getDatabase: function () {
+                return this.getInstance().database();
+            },
+
+            getAuth: function () {
+                return this.getInstance().auth();
+            }
+        };
+    })();
+</script>

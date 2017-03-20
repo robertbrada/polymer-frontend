@@ -238,7 +238,7 @@
 
             ready: function () {
                 var db = this.firebaseDatabase,
-                    userInfo, fullInfo = this.officeData.fullInfo;
+                    userInfo, fullInfo = this.userInterfaceInfo.fullInfo;
 
                 db.ref("/userInfo/" + this.userId).once('value').then(function (snapshot) {
                     userInfo = snapshot.val();
@@ -301,8 +301,8 @@
             },
 
             registerOffice: function () {
-                var normalizedString = this.normalizeText(this.officeData.fullInfo.name.lastName) + "_" + this.normalizeText(this.officeData.fullInfo.address.city);
-                this.generateOfficeId(this.officeData, normalizedString, 0);
+                var normalizedString = this.normalizeText(this.userInterfaceInfo.fullInfo.name.lastName) + "_" + this.normalizeText(this.userInterfaceInfo.fullInfo.address.city);
+                this.generateOfficeId(this.userInterfaceInfo, normalizedString, 0);
             },
 
             generateOfficeId: function (data, normalizedString, increment) {

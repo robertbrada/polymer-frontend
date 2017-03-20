@@ -10,7 +10,7 @@
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../bower_components/iron-icons/maps-icons.html">
 
-<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
+<link rel="import" href="/firebase-settings.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -255,11 +255,6 @@
             is: 'home-view',
 
             properties: {
-                firebaseDatabase: {
-                    type: Object,
-                    value: firebase.apps[0].database()
-                },
-
                 officesArray: {
                     type: Array
                 },
@@ -295,7 +290,7 @@
             ready: function () {
                 var officesArray, numberToFetch = this.numberToFetch, searchData;
 
-                this.firebaseDatabase.ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).once('value').then(function (snapshot) {
+                fAppSingleton.getDatabase().ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).once('value').then(function (snapshot) {
                     searchData = snapshot.val();
 
                     if (searchData !== null) {
@@ -329,7 +324,7 @@
             fetchData: function (startKey, indexDifference) {
                 var numberToFetch = this.numberToFetch, searchData;
 
-                this.firebaseDatabase.ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).startAt(startKey).once('value').then(function (snapshot) {
+                fAppSingleton.getDatabase().ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).startAt(startKey).once('value').then(function (snapshot) {
                     searchData = snapshot.val();
 
                     if (searchData !== null) {
