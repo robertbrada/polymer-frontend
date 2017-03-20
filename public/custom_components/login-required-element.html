@@ -6,15 +6,14 @@
 <dom-module id="login-required-element">
     <template>
         <style>
-            :host {
-                display: block;
-                padding: 10px 20px;
+            #main-container {
+                padding: 0 20px;
                 text-align: center;
             }
 
             h1 {
                 font-size: 2.8em;
-                color: #aaaaab;
+                color: var(--app-grey-text-color);
                 margin-bottom: 0.8em;
                 margin-top: 10vh;
                 letter-spacing: 0.02em;
@@ -26,14 +25,15 @@
 
             paper-button {
                 margin: 1em auto;
-                width: 12em;
+                padding: 1em;
+                width: 11em;
                 display: block;
                 background-color: var(--app-green-color);
                 color: #fff;
             }
 
             #no-account-label {
-                color: #aaaaab;
+                color: var(--app-grey-text-color);
                 margin: 5.5em auto 0.2em auto;
             }
 
@@ -50,7 +50,7 @@
             @media only screen and (max-width: 767px) {
                 h1 {
                     font-size: 1.5em;
-                    margin-top: 1em;
+                    margin-top: 1.5em;
                     padding-bottom: 0.65em;
                 }
             }
@@ -60,7 +60,7 @@
         <firebase-auth id="auth" app-name="[[appName]]" status-known="{{statusKnown}}"
                        user="{{user}}"></firebase-auth>
 
-        <div hidden="[[loggedIn]]">
+        <div id="main-container" hidden="[[loggedIn]]">
             <h1>Tato stránka využaduje přihlášení</h1>
             <br>
             <paper-button raised on-tap="showLoginDialog">Přihlásit se</paper-button>

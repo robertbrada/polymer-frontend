@@ -39,7 +39,6 @@
                 width: 100%;
                 border-collapse: collapse;
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
             }
 
             #month-container {
@@ -78,16 +77,30 @@
                 background-color: #ecedf0;
             }
 
-            #free {
+            .free {
                 font-size: 0.7em;
                 color: #fff;
                 background-color: var(--app-green-color);
                 padding: 0.1em 0.4em;
                 border-radius: 20px;
-                margin: 0.5em auto 0 auto;
+            }
+
+            #free-calendar-badge {
                 position: absolute;
                 left: 5px;
                 top: 0;
+                margin: 0.5em auto 0 auto;
+            }
+
+            #free-hint {
+                padding: 0.5em;
+                background-color: #fff;
+                margin-top: 0.8em;
+                border: 1px solid #e2e2e3;
+            }
+
+            #free-hint span {
+                margin-right: 0.6em;
             }
 
             /*** DAY DETAIL ***/
@@ -243,12 +256,16 @@
                                 <td on-tap="selectDate">
                                     <span id="date" hidden="[[dayOfWeek.disabled]]">[[dayOfWeek.date]]</span>
                                     <br>
-                                    <span id="free" hidden="[[!dayOfWeek.free]]">[[dayOfWeek.free]]</span>
+                                    <span id="free-calendar-badge" class="free" hidden="[[!dayOfWeek.free]]">[[dayOfWeek.free]]</span>
                                 </td>
                             </template>
                         </tr>
                     </template>
+
                 </table>
+
+                <div id="free-hint"><span class="free">1</span>Počet volných objednávacích časů</div>
+
             </div>
 
             <div id="day-detail-container" class="flexchild">

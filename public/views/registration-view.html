@@ -24,6 +24,19 @@
     <template>
         <style include="button-styles layout-styles input-styles">
 
+
+            header {
+                margin-bottom: 0.5em;
+            }
+
+            header h1 {
+                margin-top: 4vh;
+            }
+
+            h2 {
+                margin-top: 4em;
+            }
+
             a {
                 text-decoration: none;
                 color: var(--app-green-color);
@@ -33,10 +46,22 @@
                 text-decoration: underline;
             }
 
+            .subsection {
+                margin-bottom: 3em;
+            }
+
+            #confirm-button {
+                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+            }
+
+            paper-radio-group {
+                margin-top: 1.2em;
+            }
+
             .tooltip {
                 display: block;
-                font-size: 0.8em;
-                color: #99999a;
+                font-size: 0.9em;
+                color: var(--app-grey-text-color);
                 cursor: help;
                 position: relative;
                 float: right;
@@ -53,7 +78,7 @@
 
             paper-tooltip {
                 --paper-tooltip: {
-                    font-size: 0.85em;
+                    font-size: 0.9em;
                     line-height: 1.2em;
                     letter-spacing: 0.02em;
                     position: absolute;
@@ -75,6 +100,13 @@
                 margin-top: 1em;
                 padding-top: 2.7em;
                 margin-bottom: 2em;
+            }
+
+            @media (min-width: 767px) {
+                #confirm-button:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+                }
             }
 
             @media only screen and (min-width: 767px) {
@@ -132,17 +164,15 @@
                                      pattern="[0-9]{1,2}[.][0-9]{1,2}[.][0-9]{4}" prevent-invalid-input
                                      allowed-pattern="[0-9.]" validator="dateValidator">
                         </paper-input>
-
-                        <paper-radio-group id="sex" selected="female">
-                            <paper-radio-button name="female">Žena</paper-radio-button>
-                            <paper-radio-button name="male">Muž</paper-radio-button>
-                        </paper-radio-group>
-
                         <span id="birth-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést své datum narození?</span>
                         <paper-tooltip for="birth-tooltip" offset="0">Vaše datum narození slouží lékaři k tomu, aby
                             ověřil vaši totožnost a mohl vás tak přijmout jako svého pacienta.
                         </paper-tooltip>
 
+                        <paper-radio-group id="sex" selected="female">
+                            <paper-radio-button name="female">Žena</paper-radio-button>
+                            <paper-radio-button name="male">Muž</paper-radio-button>
+                        </paper-radio-group>
 
                         <h2>
                             <iron-icon icon="icons:mail"></iron-icon>
@@ -186,18 +216,19 @@
                                           value="{{officeData.information.phoneNumber}}">
                         </gold-phone-input>
                         <span id="phone-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést své telefonní číslo?</span>
-                        <paper-tooltip for="phone-tooltip" offset="0">Telefonní číslo slouží k lepšímu zabezpečení účtu a pro lékaře, aby Vás mohl
+                        <paper-tooltip for="phone-tooltip" offset="0">Telefonní číslo slouží k lepšímu zabezpečení účtu
+                            a pro lékaře, aby Vás mohl
                             kontaktovat.
                         </paper-tooltip>
                     </form>
                 </section>
             </div>
 
-            <span id="conditions">
-<!--                Kliknutím na tlačítko Registrovat vyjádříte svůj souhlas s našimi
-                <a href="#">podmínkami</a> a potvrdíte, že jste obeznámeni s našimi
-                <a href="#">zásadami používání dat.</a>-->
-            </span>
+            <!--<span id="conditions">-->
+            <!--                Kliknutím na tlačítko Registrovat vyjádříte svůj souhlas s našimi
+                            <a href="#">podmínkami</a> a potvrdíte, že jste obeznámeni s našimi
+                            <a href="#">zásadami používání dat.</a>-->
+            <!--</span>-->
 
             <paper-button id="confirm-button" responsive on-tap="confirm" raised>
                 Registrovat
