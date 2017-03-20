@@ -136,6 +136,12 @@
             validPrefix: '/office/registration',
 
             properties: {
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                },
 
                 firebaseDatabase: {
                     type: Object,
@@ -391,7 +397,8 @@
             },
 
             notifyGenerator: function (postData) {
-                var request = new XMLHttpRequest();
+                var request = new XMLHttpRequest(),
+                    appName = this.appName;
 
                 request.onerror = function () {
                     this.fire("show-dialog", {
@@ -404,7 +411,7 @@
                 }.bind(this);
 
                 // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("POST", "https://doctor-appointment-system.appspot-preview.com/registration/generate", true);
+                request.open("POST", "https://" + appName + ".appspot-preview.com/registration/generate", true);
 
                 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 

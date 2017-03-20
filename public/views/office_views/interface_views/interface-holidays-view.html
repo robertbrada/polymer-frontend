@@ -340,6 +340,7 @@
 
             sendAdditionRequest: function (postData) {
                 var request = new XMLHttpRequest(),
+                    appName = this.appName,
                     jsonResponse;
 
                 request.onerror = function () {
@@ -359,7 +360,7 @@
                 }.bind(this);
 
                 // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("POST", "https://doctor-appointment-system.appspot-preview.com/holiday/add", true);
+                request.open("POST", "https://" + appName + ".appspot-preview.com/holiday/add", true);
 
                 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
@@ -368,6 +369,7 @@
 
             sendDeletionRequest: function (postData) {
                 var request = new XMLHttpRequest(),
+                    appName = this.appName,
                     jsonResponse;
 
                 request.onerror = function () {
@@ -387,7 +389,7 @@
                 }.bind(this);
 
                 // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("POST", "https://doctor-appointment-system.appspot-preview.com/holiday/delete", true);
+                request.open("POST", "https://" + appName + ".appspot-preview.com/holiday/delete", true);
 
                 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
