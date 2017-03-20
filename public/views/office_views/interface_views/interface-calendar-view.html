@@ -286,12 +286,14 @@
                             <iron-collapse opened="[[time.infoOpened]]">
                                 <div class="collapse-content flex-horizontal-buttons">
                                     <div class="flexchild">
-                                        <template is="dom-if" if="[[computeIfOnlinePatient(time.appointmentData.source)]]">
+                                        <template is="dom-if"
+                                                  if="[[computeIfOnlinePatient(time.appointmentData.source)]]">
                                             <b>Datum narození: </b>[[computeDateOfBirth(time.appointmentData.dateOfBirth)]]<br>
                                             <b>Adresa: </b>[[computeAddress(time.appointmentData.address)]]<br>
                                         </template>
 
-                                        <template is="dom-if" if="[[computeTextAvailability(time.appointmentData.message)]]">
+                                        <template is="dom-if"
+                                                  if="[[computeTextAvailability(time.appointmentData.message)]]">
                                             <b>Zpráva: </b>[[time.appointmentData.message]]
                                         </template>
                                     </div>
@@ -460,7 +462,7 @@
             },
 
             observeIfSynced: function (rawPrivateSynced, monthTimesSynced) {
-                if (rawPrivateSynced && monthTimesSynced) {
+                if (rawPrivateSynced && monthTimesSynced && !!this.selectedDate) { //when logout and login again no date is selected
                     this.setSelectedDateTimes(this.rawPrivate, this.monthTimes, this.selectedDate.dateId);
 
                     // Reset object
