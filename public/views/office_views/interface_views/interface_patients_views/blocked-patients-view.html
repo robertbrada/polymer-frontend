@@ -29,7 +29,7 @@
                 padding: 1em;
             }
 
-            .pagination-buttons paper-button{
+            .pagination-buttons paper-button {
                 margin: 0;
             }
 
@@ -105,8 +105,8 @@
         </template>
 
         <div class="pagination-buttons">
-            <paper-button raised on-tap="previous" disabled="[[computeDisabledPrevious(selectedIdIndex)]]">Předchozí</paper-button>
-            <paper-button raised style="float: right" on-tap="next" disabled="[[computeDisabledNext(patientsArray)]]">Další</paper-button>
+            <paper-button raised on-tap="previous" disabled="[[previousDisabled]]">Předchozí</paper-button>
+            <paper-button raised style="float: right" on-tap="next" disabled="[[nextDisabled]]">Další</paper-button>
         </div>
 
     </template>
@@ -148,6 +148,18 @@
                 selectedIdIndex: {
                     type: Number,
                     value: null
+                },
+
+                nextDisabled: {
+                    type: Boolean,
+                    value: true,
+                    computed: "computeNextDisabled(patientsArray)"
+                },
+
+                previousDisabled: {
+                    type: Boolean,
+                    value: true,
+                    computed: "computePreviousDisabled(selectedIdIndex)"
                 }
             },
 
@@ -256,12 +268,12 @@
                 return dateOfBirth.date + ". " + dateOfBirth.month + ". " + dateOfBirth.year;
             },
 
-            computeDisabledPrevious: function (selectedIdIndex) {
-                return selectedIdIndex === 0;
+            computeNextDisabled: function (patientsArray) {
+                return this.numberToFetch !== patientsArray.length;
             },
 
-            computeDisabledNext: function (patientsArray) {
-                return this.numberToFetch !== patientsArray.length;
+            computePreviousDisabled: function (selectedIdIndex) {
+                return selectedIdIndex === 0;
             }
         });
     </script>
