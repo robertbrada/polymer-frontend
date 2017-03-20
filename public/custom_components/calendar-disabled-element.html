@@ -12,9 +12,9 @@
         <style include="button-styles">
         </style>
 
-        <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}" user="{{user}}"></firebase-auth>
+        <firebase-auth id="auth" app-name="[[appName]]" status-known="{{statusKnown}}" user="{{user}}"></firebase-auth>
 
-        <firebase-document id="user_contacted_document" app-name="doctor-appointment-system"
+        <firebase-document id="user_contacted_document" app-name="[[appName]]"
                            path="/userContactedOffices/[[user.uid]]/[[officeId]]" data="{{userContactedOffice}}">
         </firebase-document>
 
@@ -31,6 +31,13 @@
             is: 'calendar-disabled-element',
 
             properties: {
+
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                },
 
                 disabledCalendar: {
                     type: Boolean,

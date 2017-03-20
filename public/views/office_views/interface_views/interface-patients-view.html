@@ -28,7 +28,7 @@
 
         </style>
 
-        <firebase-document id="patients_document" app-name="doctor-appointment-system"
+        <firebase-document id="patients_document" app-name="[[appName]]"
                            path="/officePatients/[[officeId]]"
                            data="{{officePatients}}">
         </firebase-document>
@@ -62,6 +62,13 @@
             is: 'interface-patients-view',
 
             properties: {
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                },
+
                 selected: {
                     type: String,
                     value: "confirm-patients", // First selected view

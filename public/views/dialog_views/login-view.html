@@ -3,7 +3,7 @@
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/button-styles.html">
@@ -46,8 +46,6 @@
 
         </style>
 
-        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
-
         <p class="error">{{errorMessage}}</p>
 
         <!--TODO: bug fix of faulty autofocus-->
@@ -88,7 +86,7 @@
             },
 
             signInWithEmailAndPassword: function () {
-                this.$.auth.signInWithEmailAndPassword(this.email, this.password).then(function () {
+                firebase.apps[0].auth().signInWithEmailAndPassword(this.email, this.password).then(function () {
                     this.fire("show-toast", {text: "Přihlášeno"});
                 }.bind(this)).catch(function (error) {
                     switch (error["code"]) {

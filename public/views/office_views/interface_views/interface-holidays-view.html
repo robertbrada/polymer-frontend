@@ -170,7 +170,7 @@
 
         </style>
 
-        <firebase-document id="holidays_document" app-name="doctor-appointment-system"
+        <firebase-document id="holidays_document" app-name="[[appName]]"
                            path="/officeHolidays/[[officeId]]"
                            data="{{officeHolidays}}">
         </firebase-document>
@@ -240,6 +240,13 @@
             is: 'interface-holidays-view',
 
             properties: {
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                },
+
                 hideErrorMessage: {
                     type: Boolean,
                     value: true

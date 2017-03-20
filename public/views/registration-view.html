@@ -106,7 +106,7 @@
 
         </style>
 
-        <firebase-auth id="auth" app-name="doctor-appointment-system"></firebase-auth>
+        <firebase-auth id="auth" app-name="[[appName]]"></firebase-auth>
 
         <date-validator validator-name="dateValidator"></date-validator>
 
@@ -186,7 +186,8 @@
                                           value="{{officeData.information.phoneNumber}}">
                         </gold-phone-input>
                         <span id="phone-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést své telefonní číslo?</span>
-                        <paper-tooltip for="phone-tooltip" offset="0">Telefonní číslo slouží k lepšímu zabezpečení účtu a pro lékaře, aby Vás mohl kontaktovat.
+                        <paper-tooltip for="phone-tooltip" offset="0">Telefonní číslo slouží k lepšímu zabezpečení účtu a pro lékaře, aby Vás mohl
+                            kontaktovat.
                         </paper-tooltip>
                     </form>
                 </section>
@@ -209,6 +210,15 @@
             is: 'registration-view',
 
             behaviors: [FormValidationBehavior, PassVisibilityBehavior],
+
+            properties: {
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                }
+            },
 
             confirm: function () {
                 var form1Validity = this._validateForm(this.$.form1),

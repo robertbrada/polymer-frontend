@@ -57,7 +57,7 @@
 
         </style>
 
-        <firebase-auth id="auth" app-name="doctor-appointment-system" status-known="{{statusKnown}}"
+        <firebase-auth id="auth" app-name="[[appName]]" status-known="{{statusKnown}}"
                        user="{{user}}"></firebase-auth>
 
         <div hidden="[[loggedIn]]">
@@ -75,6 +75,13 @@
             is: 'login-required-element',
 
             properties: {
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                },
+
                 loggedIn: {
                     type: Boolean,
                     computed: 'computeLoggedInProperty(statusKnown, user)',

@@ -75,9 +75,10 @@
             });
         }
     </script>
-    
+
     <!-- Polymerfire bug, viz: http://stackoverflow.com/a/41450672/3952906 -->
-    <link rel="import" href="/bower_components/polymerfire/polymerfire.html">
+    <link rel="import" href="/bower_components/polymerfire/firebase-app.html">
+    <link rel="import" href="/bower_components/polymerfire/firebase-document.html">
     <link rel="import" href="/core-scaffold.html">
 
     <style>
@@ -91,7 +92,8 @@
     </style>
 </head>
 <body>
-<firebase-app name="doctor-appointment-system"
+<firebase-app id="main_app"
+              name="doctor-appointment-system"
               api-key="AIzaSyAGllVgFQns9sv__I2MjU0WzWttC-5c4Cc"
               auth-domain="doctor-appointment-system.firebaseapp.com"
               database-url="https://doctor-appointment-system.firebaseio.com"

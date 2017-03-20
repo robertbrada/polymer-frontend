@@ -132,7 +132,7 @@
 
         </style>
 
-        <firebase-document id="appointment_document" app-name="doctor-appointment-system" path="/userAppointments/[[userId]]"
+        <firebase-document id="appointment_document" app-name="[[appName]]" path="/userAppointments/[[userId]]"
                            data="{{appointmentsRaw}}">
         </firebase-document>
 
@@ -194,6 +194,13 @@
             is: 'appointments-view',
 
             properties: {
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                },
+
                 appointmentsArray: {
                     type: Array,
                     computed: 'computeAppointments(appointmentsRaw)'

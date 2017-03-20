@@ -68,7 +68,7 @@
 
         </style>
 
-        <firebase-document id="verify_document" app-name="doctor-appointment-system"
+        <firebase-document id="verify_document" app-name="[[appName]]"
                            path="/officePatientsToVerify/[[officeId]]"
                            data="{{officePatientsToVerify}}">
         </firebase-document>
@@ -115,6 +115,14 @@
             is: 'confirm-patients-view',
 
             properties: {
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                },
+
+
                 patientsArray: {
                     type: Array,
                     computed: 'computePatientsArray(officePatientsToVerify)'
