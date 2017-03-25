@@ -1,5 +1,21 @@
 {
   "rules": {
+    "taskQueue": {
+      ".read": "auth.uid === 'my-service-worker'",
+      ".write": "auth.uid === 'my-service-worker'",
+      "holidayAddition": {
+        "$tid": {
+          ".write": "root.child('officeAdminInfo/' + newData.child('officeId').val() + '/users/' + auth.uid).exists()",
+          ".validate": "newData.child('startAt').isNumber() && newData.child('endAt').isNumber()"
+        }
+      },
+      "holidayDeletion": {
+        "$tid": {
+          ".write": "root.child('officeAdminInfo/' + newData.child('officeId').val() + '/users/' + auth.uid).exists()",
+          ".validate": "newData.child('holidayId').isNumber()"
+        }
+      }
+    },
     "userInfo": {
       "$uid": {
         ".read": "$uid === auth.uid",

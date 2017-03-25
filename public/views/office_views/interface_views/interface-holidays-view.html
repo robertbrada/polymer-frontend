@@ -224,8 +224,11 @@
                         <div hidden="[[!holiday.substituteDoctorName]]"><b>Zastupující lékař:</b>
                             [[holiday.substituteDoctorName]]
                         </div>
+                        <div hidden="[[computeStatusHiddenness(holiday.status)]]"><b>Status:</b>
+                            [[computeStatus(holiday.status)]]
+                        </div>
                     </div>
-                    <paper-button class="dismiss-button" raised on-tap="deleteHolidays">
+                    <paper-button hidden="[[computeButtonHiddenness(holiday.status)]]" class="dismiss-button" raised on-tap="deleteHolidays">
                         <iron-icon icon="close"></iron-icon>
                         Odstranit
                     </paper-button>
@@ -281,6 +284,7 @@
                         'name': officeHolidays[key]['name'],
                         'startAt': getFormattedDateTime(Number(key)),
                         'endAt': getFormattedDateTime(officeHolidays[key]['endAt']),
+                        'status': officeHolidays[key]['status'],
                         'substituteDoctorName': officeHolidays[key]['substituteDoctorName'],
                         'hId': key
                     }
@@ -305,105 +309,80 @@
             },
 
             addHolidays: function () {
-                var postData = {
+                var db = this.$.holidays_document.app.database(),
+                    objectToSave = {},
+                    hId = this.fromDateTime.valueOf(),
+                    endAt = this.toDateTime.valueOf(),
+                    name = this.holidayName,
+                    officeId = this.officeId,
+                    substituteDoctorName = this.substituteDoctorName;
+
+                objectToSave["/officeHolidays/" + officeId + "/" + hId] = {
+                    endAt: endAt,
+                    name: name,
+                    status: "awaitsAddition",
+                    substituteDoctorName: substituteDoctorName
+                };
+
+                objectToSave["/taskQueue/holidayAddition/" + db.ref().push().key] = {
+                    officeId: this.officeId,
                     startAt: this.fromDateTime.valueOf(),
                     endAt: this.toDateTime.valueOf(),
-                    name: this.holidayName,
-                    officeId: this.officeId,
                     substituteDoctorName: this.substituteDoctorName
                 };
 
-                this.getTokenAndSendRequest(postData, false);
+                this.saveAndNotify(db, objectToSave)
             },
 
             deleteHolidays: function (event) {
-                var postData = {
-                    officeId: this.officeId,
-                    holidayId: event.model.holiday.hId
+                var db = this.$.holidays_document.app.database(),
+                    objectToSave = {},
+                    officeId = this.officeId,
+                    hId = event.model.holiday.hId;
+
+                objectToSave["/taskQueue/holidayDeletion/" + db.ref().push().key] = {
+                    officeId: officeId,
+                    holidayId: Number(hId)
                 };
 
-                this.getTokenAndSendRequest(postData, true);
+                objectToSave["/officeHolidays/" + officeId + "/" + hId + "/status"] = "awaitsDeletion";
+
+                this.saveAndNotify(db, objectToSave);
             },
 
-            getTokenAndSendRequest: function (postData, deletion) {
-                this.$.holidays_document.app.auth().currentUser.getToken(true).then(function (idToken) {
-                    postData["idToken"] = idToken;
-                    if (deletion) {
-                        this.sendDeletionRequest(postData);
-                    } else {
-                        this.sendAdditionRequest(postData);
-                    }
-                }.bind(this)).catch(function () {
-                    this.showErrorDialog('Nepodařilo se získat autorizační token. Zkuste se odhlásit a přihlásit.');
+            saveAndNotify: function (db, objectToSave) {
+                db.ref("/").update(objectToSave).then(function () {
+                    this.fire("show-toast", {text: "Změna uložena"});
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání změn se vyskytla chyba.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
                 }.bind(this));
+
+                // TODO: notify task processor
             },
 
-            sendAdditionRequest: function (postData) {
-                var request = new XMLHttpRequest(),
-                    appName = this.appName,
-                    jsonResponse;
-
-                request.onerror = function () {
-                    this.showErrorDialog('Při ukládání dovolené se vyskytla chyba. Pravděpodobně se vyskytl problém s internetovým připojením.' +
-                        'Zkuste to prosím znovu.');
-                }.bind(this);
-
-                request.onreadystatechange = function () {
-                    if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
-                        jsonResponse = JSON.parse(request.responseText);
-                        if (jsonResponse["success"]) {
-                            this.fire("show-toast", {text: "Požadavek se zpracovává"});
-                        } else {
-                            this.showErrorDialog('Při ukládání dovolené se vyskytla chyba. Zkuste to prosím znovu.');
-                        }
-                    }
-                }.bind(this);
-
-                // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("POST", "https://" + appName + ".appspot-preview.com/holiday/add", true);
-
-                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-                request.send(JSON.stringify(postData));
+            computeStatus: function (status) {
+                switch(status) {
+                    case "awaitsAddition":
+                        return "Čeká na zpracování";
+                    case "awaitsDeletion":
+                        return "Čeká na odstranění";
+                    default:
+                        return null;
+                }
             },
 
-            sendDeletionRequest: function (postData) {
-                var request = new XMLHttpRequest(),
-                    appName = this.appName,
-                    jsonResponse;
-
-                request.onerror = function () {
-                    this.showErrorDialog('Při odstraňování dovolené se vyskytla chyba. Pravděpodobně se vyskytl problém s internetovým připojením.' +
-                        'Zkuste to prosím znovu.');
-                }.bind(this);
-
-                request.onreadystatechange = function () {
-                    if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
-                        jsonResponse = JSON.parse(request.responseText);
-                        if (jsonResponse["success"]) {
-                            this.fire("show-toast", {text: "Požadavek se zpracovává"});
-                        } else {
-                            this.showErrorDialog('Při odstraňování dovolené se vyskytla chyba. Zkuste to prosím znovu.');
-                        }
-                    }
-                }.bind(this);
-
-                // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("POST", "https://" + appName + ".appspot-preview.com/holiday/delete", true);
-
-                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-                request.send(JSON.stringify(postData));
+            computeStatusHiddenness: function (status) {
+                return status === "processed";
             },
 
-            showErrorDialog: function (message) {
-                this.fire("show-dialog", {
-                    path: "", viewName: "genericdialog", open: true,
-                    data: {
-                        text: message,
-                        buttonText: 'Zavřít'
-                    }
-                });
+            computeButtonHiddenness: function (status) {
+                return status === "awaitsDeletion";
             },
 
             computeIfEmpty: function (holidaysArray) {
