@@ -3,16 +3,21 @@
     "taskQueue": {
       ".read": "auth.uid === 'my-service-worker'",
       ".write": "auth.uid === 'my-service-worker'",
-      "holidayAddition": {
+      "holidayAdditions": {
         "$tid": {
           ".write": "root.child('officeAdminInfo/' + newData.child('officeId').val() + '/users/' + auth.uid).exists()",
           ".validate": "newData.child('startAt').isNumber() && newData.child('endAt').isNumber()"
         }
       },
-      "holidayDeletion": {
+      "holidayDeletions": {
         "$tid": {
           ".write": "root.child('officeAdminInfo/' + newData.child('officeId').val() + '/users/' + auth.uid).exists()",
           ".validate": "newData.child('holidayId').isNumber()"
+        }
+      },
+      "indexUpdates": {
+        "$oid": {
+          ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
         }
       }
     },
@@ -114,13 +119,6 @@
     },
     "officeSearchInfo": {
       ".read": true,
-      "$oid": {
-        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
-      }
-    },
-    "awaitsIndexing": {
-      ".read": "auth.uid === 'my-service-worker'",
-      ".write": "auth.uid === 'my-service-worker'",
       "$oid": {
         ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
       }

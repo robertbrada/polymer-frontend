@@ -324,7 +324,7 @@
                     substituteDoctorName: substituteDoctorName
                 };
 
-                objectToSave["/taskQueue/holidayAddition/" + db.ref().push().key] = {
+                objectToSave["/taskQueue/holidayAdditions/" + db.ref().push().key] = {
                     officeId: this.officeId,
                     startAt: this.fromDateTime.valueOf(),
                     endAt: this.toDateTime.valueOf(),
@@ -340,7 +340,7 @@
                     officeId = this.officeId,
                     hId = event.model.holiday.hId;
 
-                objectToSave["/taskQueue/holidayDeletion/" + db.ref().push().key] = {
+                objectToSave["/taskQueue/holidayDeletions/" + db.ref().push().key] = {
                     officeId: officeId,
                     holidayId: Number(hId)
                 };

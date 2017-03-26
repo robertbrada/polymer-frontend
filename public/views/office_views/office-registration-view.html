@@ -346,7 +346,7 @@
                 };
                 objectToSave['/officeAdminInfo/' + officeId]['users'][this.userId] = 'admin';
                 objectToSave['/officeSearchInfo/' + officeId] = indexAndSearchInfo;
-                objectToSave['/awaitsIndexing/' + officeId] = indexAndSearchInfo;
+                objectToSave['/taskQueue/indexUpdates/' + officeId] = indexAndSearchInfo;
                 objectToSave['/userOffices/' + userId + '/' + officeId] = {
                     'role': 'admin',
                     'name': data.fullInfo.address.city + ', ' + data.fullInfo.address.street

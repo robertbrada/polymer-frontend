@@ -222,7 +222,7 @@
 
                     objectToSave['/officeFullInfo/' + officeId] = officeFullInfo;
                     objectToSave['/officeSearchInfo/' + officeId] = indexAndSearchInfo;
-                    objectToSave['/awaitsIndexing/' + officeId] = indexAndSearchInfo;
+                    objectToSave['/taskQueue/indexUpdates/' + officeId] = indexAndSearchInfo;
 
                     db.ref('/').update(objectToSave);
 
