@@ -317,6 +317,10 @@
                     officeId = this.officeId,
                     substituteDoctorName = this.substituteDoctorName;
 
+                if (!(!!substituteDoctorName)) substituteDoctorName = null;
+
+                objectToSave["/taskQueue/holidayDeletions/" + officeId + "/" + hId] = null;
+
                 objectToSave["/officeHolidays/" + officeId + "/" + hId] = {
                     endAt: endAt,
                     name: name,
@@ -324,11 +328,10 @@
                     substituteDoctorName: substituteDoctorName
                 };
 
-                objectToSave["/taskQueue/holidayAdditions/" + db.ref().push().key] = {
-                    officeId: this.officeId,
-                    startAt: this.fromDateTime.valueOf(),
-                    endAt: this.toDateTime.valueOf(),
-                    substituteDoctorName: this.substituteDoctorName
+                objectToSave["/taskQueue/holidayAdditions/" + officeId + "/" + hId] = {
+                    officeId: officeId,
+                    endAt: endAt,
+                    substituteDoctorName: substituteDoctorName
                 };
 
                 this.saveAndNotify(db, objectToSave)
@@ -338,13 +341,11 @@
                 var db = this.$.holidays_document.app.database(),
                     objectToSave = {},
                     officeId = this.officeId,
-                    hId = event.model.holiday.hId;
+                    hId = event.model.holiday.hId,
+                    endAt = this.officeHolidays[hId].endAt;
 
-                objectToSave["/taskQueue/holidayDeletions/" + db.ref().push().key] = {
-                    officeId: officeId,
-                    holidayId: Number(hId)
-                };
-
+                objectToSave["/taskQueue/holidayDeletions/" + officeId + "/" + hId] = endAt;
+                objectToSave["/taskQueue/holidayAdditions/" + officeId + "/" + hId] = null;
                 objectToSave["/officeHolidays/" + officeId + "/" + hId + "/status"] = "awaitsDeletion";
 
                 this.saveAndNotify(db, objectToSave);
@@ -363,11 +364,27 @@
                     });
                 }.bind(this));
 
-                // TODO: notify task processor
+                this.notifyTaskProcessor();
+            },
+
+            notifyTaskProcessor: function () {
+                var request = new XMLHttpRequest(),
+                    appName = this.appName;
+
+                request.onerror = function () {
+                    // TODO: handle error
+                };
+
+                // TODO: enable pre-flight request redirection when CORS standard catches up
+                request.open("GET", "https://" + appName + ".appspot-preview.com/tasks/process", true);
+
+                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                request.send();
             },
 
             computeStatus: function (status) {
-                switch(status) {
+                switch (status) {
                     case "awaitsAddition":
                         return "Čeká na zpracování";
                     case "awaitsDeletion":

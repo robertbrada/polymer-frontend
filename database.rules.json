@@ -4,15 +4,19 @@
       ".read": "auth.uid === 'my-service-worker'",
       ".write": "auth.uid === 'my-service-worker'",
       "holidayAdditions": {
-        "$tid": {
-          ".write": "root.child('officeAdminInfo/' + newData.child('officeId').val() + '/users/' + auth.uid).exists()",
-          ".validate": "newData.child('startAt').isNumber() && newData.child('endAt').isNumber()"
+        "$oid": {
+          ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          "$hid": {
+            ".validate": "newData.child('endAt').isNumber()"
+          }
         }
       },
       "holidayDeletions": {
-        "$tid": {
-          ".write": "root.child('officeAdminInfo/' + newData.child('officeId').val() + '/users/' + auth.uid).exists()",
-          ".validate": "newData.child('holidayId').isNumber()"
+        "$oid": {
+          ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          "$hid": {
+            ".validate": "newData.isNumber()"
+          }
         }
       },
       "indexUpdates": {
@@ -68,7 +72,7 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
         "numberOfNotifications": {
-          ".read": "root.child('userOffices/' + auth.uid).exists()",
+          ".read": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".write": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".validate": "newData.isNumber() && newData.val() >= 0"
         }
@@ -97,6 +101,7 @@
       }
     },
     "userNotifications": {
+      ".write": "auth.uid === 'my-service-worker'",
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
@@ -160,7 +165,10 @@
     "officeHolidays": {
       "$oid": {
         ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
-        ".write": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+        ".write": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        "status": {
+          ".validate": "newData.isString() && (newData.val() == 'awaitsDeletion' || newData.val() == 'processed' || newData.val() == 'awaitsAddition')"
+        }
       }
     },
     "officeInterfaceInfo": {

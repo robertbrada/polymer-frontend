@@ -371,32 +371,13 @@
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/welcome/' + officeId});
                         if (data.officeInterfaceInfo.services.onlineBooking) {
-                            this.getTokenAndNotifyGenerator(officeId);
+                            this.notifyGenerator(officeId);
                         }
                     }
                 }.bind(this));
             },
 
-            getTokenAndNotifyGenerator: function (officeId) {
-                firebase.apps[0].auth().currentUser.getToken(true).then(function (idToken) {
-
-                    this.notifyGenerator({
-                        officeId: officeId,
-                        idToken: idToken
-                    });
-
-                }.bind(this)).catch(function () {
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'V průběhu příštích 24 hodin budou vygenerovány první termíny.',
-                            buttonText: 'Zavřít'
-                        }
-                    });
-                }.bind(this));
-            },
-
-            notifyGenerator: function (postData) {
+            notifyGenerator: function (officeId) {
                 var request = new XMLHttpRequest(),
                     appName = this.appName;
 
@@ -411,11 +392,11 @@
                 }.bind(this);
 
                 // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("POST", "https://" + appName + ".appspot-preview.com/registration/generate", true);
+                request.open("GET", "https://" + appName + ".appspot-preview.com/registration/generate?officeid=" + officeId, true);
 
                 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-                request.send(JSON.stringify(postData));
+                request.send();
             },
 
             savePhoto: function (data, officeID) {
