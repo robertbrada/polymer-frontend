@@ -341,14 +341,13 @@
 
                 objectToSave['/officeFullInfo/' + officeId] = data.fullInfo;
                 objectToSave['/userInterfaceInfo/' + userId + '/showOfficeInterface'] = true;
-                objectToSave['/officeAdminInfo/' + officeId] = {
-                    'users': {}
-                };
-                objectToSave['/officeAdminInfo/' + officeId]['users'][this.userId] = 'admin';
+                objectToSave['/officePermissions/' + officeId + '/' + this.userId + '/admin'] = true;
                 objectToSave['/officeSearchInfo/' + officeId] = indexAndSearchInfo;
                 objectToSave['/taskQueue/indexUpdates/' + officeId] = indexAndSearchInfo;
                 objectToSave['/userOffices/' + userId + '/' + officeId] = {
-                    'role': 'admin',
+                    'permissions': {
+                        'admin': true
+                    },
                     'name': data.fullInfo.address.city + ', ' + data.fullInfo.address.street
                 };
 
@@ -371,9 +370,9 @@
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/welcome/' + officeId});
                         // TODO: activate when there is stable server running
-/*                        if (data.officeInterfaceInfo.services.onlineBooking) {
-                            this.notifyGenerator(officeId);
-                        }*/
+                        /*                        if (data.officeInterfaceInfo.services.onlineBooking) {
+                         this.notifyGenerator(officeId);
+                         }*/
                     }
                 }.bind(this));
             },

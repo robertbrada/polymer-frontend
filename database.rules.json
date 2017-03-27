@@ -5,7 +5,7 @@
       ".write": "auth.uid === 'my-service-worker'",
       "holidayAdditions": {
         "$oid": {
-          ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
           "$hid": {
             ".validate": "newData.child('endAt').isNumber()"
           }
@@ -13,7 +13,7 @@
       },
       "holidayDeletions": {
         "$oid": {
-          ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
           "$hid": {
             ".validate": "newData.isNumber()"
           }
@@ -21,7 +21,7 @@
       },
       "indexUpdates": {
         "$oid": {
-          ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+          ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()"
         }
       }
     },
@@ -72,6 +72,7 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
         "numberOfNotifications": {
+//          TODO: check if bullshit
           ".read": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".write": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".validate": "newData.isNumber() && newData.val() >= 0"
@@ -83,7 +84,7 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
         "$oid": {
-          ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
           "status": {
             ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'accessed' || newData.val() === 'blocked'"
           }
@@ -96,7 +97,7 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
         "$aid": {
-          ".write": "root.child('officeAdminInfo/' + data.child('officeId').val() + '/users/' + auth.uid).exists()"
+          ".write": "root.child('officePermissions/' + data.child('officeId').val() + '/' + auth.uid + '/admin').exists()"
         }
       }
     },
@@ -106,14 +107,14 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
         "$nid": {
-          ".write": "root.child('officeAdminInfo/' + newData.child('sender').val() + '/users/' + auth.uid).exists() && root.child('userContactedOffices/' + $uid + '/' + newData.child('sender').val()).exists()"
+          ".write": "root.child('officePermissions/' + newData.child('sender').val() + '/' + auth.uid + '/admin').exists() && root.child('userContactedOffices/' + $uid + '/' + newData.child('sender').val()).exists()"
         }
       }
     },
     "officeFullInfo": {
       "$oid": {
         ".read": true,
-        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "holidays": {
           ".write": "auth.uid === 'my-service-worker'"
         },
@@ -125,19 +126,19 @@
     "officeSearchInfo": {
       ".read": true,
       "$oid": {
-        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'"
+        ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()"
       }
     },
-    "officeAdminInfo": {
+    "officePermissions": {
       "$oid": {
-        ".read": "data.child('users/' + auth.uid).val() === 'admin'",
-        ".write": "!data.exists() || data.child('users/' + auth.uid).val() === 'admin'"
+        ".read": "data.child(auth.uid + '/admin').exists()",
+        ".write": "!data.exists() || data.child(auth.uid + '/admin').exists()"
       }
     },
     "officePatients": {
       "$oid": {
-        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "$uid": {
           ".write": "data.exists() && $uid === auth.uid || !data.exists() && root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false"
         }
@@ -145,8 +146,8 @@
     },
     "officeBlockedPatients": {
       "$oid": {
-        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "$uid": {
           ".write": "data.exists() && $uid === auth.uid"
         }
@@ -155,8 +156,8 @@
     // Doesn't validate if email is verified. Couldn't get it working.
     "officePatientsToVerify": {
       "$oid": {
-        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "$uid": {
           ".write": "$uid === auth.uid && !root.child('officePatients/' + $oid + '/' + $uid).exists() && !root.child('officeBlockedPatients/' + $oid + '/' + $uid).exists()"
         }
@@ -164,8 +165,8 @@
     },
     "officeHolidays": {
       "$oid": {
-        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
-        ".write": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "auth.uid === 'my-service-worker' || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "status": {
           ".validate": "newData.isString() && (newData.val() == 'awaitsDeletion' || newData.val() == 'processed' || newData.val() == 'awaitsAddition')"
         }
@@ -173,12 +174,12 @@
     },
     "officeInterfaceInfo": {
       "$oid": {
-        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         // TODO: It's hackable. Moving the logic to backend would solve the issue. Low priority
         "patientsToVerify": {
-          ".read": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-          ".write": "!data.exists() || root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+          ".read": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+          ".write": "!data.exists() || root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
           ".validate": "newData.isNumber() && newData.val() >= 0"
         }
       }
@@ -187,8 +188,8 @@
     "generatorInfo": {
       ".read": "auth.uid === 'my-service-worker'",
       "$oid": {
-        ".read": "root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "!data.exists() || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).val() === 'admin'",
+        ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "officeHours": {
           "dayIndex": {
             "available": {
@@ -229,7 +230,7 @@
     "appointmentsPublic": {
       ".read": true,
       "$oid": {
-        ".write": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".write": "auth.uid === 'my-service-worker' || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "$aid": {
           ".write": "auth !== null && auth.token.email_verified == true && ((data.val() === true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.val() === false && root.child('appointmentsPrivate/' + $oid + '/' + $aid + '/patient').val() === auth.uid)"
         }
@@ -237,8 +238,8 @@
     },
     "appointmentsPrivate": {
       "$oid": {
-        ".read": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
-        ".write": "auth.uid === 'my-service-worker' || root.child('officeAdminInfo/' + $oid + '/users/' + auth.uid).exists()",
+        ".read": "auth.uid === 'my-service-worker' || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "auth.uid === 'my-service-worker' || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "$aid": {
           ".write": "auth !== null && ((!data.exists() && auth.token.email_verified == true && (root.child('officeFullInfo/' + $oid + '/manualConfirmation').val() === false || root.child('officePatients/' + $oid + '/' + auth.uid).exists())) || data.child('patient').val() === auth.uid)",
           "source": {
@@ -250,7 +251,7 @@
     "issues": {
       "$iid": {
         ".read": false,
-        ".write": "root.child('officeAdminInfo/' + newData.child('officeId').val() + '/users/' + auth.uid).exists()",
+        ".write": "root.child('officePermissions/' + newData.child('officeId').val() + '/' + auth.uid + '/admin').exists()",
         "message": {
           ".validate": "newData.isString() && newData.val().length <= 2000"
         }

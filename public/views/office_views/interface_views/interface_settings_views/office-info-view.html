@@ -212,7 +212,7 @@
                         'sex': officeFullInfo.sex
                     };
 
-                db.ref('/officeAdminInfo/' + officeId + '/users').once('value').then(function (snapshot) {
+                db.ref('/officePermissions/' + officeId).once('value').then(function (snapshot) {
                     officeUserIds = Object.keys(snapshot.val());
                     officeName = officeFullInfo.address.city + ', ' + officeFullInfo.address.street;
 
