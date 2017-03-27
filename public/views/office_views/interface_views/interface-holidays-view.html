@@ -39,6 +39,7 @@
 
             .error {
                 color: var(--app-red-color);
+                padding-bottom: 0.5em;
             }
 
             /** NEW HOLIDAY **/
@@ -103,6 +104,21 @@
 
             #holiday {
                 border-top: 1px solid #dadbdd;
+            }
+
+            #holiday-status-container {
+                color: var(--app-grey-text-color);
+                margin-top: 0.5em;
+                padding-top: 0.5em;
+                border-top: 1px solid var(--border-color);
+            }
+
+            #holiday-status-container iron-icon{
+                color: var(--app-green-color);
+                margin-right: 0.4em;
+                margin-top: -3px;
+                height: 20px;
+                width: 20px;
             }
 
             .dismiss-button {
@@ -224,7 +240,7 @@
                         <div hidden="[[!holiday.substituteDoctorName]]"><b>Zastupující lékař:</b>
                             [[holiday.substituteDoctorName]]
                         </div>
-                        <div hidden="[[computeStatusHiddenness(holiday.status)]]"><b>Status:</b>
+                        <div id="holiday-status-container"  class="tooltip" hidden="[[computeStatusHiddenness(holiday.status)]]" title="Požadavek na přidání/odstranění dovolené bude zpracován do 24 hodin."><iron-icon icon="help"></iron-icon><b>Status:</b>
                             [[computeStatus(holiday.status)]]
                         </div>
                     </div>
