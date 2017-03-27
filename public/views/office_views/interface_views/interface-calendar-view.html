@@ -536,20 +536,21 @@
             setSelectedDateTimes: function (rawPrivate, monthTimes, dateId) {
                 var i, rawDateTimes = monthTimes[dateId], times, time;
 
-                if (rawDateTimes === undefined) return [];
-
-                times = rawDateTimes.times;
-                for (i = 0; i < times.length; i++) {
-                    time = times[i];
-                    if (time.occupied) {
-                        if (rawPrivate === null) {
-                            time.occupied = false;
-                        } else {
-                            time.appointmentData = rawPrivate[time.id];
+                if (rawDateTimes === undefined) {
+                    times = [];
+                } else {
+                    times = rawDateTimes.times;
+                    for (i = 0; i < times.length; i++) {
+                        time = times[i];
+                        if (time.occupied) {
+                            if (rawPrivate === null) {
+                                time.occupied = false;
+                            } else {
+                                time.appointmentData = rawPrivate[time.id];
+                            }
                         }
                     }
                 }
-
                 this.set("selectedDateTimes", times);
             },
 
