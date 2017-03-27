@@ -370,9 +370,10 @@
                     } else {
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/welcome/' + officeId});
-                        if (data.officeInterfaceInfo.services.onlineBooking) {
+                        // TODO: activate when there is stable server running
+/*                        if (data.officeInterfaceInfo.services.onlineBooking) {
                             this.notifyGenerator(officeId);
-                        }
+                        }*/
                     }
                 }.bind(this));
             },

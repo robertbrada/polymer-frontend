@@ -105,7 +105,8 @@
                 background-color: var(--app-green-color);
                 color: white;
             }
-            .iron-selected.nav iron-icon{
+
+            .iron-selected.nav iron-icon {
                 color: white;
             }
 
@@ -216,22 +217,36 @@
 
                 <iron-selector attr-for-selected="name" selected="{{page}}" on-iron-activate="toggleDrawer">
                     <paper-item hidden="[[!officeInterfaceInfo.services.onlineBooking]]" name="waiting-list"
-                                class="nav"><iron-icon icon="editor:format-list-numbered"></iron-icon>Pořadník
+                                class="nav">
+                        <iron-icon icon="editor:format-list-numbered"></iron-icon>
+                        Pořadník
                     </paper-item>
                     <paper-item hidden="[[!officeInterfaceInfo.services.onlineBooking]]" name="calendar" class="nav">
                         <iron-icon icon="icons:today"></iron-icon>
                         Kalendář
                     </paper-item>
                     <paper-item hidden="[[!officeInterfaceInfo.services.onlineBooking]]" name="patients" class="nav">
-                        <iron-icon icon="social:group"></iron-icon>Pacienti
+                        <iron-icon icon="social:group"></iron-icon>
+                        Pacienti
                         <span hidden="[[!showNotifications(officeInterfaceInfo.patientsToVerify)]]" class="badge">
                             [[officeInterfaceInfo.patientsToVerify]]
                         </span>
                     </paper-item>
-                    <paper-item name="holidays" class="nav"><iron-icon icon="av:snooze"></iron-icon>Dovolená</paper-item>
-                    <paper-item name="settings" class="nav"><iron-icon icon="icons:settings"></iron-icon>Nastavení</paper-item>
-                    <paper-item name="help" id="help-tab" class="nav bottom-link"><iron-icon icon="icons:help"></iron-icon>Nápověda</paper-item>
-                    <paper-item name="contact" id="contact-tab" class="nav bottom-link"><iron-icon icon="communication:message"></iron-icon>Kontakt
+                    <paper-item name="holidays" class="nav">
+                        <iron-icon icon="av:snooze"></iron-icon>
+                        Dovolená
+                    </paper-item>
+                    <paper-item name="settings" class="nav">
+                        <iron-icon icon="icons:settings"></iron-icon>
+                        Nastavení
+                    </paper-item>
+                    <paper-item name="help" id="help-tab" class="nav bottom-link">
+                        <iron-icon icon="icons:help"></iron-icon>
+                        Nápověda
+                    </paper-item>
+                    <paper-item name="contact" id="contact-tab" class="nav bottom-link">
+                        <iron-icon icon="communication:message"></iron-icon>
+                        Kontakt
                     </paper-item>
                 </iron-selector>
             </app-drawer>
@@ -247,7 +262,8 @@
                     <interface-settings-view name="settings" office-id="[[officeId]]"></interface-settings-view>
                     <interface-help-view name="help" online-booking="[[officeInterfaceInfo.services.onlineBooking]]"></interface-help-view>
                     <interface-contact-view name="contact" office-id="[[officeId]]"></interface-contact-view>
-                    <interface-welcome-view name="welcome" office-id="[[officeId]]"></interface-welcome-view>
+                    <interface-welcome-view name="welcome" office-id="[[officeId]]"
+                                            online-booking="[[officeInterfaceInfo.services.onlineBooking]]"></interface-welcome-view>
                 </iron-pages>
             </div>
         </app-drawer-layout>

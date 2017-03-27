@@ -36,6 +36,11 @@
                 text-decoration: underline;
             }
 
+            .red {
+                color: var(--app-red-color);
+                font-weight: 400;
+            }
+
         </style>
 
         <paper-material elevation="1" id="main-container">
@@ -54,6 +59,11 @@
                 Pokud máte nápad na vylepšení nebo narazíte na problém, neváhejte a <a href="../contact/[[officeId]]">kontaktujte
                 nás</a>.
                 Pro seznámení se systémem doporučujeme projít si <a href="../help/[[officeId]]">nápovědu</a>.</p>
+
+            <!--TODO: remove when server is enabled-->
+            <p class="red" hidden="[[!onlineBooking]]">
+                Během příštích 24 hodin Vám vygenerujeme první termíny.
+            </p>
 
             <br><p> Děkujeme za registraci v našem systému a doufáme, že budete spokojeni. </p><br>
 
