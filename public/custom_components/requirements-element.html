@@ -1,0 +1,166 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<link rel="import" href="/bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+
+<dom-module id="requirements-element">
+    <template>
+        <style>
+            .main-container {
+                padding: 0 20px;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 2.8em;
+                color: var(--app-grey-text-color);
+                margin-bottom: 0.8em;
+                margin-top: 10vh;
+                letter-spacing: 0.02em;
+                font-weight: 100;
+                display: inline-block;
+                padding: 0.2em 0.5em;
+                border-bottom: 1px solid #e0e0e1;
+            }
+
+            paper-button {
+                margin: 1em auto;
+                padding: 1em;
+                width: 11em;
+                display: block;
+                background-color: var(--app-green-color);
+                color: #fff;
+            }
+
+            #no-account-label {
+                color: var(--app-grey-text-color);
+                margin: 5.5em auto 0.2em auto;
+            }
+
+            a {
+                text-decoration: none;
+                color: var(--app-green-color);
+                font-size: 1.35em;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            @media only screen and (max-width: 767px) {
+                h1 {
+                    font-size: 1.5em;
+                    margin-top: 1.5em;
+                    padding-bottom: 0.65em;
+                }
+            }
+
+        </style>
+
+        <firebase-auth id="auth" app-name="[[appName]]" status-known="{{statusKnown}}"
+                       user="{{user}}"></firebase-auth>
+
+        <template is="dom-if" if="[[!loggedIn]]">
+            <div class="main-container">
+                <h1>Tato stránka využaduje přihlášení</h1>
+                <br>
+                <paper-button raised on-tap="showLoginDialog">Přihlásit se</paper-button>
+                <div id="no-account-label">Nemáte účet?</div>
+                <a href="/registration">Zaregistrujte se</a>
+            </div>
+        </template>
+
+        <template is="dom-if" if="[[!emailVerificationSuccess]]">
+            <div class="main-container">
+                <h1>[[computeText(emailSent)]]</h1>
+                <br>
+                <paper-button raised on-tap="showLoginDialog" hidden="[[emailSent]]">Poslat potvrzovací email</paper-button>
+                <p hidden="[[emailSent]]">Pro potvrzení emailu přejděte na odkaz ve zprávě, kterou jsme Vám poslali na Váš email. Pokud Vám zpráva
+                    nepříšla,
+                    klikněte prosím na tlačítko výše.</p>
+            </div>
+        </template>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'requirements-element',
+
+            properties: {
+                appName: {
+                    type: String,
+                    value: function () {
+                        return document.getElementById("main_app").name;
+                    }
+                },
+
+                verifyEmail: {
+                    type: Boolean
+                },
+
+                valid: {
+                    type: Boolean,
+                    computed: 'computeValid(loggedIn, emailVerificationSuccess)',
+                    notify: true
+                },
+
+                loggedIn: {
+                    type: Boolean,
+                    computed: 'computeLoggedInProperty(statusKnown, user)',
+                    notify: true
+                },
+
+                user: {
+                    notify: true
+                },
+
+                // Is true if the user is not logged in
+                emailVerificationSuccess: {
+                    type: Boolean,
+                    value: true,
+                    computed: 'computeEmailVerificationSuccess(loggedIn, verifyEmail, user)'
+                },
+
+                emailSent: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+
+            sendEmail: function () {
+                this.user.sendEmailVerification().then(function () {
+                    this.emailSent = true;
+                }.bind(this), function () {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při posílání emailu se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            },
+
+            showLoginDialog: function () {
+                this.fire("show-dialog", {path: "", viewName: "login", open: true})
+            },
+
+            computeValid: function (loggedIn, emailVerificationSuccess) {
+                return loggedIn && emailVerificationSuccess;
+            },
+
+            computeLoggedInProperty: function (statusKnown, user) {
+                return (statusKnown && !!user);
+            },
+
+            computeEmailVerificationSuccess: function (loggedIn, verifyEmail, user) {
+                return !loggedIn || !verifyEmail || user.emailVerified;
+            },
+
+            computeText: function (emailSent) {
+                return (emailSent) ? "Email odeslán" : "Tato stránka využaduje potvrzený email"
+            }
+        });
+    </script>
+</dom-module>

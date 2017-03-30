@@ -7,7 +7,7 @@
 <link rel="import" href="/bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
 
-<link rel="import" href="/custom_components/login-required-element.html">
+<link rel="import" href="/custom_components/requirements-element.html">
 <link rel="import" href="/behaviors/routing-behavior.html">
 
 <link rel="import" href="/styles/tab-styles.html">
@@ -61,10 +61,10 @@
                 data="{{routeData}}"
                 tail="{{subRoute}}"></app-route>
 
-        <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
+        <requirements-element valid="{{valid}}" user="{{user}}"></requirements-element>
 
 
-        <div id="page" hidden="[[!loggedIn]]">
+        <div id="page" hidden="[[!valid]]">
             <div id="page-name" hidden="[[!smallScreen]]">[[computePageName(page)]]</div>
             <paper-tabs focused selected="{{page}}" attr-for-selected="name" hidden="[[smallScreen]]">
                 <paper-tab name="notifications">Upozornění</paper-tab>

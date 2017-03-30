@@ -2,7 +2,7 @@
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 
-<link rel="import" href="/custom_components/login-required-element.html">
+<link rel="import" href="/custom_components/requirements-element.html">
 
 <link rel="import" href="/behaviors/routing-behavior.html">
 
@@ -14,9 +14,9 @@
                 data="{{routeData}}"
                 tail="{{subRoute}}"></app-route>
 
-        <login-required-element logged-in="{{loggedIn}}" user="{{user}}"></login-required-element>
+        <requirements-element valid="{{valid}}" user="{{user}}" verify-email="true"></requirements-element>
 
-        <template is="dom-if" if="[[loggedIn]]" restamp="true">
+        <template is="dom-if" if="[[valid]]" restamp="true">
             <iron-pages
                     selected="[[page]]"
                     attr-for-selected="name"
