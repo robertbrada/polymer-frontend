@@ -46,14 +46,6 @@
                 border-bottom: 1px solid #e7e7e8;
             }
 
-            .rectangle {
-                width: 50px;
-                height: 3px;
-                background-color: #fff;
-                border-radius: 5px;
-                margin: 1em auto 2em auto;
-            }
-
             a {
                 text-decoration: none;
             }
@@ -170,41 +162,6 @@
                 color: #fff;
                 padding: 0.5em 1em;
                 border-radius: 1em;
-            }
-
-            /*** OFFICE REGITRATION ***/
-
-            #office-registration {
-                background-color: var(--app-accent-color);
-                color: #fff;
-                padding: 5%;
-                margin-top: 4em;
-            }
-
-            #office-registration * {
-                color: #fff;
-            }
-
-            #office-registration section {
-                text-align: center;
-                padding-top: 0;
-                padding-bottom: 2em;
-            }
-
-            #office-registration section:first-child {
-                border-right: 2px solid #374C80;
-            }
-
-            #office-registration h1 {
-                text-align: center;
-                margin-top: 0;
-                margin-bottom: 3em;
-            }
-
-            #office-registration paper-button {
-                padding: 1.2em 2em;
-                letter-spacing: 0.08em;
-                font-weight: bold;
             }
 
             /*** QUESTION FORM ***/
@@ -450,26 +407,10 @@
             </section>
         </section>
 
-        <div id="office-registration">
-            <h1>Jak zaregistruji svoji ordinaci?</h1>
-            <section class="grid main-frame">
-                <section id="no-account-section">
-                    <a href="/registration">
-                        <paper-button raised>Ještě nemám účet</paper-button>
-                    </a>
-                    <div class="rectangle"></div>
-                    <p>Po registraci obdržíte email, který Vás navede na registraci Vaší ordinace.
-                    </p>
-                </section>
-                <section>
-                    <a href="/office/registration/first">
-                        <paper-button raised>Již mám účet</paper-button>
-                    </a>
-                    <div class="rectangle"></div>
-                    <p>Pokud již máte vytvořený účet, můžete rovnou zaregistrovat Vaší ordinaci.
-                    </p>
-                </section>
-            </section>
+        <div>
+                <a href="[[computeUrl(signedIn)]]">
+                    <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
+                </a>
         </div>
 
         <div id="question-container" hidden="[[messageSent]]">
@@ -537,6 +478,14 @@
                         }
                     });
                 }.bind(this));
+            },
+
+            computeUrl: function (signedIn) {
+                return (signedIn) ? "/office/registration/first" : "/registration/doc";
+            },
+
+            computeButtonText: function (signedIn) {
+                return (signedIn) ? "Přidat ordinaci" : "Zaregistrovat";
             }
         });
     </script>

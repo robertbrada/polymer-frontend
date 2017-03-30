@@ -24,7 +24,6 @@
     <template>
         <style include="button-styles layout-styles input-styles">
 
-
             header {
                 margin-bottom: 0.5em;
             }
@@ -167,7 +166,7 @@
                         </paper-input>
                         <span id="birth-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést své datum narození?</span>
                         <paper-tooltip for="birth-tooltip" offset="0">Vaše datum narození slouží lékaři k tomu, aby
-                            ověřil vaši totožnost a mohl vás tak přijmout jako svého pacienta.
+                            ověřil vaši totožnost a mohl Vás tak přijmout jako svého pacienta.
                         </paper-tooltip>
 
                         <paper-radio-group id="sex" selected="female">
@@ -199,7 +198,7 @@
 
                         <span id="address-tooltip" class="tooltip"><iron-icon icon="icons:help"></iron-icon>Proč mám uvést adresu?</span>
                         <paper-tooltip for="address-tooltip" offset="0">Vaše adresa slouží lékaři k tomu, aby
-                            ověřil vaši totožnost a mohl vás tak přijmout jako svého pacienta.
+                            ověřil vaši totožnost a mohl Vás tak přijmout jako svého pacienta.
                         </paper-tooltip>
 
                         <h2>
@@ -248,7 +247,17 @@
                     value: function () {
                         return document.getElementById("main_app").name;
                     }
+                },
+
+                fromDocInfo: {
+                    type: Boolean,
+                    value: false,
+                    computed: 'computeFromDocInfo(route.path)'
                 }
+            },
+
+            computeFromDocInfo: function (path) {
+                return (path === "/doc");
             },
 
             confirm: function () {
@@ -265,13 +274,16 @@
                 this.$.auth.createUserWithEmailAndPassword(this.$.einput.value, this.$.pass.value).then(function (user) {
                     user.sendEmailVerification();
 
+                    var dialogText = "Na Vaší emailovou adresu byl poslán email, ve kterém je odkaz, jehož navštívením potvrdíte Vaší emailovou " +
+                        "adresu. Jakmile svůj email potvrdíte, budete " + ((this.fromDocInfo) ? ("si moci přidat ordinaci. Tento účet můžete použít " +
+                        "jak na administraci Vaší ordinaci, tak i pro objednání se u ostatních lékařů.") : "se moci objednat.");
+
                     this.fire('change-route', {url: '/home'});
                     this.fire("show-toast", {text: "Přihlášeno"});
                     this.fire("show-dialog", {
                         path: "", viewName: "genericdialog", open: true,
                         data: {
-                            text: 'Na Vaší emailovou adresu byl poslán email, ve kterém je odkaz, jehož navštívením potvrdíte Vaší emailovou ' +
-                            'adresu. Po potvrzení se budete moci objednat, případně si zaregistrovat ordinaci.',
+                            text: dialogText,
                             buttonText: 'Zavřít'
                         }
                     });

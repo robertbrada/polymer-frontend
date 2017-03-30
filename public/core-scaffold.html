@@ -226,8 +226,8 @@
             <d-view name="d" route="{{subRoute}}" small-screen="[[smallScreen]]" user-id="[[user.uid]]"></d-view>
             <e404-view name="e404"></e404-view>
             <emailaction-view name="emailaction" route="{{subRoute}}"></emailaction-view>
-            <docinfo-view name="docinfo" route="{{subRoute}}"></docinfo-view>
-            <registration-view name="registration"></registration-view>
+            <docinfo-view name="docinfo" route="{{subRoute}}" signed-in="[[signedIn]]"></docinfo-view>
+            <registration-view name="registration" route="{{subRoute}}"></registration-view>
             <conditions-view name="conditions"></conditions-view>
         </iron-pages>
 
