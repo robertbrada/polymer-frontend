@@ -26,13 +26,20 @@
             paper-button {
                 margin: 1em auto;
                 padding: 1em;
-                width: 11em;
                 display: block;
                 background-color: var(--app-green-color);
                 color: #fff;
             }
 
-            #no-account-label {
+            #login-button {
+                width: 11em;
+            }
+
+            #email-button {
+                width: 17em;
+            }
+
+            .sub-text {
                 color: var(--app-grey-text-color);
                 margin: 5.5em auto 0.2em auto;
             }
@@ -64,8 +71,8 @@
             <div class="main-container">
                 <h1>Tato stránka využaduje přihlášení</h1>
                 <br>
-                <paper-button raised on-tap="showLoginDialog">Přihlásit se</paper-button>
-                <div id="no-account-label">Nemáte účet?</div>
+                <paper-button id="login-button" raised on-tap="showLoginDialog">Přihlásit se</paper-button>
+                <div class="sub-text">Nemáte účet?</div>
                 <a href="/registration">Zaregistrujte se</a>
             </div>
         </template>
@@ -74,10 +81,9 @@
             <div class="main-container">
                 <h1>[[computeText(emailSent)]]</h1>
                 <br>
-                <paper-button raised on-tap="showLoginDialog" hidden="[[emailSent]]">Poslat potvrzovací email</paper-button>
-                <p hidden="[[emailSent]]">Pro potvrzení emailu přejděte na odkaz ve zprávě, kterou jsme Vám poslali na Váš email. Pokud Vám zpráva
-                    nepříšla,
-                    klikněte prosím na tlačítko výše.</p>
+                <paper-button id="email-button" raised on-tap="sendEmail" hidden="[[emailSent]]">Poslat potvrzovací email</paper-button>
+                <p class="sub-text" hidden="[[emailSent]]">Pro potvrzení emailu přejděte na odkaz ve zprávě, kterou jsme Vám poslali na Váš email.
+                    Pokud Vám zpráva nepříšla, klikněte prosím na tlačítko výše.</p>
             </div>
         </template>
 

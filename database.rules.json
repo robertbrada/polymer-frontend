@@ -114,7 +114,7 @@
     "officeFullInfo": {
       "$oid": {
         ".read": true,
-        ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "(!data.exists() && auth.token.email_verified == true) || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "holidays": {
           ".write": "auth.uid === 'my-service-worker'"
         },
@@ -126,13 +126,13 @@
     "officeSearchInfo": {
       ".read": true,
       "$oid": {
-        ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()"
+        ".write": "(!data.exists() && auth.token.email_verified == true) || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()"
       }
     },
     "officePermissions": {
       "$oid": {
         ".read": "data.child(auth.uid + '/admin').exists()",
-        ".write": "!data.exists() || data.child(auth.uid + '/admin').exists()"
+        ".write": "(!data.exists() && auth.token.email_verified == true) || data.child(auth.uid + '/admin').exists()"
       }
     },
     "officePatients": {
@@ -175,7 +175,7 @@
     "officeInterfaceInfo": {
       "$oid": {
         ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
-        ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "(!data.exists() && auth.token.email_verified == true) || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         // TODO: It's hackable. Moving the logic to backend would solve the issue. Low priority
         "patientsToVerify": {
           ".read": "root.child('officePatientsToVerify/' + $oid + '/' + auth.uid).exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
@@ -189,7 +189,7 @@
       ".read": "auth.uid === 'my-service-worker'",
       "$oid": {
         ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
-        ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "(!data.exists() && auth.token.email_verified == true) || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "officeHours": {
           "dayIndex": {
             "available": {
