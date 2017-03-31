@@ -20,30 +20,12 @@
         <style include="button-styles layout-styles input-styles">
             :host {
                 display: block;
+                color: #252526;
             }
 
             .green {
                 background-color: var(--app-green-color);
                 color: #fff !important;
-            }
-
-            .blue {
-                background-color: var(--app-accent-color);
-                color: #fff !important;
-            }
-
-            .green-text {
-                color: var(--app-green-color);
-            }
-
-            .blue-text {
-                color: var(--app-accent-color);
-            }
-
-            .grey {
-                background-color: #fafafb;
-                border-top: 1px solid #e7e7e8;
-                border-bottom: 1px solid #e7e7e8;
             }
 
             a {
@@ -54,17 +36,16 @@
                 letter-spacing: 0.02em;
             }
 
-            paper-button, a {
+            paper-button, #example-profile-link {
                 transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
 
             .main-frame {
-                max-width: 1200px;
+                max-width: 1350px;
                 font-weight: lighter;
                 padding: 0;
-                color: #252526;
-                margin: 2em auto;
+                margin: 0 auto;
             }
 
             .grid section {
@@ -74,13 +55,141 @@
             }
 
             section > p {
-                font-size: 1.15em;
+                font-size: 1.2em;
                 line-height: 1.65em;
             }
 
             section > h1 {
                 font-size: 1.6em;
                 margin-top: 0;
+                margin-bottom: 1.4em;
+            }
+
+            header {
+                background: var(--app-accent-color) url("../images/docinfo/header-shadow.png");
+                background-size: cover;
+                color: #fff;
+                text-align: center;
+                padding-bottom: 3em;
+                padding-top: 2em;
+            }
+
+            header > section {
+                max-width: 1300px;
+                margin: 0 auto;
+                text-align: left;
+            }
+
+            header h1 {
+                font-size: 2em !important;
+                margin-bottom: 1.3em !important;
+                letter-spacing: 0.03em !important;
+            }
+
+            header .image-section {
+                text-align: right;
+            }
+
+            header paper-button {
+                padding: 1.5em 2.5em;
+                font-weight: bold;
+                letter-spacing: 0.08em;
+            }
+
+            .register-container {
+                text-align: center;
+                position: relative;
+            }
+
+            .register-container paper-button {
+                padding: 1.6em 2.6em;
+                font-weight: bold;
+                font-size: 1.1em;
+                letter-spacing: 0.08em;
+            }
+
+            .register-container p {
+                font-size: 1.1em;
+                font-weight: 300;
+                color: #808081;
+                max-width: 550px;
+                margin: 2em auto 1em auto;
+                padding: 0 1em;
+            }
+
+            #headline-arrow {
+                color: var(--app-green-color);
+                height: 25px;
+                width: auto;
+                margin-right: 0.5em;
+            }
+
+            #header-image {
+                max-width: 400px;
+                margin-top: 5em;
+            }
+
+            #horizontal-arrow{
+                max-width: 70px;
+                position: absolute;
+                top: calc(50% - 0.5em);
+                left: calc(50% - 16em);
+            }
+
+            /************************/
+            #discover-more-container {
+                text-align: center;
+                margin: 2em auto 3em auto;
+            }
+
+            #discover-more-container h2 {
+                font-size: 1.6em;
+                margin: 1em auto;
+            }
+
+            #discover-arrow {
+                max-width: 38px;
+            }
+
+            /******************/
+
+            #office-calendar-main-section {
+                margin-bottom: 0;
+                padding-top: 2em;
+            }
+
+            #online-booking-arrow {
+                max-height: 120px;
+                position: absolute;
+                right: 40%;
+                top: -3.5em;
+            }
+
+            /********************/
+            #patients-main-container {
+                position: relative;
+                margin-top: 0;
+                padding-top: 3em;
+                padding-bottom: 3em;
+            }
+
+            #patients-image {
+                max-height: 200px;
+                width: auto;
+            }
+
+            /***************/
+
+            #about-section {
+                border-bottom: 1px solid #e2e2e3;
+                border-top: 1px solid #e2e2e3;
+                background-color: #fbfbfc;
+            }
+
+            /****************/
+
+            #bottom-registration-container {
+                margin-top: 4em;
             }
 
             .presentation-img {
@@ -92,15 +201,11 @@
                 margin: auto;
             }
 
-            #patient-image {
-                max-width: 150px;
-            }
-
             #comp-img {
                 margin-left: 0;
                 margin-bottom: 0;
-                max-width: 480px;
-                max-height: 480px;
+                max-width: 560px;
+                max-height: 560px;
             }
 
             .img-section {
@@ -115,7 +220,6 @@
                 padding-left: 5em;
                 padding-right: 5em;
                 border-left: 1px solid #e2e2e3;
-
             }
 
             .profile-image {
@@ -123,35 +227,8 @@
                 max-width: 170px;
                 max-height: 170px;
             }
-
             #about-section {
                 margin-bottom: 0;
-            }
-
-            /***** WHAT WE OFFER HEADER *******/
-
-            #what-we-offer {
-                text-align: center;
-                margin: 2em auto 4em auto;
-            }
-
-            #what-we-offer h1 {
-                color: var(--app-accent-color);
-                display: inline-block;
-                font-size: 2.2em;
-                margin: 1em auto 0;
-                padding: 0 1.3em 0.2em 1.3em;
-                position: relative;
-            }
-
-            #arrow-image {
-                max-height: 40px;
-                display: inline-block;
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                left: auto;
-                top: auto;
             }
 
             /***** OFFICE PRESENTATION ********/
@@ -168,13 +245,16 @@
 
             #question-container {
                 background-color: #fbfbfc;
-                padding: 3em;
+                margin-top: 3em;
+                padding: 4em;
+                border-top: 1px solid #e2e2e3;
             }
 
             #question-container h2 {
                 font-size: 1.5em;
                 letter-spacing: 0.02em;
                 margin-top: 0.5em;
+
             }
 
             form {
@@ -182,31 +262,14 @@
                 margin: 0 auto;
             }
 
-            /** SQUARES SECTION **/
-
-            #first-square-section {
-                margin-bottom: 0;
-            }
-
-            #last-presentation-section {
-                margin-top: 0;
-            }
-
-            #no-contract-section {
-                box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 18px 10px rgba(0, 0, 0, 0.22);
-            }
-
             #office-presence-main-section {
-                margin-top: 0;
+                margin-top: 4em;
+                margin-bottom: 4em;
             }
 
-            /*** FEATURES ***/
-
-            .features-section {
-                text-align: center;
-                padding-top: 2em !important;
-                padding-bottom: 2em;
-            !important;
+            #settings-img {
+                max-height: 480px;
+                max-width: 480px;
             }
 
             .features-section > div {
@@ -218,18 +281,24 @@
                 text-align: left;
             }
 
-            #all-features-description {
-                margin: 3em auto;
-                text-align: center;
-                border-bottom: 1px solid #e2e2e3;
-            }
-
-            /******************************/
-
-            @media (max-width: 980px) {
+            @media (max-width: 1200px) {
                 #comp-img {
+                    max-width: 450px;
+                    max-height: 450px;
+                }
+
+                #settings-img{
                     max-width: 350px;
                     max-height: 350px;
+                }
+
+                header .image-section {
+                    text-align: center;
+                }
+
+                #header-image {
+                    max-width: 280px;
+                    margin-top: 5em;
                 }
             }
 
@@ -273,11 +342,22 @@
                     font-size: 1.8em;
                 }
 
-                #all-features-description {
-                    text-align: left;
+                #online-booking-arrow {
+                    max-height: 90px;
+                }
+
+                #horizontal-arrow{
+                    max-width: 45px;
+                    left: calc(50% - 13.5em);
                 }
             }
 
+            @media (max-width: 980px) {
+
+                #office-calendar-main-section {
+                    padding-top: 0;
+                }
+            }
             @media (min-width: 767px) {
 
                 paper-button:hover {
@@ -285,133 +365,139 @@
                     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
                 }
 
-                a:hover {
+                #example-profile-link:hover {
                     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
                 }
             }
 
-
         </style>
 
         <iron-media-query query="max-width:716px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width:980px" query-matches="{{mediumScreen}}"></iron-media-query>
 
-        <section id="about-section" class="main-frame grid">
-            <section>
-                <h1>Kdo jsme a co děláme</h1>
-                <p>
-                    Jsme dva studenti kybernetiky a víme, že největším problémem moderních technologií je jejich
-                    složitost. Často pak nejsou využívány tam, kde to má největší smysl. <br><br>
+        <header>
+            <section id="" class="grid">
+                <section>
+                    <h1><img src="../images/docinfo/headline-arrow.png" id="headline-arrow">PŘIDEJDE SE K NÁM</h1>
+                    <p>
+                        Docta.cz je unikátní projekt, který umožňuje všem lékařům
+                        zapojit se do elektronizace zdravotnictví.
+                    </p>
+                    <p>
+                        Jedná se o nastupující trend, jak zlepšit zdravotní péči a interakci
+                        mezi lékaři a pacienty. Ušetříte tak čas a práci sobě i ostatním.
+                    </p>
+                    <p>
+                        Ke službám zlepšující zdravotní péči by měl mít přístup každý.
+                        Proto je vše, co nabízíme, zdarma. Stačí se jen Zaregistrovat.
+                    </p>
+                </section>
+                <section class="image-section">
+                    <img src="../images/docinfo/header.png" id="header-image" hidden="[[smallScreen]]">
+                </section>
+            </section>
 
-                    Naším cílem je, aby se online interakce ve zdravotnictví stala samozřejmostí. Chceme, aby naše práce
-                    a úsilí mělo smysl, a proto upřednostňujeme úspěch našeho produktu před finančním ziskem.<br><br>
-
-                    Uvědomujeme si, že naše služby jsou přínosem především pro pacienty. Je tak nelogické, aby
-                    lékaři podepisovali nesmyslné smlouvy a platili za pohodlí pacientů.
-                    Proto za náš systém nebudete muset nikdy platit.
-                </p>
-            </section>
-            <section id="profile-images-section" class="">
-                <img src="../images/docinfo/jan.jpg" class="profile-image">
-                <img src="../images/docinfo/robert.jpg" class="profile-image">
-            </section>
-        </section>
-
-        <section id="what-we-offer" class="main-frame">
-            <h1>Co nabízíme?<img src="../images/docinfo/arrow.png" id="arrow-image"></h1>
-        </section>
-
-        <section class="main-frame grid grey" id="office-presence-main-section">
-            <section class="img-section" hidden="[[smallScreen]]">
-                <img id="comp-img" class="presentation-img" src="../images/docinfo/computer.png">
-            </section>
-            <section id="office-presence-section">
-                <h1>Kompletní prezentace ordinace</h1>
-                <p>Na Docta.cz můžete prezentovat všechny důležité informace o Vaší ordinaci zcela zdarma a
-                    napořád.
-                    <br>
-                    <br>
-                    <a href="/d/strakova_plzen">Zobrazit ukázkový profil</a>
-                </p>
-            </section>
-        </section>
-
-        <section class="main-frame grid">
-            <section>
-                <h1>Přenechte objednání pacientům</h1>
-                <p>Nemarněte čas vyřizováním telefonátů a nechte pacienty, ať se objednají sami.
-                    V ordinaci se tak můžete nerušeně věnovat své práci.
-                    Podle Vašich objednávacích hodin Vám vytvoříme kalendář na míru.
-                </p>
-            </section>
-            <section class="img-section">
-                <img id="patient-image" src="../images/docinfo/patient.png">
-            </section>
-        </section>
-
-        <section class="main-frame grid" id="first-square-section">
-            <section class="blue">
-                <h1>Máte kontrolu nad pacienty</h1>
-                <p>Nemusíte mít strach, že se k Vám bude objednávat kdokoliv. Můžete si vybrat, kteří pacienti se u
-                    Vás mohou objednat. U každého pacienta uvidíte údaje potřebné k jeho jednoznačné identifikaci.</p>
-            </section>
-            <section class="grey">
-                <h1>Vše na jednom místě</h1>
-                <p>V rozhraní Vaší ordinace máte vše, co potřebujete. Elektronický kalendář, seznam objednaných pacientů, nastavení ordinace, dovolené
-                    a další.
-                </p>
-            </section>
-        </section>
-
-        <section class="main-frame grid" id="last-presentation-section">
-            <section class="grey">
-                <h1>Objednávejte jednoduše</h1>
-                <p>Elektronický kalendář přehledně reprezentuje Vaše objednané pacienty. Můžete tak snadno objednávat nové pacienty nebo rušit
-                    schůzky.</p>
-            </section>
-            <section class="green" id="no-contract-section">
-                <h1>Bez smlouvy a závazků</h1>
-                <p>Vše můžete začít používat ihned a bez placení.
-                    Nemusíte se nám nijak zavazovat, je tak zcela
-                    na Vás, jak budete našich služeb využívat.
-                </p>
-            </section>
-        </section>
-
-        <section id="all-features-description" class="main-frame grid">
-            <section>
-                <h1>Kompletní přehled služeb</h1>
-                <p>Všechny služby jsou k dispozici bez poplatků a další budou přibývat.
-                    <br>Přáli byste si nějakou další službu? Dejte nám vědět a přispějte tak ke zlepšení systému.
-                </p>
-            </section>
-        </section>
-
-        <section id="all-features-container" class="main-frame grid">
-            <section class="features-section green-text">
-                <h1>Prezentace ordinace</h1>
-                <p>
-                    &#8226; &nbsp; Kontaktní informace<br>
-                    &#8226; &nbsp; Seznam smluvních pojišťoven<br>
-                    &#8226; &nbsp; Ceník poskytovaných služeb<br>
-                    &#8226; &nbsp; Upozornění na dovolenou
-                </p>
-            </section>
-            <section class="features-section blue-text">
-
-                <h1>Online objednání</h1>
-                <p>
-                    &#8226; &nbsp; Online objednávání pacientů<br>
-                    &#8226; &nbsp; Kontrola nad objednanými pacienty<br>
-                    &#8226; &nbsp; Elektronický kalendář
-                </p>
-            </section>
-        </section>
-
-        <div>
+            <div class="register-container">
+                <img src="../images/docinfo/horizontal-arrow.png" id="horizontal-arrow">
                 <a href="[[computeUrl(signedIn)]]">
                     <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
                 </a>
+            </div>
+
+        </header>
+
+        <section id="about-section">
+            <div class="main-frame grid">
+                <section>
+                    <h1>PROČ TO DĚLÁME?</h1>
+                    <p>
+                        Víme, že moderní technologie často nejsou využívány tam, kde to má nějvětší smysl.
+                        A zdravotnictví je jedno z nejdůležitějších odvětví, kde lze tyto nástroje aplikovat tak,
+                        aby zjedodušily život nám všem.</p>
+                    <p>
+                        Proto jsme si dali za cíl vytvořit tento veřejný systém. Kvalita zdravotní péče ovlivňuje každého z
+                        nás. Je tak důležité, aby k těmto službám měli přístup všichni a bez rozdílu.
+                    </p>
+
+                    <!--<p>-->
+                    <!--<br>-->
+                    <!--Jan Beneš & Robert Brada.-->
+                    <!--</p>-->
+                </section>
+                <section id="profile-images-section" class="">
+                    <img src="../images/docinfo/jan.jpg" class="profile-image">
+                    <img src="../images/docinfo/robert.jpg" class="profile-image">
+                </section>
+            </div>
+        </section>
+
+        <div id="discover-more-container">
+            <h2>Co Vám umožníme?</h2>
+            <img src="../images/docinfo/discover-arrow.png" id="discover-arrow">
         </div>
+
+
+        <section id="office-presence-main-section">
+            <div class="main-frame grid">
+                <section id="office-presence-section">
+                    <h1>KOMPLETNÍ PREZENTACE ORDINACE</h1>
+                    <p>Nabízíme Vám možnost prezentovat všechny důležité informace
+                        o Vaší ordinaci na internetu. K dispozici máte přehledné nastavení
+                        ordinace, kde můžete kdykoli měnit informace tak, jak uznáte za vhodné.
+                        <br>
+                        <br>
+                        <br>
+                        <a id="example-profile-link" href="/d/strakova_plzen">Zobrazit ukázkový profil</a>
+                    </p>
+                </section>
+
+                <section class="img-section" hidden="[[mediumScreen]]">
+                    <img id="settings-img" class="" src="../images/docinfo/settings.png">
+                </section>
+            </div>
+        </section>
+
+        <section class="green" id="office-calendar-main-section">
+            <div class="main-frame grid">
+                <section class="img-section" hidden="[[mediumScreen]]">
+                    <img id="comp-img" class="presentation-img" src="../images/docinfo/calendar.png">
+                </section>
+                <section id="office-calendar-section">
+                    <h1>ONLINE OBJEDNÁVÁNÍ<br>A ELEKTRONICKÝ KALENDÁŘ</h1>
+                    <p>K dispozici máte online objednání, které můžete využít jakkoli se Vám to hodí. Je jedno kolik objednávacích dnů nebo časů si vytvoříte,
+                        za nic platit nebudete.
+                    </p>
+                    <p>Váš elektronický kalendář přehledně reprezentuje Vaše objednané pacietny. Můžete tak snadno objednávat pacienty nebo rušit schůzky.</p>
+                </section>
+
+            </div>
+        </section>
+
+        <section class="" id="patients-main-container">
+            <img id="online-booking-arrow" src="../images/docinfo/online_booking_arrow.png">
+            <div class="main-frame grid">
+                <section>
+                    <h1>KONTROLUJTE SI SAMI, KDO SE K VÁM MŮŽE OBJEDNAT</h1>
+                    <p>Nemusíte se obávat, že se k Vám objedná kdokoli. Pokud budete chtít,
+                        máte k dispozici potvrzování pacientů.
+                    </p><p>
+                    Můžete si sami tak vybrat, kteří pacienti se mohou objednat a kteří ne. Tím si vytvoříte seznam svých pacientů, kterým můžete důvěřovat.
+                </p>
+                </section>
+                <section class="img-section">
+                    <img id="patients-image" src="../images/docinfo/patients.png">
+                </section>
+            </div>
+
+            <div id="bottom-registration-container" class="register-container">
+                <a href="[[computeUrl(signedIn)]]">
+                    <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
+                </a>
+                <p>Naše služby neustále zlepšujeme a rozšiřujeme, systém má sloužit Vám.
+                    Proto pokud máte jakýkoli návrh na zlepšení, neváhejte se nám ozvat. </p>
+            </div>
+        </section>
+
 
         <div id="question-container" hidden="[[messageSent]]">
             <form id="docinfo_form" is="iron-form">
@@ -485,7 +571,7 @@
             },
 
             computeButtonText: function (signedIn) {
-                return (signedIn) ? "Přidat ordinaci" : "Zaregistrovat";
+                return (signedIn) ? "Přidat ordinaci" : "Zaregistrovat se";
             }
         });
     </script>
