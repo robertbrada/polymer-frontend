@@ -34,6 +34,9 @@
 
             h1 {
                 letter-spacing: 0.02em;
+                font-size: 1.6em;
+                margin-top: 0;
+                margin-bottom: 1.4em;
             }
 
             paper-button, #example-profile-link {
@@ -59,11 +62,6 @@
                 line-height: 1.65em;
             }
 
-            section > h1 {
-                font-size: 1.6em;
-                margin-top: 0;
-                margin-bottom: 1.4em;
-            }
 
             header {
                 background: var(--app-accent-color) url("../images/docinfo/header-shadow.png");
@@ -71,7 +69,7 @@
                 color: #fff;
                 text-align: center;
                 padding-bottom: 3em;
-                padding-top: 2em;
+                padding-top: 1em;
             }
 
             header > section {
@@ -81,9 +79,9 @@
             }
 
             header h1 {
-                font-size: 2em !important;
-                margin-bottom: 1.3em !important;
-                letter-spacing: 0.03em !important;
+                font-size: 1.95em;
+                margin-bottom: 2em;
+                letter-spacing: 0.03em;
             }
 
             header .image-section {
@@ -99,8 +97,8 @@
             .register-container {
                 text-align: center;
                 position: relative;
+                padding-top: 2em;
             }
-
             .register-container paper-button {
                 padding: 1.6em 2.6em;
                 font-weight: bold;
@@ -119,7 +117,7 @@
 
             #headline-arrow {
                 color: var(--app-green-color);
-                height: 25px;
+                height: 23px;
                 width: auto;
                 margin-right: 0.5em;
             }
@@ -129,11 +127,11 @@
                 margin-top: 5em;
             }
 
-            #horizontal-arrow{
-                max-width: 70px;
+            header .arrow{
+                max-width: 30px;
                 position: absolute;
-                top: calc(50% - 0.5em);
-                left: calc(50% - 16em);
+                top: 0;
+                left: calc(50% - 15px);
             }
 
             /************************/
@@ -143,12 +141,14 @@
             }
 
             #discover-more-container h2 {
-                font-size: 1.6em;
-                margin: 1em auto;
+                color: var(--app-grey-text-color);
+                font-weight: 300;
+                font-size: 1.5em;
+                margin: 1em auto 0.6em 0;
             }
 
             #discover-arrow {
-                max-width: 38px;
+                max-width: 30px;
             }
 
             /******************/
@@ -159,10 +159,10 @@
             }
 
             #online-booking-arrow {
-                max-height: 120px;
+                max-height: 90px;
                 position: absolute;
                 right: 40%;
-                top: -3.5em;
+                top: -2em;
             }
 
             /********************/
@@ -188,8 +188,9 @@
 
             /****************/
 
-            #bottom-registration-container {
-                margin-top: 4em;
+            #bottom-registration-container h1{
+                color: var(--app-green-color);
+                font-size: 1.4em;
             }
 
             .presentation-img {
@@ -246,7 +247,7 @@
             #question-container {
                 background-color: #fbfbfc;
                 margin-top: 3em;
-                padding: 4em;
+                padding: 3em 1.5em;
                 border-top: 1px solid #e2e2e3;
             }
 
@@ -296,6 +297,14 @@
                     text-align: center;
                 }
 
+                header h1 {
+                    font-size: 1.6em;
+                }
+
+                #headline-arrow {
+                    height: 19px;
+                }
+
                 #header-image {
                     max-width: 280px;
                     margin-top: 5em;
@@ -303,6 +312,10 @@
             }
 
             @media (max-width: 716px) {
+
+                :host {
+                    font-size: 0.85em;
+                }
 
                 .grid section {
                     padding: 7% 5%;
@@ -323,32 +336,12 @@
                     max-width: 100%;
                 }
 
-                #office-registration section {
-                    margin-top: 0;
-                }
-
-                #office-registration section:first-child {
-                    border-right: none;
-                    padding-bottom: 4em;
-                    border-bottom: 2px solid #374C80;
-                }
-
-                #office-registration section:nth-child(2) {
-                    padding-top: 4em;
-                }
-
-                #office-registration h1 {
-                    margin-bottom: 0;
-                    font-size: 1.8em;
-                }
-
                 #online-booking-arrow {
-                    max-height: 90px;
+                    max-height: 60px;
                 }
 
-                #horizontal-arrow{
-                    max-width: 45px;
-                    left: calc(50% - 13.5em);
+                header .arrow{
+                    max-width: 20px;
                 }
             }
 
@@ -358,6 +351,7 @@
                     padding-top: 0;
                 }
             }
+
             @media (min-width: 767px) {
 
                 paper-button:hover {
@@ -370,6 +364,70 @@
                 }
             }
 
+            /******** HEADER ANIMATIONS ************/
+
+            /*Vertical Sliding*/
+            .slidingVertical{
+                display: inline;
+            }
+            .slidingVertical span{
+
+                /*on all browsers*/
+                animation: topToBottom 15.2s linear infinite 0s;
+                -ms-animation: topToBottom 15.2s linear infinite 0s;
+                -webkit-animation: topToBottom 15.2s linear infinite 0s;
+
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+            }
+            .slidingVertical span:nth-child(2){
+                animation-delay: 3.8s;
+                -ms-animation-delay: 3.8s;
+                -webkit-animation-delay: 3.8s;
+            }
+            .slidingVertical span:nth-child(3){
+                animation-delay: 7.6s;
+                -ms-animation-delay: 7.6s;
+                -webkit-animation-delay: 7.6s;
+            }
+            .slidingVertical span:nth-child(4){
+                animation-delay: 11.4s;
+                -ms-animation-delay: 11.4s;
+                -webkit-animation-delay: 11.4s;
+            }
+
+            /*topToBottom Animation on all browsers*/
+            @-moz-keyframes topToBottom{
+                0% { opacity: 0; }
+                5% { opacity: 0; -moz-transform: translateY(-50px); }
+                10% { opacity: 1; -moz-transform: translateY(0px); }
+                25% { opacity: 1; -moz-transform: translateY(0px); }
+                30% { opacity: 0; -moz-transform: translateY(50px); }
+                80% { opacity: 0; }
+                100% { opacity: 0; }
+            }
+            @-webkit-keyframes topToBottom{
+                0% { opacity: 0; }
+                5% { opacity: 0; -webkit-transform: translateY(-50px); }
+                10% { opacity: 1; -webkit-transform: translateY(0px); }
+                25% { opacity: 1; -webkit-transform: translateY(0px); }
+                30% { opacity: 0; -webkit-transform: translateY(50px); }
+                80% { opacity: 0; }
+                100% { opacity: 0; }
+            }
+            @-ms-keyframes topToBottom{
+                0% { opacity: 0; }
+                5% { opacity: 0; -ms-transform: translateY(-50px); }
+                10% { opacity: 1; -ms-transform: translateY(0px); }
+                25% { opacity: 1; -ms-transform: translateY(0px); }
+                30% { opacity: 0; -ms-transform: translateY(50px); }
+                80% { opacity: 0; }
+                100% { opacity: 0; }
+            }
+
+
+
         </style>
 
         <iron-media-query query="max-width:716px" query-matches="{{smallScreen}}"></iron-media-query>
@@ -378,27 +436,39 @@
         <header>
             <section id="" class="grid">
                 <section>
-                    <h1><img src="../images/docinfo/headline-arrow.png" id="headline-arrow">PŘIDEJDE SE K NÁM</h1>
+                    <h1><img src="../images/docinfo/headline-arrow.png" id="headline-arrow">
+                        <div class="slidingVertical">
+                            <span>INOVUJEME ZDRAVOTNICTVÍ</span>
+                            <span>PROPOJUJEME LÉKAŘE S PACIENTY</span>
+                            <span>PŘIDEJTE SE K NÁM</span>
+                            <span>ŽÁDNÉ SMLOUVY ANI ZÁVAZKY</span>
+                            <!--<span>STAŇTE SE SOUČÁSTÍ NĚČEHO NOVÉHO</span>-->
+                            <!--<span>TVOŘÍME SLUŽBY PRO VŠECHNY</span>-->
+                            <!--<span>STAČÍ SE JEN REGISTROVAT</span>-->
+                        </div>
+                    </h1>
                     <p>
                         Docta.cz je unikátní projekt, který umožňuje všem lékařům
                         zapojit se do elektronizace zdravotnictví.
                     </p>
                     <p>
-                        Jedná se o nastupující trend, jak zlepšit zdravotní péči a interakci
+                        Jedná se o nastupující trend, jak zefektivnit zdravotnictví a interakci
                         mezi lékaři a pacienty. Ušetříte tak čas a práci sobě i ostatním.
                     </p>
                     <p>
-                        Ke službám zlepšující zdravotní péči by měl mít přístup každý.
-                        Proto je vše, co nabízíme, zdarma. Stačí se jen Zaregistrovat.
+                        Lékaři by neměli být vázáni smlouvami ani platit za služby, které
+                        zlepšují zdravotní péči. Proto je vše, co nabízíme, zdarma.
+                   <br>Stačí se jen Zaregistrovat.
                     </p>
                 </section>
-                <section class="image-section">
+
+                <section class="image-section" hidden="[[smallScreen]]">
                     <img src="../images/docinfo/header.png" id="header-image" hidden="[[smallScreen]]">
                 </section>
             </section>
 
             <div class="register-container">
-                <img src="../images/docinfo/horizontal-arrow.png" id="horizontal-arrow">
+                <img src="../images/docinfo/vertical-white-arrow.png" class="arrow">
                 <a href="[[computeUrl(signedIn)]]">
                     <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
                 </a>
@@ -418,11 +488,6 @@
                         Proto jsme si dali za cíl vytvořit tento veřejný systém. Kvalita zdravotní péče ovlivňuje každého z
                         nás. Je tak důležité, aby k těmto službám měli přístup všichni a bez rozdílu.
                     </p>
-
-                    <!--<p>-->
-                    <!--<br>-->
-                    <!--Jan Beneš & Robert Brada.-->
-                    <!--</p>-->
                 </section>
                 <section id="profile-images-section" class="">
                     <img src="../images/docinfo/jan.jpg" class="profile-image">
@@ -432,8 +497,8 @@
         </section>
 
         <div id="discover-more-container">
-            <h2>Co Vám umožníme?</h2>
-            <img src="../images/docinfo/discover-arrow.png" id="discover-arrow">
+            <h2>Prohlídka systému</h2>
+            <img src="../images/docinfo/vertical-green-arrow.png" id="discover-arrow">
         </div>
 
 
@@ -442,8 +507,10 @@
                 <section id="office-presence-section">
                     <h1>KOMPLETNÍ PREZENTACE ORDINACE</h1>
                     <p>Nabízíme Vám možnost prezentovat všechny důležité informace
-                        o Vaší ordinaci na internetu. K dispozici máte přehledné nastavení
-                        ordinace, kde můžete kdykoli měnit informace tak, jak uznáte za vhodné.
+                        o Vaší ordinaci na internetu. </p>
+                    <p>
+                        Nemusíte si platit za vlastní stránky. K dispozici máte přehledné nastavení
+                        ordinace, kde můžete kdykoli měnit informace o Vaší ordinaci.
                         <br>
                         <br>
                         <br>
@@ -467,9 +534,8 @@
                     <p>K dispozici máte online objednání, které můžete využít jakkoli se Vám to hodí. Je jedno kolik objednávacích dnů nebo časů si vytvoříte,
                         za nic platit nebudete.
                     </p>
-                    <p>Váš elektronický kalendář přehledně reprezentuje Vaše objednané pacietny. Můžete tak snadno objednávat pacienty nebo rušit schůzky.</p>
+                    <p>Elektronický kalendář přehledně reprezentuje Vaše objednané pacietny. Můžete v něm snadno objednávat nebo rušit schůzky.</p>
                 </section>
-
             </div>
         </section>
 
@@ -481,7 +547,7 @@
                     <p>Nemusíte se obávat, že se k Vám objedná kdokoli. Pokud budete chtít,
                         máte k dispozici potvrzování pacientů.
                     </p><p>
-                    Můžete si sami tak vybrat, kteří pacienti se mohou objednat a kteří ne. Tím si vytvoříte seznam svých pacientů, kterým můžete důvěřovat.
+                    Můžete si tak sami vybrat, kteří pacienti se mohou objednat a kteří ne. Tím si vytvoříte seznam Vašich pacientů, kterým můžete důvěřovat.
                 </p>
                 </section>
                 <section class="img-section">
@@ -490,10 +556,11 @@
             </div>
 
             <div id="bottom-registration-container" class="register-container">
+                <h1>ZAREGISTRUJTE SE A VYUŽÍVEJTE VŠECH SLUŽEB NAPLNO</h1>
                 <a href="[[computeUrl(signedIn)]]">
                     <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
                 </a>
-                <p>Naše služby neustále zlepšujeme a rozšiřujeme, systém má sloužit Vám.
+                <p>* Naše služby neustále zlepšujeme a rozšiřujeme, systém má sloužit Vám.
                     Proto pokud máte jakýkoli návrh na zlepšení, neváhejte se nám ozvat. </p>
             </div>
         </section>
