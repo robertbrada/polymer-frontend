@@ -315,7 +315,7 @@
             <div id="head" class="subsection grid">
                 <section class="photo-name-section">
 
-                    <img src$="[[computePhotoURL(officeData.photoAvailability, officeData.sex, officeId)]]">
+                    <img src$="[[photoUrl]]">
 
                     <h3>[[computeFormattedName(officeData.title, officeData.name.firstName,
                         officeData.name.lastName)]]</h3>
@@ -605,13 +605,40 @@
                 mapMarkerLoaded: {
                     type: Boolean,
                     value: false
+                },
+
+                photoUrl: {
+                    type: String
+                },
+
+                dataLoaded: {
+                    type: Boolean,
+                    value: false
                 }
             },
+
+            observers: [
+                "setPhotoUrl(firebaseApp, officeData.photoAvailability, dataLoaded, officeData.sex, officeId)"
+            ],
 
             listeners: {
                 'neon-animation-finish': '_onNeonAnimationFinish',
                 'appointment-request': '_onAppointmentRequest'
             },
+
+            setPhotoUrl: function (firebaseApp, photoAvailability, dataLoaded, sex, officeId) {
+                if (photoAvailability && dataLoaded && !!officeId) {
+                    firebaseApp.storage().ref("profilePhotos/" + officeId + ".jpg").getDownloadURL().then(function (url) {
+                        this.photoUrl = url;
+                    }.bind(this)).catch(function (error) {
+                        console.log("Photo error"); // TODO: handler
+                        this.photoUrl = "../images/doctor-" + sex + ".png";
+                    });
+                } else {
+                    this.photoUrl = "../images/doctor-" + sex + ".png";
+                }
+            },
+
 
             observeOnlineBooking: function (onlineBooking) {
                 // Lazy load the elements
@@ -660,6 +687,9 @@
                 var db = this.firebaseApp.database(),
                     officeData;
 
+                this.dataLoaded = false;
+
+
                 db.ref('/officeFullInfo/' + officeId).once('value').then(function (snapshot) {
                     officeData = snapshot.val();
 
@@ -691,6 +721,7 @@
                     mapElement.resize(); // Center the map with new coordinates
                 }
 
+                this.dataLoaded = true;
                 this.calendarVisibility = true; // Hide appointment form. Might be visible if user came from different office profile
             },
 
@@ -844,10 +875,6 @@
 
             returnBoolean: function (data) {
                 return !!data;
-            },
-
-            computePhotoURL: function (photoAvailability, sex, officeId) {
-                return "../images/doctor-" + sex + ".png";
             },
 
             computeMapLink: function (address) {

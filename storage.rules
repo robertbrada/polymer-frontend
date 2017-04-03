@@ -1,0 +1,9 @@
+service firebase.storage {
+    match /b/{bucket}/o {
+        match /profilePhotos {
+            match /{allPhotos=**} {
+                allow read;
+            }
+        }
+    }
+}

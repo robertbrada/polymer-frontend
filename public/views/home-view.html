@@ -210,8 +210,7 @@
 
                         <div id="photo-container">
                             <template is="dom-if" if="[[!office.photoAvailability]]">
-                                <!--Show icon-->
-                                <img src="../images/doctor-[[office.sex]].png" id="profile-photo">
+                                <img src$="[[office.photoUrl]]" id="profile-photo">
                             </template>
                         </div>
 
@@ -255,9 +254,9 @@
             is: 'home-view',
 
             properties: {
-                firebaseDatabase: {
+                firebaseApp: {
                     type: Object,
-                    value: firebase.apps[0].database()
+                    value: firebase.apps[0]
                 },
 
                 officesArray: {
@@ -292,10 +291,34 @@
                 }
             },
 
+/*            observers: [
+                "setPhotos(firebaseApp, officesArray)"
+            ],*/
+
+            setPhotos: function (firebaseApp, officesArray) {
+                var i, office;
+
+                // TODO: promises
+
+                for (i = 0; i < officesArray.length; i++) {
+                    office = officesArray[i];
+
+                    if (office.photoAvailability) {
+                        firebaseApp.storage().ref("profilePhotos/" + office.officeId + ".jpg").getDownloadURL().then(function (url) {
+                            console.log(url);
+                            office.photoUrl = url;
+                        }.bind(this)).catch(function (error) {
+                            console.log(error);
+                            this.photoUrl = "../images/doctor-" + office.sex + ".png";
+                        });
+                    }
+                }
+            },
+
             ready: function () {
                 var officesArray, numberToFetch = this.numberToFetch, searchData;
 
-                this.firebaseDatabase.ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).once('value').then(function (snapshot) {
+                this.firebaseApp.database().ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).once('value').then(function (snapshot) {
                     searchData = snapshot.val();
 
                     if (searchData !== null) {
@@ -329,7 +352,7 @@
             fetchData: function (startKey, indexDifference) {
                 var numberToFetch = this.numberToFetch, searchData;
 
-                this.firebaseDatabase.ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).startAt(startKey).once('value').then(function (snapshot) {
+                this.firebaseApp.database().ref('/officeSearchInfo/').orderByKey().limitToFirst(numberToFetch).startAt(startKey).once('value').then(function (snapshot) {
                     searchData = snapshot.val();
 
                     if (searchData !== null) {
@@ -341,14 +364,16 @@
 
             computeOfficesArray: function (officeSearchInfo) {
                 return Object.keys(officeSearchInfo).map(function (key) {
+                    var sex = officeSearchInfo[key]['sex'];
                     return {
                         'name': officeSearchInfo[key]['name'],
-                        'sex': officeSearchInfo[key]['sex'],
+                        'sex': sex,
                         'address': officeSearchInfo[key]['address'],
                         'specialization': officeSearchInfo[key]['specialization'],
                         'photoAvailability': officeSearchInfo[key]['photoAvailability'],
                         'acceptingNewPatients': officeSearchInfo[key]['acceptingNewPatients'],
-                        'officeId': key
+                        'officeId': key,
+                        'photoUrl': "../images/doctor-" + sex + ".png"
                     }
                 });
             },
