@@ -39,7 +39,7 @@
                 margin-bottom: 1.4em;
             }
 
-            paper-button, #example-profile-link {
+            paper-button, .styled-link {
                 transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
@@ -96,7 +96,6 @@
             .register-container {
                 text-align: center;
                 position: relative;
-                padding-top: 2em;
             }
 
             .register-container paper-button {
@@ -128,10 +127,10 @@
             }
 
             header .arrow {
-                max-width: 30px;
+                max-height: 26px;
                 position: absolute;
-                top: 0;
-                left: calc(50% - 15px);
+                top: calc(50% - 15px);
+                left: calc(50% - 12em);
             }
 
             /************************/
@@ -148,7 +147,7 @@
             }
 
             #discover-arrow {
-                max-width: 30px;
+                max-width: 26px;
             }
 
             /******************/
@@ -173,6 +172,15 @@
                 padding-bottom: 3em;
             }
 
+            #patients-main-container .main-frame {
+                border-bottom: 1px solid #e2e2e3;
+            }
+
+            #patients-main-container .styled-link{
+                display: block;
+                text-align: center;
+            }
+
             #patients-image {
                 max-height: 200px;
                 width: auto;
@@ -189,8 +197,9 @@
             /****************/
 
             #bottom-registration-container h1 {
-                color: var(--app-green-color);
+                color: var(--app-accent-color);
                 font-size: 1.4em;
+                margin-top: 2em;
             }
 
             .presentation-img {
@@ -225,8 +234,8 @@
 
             .profile-image {
                 position: static;
-                max-width: 170px;
-                max-height: 170px;
+                max-width: 150px;
+                max-height: 150px;
             }
 
             #about-section {
@@ -235,12 +244,13 @@
 
             /***** OFFICE PRESENTATION ********/
 
-            #office-presence-section a {
+            .styled-link {
                 font-weight: bold;
                 background-color: var(--app-green-color);
                 color: #fff;
                 padding: 0.5em 1em;
-                border-radius: 1em;
+                border-radius: 2em;
+                letter-spacing: 0.02em;
             }
 
             /*** QUESTION FORM ***/
@@ -341,9 +351,6 @@
                     max-height: 60px;
                 }
 
-                header .arrow {
-                    max-width: 20px;
-                }
             }
 
             @media (max-width: 980px) {
@@ -360,7 +367,7 @@
                     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
                 }
 
-                #example-profile-link:hover {
+                .styled-link:hover {
                     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
                 }
             }
@@ -487,9 +494,9 @@
                 }
             }
 
-
         </style>
 
+        <iron-media-query query="max-width:460px" query-matches="{{mobileScreen}}"></iron-media-query>
         <iron-media-query query="max-width:716px" query-matches="{{smallScreen}}"></iron-media-query>
         <iron-media-query query="max-width:980px" query-matches="{{mediumScreen}}"></iron-media-query>
 
@@ -528,7 +535,7 @@
             </section>
 
             <div class="register-container">
-                <img src="../images/docinfo/vertical-white-arrow.png" class="arrow">
+                <img src="../images/docinfo/horizontal-white-arrow.png" class="arrow" hidden="[[mobileScreen]]">
                 <a href="[[computeUrl(signedIn)]]">
                     <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
                 </a>
@@ -541,12 +548,15 @@
                 <section>
                     <h1>PROČ TO DĚLÁME?</h1>
                     <p>
-                        Víme, že moderní technologie často nejsou využívány tam, kde to má nějvětší smysl.
-                        A zdravotnictví je jedno z nejdůležitějších odvětví, kde lze tyto nástroje aplikovat tak,
-                        aby zjednodušily život nám všem.</p>
+                        Je rok 2017 a už 10 let existuje konkurence, která nabízí podobné služby co my. Místo toho, aby
+                        se snažili uspokojit co nejvíc zákazníků, tak vybírají poplatky a zavazují smlouvami ke službám,
+                        které by měly být samozřejmostí. Tím brzdí vývoj a odrazují lékaře od služeb, které jsou
+                        prospěšné pro nás všechny.
+
+                    </p>
                     <p>
-                        Proto jsme si dali za cíl vytvořit tento veřejný systém. Kvalita zdravotní péče ovlivňuje každého z
-                        nás. Je tak důležité, aby k těmto službám měli přístup všichni a bez rozdílu.
+                        Kvalita zdravotní péče ovlivňuje každého z nás, a proto jsme si dali za cíl vytvořit tento
+                        veřejný systém.
                     </p>
                 </section>
                 <section id="profile-images-section" class="">
@@ -574,7 +584,7 @@
                         <br>
                         <br>
                         <br>
-                        <a id="example-profile-link" href="/d/strakova_plzen">Zobrazit ukázkový profil</a>
+                        <a class="styled-link" href="/d/strakova_plzen">Zobrazit ukázkový profil</a>
                     </p>
                 </section>
 
@@ -591,11 +601,13 @@
                 </section>
                 <section id="office-calendar-section">
                     <h1>ONLINE OBJEDNÁVÁNÍ<br>A ELEKTRONICKÝ KALENDÁŘ</h1>
-                    <p>K dispozici máte online objednání, které můžete využít jakkoli se Vám to hodí. Je jedno kolik objednávacích dnů nebo časů si
+                    <p>K dispozici máte online objednání, které můžete využít jakkoli se Vám to hodí. Je jedno kolik
+                        objednávacích dnů nebo časů si
                         vytvoříte,
                         za nic platit nebudete.
                     </p>
-                    <p>Elektronický kalendář přehledně reprezentuje Vaše objednané pacienty. Můžete v něm snadno objednávat nebo rušit schůzky.</p>
+                    <p>Elektronický kalendář přehledně reprezentuje Vaše objednané pacienty. Můžete v něm snadno
+                        objednávat nebo rušit schůzky.</p>
                 </section>
             </div>
         </section>
@@ -609,8 +621,13 @@
                         máte k dispozici potvrzování pacientů.
                     </p>
                     <p>
-                        Můžete si tak sami vybrat, kteří pacienti se mohou objednat a kteří ne. Tím si vytvoříte seznam Vašich pacientů, kterým můžete
+                        Můžete si tak sami vybrat, kteří pacienti se mohou objednat a kteří ne. Tím si vytvoříte seznam
+                        Vašich pacientů, kterým můžete
                         důvěřovat.
+                        <br>
+                        <br>
+                        <br>
+                        <a class="styled-link" href="/newweb">Zaujaly Vás naše služby, ale chcete vlastní stránky?</a>
                     </p>
                 </section>
                 <section class="img-section">
@@ -619,7 +636,7 @@
             </div>
 
             <div id="bottom-registration-container" class="register-container">
-                <h1>ZAREGISTRUJTE SE A VYUŽÍVEJTE VŠECH SLUŽEB NAPLNO</h1>
+                <h1>PRO VYUŽITÍ VŠECH SLUŽEB SE ZAREGISTRUJTE</h1>
                 <a href="[[computeUrl(signedIn)]]">
                     <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
                 </a>
@@ -631,7 +648,7 @@
 
         <div id="question-container" hidden="[[messageSent]]">
             <form id="docinfo_form" is="iron-form">
-                <h2>Máte nějaký dotaz? Zeptejte se nás.</h2>
+                <h2>Napište nám</h2>
                 <gold-email-input id="email_input" error-message="Špatný formát"
                                   label="Vaše emailová adresa" required>
                 </gold-email-input>
