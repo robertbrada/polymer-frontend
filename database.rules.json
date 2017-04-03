@@ -272,6 +272,18 @@
     "docInfoVisitors": {
       ".read": false,
       ".write": true
+    },
+    "newWebQuestions": {
+      ".read": false,
+      ".write": true,
+      "$pushId": {
+        "contact": {
+          ".validate": "newData.isString()"
+        },
+        "message": {
+          ".validate": "newData.isString() && newData.val().length <= 2000"
+        }
+      }
     }
   }
 }
