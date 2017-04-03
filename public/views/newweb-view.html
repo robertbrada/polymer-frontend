@@ -1,0 +1,169 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
+<link rel="import" href="/bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="/styles/input-styles.html">
+
+
+<dom-module id="newweb-view">
+    <template>
+        <style include="input-styles">
+
+            #main-container {
+                background-color: #fff;
+                padding: 1em;
+                font-size: 1.3em;
+                font-weight: 100;
+                max-width: 850px;
+                margin: 2em auto 0 auto;
+            }
+
+            h1 {
+                font-weight: 100;
+                text-align: center;
+                margin: 0 auto 0.9em 0;
+                font-size: 1.5em;
+            }
+
+            p {
+                line-height: 1.7em;
+            }
+
+            #question-container {
+                margin-top: 2.5em;
+                border-top: 1px solid #e2e2e3;
+                padding-top: 2em;
+            }
+
+            #question-container h2 {
+                font-size: 1.2em;
+                letter-spacing: 0.02em;
+                margin-top: 0.5em;
+                margin-bottom: 1em;
+
+            }
+
+            paper-button {
+                background-color: var(--app-green-color);
+                color: #fff;
+                padding: 1em 2em;
+                font-size: 0.85em;
+                margin-top: 2em;
+                font-weight: 500;
+                letter-spacing: 0.03em;
+            }
+
+            img {
+                max-width: 50%;
+                margin: 3em auto;
+                display: block;
+                text-align: center;
+
+            }
+
+            #message-sent {
+                color: var(--app-green-color);
+                font-weight: 500;
+                padding-top: 1em;
+                border-top: 1px solid #e2e2e3;
+            }
+            @media (max-width: 767px) {
+
+                :host {
+                    font-size: 0.9em;
+                }
+            }
+
+        </style>
+        <div id="main-container">
+            <h1>Nechte si vytvořit webovou stránku od tvůrců Docta.cz</h1>
+
+            <img src="../images/docinfo/website.png" id="header-image">
+
+            <p>Vytvoříme Vám unikátní internetovou stránku na míru, kde můžete mít i online objednávání.
+                Vaše stránka bude dokonale propojena se systémem Docta.cz a budete tak moci spravovat informace pohodlně
+                z nastavení ordinace.
+            </p>
+            <p>
+                Stránky Vám vytvoříme za 500 Kč měsíčně bez dalších poplatků. Za online objednávání nic platit nebudete,
+                je tak zcela na Vás, zda ho chcete využít nebo ne.
+            </p>
+            <p>
+                Dnes tvoří stránky kdekdo, aniž by věděl, jak má stránka fungovat. Stránky jsou pak zmatečné a
+                fungují špatně na mobilních zařízeních. Tyto stránky jsou těžko vyhledatelné, jelikož kvalita stránek je
+                důležitým faktorem pro internetové vyhledávače. Zajistíme, aby Vaše stránky fungovaly perfektně.
+            </p>
+            <p>
+                Pokud už máte vlastní stránky, postaráme se, abyste s přesunem měli minimum starostí.
+            </p>
+            <p>
+                V případě zájmu vyplňte prosím kontaktní formulář níže.
+            </p>
+            <p>
+                Věříme, že s námi budete spokojeni.
+            </p>
+            <div id="question-container" hidden="[[messageSent]]">
+                <form id="docinfo_form" is="iron-form">
+                    <h2>Kontaktní formulář</h2>
+                        Napište, jak Vás máme kontaktovat (email, telefon, ...). Pokud máme zavolat, dejte vědět, kdy se Vám to hodí.
+                    </p>
+                    <paper-input id="contact_input" error-message="Pole nesmí být prázdné"
+                                      label="Kontakt na Vás" required>
+                    </paper-input>
+                    <paper-textarea id="message_input" label="Dobrovolná zpráva" char-counter
+                                    maxlength="2000"></paper-textarea>
+                    <paper-button raised on-tap="send">Odeslat</paper-button>
+                </form>
+            </div>
+
+            <p id="message-sent" hidden="[[!messageSent]]">Zpráva odeslána, děkujeme.</p>
+
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'newweb-view',
+
+            properties: {
+                messageSent: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+
+            send: function () {
+                //  paper-textarea was not detected by form validation, so I'm validating the inputs manually
+                if (this.$.contact_input.validate() && this.$.message_input.validate()) {
+                    this.sendQuestion();
+                }
+            },
+
+            sendQuestion: function () {
+
+                var contact = this.$.contact_input.value,
+                    message = this.$.message_input.value,
+                    db = firebase.apps[0].database();
+
+                db.ref('/newWebQuestions/').push({
+                    "contact": contact,
+                    "message": message
+                }).then(function () {
+                    this.fire("show-toast", {text: "Zpráva odeslána"});
+                    this.messageSent = true;
+                }.bind(this), function () {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            }
+        });
+    </script>
+</dom-module>
