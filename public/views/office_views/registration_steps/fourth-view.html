@@ -82,7 +82,7 @@
                     <h2>Pojišťovny</h2>
                     <p>Vyberte pojišťovny, se kterými máte smlouvu.</p>
                     <template is="dom-repeat" items="[[fullInfo.insurance]]" as="entry">
-                        <paper-checkbox checked="{{entry.accepted}}">[[computeInsuranceName(entry.id)]]
+                        <paper-checkbox checked="{{entry.available}}">[[computeInsuranceName(entry.id)]]
                         </paper-checkbox>
                     </template>
                 </section>

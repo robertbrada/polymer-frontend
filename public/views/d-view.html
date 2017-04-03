@@ -332,14 +332,14 @@
                         <span id="address-city">[[officeData.address.city]]</span>
                     </div>
 
-                    <div hidden="[[!computeTextAvailability(officeData.phoneNumber)]]">
+                    <div hidden="[[!returnBoolean(officeData.phoneNumber)]]">
                         <a href="tel:[[officeData.phoneNumber]]">
                             <iron-icon icon="communication:phone"></iron-icon>
                         </a>
                         [[officeData.phoneNumber]]
                     </div>
 
-                    <div hidden="[[!computeTextAvailability(officeData.email)]]">
+                    <div hidden="[[!returnBoolean(officeData.email)]]">
                         <a href="mailto:bert.blader@gmail.com">
                             <iron-icon icon="communication:email"></iron-icon>
                         </a>
@@ -397,16 +397,16 @@
                 </template>
 
                 <template is="dom-if"
-                          if="[[computeIfInfoSection(offlineHoursAvailable, holidayAvailable, insuranceAvailable, patientTextAvailable, servicesAvailable)]]">
+                          if="[[infoAvailability.available]]">
                     <section id="no-calendar-container">
 
-                        <template is="dom-if" if="[[offlineHoursAvailable]]">
+                        <template is="dom-if" if="[[infoAvailability.offlineOfficeHours]]">
                             <div id="offline-hours">
                                 <h2>
                                     <iron-icon icon="icons:watch-later"></iron-icon>
                                     Ordinační hodiny
                                 </h2>
-                                <template is="dom-repeat" items="[[offlineOfficeHoursArray]]" as="offlineHours">
+                                <template is="dom-repeat" items="[[officeData.offlineOfficeHours]]" as="offlineHours">
                                     <template is="dom-if" if="[[offlineHours.available]]">
                                         <div class="day"><span>[[computeDateName(index)]] :</span><span
                                                 hidden="[[!offlineHours.available]]">
@@ -417,14 +417,14 @@
                             </div>
                         </template>
 
-                        <template is="dom-if" if="[[holidayAvailable]]">
+                        <template is="dom-if" if="[[infoAvailability.holidays]]">
                             <div class="holidays-container">
                                 <b>Dovolená</b><br>
 
-                                <template is="dom-repeat" items="[[holidaysArray]]" as="holiday">
+                                <template is="dom-repeat" items="[[computeHolidaysArray(officeData.holidays)]]" as="holiday">
                                     <div class="holiday">
                                         <span><b>Od:</b> [[holiday.startAt]] &nbsp;&nbsp; <b>Do:</b> [[holiday.endAt]]</span>
-                                        <div hidden="[[!computeTextAvailability(holiday.substituteDoctorName)]]"><b>Zastupující
+                                        <div hidden="[[!returnBoolean(holiday.substituteDoctorName)]]"><b>Zastupující
                                             lékař:</b> [[holiday.substituteDoctorName]]
                                         </div>
                                     </div>
@@ -433,7 +433,7 @@
                         </template>
 
 
-                        <template is="dom-if" if="[[patientTextAvailable]]">
+                        <template is="dom-if" if="[[infoAvailability.patientText]]">
                             <h2>
                                 <iron-icon icon="icons:info"></iron-icon>
                                 Informace pro pacienty
@@ -441,27 +441,27 @@
                             <span>[[officeData.patientText]]</span>
                         </template>
 
-                        <template is="dom-if" if="[[insuranceAvailable]]">
+                        <template is="dom-if" if="[[infoAvailability.insurance]]">
                             <section id="insurance-container">
                                 <h2>
                                     <iron-icon icon="icons:assignment"></iron-icon>
                                     Pojišťovny, se kterými máme smlouvu
                                 </h2>
-                                <template is="dom-repeat" items="[[insuranceArray]]" as="insurance">
-                                    <template is="dom-if" if="[[insurance.accepted]]">
+                                <template is="dom-repeat" items="[[officeData.insurance]]" as="insurance">
+                                    <template is="dom-if" if="[[insurance.available]]">
                                         <div>[[computeInsuranceName(insurance.id)]]</div>
                                     </template>
                                 </template>
                             </section>
                         </template>
 
-                        <template is="dom-if" if="[[servicesAvailable]]">
+                        <template is="dom-if" if="[[infoAvailability.officeServices]]">
                             <section id="services-container">
                                 <h2>
                                     <iron-icon icon="icons:view-list"></iron-icon>
                                     Poskytované služby
                                 </h2>
-                                <template is="dom-repeat" items="[[officeServicesArray]]" as="officeServices">
+                                <template is="dom-repeat" items="[[officeData.officeServices]]" as="officeServices">
                                     <div class="flex-horizontal service-item">
                                         <div class="service-name flexchild">[[officeServices.name]]</div>
                                         <div class="service-price">[[officeServices.price]]</div>
@@ -506,27 +506,6 @@
                     type: String,
                     computed: 'computeIdProperty(route.path)',
                     observer: 'loadOfficeData'
-                },
-
-
-                insuranceArray: {
-                    type: Array,
-                    computed: 'computeInsuranceArray(officeData.insurance)'
-                },
-
-                offlineOfficeHoursArray: {
-                    type: Array,
-                    computed: 'computeOfflineOfficeHoursArray(officeData.offlineOfficeHours)'
-                },
-
-                officeServicesArray: {
-                    type: Array,
-                    computed: 'computeOfficeServicesArray(officeData.officeServices)'
-                },
-
-                holidaysArray: {
-                    type: Array,
-                    computed: 'computeHolidaysArray(officeData.holidays)'
                 },
 
                 hideSpinner: {
@@ -589,7 +568,7 @@
 
                 onlineBooking: {
                     type: Boolean,
-                    computed: "computeOnlineBooking(officeData)",
+                    computed: "returnBoolean(officeData.lastGeneratedDate)",
                     observer: "observeOnlineBooking"
                 },
 
@@ -599,34 +578,12 @@
                     observer: "observerShowMap"
                 },
 
-                // Info section
 
-                offlineHoursAvailable: {
-                    type: Boolean,
-                    computed: "computeArrayDataAvailability(officeData.offlineOfficeHours)"
-
+                // One object grouping the info about availability of info section information
+                infoAvailability: {
+                    type: Object,
+                    computed: "computeInfoAvailability(officeData)"
                 },
-
-                insuranceAvailable: {
-                    type: Boolean,
-                    computed: "computeArrayDataAvailability(insuranceArray)"
-                },
-
-                patientTextAvailable: {
-                    type: Boolean,
-                    computed: "computeTextAvailability(officeData.patientText)"
-                },
-
-                servicesAvailable: {
-                    type: Boolean,
-                    computed: "computeDataAvailability(officeData.officeServices)"
-                },
-
-                holidayAvailable: {
-                    type: Boolean,
-                    computed: "computeDataAvailability(officeData.holidays)"
-                },
-
 
                 // Lazy loading
                 calendarElementLoaded: {
@@ -884,8 +841,8 @@
                 return (this.specializations[specialization]);
             },
 
-            computeTextAvailability: function (text) {
-                return (!!text);
+            returnBoolean: function (data) {
+                return !!data;
             },
 
             computePhotoURL: function (photoAvailability, sex, officeId) {
@@ -898,38 +855,6 @@
 
             computeContentHiddenness: function (requestFinished, wrongId) {
                 return requestFinished || wrongId;
-            },
-
-
-            //COMPUTE OFFICE INFO
-
-            computeInsuranceArray: function (officeData) {
-                return Object.keys(officeData).map(function (key) {
-                    return {
-                        'accepted': officeData[key]['accepted'],
-                        'id': officeData[key]['id']
-                    }
-                });
-            },
-
-            computeOfflineOfficeHoursArray: function (officeData) {
-                return Object.keys(officeData).map(function (key) {
-                    return {
-                        'available': officeData[key]['available'],
-                        'hours': officeData[key]['hours']
-                    }
-                });
-            },
-
-            computeOfficeServicesArray: function (officeData) {
-                if (!!officeData) {
-                    return Object.keys(officeData).map(function (key) {
-                        return {
-                            'name': officeData[key]['name'],
-                            'price': officeData[key]['price']
-                        }
-                    });
-                }
             },
 
             computeHolidaysArray: function (officeHolidays) {
@@ -957,33 +882,38 @@
                 return this.days[index]
             },
 
-            computeArrayDataAvailability: function (array) {
-                for (var i = 0; i < array.length; i++) {
-                    if (array[i].available == true) {
-                        return true
-                    }
-                }
-                return false;
-            },
-
             computeMapAvailability: function (showMap, mapLoaded, mapMarkerLoaded) {
                 return showMap && mapLoaded && mapMarkerLoaded;
-            },
-
-            computeOnlineBooking: function (officeData) {
-                return !!officeData.lastGeneratedDate;
             },
 
             computeIfCalendar: function (onlineBooking, calendarElementLoaded, calendarDisabledElementLoaded) {
                 return onlineBooking && calendarElementLoaded && calendarDisabledElementLoaded;
             },
 
-            computeDataAvailability: function (data) {
-                return !!data;
-            },
+            computeInfoAvailability: function (officeData) {
+                var availabilityObject = {"available": false},
+                    areArrayDataAvailable = function (array) {
+                        for (var i = 0; i < array.length; i++) {
+                            if (array[i].available == true) {
+                                return true
+                            }
+                        }
+                        return false;
+                    };
 
-            computeIfInfoSection: function (offlineHoursAvailable, holidayAvailable, insuranceAvailable, patientTextAvailable, servicesAvailable) {
-                return offlineHoursAvailable || holidayAvailable || insuranceAvailable || patientTextAvailable || servicesAvailable;
+                availabilityObject["offlineOfficeHours"] = areArrayDataAvailable(officeData.offlineOfficeHours);
+                availabilityObject["insurance"] = areArrayDataAvailable(officeData.insurance);
+                availabilityObject["patientText"] = !!officeData.patientText;
+                availabilityObject["officeServices"] = !!officeData.officeServices;
+                availabilityObject["holidays"] = !!officeData.holidays;
+
+                Object.keys(availabilityObject).forEach(function (key, index) {
+                    if (availabilityObject[key]) {
+                        availabilityObject.available = true;
+                    }
+                });
+
+                return availabilityObject;
             }
         });
     </script>

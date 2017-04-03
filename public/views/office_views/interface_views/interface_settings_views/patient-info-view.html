@@ -137,7 +137,7 @@
                     <h2>Pojišťovny</h2>
                     <p>Vyberte pojišťovny, se kterými máte smlouvu.</p><br>
                     <template is="dom-repeat" items="[[localOfficeData.insurance]]" as="entry">
-                        <paper-checkbox checked="{{entry.accepted}}">[[computeInsuranceName(entry.id)]]
+                        <paper-checkbox checked="{{entry.available}}">[[computeInsuranceName(entry.id)]]
                         </paper-checkbox>
                     </template>
                 </section>
