@@ -291,30 +291,6 @@
                 }
             },
 
-/*            observers: [
-                "setPhotos(firebaseApp, officesArray)"
-            ],*/
-
-            setPhotos: function (firebaseApp, officesArray) {
-                var i, office;
-
-                // TODO: promises
-
-                for (i = 0; i < officesArray.length; i++) {
-                    office = officesArray[i];
-
-                    if (office.photoAvailability) {
-                        firebaseApp.storage().ref("profilePhotos/" + office.officeId + ".jpg").getDownloadURL().then(function (url) {
-                            console.log(url);
-                            office.photoUrl = url;
-                        }.bind(this)).catch(function (error) {
-                            console.log(error);
-                            this.photoUrl = "../images/doctor-" + office.sex + ".png";
-                        });
-                    }
-                }
-            },
-
             ready: function () {
                 var officesArray, numberToFetch = this.numberToFetch, searchData;
 
@@ -364,16 +340,16 @@
 
             computeOfficesArray: function (officeSearchInfo) {
                 return Object.keys(officeSearchInfo).map(function (key) {
-                    var sex = officeSearchInfo[key]['sex'];
+                    var data = officeSearchInfo[key];
                     return {
-                        'name': officeSearchInfo[key]['name'],
-                        'sex': sex,
-                        'address': officeSearchInfo[key]['address'],
-                        'specialization': officeSearchInfo[key]['specialization'],
-                        'photoAvailability': officeSearchInfo[key]['photoAvailability'],
-                        'acceptingNewPatients': officeSearchInfo[key]['acceptingNewPatients'],
+                        'name': data['name'],
+                        'sex': data['sex'],
+                        'address': data['address'],
+                        'specialization': data['specialization'],
+                        'photoAvailability': data['photoAvailability'],
+                        'acceptingNewPatients': data['acceptingNewPatients'],
                         'officeId': key,
-                        'photoUrl': "../images/doctor-" + sex + ".png"
+                        'photoUrl': data['photoUrl']
                     }
                 });
             },

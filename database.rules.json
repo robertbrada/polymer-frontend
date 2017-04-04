@@ -19,6 +19,16 @@
           }
         }
       },
+      "photoAddition": {
+        "$oid": {
+          ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()"
+        }
+      },
+      "photoDeletion": {
+        "$oid": {
+          ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()"
+        }
+      },
       "indexUpdates": {
         "$oid": {
           ".write": "!data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()"
@@ -169,6 +179,18 @@
         ".write": "auth.uid === 'my-service-worker' || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         "status": {
           ".validate": "newData.isString() && (newData.val() == 'awaitsDeletion' || newData.val() == 'processed' || newData.val() == 'awaitsAddition')"
+        }
+      }
+    },
+    "officeProfilePhoto": {
+      "$oid": {
+        ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        ".write": "auth.uid === 'my-service-worker' || !data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        "status": {
+          ".validate": "newData.isString() && (newData.val() == 'awaitsDeletion' || newData.val() == 'processed' || newData.val() == 'awaitsAddition')"
+        },
+        "photoUrl": {
+          ".validate": "newData.isString()"
         }
       }
     },

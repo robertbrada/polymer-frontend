@@ -193,7 +193,7 @@
                             email: null,
                             manualConfirmation: true,
                             patientText: null,
-                            photoAvailability: false,
+                            photoUrl: null,
                             acceptingNewPatients: false,
                             offlineOfficeHours: [
                                 {'available': true, hours: null}, // Monday
@@ -319,7 +319,6 @@
                 db.ref('/officeSearchInfo/' + officeId).once('value', function (snapshot) {
                     if (snapshot.val() === null) {
                         this.saveOffice(data, officeId, this.userId);
-                        this.savePhoto(data, officeId);
                     } else {
                         this.generateOfficeId(data, normalizedString, increment + 1);
                     }
@@ -327,28 +326,34 @@
             },
 
             saveOffice: function (data, officeId, userId) {
+                data.fullInfo.photoUrl = "../images/doctor-" + data.fullInfo.sex + ".png";
+
                 var objectToSave = {},
                     rootRef = this.firebaseDatabase.ref('/'),
                     indexAndSearchInfo = {
-                        'name': data.fullInfo.name,
-                        'sex': data.fullInfo.sex,
-                        'address': data.fullInfo.address,
-                        'coordinates': data.fullInfo.coordinates,
-                        'acceptingNewPatients': data.fullInfo.acceptingNewPatients,
-                        'specialization': data.fullInfo.specialization,
-                        'photoAvailability': data.fullInfo.photoAvailability
+                        name: data.fullInfo.name,
+                        sex: data.fullInfo.sex,
+                        address: data.fullInfo.address,
+                        coordinates: data.fullInfo.coordinates,
+                        acceptingNewPatients: data.fullInfo.acceptingNewPatients,
+                        specialization: data.fullInfo.specialization,
+                        photoUrl: data.fullInfo.photoUrl
                     };
 
                 objectToSave['/officeFullInfo/' + officeId] = data.fullInfo;
                 objectToSave['/userInterfaceInfo/' + userId + '/showOfficeInterface'] = true;
                 objectToSave['/officePermissions/' + officeId + '/' + this.userId + '/admin'] = true;
                 objectToSave['/officeSearchInfo/' + officeId] = indexAndSearchInfo;
+                objectToSave['/officeProfilePhoto/' + officeId] = {
+                    status: "processed",
+                    photoUrl: data.fullInfo.photoUrl
+                };
                 objectToSave['/taskQueue/indexUpdates/' + officeId] = indexAndSearchInfo;
                 objectToSave['/userOffices/' + userId + '/' + officeId] = {
-                    'permissions': {
-                        'admin': true
+                    permissions: {
+                        admin: true
                     },
-                    'name': data.fullInfo.address.city + ', ' + data.fullInfo.address.street
+                    name: data.fullInfo.address.city + ', ' + data.fullInfo.address.street
                 };
 
                 objectToSave['/officeInterfaceInfo/' + officeId] = data.officeInterfaceInfo;
@@ -397,11 +402,6 @@
                 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
                 request.send();
-            },
-
-            savePhoto: function (data, officeID) {
-//                this.$.office_document.app.storage();
-                console.log('TODO: save photo');
             },
 
             normalizeText: function (text) {
