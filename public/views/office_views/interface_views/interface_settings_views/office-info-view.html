@@ -9,6 +9,8 @@
 <link rel="import" href="/bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-icon/iron-icons.html">
 
 <link rel="import" href="/bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
@@ -25,6 +27,87 @@
 <dom-module id="office-info-view">
     <template>
         <style include="button-styles layout-styles input-styles settings-styles">
+
+            #profile-photo {
+                width: 120px;
+                margin-right: 1em;
+            }
+
+            .profile-photo-section {
+                padding: 1em 0 1.5em 0;
+                margin-top: 2em;
+            }
+
+            .button-container {
+                text-align: right;
+            }
+
+            .delete-photo-button {
+                background-color: transparent;
+            }
+
+            .delete-photo-button iron-icon {
+                height: 22px;
+                margin-top: -2px;
+            }
+
+            #upload-label {
+                cursor: pointer;
+                display: block;
+                max-width: 14em;
+                background-color: var(--app-green-color);
+                color: #fff;
+                text-align: center;
+                border-radius: 2em;
+                padding: 0.6em 1em;
+                margin: 0 0 1em auto;
+            }
+
+            #upload-photo {
+                opacity: 0;
+                position: absolute;
+                z-index: -1;
+            }
+
+            #photo-status-container {
+                color: var(--app-grey-text-color);
+                border-top: 1px solid #e2e2e3;
+                padding-top: 0.8em;
+                text-align: center;
+            }
+
+            #photo-status-container iron-icon {
+                color: var(--app-green-color);
+                height: 20px;
+                width: 20px;
+                margin-right: 0.2em;
+                margin-top: -3px;
+            }
+
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+            }
+
+            @media only screen and (max-width: 500px) {
+
+                .flex-horizontal {
+                    @apply(--layout-vertical);
+                }
+
+                #upload-label {
+                    margin: 2em auto 0.5em auto;
+                }
+
+                .profile-photo-section, .button-container {
+                    text-align: center;
+                }
+            }
+
+
         </style>
 
         <form id="general_form" is="iron-form" class="main-frame">
@@ -52,6 +135,38 @@
                         <paper-radio-button name="male">Muž</paper-radio-button>
                     </paper-radio-group>
 
+
+                    <h2>Profilová fotografie</h2>
+                    <div class="container flex-horizontal profile-photo-section">
+                        <div><img id="profile-photo" src$="[[photoUrl]]"></div>
+                        <div class="flexchild button-container">
+                            <label id="upload-label" for="upload-photo">
+                                <iron-icon icon="icons:file-upload"></iron-icon>
+                                Vybrat profilovou fotografii
+                            </label>
+                            <input type="file" name="photo" id="upload-photo"/>
+                            <br>
+
+                            <button class="delete-photo-button"
+                                    on-tap="deletePhoto"
+                                    hidden="[[computeButtonHiddenness(officeFullInfo.photoAvailability, photoStatus)]]" >
+                                <iron-icon icon="close"></iron-icon>
+                                Odstranit
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="photo-status-container"
+                         title="Požadavek na přidání/odstranění fotografie co nejdříve zpracujeme."
+                         hidden="[[computeStatusHiddenness(photoStatus)]]">
+                        <iron-icon icon="help"></iron-icon>
+                        <b>Status:</b>
+                        Čeká na zpracování
+                        <!--[[computeStatus(photoStatus)]]-->
+                    </div>
+
+                </section>
+                <section>
                     <h2>Adresa ordinace</h2>
                     <paper-input label="Město" value="{{officeFullInfo.address.city}}"
                                  minlength="1" maxlength="20" auto-validate>
@@ -59,8 +174,7 @@
                     <paper-input label="Ulice a číslo popisné" value="{{officeFullInfo.address.street}}"
                                  minlength="1" maxlength="80" required auto-validate></paper-input>
 
-                </section>
-                <section>
+
                     <h2>Vřejné informace profilu</h2>
                     <p>Informace budou veřejně k vidění na Vašem profilu. Údaje jsou
                         dobrovolné a nemusíte je tak vyplňovat. </p>
@@ -72,7 +186,8 @@
                                       auto-validate></gold-email-input>
                     <h2>Vaše specializace v této ordinaci</h2>
                     <paper-dropdown-menu label="Specializace">
-                        <paper-listbox class="dropdown-content" selected="{{officeFullInfo.specialization}}" attr-for-selected="name">
+                        <paper-listbox class="dropdown-content" selected="{{officeFullInfo.specialization}}"
+                                       attr-for-selected="name">
                             <template is="dom-repeat" items="[[specializations]]" as="specialization">
                                 <paper-item name="[[specialization]]">[[specialization]]</paper-item>
                             </template>
@@ -182,14 +297,42 @@
 
                 officeFullInfo: {
                     type: Object
+                },
+
+                photoStatus: {
+                    type: String
+                },
+
+                photoUrl: {
+                    type: String
+                }
+            },
+
+
+
+            setPhotoUrl: function () {
+//                TODO get photoUrl
+                var photoAvailability = this.officeFullInfo.photoAvailability,
+                    sex = this.officeFullInfo.sex;
+
+                if (photoAvailability) {
+
+                } else {
+                    this.photoUrl = "../../../../images/doctor-" + sex + ".png";
                 }
             },
 
             fetchData: function () {
                 this.firebaseDatabase.ref("/officeFullInfo/" + this.officeId).once('value').then(function (snapshot) {
                     this.officeFullInfo = snapshot.val();
+                    this.setPhotoUrl();
                 }.bind(this));
 
+                /* get photo status */
+                /* TODO not in database rules yet*/
+                this.firebaseDatabase.ref("/officeProfilePhoto/" + this.officeId + "/status").once('value').then(function (snapshot) {
+                    this.photoStatus = snapshot.val();
+                }.bind(this));
             },
 
             confirm: function () {
@@ -237,6 +380,26 @@
                         }
                     });
                 }.bind(this));
+            },
+
+            computeStatus: function (status) {
+                switch (status) {
+                    case "awaitsAddition":
+                        return "Čeká na zpracování";
+                    case "awaitsDeletion":
+                        return "Čeká na odstranění";
+                    default:
+                        return null;
+                }
+            },
+
+            computeStatusHiddenness: function (status) {
+                return status === "processed";
+            },
+
+            computeButtonHiddenness: function (photoAvailable, status) {
+                //don't show delete button when some task in process
+                return !photoAvailable || status == "awaitsAddition" || status == "awaitsDeletion";
             }
         });
     </script>
