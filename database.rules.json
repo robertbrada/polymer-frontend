@@ -82,7 +82,7 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
         "numberOfNotifications": {
-//          TODO: check if bullshit
+          // TODO: check if bullshit
           ".read": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".write": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".validate": "newData.isNumber() && newData.val() >= 0"
@@ -186,6 +186,9 @@
       "$oid": {
         ".read": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
         ".write": "auth.uid === 'my-service-worker' || !data.exists() || root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
+        "defaultPhoto": {
+          ".validate": "newData.isBoolean()"
+        },
         "status": {
           ".validate": "newData.isString() && (newData.val() == 'awaitsDeletion' || newData.val() == 'processed' || newData.val() == 'awaitsAddition')"
         },

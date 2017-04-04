@@ -326,7 +326,7 @@
             },
 
             saveOffice: function (data, officeId, userId) {
-                data.fullInfo.photoUrl = "../images/doctor-" + data.fullInfo.sex + ".png";
+                data.fullInfo.photoUrl = "/images/doctor-" + data.fullInfo.sex + ".png";
 
                 var objectToSave = {},
                     rootRef = this.firebaseDatabase.ref('/'),
@@ -345,8 +345,9 @@
                 objectToSave['/officePermissions/' + officeId + '/' + this.userId + '/admin'] = true;
                 objectToSave['/officeSearchInfo/' + officeId] = indexAndSearchInfo;
                 objectToSave['/officeProfilePhoto/' + officeId] = {
-                    status: "processed",
-                    photoUrl: data.fullInfo.photoUrl
+                    defaultPhoto: true,
+                    photoUrl: data.fullInfo.photoUrl,
+                    status: "processed"
                 };
                 objectToSave['/taskQueue/indexUpdates/' + officeId] = indexAndSearchInfo;
                 objectToSave['/userOffices/' + userId + '/' + officeId] = {

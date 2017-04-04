@@ -10,7 +10,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="/bower_components/iron-icon/iron-icons.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="/bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
@@ -138,7 +138,7 @@
 
                     <h2>Profilová fotografie</h2>
                     <div class="container flex-horizontal profile-photo-section">
-                        <div><img id="profile-photo" src$="[[photoUrl]]"></div>
+                        <div><img id="profile-photo" src$="[[officeProfilePhoto.photoUrl]]"></div>
                         <div class="flexchild button-container">
                             <label id="upload-label" for="upload-photo">
                                 <iron-icon icon="icons:file-upload"></iron-icon>
@@ -149,7 +149,7 @@
 
                             <button class="delete-photo-button"
                                     on-tap="deletePhoto"
-                                    hidden="[[computeButtonHiddenness(officeFullInfo.photoAvailability, photoStatus)]]" >
+                                    hidden="[[officeProfilePhoto.defaultPhoto]]">
                                 <iron-icon icon="close"></iron-icon>
                                 Odstranit
                             </button>
@@ -158,11 +158,11 @@
 
                     <div id="photo-status-container"
                          title="Požadavek na přidání/odstranění fotografie co nejdříve zpracujeme."
-                         hidden="[[computeStatusHiddenness(photoStatus)]]">
+                         hidden="[[computeStatusHiddenness(officeProfilePhoto.status)]]">
                         <iron-icon icon="help"></iron-icon>
                         <b>Status:</b>
                         Čeká na zpracování
-                        <!--[[computeStatus(photoStatus)]]-->
+                        [[computeStatus(officeProfilePhoto.status)]]
                     </div>
 
                 </section>
@@ -299,40 +299,46 @@
                     type: Object
                 },
 
+                officeProfilePhoto: {
+                    type: Object
+                },
+
                 photoStatus: {
                     type: String
                 },
 
                 photoUrl: {
                     type: String
+                },
+
+                officeProfilePhotoRef: {
+                    type: Object,
+                    value: null
                 }
             },
 
-
-
-            setPhotoUrl: function () {
-//                TODO get photoUrl
-                var photoAvailability = this.officeFullInfo.photoAvailability,
-                    sex = this.officeFullInfo.sex;
-
-                if (photoAvailability) {
-
-                } else {
-                    this.photoUrl = "../../../../images/doctor-" + sex + ".png";
-                }
+            fetchData: function (officeId) {
+                this.fetchFullInfo(officeId);
+                this.fetchProfilePhoto(officeId);
             },
 
-            fetchData: function () {
-                this.firebaseDatabase.ref("/officeFullInfo/" + this.officeId).once('value').then(function (snapshot) {
+            fetchFullInfo: function (officeId) {
+                this.firebaseDatabase.ref("/officeFullInfo/" + officeId).once('value').then(function (snapshot) {
                     this.officeFullInfo = snapshot.val();
-                    this.setPhotoUrl();
+                }.bind(this));
+            },
+
+            fetchProfilePhoto: function (officeId) {
+                var ref = this.firebaseDatabase.ref("/officeProfilePhoto/" + officeId);
+
+                // Disable old reference
+                if (!!this.officeProfilePhotoRef) this.officeProfilePhotoRef.off();
+
+                ref.on('value', function (snapshot) {
+                    this.officeProfilePhoto = snapshot.val();
                 }.bind(this));
 
-                /* get photo status */
-                /* TODO not in database rules yet*/
-                this.firebaseDatabase.ref("/officeProfilePhoto/" + this.officeId + "/status").once('value').then(function (snapshot) {
-                    this.photoStatus = snapshot.val();
-                }.bind(this));
+                this.officeProfilePhotoRef = ref;
             },
 
             confirm: function () {
@@ -351,7 +357,7 @@
                         'coordinates': officeFullInfo.coordinates,
                         'acceptingNewPatients': officeFullInfo.acceptingNewPatients,
                         'specialization': officeFullInfo.specialization,
-                        'photoAvailability': officeFullInfo.photoAvailability,
+                        'photoUrl': officeFullInfo.photoUrl,
                         'sex': officeFullInfo.sex
                     };
 
@@ -395,11 +401,6 @@
 
             computeStatusHiddenness: function (status) {
                 return status === "processed";
-            },
-
-            computeButtonHiddenness: function (photoAvailable, status) {
-                //don't show delete button when some task in process
-                return !photoAvailable || status == "awaitsAddition" || status == "awaitsDeletion";
             }
         });
     </script>
