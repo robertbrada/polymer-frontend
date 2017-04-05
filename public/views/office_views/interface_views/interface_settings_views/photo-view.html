@@ -1,15 +1,103 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/bower_components/iron-cropper/iron-cropper.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
+
 <dom-module id="photo-view">
     <template>
         <style>
         </style>
 
+        <input type="file" name="photo" id="upload-photo" on-change="setImage"/>
+        <div hidden="[[!photoAvailable]]">
+            <iron-cropper id="icropper"></iron-cropper>
+            <paper-button on-tap="saveToStorage">Nahrát</paper-button>
+        </div>
+        <img id="img2">
     </template>
 
     <script>
         Polymer({
-            is: 'photo-view'
+            is: 'photo-view',
+
+            properties: {
+                firebaseApp: {
+                    type: Object,
+                    value: firebase.apps[0]
+                },
+
+                photoAvailable: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+
+            setImage: function (event) {
+                var files = event.srcElement.files;
+                if (files.length === 1) {
+                    var file = URL.createObjectURL(files[0]);
+                    this.$.icropper.src = file;
+                    this.photoAvailable = true;
+                }
+            },
+
+            saveToStorage: function () {
+                var dataURItoBlob = function (dataURI) {
+                    var byteString = atob(dataURI.split(',')[1]);
+
+                    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+                    var ab = new ArrayBuffer(byteString.length);
+                    var ia = new Uint8Array(ab);
+                    for (var i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i);
+                    }
+
+                    var blob = new Blob([ab], {type: mimeString});
+                    return blob;
+                };
+
+                var uid = this.firebaseApp.auth().currentUser.uid,
+                    file = dataURItoBlob(this.$.icropper._cropper.getCroppedCanvas().toDataURL()),
+                    storageRef = this.firebaseApp.storage().ref("officeProfileImages/" + uid + "/");
+
+                storageRef.put(file).then(function (snapshot) {
+                    storageRef.getDownloadURL().then(function (url) {
+                        this.saveToDatabase(url);
+                    }.bind(this))
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                });
+            },
+
+            saveToDatabase: function (url) {
+                var db = this.firebaseApp.database(),
+                    objectToSave = {},
+                    officeId = this.officeId;
+
+                objectToSave["/officeFullInfo/" + officeId + "/photoUrl"] = url;
+                objectToSave["/officeSearchInfo/" + officeId + "/photoUrl"] = url;
+
+                db.ref().update(objectToSave).then(function (success) {
+                    this.fire("show-toast", {text: "Fotografie nahrána"});
+                    this.photoAvailable = false;
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při ukládání dat se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this))
+            }
         });
     </script>
 </dom-module>
