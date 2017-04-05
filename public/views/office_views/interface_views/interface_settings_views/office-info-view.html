@@ -12,6 +12,10 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
+<link rel="import" href="/bower_components/google-apis/google-maps-api.html">
+<link rel="import" href="/bower_components/google-map/google-map.html">
+<link rel="import" href="/bower_components/google-map/google-map-marker.html">
+
 <link rel="import" href="/bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
 
@@ -28,13 +32,17 @@
     <template>
         <style include="button-styles layout-styles input-styles settings-styles">
 
+            a {
+                text-decoration: none;
+            }
+
             #profile-photo {
                 width: 120px;
                 margin-right: 1em;
             }
 
             .profile-photo-section {
-                padding: 1em 0 1.5em 0;
+                padding: 1.3em;
                 margin-top: 2em;
             }
 
@@ -84,6 +92,31 @@
                 margin-top: -3px;
             }
 
+            #map-container {
+                margin-top: 2em;
+                padding-bottom: 2em;
+                border-bottom: 1px solid #e2e2e3;
+            }
+
+            #map-container p {
+                color: #fff;
+                padding: 1em;
+                font-size: 1.1em;
+                margin: 0;
+                font-weight: 500;
+                background-color: var(--app-green-color);
+            }
+
+            #map-container iron-icon {
+                margin-right: 0.5em;
+                margin-top: -2px;
+            }
+
+            google-map {
+                height: 400px;
+                border: 1px solid #e2e2e3;
+            }
+
             .flex-horizontal {
                 @apply(--layout-horizontal);
             }
@@ -110,9 +143,29 @@
 
         </style>
 
-        <form id="general_form" is="iron-form" class="main-frame">
-            <div class="subsection grid">
+        <google-maps-api id="map_api" api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI"></google-maps-api>
 
+        <form id="general_form" is="iron-form" class="main-frame">
+            <template is="dom-if" if="[[showMap]]">
+
+                <div id="map-container">
+                    <p>
+                        <iron-icon icon="icons:info"></iron-icon>
+                        Změnili jste adresu ordinace, překontrolujte prosím pozici ordinace na mapě a uložte změny.
+                    </p>
+
+                    <google-map api-key="AIzaSyAqsxSW1xtRQ5HPFA73iILCIkRj4stY4LI" fit-to-marker zoom="15"
+                                latitude="[[officeFullInfo.coordinates.latitude]]"
+                                longitude="[[officeFullInfo.coordinates.longitude]]">
+                        <google-map-marker latitude="{{officeFullInfo.coordinates.latitude}}"
+                                           longitude="{{officeFullInfo.coordinates.longitude}}"
+                                           draggable="true">
+                        </google-map-marker>
+                    </google-map>
+                </div>
+            </template>
+
+            <div class="subsection grid">
                 <section>
                     <h2>Váš titul a jméno</h2>
                     <paper-dropdown-menu label="Titul">
@@ -138,12 +191,14 @@
 
                     <h2>Profilová fotografie</h2>
                     <div class="container flex-horizontal profile-photo-section">
-                        <div><img id="profile-photo" src$="[[officeProfilePhoto.photoUrl]]"></div>
+                        <div><img id="profile-photo" src$="[[officeFullInfo.photoUrl]]"></div>
                         <div class="flexchild button-container">
-                            <label id="upload-label" for="upload-photo">
-                                <iron-icon icon="icons:file-upload"></iron-icon>
-                                Vybrat profilovou fotografii
-                            </label>
+                            <a href="#">
+                                <label id="upload-label" for="upload-photo">
+                                    <iron-icon icon="icons:file-upload"></iron-icon>
+                                    Vybrat profilovou fotografii
+                                </label>
+                            </a>
                             <input type="file" name="photo" id="upload-photo"/>
                             <br>
 
@@ -173,7 +228,6 @@
                     </paper-input>
                     <paper-input label="Ulice a číslo popisné" value="{{officeFullInfo.address.street}}"
                                  minlength="1" maxlength="80" required auto-validate></paper-input>
-
 
                     <h2>Vřejné informace profilu</h2>
                     <p>Informace budou veřejně k vidění na Vašem profilu. Údaje jsou
@@ -314,8 +368,21 @@
                 officeProfilePhotoRef: {
                     type: Object,
                     value: null
+                },
+
+                //address before changes are saved
+                initialAddress: {
+                    type: Array,
+                    value: []
+                },
+
+                /* don't use "on-input" change, because it doesn't always mean, that address was changed*/
+                showMap: {
+                    type: Boolean,
+                    value: false
                 }
             },
+
 
             fetchData: function (officeId) {
                 this.fetchFullInfo(officeId);
@@ -325,6 +392,7 @@
             fetchFullInfo: function (officeId) {
                 this.firebaseDatabase.ref("/officeFullInfo/" + officeId).once('value').then(function (snapshot) {
                     this.officeFullInfo = snapshot.val();
+                    this.setInitialAddress();
                 }.bind(this));
             },
 
@@ -339,6 +407,11 @@
                 }.bind(this));
 
                 this.officeProfilePhotoRef = ref;
+            },
+
+            setInitialAddress: function () {
+                this.initialAddress.city = this.officeFullInfo.address.city;
+                this.initialAddress.street = this.officeFullInfo.address.street;
             },
 
             confirm: function () {
@@ -360,6 +433,14 @@
                         'photoUrl': officeFullInfo.photoUrl,
                         'sex': officeFullInfo.sex
                     };
+
+
+                /* show map when address changed */
+                this.showMap = (this.initialAddress.city != officeFullInfo.address.city || this.initialAddress.street != officeFullInfo.address.street);
+                if (this.showMap) {
+                    this.setCoordinatesByAddress(officeFullInfo.address);
+                }
+                this.setInitialAddress();
 
                 db.ref('/officePermissions/' + officeId).once('value').then(function (snapshot) {
                     officeUserIds = Object.keys(snapshot.val());
@@ -401,6 +482,22 @@
 
             computeStatusHiddenness: function (status) {
                 return status === "processed";
+            },
+
+            setCoordinatesByAddress: function (addressObject) {
+                var address = addressObject.city + " " + addressObject.street,
+                    api = this.$.map_api.api,
+                    geocoder = new api.Geocoder();
+
+                geocoder.geocode({'address': address}, function (result, status) {
+                    if (status == api.GeocoderStatus.OK && status != api.GeocoderStatus.ZERO_RESULTS) {
+                        var location = result[0].geometry.location;
+
+                        this.set('officeFullInfo.coordinates.latitude', location.lat());
+                        this.set('officeFullInfo.coordinates.longitude', location.lng());
+
+                    }
+                }.bind(this));
             }
         });
     </script>
