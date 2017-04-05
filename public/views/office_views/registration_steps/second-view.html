@@ -83,7 +83,7 @@
 
                 if (geocoder) {
                     geocoder.geocode({'address': address}, function (result, status) {
-                        if (status == api.GeocoderStatus.OK && status != api.GeocoderStatus.ZERO_RESULTS) {
+                        if (status === api.GeocoderStatus.OK && status !== api.GeocoderStatus.ZERO_RESULTS) {
                             var location = result[0].geometry.location;
                             this.set('coordinates.latitude', location.lat());
                             this.set('coordinates.longitude', location.lng());

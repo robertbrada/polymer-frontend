@@ -6,6 +6,8 @@
 
 <link rel="import" href="/styles/tab-styles.html">
 
+<!--TODO: Routing when Polymer 2.0 is ready-->
+
 <dom-module id="interface-settings-view">
     <template>
         <style include="tab-styles">
@@ -24,9 +26,10 @@
 
 
             <iron-pages selected="[[selected]]" attr-for-selected="name">
-                <office-info-view name="office-info" office-id="[[officeId]]"></office-info-view>
+                <office-info-view name="office-info" office-id="[[officeId]]" selected="{{selected}}"></office-info-view>
                 <patient-info-view name="patient-info" office-id="[[officeId]]"></patient-info-view>
                 <generator-info-view name="generator-info" office-id="[[officeId]]"></generator-info-view>
+                <photo-view name="photo" office-id="[[officeId]]"></photo-view>
             </iron-pages>
         </paper-material>
     </template>
