@@ -119,7 +119,7 @@
                 </form>
             </div>
 
-            <p id="message-sent" hidden="[[!messageSent]]">Zpráva odeslána, děkujeme.</p>
+            <p id="message-sent" hidden="[[!messageSent]]">Zpráva odeslána, děkujeme. Co nejdříve se Vám ozveme.</p>
 
         </div>
     </template>
@@ -145,7 +145,7 @@
             sendQuestion: function () {
 
                 var contact = this.$.contact_input.value,
-                    message = this.$.message_input.value,
+                    message = (!!this.$.message_input.value) ? this.$.message_input.value: null,
                     db = firebase.apps[0].database();
 
                 db.ref('/newWebQuestions/').push({
