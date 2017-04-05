@@ -1,5 +1,4 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
 
 <dom-module id="interface-welcome-view">
@@ -8,16 +7,16 @@
 
             #main-container {
                 background-color: #fff;
-                padding: 2em;
+                padding: 3em 5%;
                 font-size: 1.2em;
                 font-weight: 100;
             }
 
             h2 {
-                margin: 0 auto 0.9em 0;
-                padding-bottom: 0.5em;
+                margin: 0 auto 1em 0;
+                padding-bottom: 0.55em;
                 font-weight: 100;
-                font-size: 1.5em;
+                font-size: 1.8em;
                 display: inline-block;
                 border-bottom: 1px solid #dededf;
             }
@@ -41,53 +40,68 @@
                 font-weight: 400;
             }
 
+            img {
+                max-width: 40px;
+                margin-left: 0.4em;
+                margin-bottom: -6px;
+
+            }
+
+            @media only screen and (max-width: 500px) {
+
+                :host {
+                    font-size: 0.85em;
+                }
+
+                img {
+                    max-width: 30px;
+                }
+            }
+
         </style>
 
         <paper-material elevation="1" id="main-container">
+                <h2>Vítejte v systému Docta. <img src="/images/handshake.png" id="header-image"></h2>
 
-            <h2>Vítejte v systému Docta.</h2>
+                <p>Váš veřejný profil je dostupný na adrese <a href="/d/[[officeId]]"  target="_blank">docta.cz/d/[[officeId]]</a>.</p>
 
-            <p>Váš veřejný profil je dostupný na adrese <a href="/d/[[officeId]]">docta.cz/d/[[officeId]]</a>.</p>
+                <p>
+                    Doporučujeme Vám zviditelnit adresu Vašeho profilu ve Vaší čekárně a na internetu
+                    (<a href="https://www.firmy.cz"  target="_blank">Seznam</a>, <a href="https://www.google.cz/business/"  target="_blank">Google</a>).
+                    Čím více lidí bude používat náš systém online, tím větším přínosem pro Vás budeme.</p>
 
-            <p>
-                Doporučujeme Vám zviditelnit adresu Vašeho profilu ve Vaší čekárně a na internetu
-                (<a href="https://www.firmy.cz">Seznam</a>, <a href="https://www.google.cz/business/">Google</a>).
-                Čím více lidí bude používat náš systém online, tím větším přínosem pro Vás budeme.</p>
+                <p>
+                    Uvědomujeme si, že v našem systému chybí ještě některé funkce jako jsou například:
+                    <br>
+                <ul>
+                    <li>Automatické přidávání dovolené o státních svátcích</li>
+                    <li>Přidání přístupu k ordinaci jiným účtům</li>
+                    <li>Posílání upomínek pacientům</li>
+                </ul>
 
+                <p>Na těchto funkcích usilovně pracujeme. Pokud máte nápad na vylepšení nebo narazíte na problém,
+                    neváhejte a <a href="../contact/[[officeId]]">kontaktujte
+                        nás</a>. Věříme, že pro Vás bude náš systém již v aktuální podobě přínosný, a proto jsme se
+                    rozhodli jej vydat.
+                </p>
 
-            <p>
-                Pokud máte nápad na vylepšení nebo narazíte na problém, neváhejte a <a href="../contact/[[officeId]]">kontaktujte
-                nás</a>.
-                Pro seznámení se systémem doporučujeme projít si <a href="../help/[[officeId]]">nápovědu</a>.</p>
+                <p>
+                    Pro seznámení se systémem doporučujeme projít si <a href="../help/[[officeId]]">nápovědu</a>.</p>
 
-            <p>
-                Uvědomujeme si, že v našem systému chybí ještě některé důležité funkce jako jsou například:
+                <p>
+                    Na profilu Vaší ordinace chybí profilová fotografie. Pokud máte zájem, můžete ji nahrát v
+                    <a href="/office/interface/settings/">nastavení</a>.
+                </p>
+
+                <!--TODO: remove when server is enabled-->
+                <p class="red" hidden="[[!onlineBooking]]">
+                    Během příštích 24 hodin Vám vygenerujeme první termíny.
+                </p>
+
                 <br>
-            <ul>
-                <li>Státní svátky (automatické přidávání dovolené o státních svátcích)</li>
-                <li> Správa více účtů (přidání přístupu k ordinaci jiným účtům)</li>
-                <li> Posílání upomínek pacientům</li>
-                <li> Profilová fotka</li>
-            </ul>
+                <p> Děkujeme za registraci v našem systému a věříme, že budete spokojeni. </p>
 
-            Myslíme si, že pro Vás náš systém již v aktuální podobě bude přínosný, a proto jsme se rozhodli jej vydat.
-            Na výše zmíněné funkcionalitě usilovně pracujeme.
-            </p>
-
-            <p>
-                Na profilu Vaší ordinace chybí profilová fotografie. Pokud máte zájem, můžete ji nahrát v
-                <a href="/office/interface/settings/">nastavení</a>.
-            </p>
-
-            <!--TODO: remove when server is enabled-->
-            <p class="red" hidden="[[!onlineBooking]]">
-                Během příštích 24 hodin Vám vygenerujeme první termíny.
-            </p>
-
-            <br>
-            <p> Děkujeme za registraci v našem systému a doufáme, že budete spokojeni. </p>
-
-            Robert Brada & Jan Beneš
+                Robert Brada & Jan Beneš
         </paper-material>
     </template>
 
