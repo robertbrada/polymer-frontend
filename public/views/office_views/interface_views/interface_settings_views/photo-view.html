@@ -59,12 +59,13 @@
                 };
 
                 var uid = this.firebaseApp.auth().currentUser.uid,
+                    officeId = this.officeId,
                     file = dataURItoBlob(this.$.icropper._cropper.getCroppedCanvas().toDataURL()),
-                    storageRef = this.firebaseApp.storage().ref("officeProfileImages/" + uid + "/");
+                    storageRef = this.firebaseApp.storage().ref("officeProfileImages/" + officeId + "/" + uid + "/");
 
                 storageRef.put(file).then(function (snapshot) {
                     storageRef.getDownloadURL().then(function (url) {
-                        this.saveToDatabase(url);
+                        this.saveToDatabase(url, officeId);
                     }.bind(this))
                 }.bind(this), function (error) {
                     this.fire("show-dialog", {
@@ -77,10 +78,9 @@
                 });
             },
 
-            saveToDatabase: function (url) {
+            saveToDatabase: function (url, officeId) {
                 var db = this.firebaseApp.database(),
-                    objectToSave = {},
-                    officeId = this.officeId;
+                    objectToSave = {};
 
                 objectToSave["/officeFullInfo/" + officeId + "/photoUrl"] = url;
                 objectToSave["/officeSearchInfo/" + officeId + "/photoUrl"] = url;

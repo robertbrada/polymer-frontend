@@ -1,6 +1,6 @@
 service firebase.storage {
     match /b/{bucket}/o {
-        match /officeProfileImages/{uid}{
+        match /officeProfileImages/{oid}/{uid}{
             allow read;
             allow write: if request.auth.uid == uid && request.resource.contentType.matches('image/.*');
         }
