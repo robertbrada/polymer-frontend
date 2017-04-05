@@ -3,13 +3,11 @@
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
-<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 <link rel="import" href="/bower_components/iron-form/iron-form.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/bower_components/iron-icons/device-icons.html">
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
@@ -30,6 +28,22 @@
 
             a {
                 text-decoration: none;
+            }
+
+            .regular-link {
+                display: block;
+                color: var(--app-accent-color);
+                font-weight: 400;
+                margin-top: 3em;
+            }
+
+            .regular-link iron-icon {
+                color: var(--app-green-color);
+                margin-top: -4px;
+            }
+
+            .regular-link:hover {
+                text-decoration: underline;
             }
 
             h1 {
@@ -176,7 +190,7 @@
                 border-bottom: 1px solid #e2e2e3;
             }
 
-            #patients-main-container .styled-link{
+            #patients-main-container .styled-link {
                 display: block;
                 text-align: center;
             }
@@ -313,7 +327,7 @@
                 }
 
                 #headline-arrow {
-                    height: 19px;
+                    height: 13px;
                 }
 
                 #header-image {
@@ -583,8 +597,10 @@
                         ordinace, kde můžete kdykoli měnit informace o Vaší ordinaci.
                         <br>
                         <br>
-                        <br>
                         <a class="styled-link" href="/d/strakova_plzen">Zobrazit ukázkový profil</a>
+                        <a class="regular-link" href="/newweb">
+                            <iron-icon icon="icons:star"></iron-icon>
+                            Profil zdarma Vám nestačí a chcete vlastní stránky?</a>
                     </p>
                 </section>
 
@@ -644,7 +660,6 @@
                     Proto pokud máte jakýkoli návrh na zlepšení, neváhejte se nám ozvat. </p>
             </div>
         </section>
-
 
         <div id="question-container" hidden="[[messageSent]]">
             <form id="docinfo_form" is="iron-form">
