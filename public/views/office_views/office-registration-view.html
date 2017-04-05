@@ -344,11 +344,6 @@
                 objectToSave['/userInterfaceInfo/' + userId + '/showOfficeInterface'] = true;
                 objectToSave['/officePermissions/' + officeId + '/' + this.userId + '/admin'] = true;
                 objectToSave['/officeSearchInfo/' + officeId] = indexAndSearchInfo;
-                objectToSave['/officeProfilePhoto/' + officeId] = {
-                    defaultPhoto: true,
-                    photoUrl: data.fullInfo.photoUrl,
-                    status: "processed"
-                };
                 objectToSave['/taskQueue/indexUpdates/' + officeId] = indexAndSearchInfo;
                 objectToSave['/userOffices/' + userId + '/' + officeId] = {
                     permissions: {
@@ -375,34 +370,8 @@
                     } else {
                         this.fire("show-toast", {text: "Ordinace zaregistrována"});
                         this.fire('change-route', {url: '/office/interface/welcome/' + officeId});
-                        // TODO: activate when there is stable server running
-                        /*                        if (data.officeInterfaceInfo.services.onlineBooking) {
-                         this.notifyGenerator(officeId);
-                         }*/
                     }
                 }.bind(this));
-            },
-
-            notifyGenerator: function (officeId) {
-                var request = new XMLHttpRequest(),
-                    appName = this.appName;
-
-                request.onerror = function () {
-                    this.fire("show-dialog", {
-                        path: "", viewName: "genericdialog", open: true,
-                        data: {
-                            text: 'V průběhu příštích 24 hodin budou vygenerovány první termíny.',
-                            buttonText: 'Zavřít'
-                        }
-                    });
-                }.bind(this);
-
-                // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("GET", "https://" + appName + ".appspot-preview.com/registration/generate?officeid=" + officeId, true);
-
-                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-                request.send();
             },
 
             normalizeText: function (text) {
