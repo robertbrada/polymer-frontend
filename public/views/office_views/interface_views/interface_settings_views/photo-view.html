@@ -1,20 +1,93 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <link rel="import" href="/bower_components/iron-cropper/iron-cropper.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 
 <dom-module id="photo-view">
     <template>
         <style>
+            .container {
+                padding: 1em;
+                background-color: #fff;
+            }
+
+            h1 {
+                font-weight: 100;
+                text-align: center;
+                margin: 0.5em auto 1.5em 0;
+                font-size: 1.5em;
+            }
+
+            input {
+                opacity: 0;
+                position: absolute;
+                z-index: -1;
+            }
+
+            label {
+                background-color: var(--app-green-color);
+                color: #fff;
+                padding: 1em 1.2em;
+                cursor: pointer;
+                border-radius: 3px;
+                text-transform: uppercase;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                display: block;
+                margin: 1em auto;
+                width: 13em;
+                text-align: center;
+                letter-spacing: 0.03em;
+            }
+
+            #crop-container {
+                background-color: #f6f6f7;
+                border-top: 1px solid #e2e2e3;
+                text-align: center;
+                box-shadow: inset 0 4px 9px #eeeeef;
+            }
+
+            #crop-content {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            p {
+                line-height: 1.7em;
+                font-size: 1.2em;
+                font-weight: 500;
+            }
+
+            #load-btn {
+                color: #fff;
+                background-color: var(--app-green-color);
+                padding: 1em 2em;
+                margin: 1em auto 2.2em 0;
+            }
+
+
         </style>
 
-        <input type="file" name="photo" id="upload-photo" on-change="setImage"/>
-        <div hidden="[[!photoAvailable]]">
-            <iron-cropper id="icropper"></iron-cropper>
-            <paper-button on-tap="saveToStorage">Nahrát</paper-button>
+        <div id="photo-container" class="container">
+            <h1>Výběr profilové fotografie</h1>
+
+            <!--Label needed because of default input styling-->
+            <label for="upload-photo">
+                <iron-icon icon="icons:file-upload"></iron-icon>
+                Vybrat fotografii</label>
+            <input type="file" name="photo" id="upload-photo" on-change="setImage" placeholder="Choose File"/>
         </div>
-        <img id="img2">
+
+        <div id="crop-container" class="container" hidden="[[!photoAvailable]]">
+            <div id="crop-content">
+                <p>Vyberte oblast obrázku, kterou chcete nastavit jako svou profilovou fotografii.</p>
+                <paper-button id="load-btn" on-tap="saveToStorage" raised>
+                    Nastavit jako profilovou fotografii
+                </paper-button>
+                <iron-cropper id="icropper"></iron-cropper>
+            </div>
+        </div>
     </template>
 
     <script>

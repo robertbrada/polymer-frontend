@@ -34,9 +34,22 @@
                 text-decoration: none;
             }
 
+            #profile-photo-container {
+                margin-right: 2em;
+                padding-right: 2em;
+                border-right: 1px solid #e2e2e3;
+                text-align: center;
+            }
+
             #profile-photo {
                 width: 120px;
-                margin-right: 1em;
+                border-radius: 50%;
+            }
+
+            #change-photo-btn {
+                text-align: center;
+                font-size: 0.9em;
+                margin-top: 0;
             }
 
             #map-container {
@@ -66,6 +79,8 @@
 
             .flex-horizontal {
                 @apply(--layout-horizontal);
+                padding: 1.6em 1.2em;
+                margin-top: 2em;
             }
 
             .flexchild {
@@ -78,11 +93,11 @@
                     @apply(--layout-vertical);
                 }
 
-                #upload-label {
-                    margin: 2em auto 0.5em auto;
-                }
 
-                .profile-photo-section, .button-container {
+                #profile-photo-container {
+                    margin: 0 auto 2em auto;
+                    padding-right: 0;
+                    border: none;
                     text-align: center;
                 }
             }
@@ -137,12 +152,16 @@
 
 
                     <h2>Profilová fotografie</h2>
-                    <div>
-                        <img id="profile-photo" src$="[[officeFullInfo.photoUrl]]">
+                    <div class="flex-horizontal">
+                        <div id="profile-photo-container">
+                            <img id="profile-photo" src$="[[officeFullInfo.photoUrl]]">
+                        </div>
+                        <div class="flexchild">
+                            <paper-button id="change-photo-btn" on-tap="showPhotoView" raised>
+                                Změnit profilovou fotografii
+                            </paper-button>
+                        </div>
                     </div>
-                    <paper-button on-tap="showPhotoView" raised>
-                        Změnit profilovou fotografii
-                    </paper-button>
 
                 </section>
                 <section>
