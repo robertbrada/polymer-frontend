@@ -617,7 +617,7 @@
                 </section>
                 <section id="office-calendar-section">
                     <h1>ONLINE OBJEDNÁVÁNÍ<br>A ELEKTRONICKÝ KALENDÁŘ</h1>
-                    <p>K dispozici máte online objednání, které můžete využít jakkoli se Vám to hodí. Je jedno kolik
+                    <p>K dispozici máte online objednávání, které můžete využít jakkoli se Vám to hodí. Je jedno kolik
                         objednávacích dnů nebo časů si
                         vytvoříte,
                         za nic platit nebudete.
@@ -687,6 +687,11 @@
 
                 id: {
                     type: String
+                },
+
+                ip: {
+                    type: String,
+                    value: null
                 }
             },
 
@@ -694,15 +699,41 @@
                 "routePathObserver(route)"
             ],
 
-            routePathObserver: function (route) {
-                var path = route.path;
+            ready: function () {
+                var xhr = new XMLHttpRequest(),
+                    setIp = function (e) {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            this.ip = response.ip;
+                            // Catch first visit
+                            if (!!this.route) {
+                                this.routePathObserver(this.route);
+                            }
+                        }
+                    }.bind(this);
 
-                if (!(!!this.id) && route.prefix === "/docinfo" && path.length > 1) {
-                    this.id = path.substring(1);
+                xhr.open('GET', "//ipinfo.io/json", true);
+                xhr.send();
+                xhr.addEventListener("readystatechange", setIp, false);
+            },
+
+            routePathObserver: function (route) {
+                var path = route.path,
+                    objectToSave = {};
+
+                if (!(!!this.id)) {
+                    if (route.prefix === "/docinfo" && path.length > 1) {
+                        this.id = path.substring(1);
+                    } else if (!!this.ip) {
+                        this.id = this.ip.replace(/[.]/g, "-");
+                    }
                 }
 
                 if (!!this.id) {
-                    firebase.apps[0].database().ref("/docInfoVisitors/" + this.id).push(route);
+                    objectToSave["URL"] = route.prefix + route.path;
+                    objectToSave["datetime"] = new Date().toString();
+                    objectToSave["ip"] = this.ip;
+                    firebase.apps[0].database().ref("/docInfoVisitors/" + this.id).push(objectToSave);
                 }
 
             },
