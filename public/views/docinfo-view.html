@@ -19,6 +19,7 @@
             :host {
                 display: block;
                 color: #252526;
+                --light-blue: #245686;
             }
 
             .green {
@@ -28,6 +29,8 @@
 
             a {
                 text-decoration: none;
+                color: var(--app-green-color);
+                font-weight: 500;
             }
 
             .regular-link {
@@ -77,7 +80,7 @@
             }
 
             header {
-                background: var(--app-accent-color) url("../images/docinfo/header-shadow.png");
+                background: var(--light-blue) url("../images/docinfo/header-shadow.png");
                 background-size: cover;
                 color: #fff;
                 text-align: center;
@@ -107,9 +110,8 @@
                 letter-spacing: 0.08em;
             }
 
-            .register-container {
-                text-align: center;
-                position: relative;
+            header p {
+                font-size: 1.3em;
             }
 
             .register-container paper-button {
@@ -150,14 +152,14 @@
             /************************/
             #discover-more-container {
                 text-align: center;
-                margin: 2em auto 3em auto;
+                margin: 0 auto;
+                cursor: pointer;
             }
 
             #discover-more-container h2 {
-                color: var(--app-grey-text-color);
-                font-weight: 300;
+                font-weight: 500;
                 font-size: 1.5em;
-                margin: 1em auto 0.6em 0;
+                margin: 0 auto 0.8em 0;
             }
 
             #discover-arrow {
@@ -168,14 +170,16 @@
 
             #office-calendar-main-section {
                 margin-bottom: 0;
-                padding-top: 2em;
+                padding-top: 3em;
+                background-color: var(--light-blue);
+                position: relative;
             }
 
-            #online-booking-arrow {
-                max-height: 90px;
+            #office-calendar-main-section .arrow {
                 position: absolute;
-                right: 40%;
-                top: -2em;
+                height: 80px;
+                bottom: -79px;
+                right: 30%;
             }
 
             /********************/
@@ -183,11 +187,15 @@
                 position: relative;
                 margin-top: 0;
                 padding-top: 3em;
-                padding-bottom: 3em;
             }
 
-            #patients-main-container .main-frame {
-                border-bottom: 1px solid #e2e2e3;
+            #patients-main-container span {
+                color: var(--light-blue);
+                font-weight: bolder;
+                margin-top: 2.5em;
+                padding-top: 1em;
+                border-top: 1px solid #e2e2e3;
+                display: block;
             }
 
             #patients-main-container .styled-link {
@@ -195,17 +203,11 @@
                 text-align: center;
             }
 
-            #patients-image {
-                max-height: 200px;
-                width: auto;
-            }
-
             /***************/
 
             #about-section {
                 border-bottom: 1px solid #e2e2e3;
                 border-top: 1px solid #e2e2e3;
-                background-color: #fbfbfc;
             }
 
             /****************/
@@ -262,8 +264,9 @@
                 font-weight: bold;
                 background-color: var(--app-green-color);
                 color: #fff;
-                padding: 0.5em 1em;
+                padding: 0.6em 1.1em;
                 border-radius: 2em;
+                font-size: 1.1em;
                 letter-spacing: 0.02em;
             }
 
@@ -271,9 +274,7 @@
 
             #question-container {
                 background-color: #fbfbfc;
-                margin-top: 3em;
                 padding: 3em 1.5em;
-                border-top: 1px solid #e2e2e3;
             }
 
             #question-container h2 {
@@ -288,23 +289,203 @@
                 margin: 0 auto;
             }
 
-            #office-presence-main-section {
-                margin-top: 4em;
-                margin-bottom: 4em;
+            #presentation {
+                margin: 0;
+            }
+
+            #presentation .free-label {
+                margin-bottom: 1em;
             }
 
             #settings-img {
-                max-height: 480px;
-                max-width: 480px;
+                max-height: 450px;
+                max-width: 450px;
             }
 
-            .features-section > div {
-                margin: 0.7em 0;
-            }
-
-            .features-section p {
+            .free-label {
+                background-color: var(--app-green-color);
+                color: #fff;
+                padding: 0.5em;
+                width: 5.8em;
+                text-align: center;
                 display: inline-block;
+                font-size: 0.8em;
+            }
+
+            .circle {
+                width: 6px;
+                height: 6px;
+                margin: auto 0.2em 0.2em 0;
+                border-radius: 6px;
+                background: #fff;
+                display: inline-block;
+            }
+
+            #why-booking-section {
+                color: #fff;
+                text-align: center;
+                padding: 6em 2em 2em 2em;
+                background-color: var(--app-green-color);
+                position: relative;
+            }
+
+            #why-booking-section h1 {
+                margin-bottom: 0;
+            }
+
+            .why-booking-img {
+                max-height: 130px;
+            }
+
+            .header-div {
+                text-align: center;
+            }
+
+            .header-div h2 {
+                padding: 0.6em;
+                border-radius: 10em;
+                text-transform: uppercase;
+                font-size: 1.1em;
+                width: 13em;
+                margin: 0 auto 2em auto;
+            }
+
+            .description-div {
                 text-align: left;
+                font-size: 1.1em;
+                letter-spacing: 0.025em;
+                line-height: 1.5em;
+            }
+
+            #add-online-booking {
+                text-align: center;
+                position: relative;
+                padding: 3em 1.5em 0 1.5em;
+            }
+
+            #add-online-booking h1 {
+                color: var(--app-accent-color);
+                margin-bottom: 0;
+            }
+
+            #add-online-booking img {
+                color: var(--app-accent-color);
+                height: 45px;
+                position: relative;
+                bottom: -44px;
+                z-index: 2;
+            }
+
+            #add-online-booking .free-label {
+                margin-left: 1em;
+            }
+
+            .badge {
+                border: 1px solid var(--light-blue);
+                color: var(--light-blue);
+                width: 50px;
+                height: 50px;
+                border-radius: 100%;
+                display: inline-block;
+                font-size: 2em;
+                font-weight: bold;
+                line-height: 1.7em;
+                text-align: center;
+                vertical-align: middle;
+                margin: auto 2em;
+            }
+
+            #step-one .badge {
+                background-color: var(--app-green-color);
+                border-color: var(--app-green-color);
+                color: #fff;
+            }
+
+            .step-container {
+                margin: 3em auto;
+            }
+
+            .step-container .headline {
+                font-size: 1.5em;
+            }
+
+            .step-container paper-button {
+                padding: 1.4em 2.4em;
+                font-weight: bold;
+                font-size: 1.1em;
+                letter-spacing: 0.08em;
+                margin: 0;
+            }
+
+            #step-two {
+                color: var(--light-blue);
+                font-weight: bold;
+            }
+
+            .vertical-align {
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+
+            .top-align {
+                margin-top: 0;
+                margin-bottom: auto;
+            }
+
+            #step-three .headline {
+                margin-top: 0.4em;
+                color: var(--app-green-color);
+                font-weight: bold;
+            }
+
+            #step-three p {
+                font-weight: 100;
+                font-size: 1.2em;
+            }
+
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+            }
+
+            #own-website {
+                color: #fff;
+                background-color: var(--app-green-color);
+                text-align: center;
+                font-size: 1.1em;
+            }
+
+            #own-website .main-frame {
+                max-width: 800px;
+                padding: 5em 1.5em;
+            }
+
+            #own-website h1 {
+                letter-spacing: 0.03em;
+                text-align: left;
+            }
+
+            #newweb-link {
+                padding: 1.2em 1em;
+                color: #fff;
+                font-weight: bold;
+                font-size: 1.2em;
+                display: block;
+                border-radius: 10px;
+                width: 8em;
+                margin: 3em auto 0 auto;
+                border: 4px solid #fff;
+                letter-spacing: 0.03em;
+                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+            }
+
+            #newweb-link:hover {
+                background-color: #fff;
+                color: var(--app-green-color);
+                transform: scale(1.1);
             }
 
             @media (max-width: 1200px) {
@@ -361,10 +542,31 @@
                     max-width: 100%;
                 }
 
-                #online-booking-arrow {
-                    max-height: 60px;
+                #office-calendar-main-section .arrow {
+                    height: 40px;
+                    bottom: -39px;
                 }
 
+                .why-booking-img {
+                    max-height: 80px;
+                }
+
+                .badge {
+                    margin-left: 0;
+                    line-height: 2em;
+                }
+
+                #own-website {
+                    font-size: 1em;
+                }
+
+                #discover-more-container {
+                    font-size: 0.9em;
+                }
+
+                #discover-arrow {
+                    width: 18px;
+                }
             }
 
             @media (max-width: 980px) {
@@ -515,7 +717,7 @@
         <iron-media-query query="max-width:980px" query-matches="{{mediumScreen}}"></iron-media-query>
 
         <header>
-            <section id="" class="grid">
+            <section class="grid">
                 <section>
                     <h1><img src="../images/docinfo/headline-arrow.png" id="headline-arrow">
                         <div class="slidingVertical">
@@ -529,18 +731,17 @@
                         </div>
                     </h1>
                     <p>
-                        Docta.cz je unikátní projekt, který umožňuje všem lékařům
-                        zapojit se do elektronizace zdravotnictví.
+                        Poskytujeme moderní služby ve zdravotnictví.
+                        Šetříme Vám tím čas a usnadníme Vaši práci.
                     </p>
                     <p>
-                        Jedná se o nastupující trend, jak zefektivnit zdravotnictví a interakci
-                        mezi lékaři a pacienty. Ušetříte tak čas a práci sobě i ostatním.
+                        Nehodnotíme Vás ani Vaši práci,
+                        chceme nabídnou služby, které Vám pomohou s každodenní péčí o pacienty.
                     </p>
-                    <p>
-                        Lékaři by neměli být vázáni smlouvami ani platit za služby, které
-                        zlepšují zdravotní péči. Proto je vše, co nabízíme, zdarma.
-                        <br>Stačí se jen Zaregistrovat.
-                    </p>
+                    <br><br>
+                    <a href="[[computeUrl(signedIn)]]">
+                        <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
+                    </a>
                 </section>
 
                 <section class="image-section" hidden="[[smallScreen]]">
@@ -548,19 +749,175 @@
                 </section>
             </section>
 
-            <div class="register-container">
-                <img src="../images/docinfo/horizontal-white-arrow.png" class="arrow" hidden="[[mobileScreen]]">
-                <a href="[[computeUrl(signedIn)]]">
-                    <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
-                </a>
+            <div id="discover-more-container" on-tap="scrollToPresentation">
+                <h2>Podívejte se, co Vám nabízíme</h2>
+                <img src="../images/docinfo/vertical-white-arrow.png" id="discover-arrow">
             </div>
 
         </header>
 
+
+        <section id="presentation">
+            <div class="main-frame grid">
+                <section>
+                    <h1>
+                        <div class="free-label">
+                            <div class="circle"></div>
+                            ZDARMA
+                        </div>
+                        <br>MODERNÍ PREZENTACE VAŠÍ ORDINACE
+
+                    </h1>
+                    <p>Nemusíte lepit papíry na dveře ordinace. Všechny důležité informace můžete
+                        zveřejnit bezplatně na svém profilu. Všichni Vaši pacienti je uvidí odkudkoli a kdykoli.</p>
+                    <p>
+                        Informace o Vaší ordinaci můžete kdykoli změnit v přehledném nastavení.
+                        Pro vytvoření vlastního profilu se stačí <a href="/registration">Zaregistrovat</a>.
+
+                        <br>
+                        <br>
+                        <br>
+                        <a class="styled-link" href="/d/strakova_plzen">Takto může vypadat Váš profil</a>
+                        <a class="regular-link" href="/newweb">
+                            <iron-icon icon="icons:star"></iron-icon>
+                            Profil zdarma Vám nestačí a chcete vlastní stránky?</a>
+                    </p>
+                </section>
+
+                <section class="img-section" hidden="[[mediumScreen]]">
+                    <img id="settings-img" class="presentation-img" src="../images/docinfo/settings.png">
+                </section>
+            </div>
+        </section>
+
+        <div id="add-online-booking">
+            <h1>PŘIDEJTE SI NA SVŮJ PROFIL ONLINE OBJEDNÁVÁNÍ
+                <div class="free-label">
+                    <div class="circle"></div>
+                    ZDARMA
+                </div>
+            </h1>
+            <img class="" src="../images/docinfo/rectangle-white-arrow.png">
+        </div>
+
+        <section id="why-booking-section">
+            <h1>Proč byste měli chtít online objednávání?</h1>
+            <div class="main-frame grid">
+                <section>
+                    <div class="header-div">
+                        <img class="why-booking-img" src="../images/docinfo/save-time.png">
+                        <h2>Ušetříte si čas</h2>
+                    </div>
+                    <div class="description-div">
+                        <p>Každý den proběhne průměrně 20
+                            objednávacích telefonátů. To je více než hodina
+                            denně strávená objednáváním. </p>
+                    </div>
+                </section>
+                <section>
+                    <div class="header-div">
+                        <img class="why-booking-img" src="../images/docinfo/save-work.png">
+                        <h2>Ušetříte si práci</h2>
+                    </div>
+                    <div class="description-div">
+                        <p>
+                            Vytvořte si kalendář podle svých potřeb.
+                            V něm budete mít přehled o všech
+                            objednaných pacientech. Můžete snadno
+                            objednávat nebo rušit schůzky.
+                        </p>
+                    </div>
+                </section>
+                <section>
+                    <div class="header-div">
+                        <img class="why-booking-img" src="../images/docinfo/help-patients.png">
+                        <h2>Pomůžete pacientům</h2>
+                    </div>
+                    <div class="description-div">
+                        <p>Pacienti se chtějí objednat kdy se jim
+                            to hodí. Nenuťte je telefonovat během
+                            ordinačních hodin. Navíc předejdete nedorozuměním.</p>
+                    </div>
+                </section>
+            </div>
+        </section>
+        <section class="green" id="office-calendar-main-section">
+            <div class="main-frame grid">
+                <section class="img-section" hidden="[[mediumScreen]]">
+                    <img id="comp-img" class="presentation-img" src="../images/docinfo/calendar.png">
+                </section>
+                <section id="office-calendar-section">
+                    <h1>KDO SE K VÁM MŮŽE OBJEDNAT?</h1>
+                    <p>Objednat se mohou jen pacienti, kteří jsou u nás zaregistrovaní.
+                        Navíc si můžete sami kontrolovat,
+                        kteří pacienti se k Vám mohou objednat a kteří ne.
+                        Vytvoříte si tak seznam pacientů, kterým můžete důveřovat.
+                    </p>
+                    <p>Nad tím, kdo se k Vám objedná, máte úplnou kontrolu.</p>
+                </section>
+            </div>
+            <img class="arrow" src="../images/docinfo/registration-arrow.png">
+        </section>
+
+        <section id="patients-main-container">
+            <div class="main-frame grid">
+                <section>
+                    <h1>NEVÍTE, ZDA OBJEDNÁVÁNÍ VYUŽIJETE?</h1>
+                    <p>Online objednávání můžete využít kdykoli a zcela bezplatně.
+                        Nic Vám tak nebrání si tuto službu vyzkoušet. Sami uvidíte,
+                        zda se Vám její používání zalíbí.
+                    </p>
+
+                    <p>Registrace Vám zabere jen 10 minut a naše služby můžete využít kdykoli.</p>
+                    <p>
+
+                        <span>
+                            Už máte vlastní stránku a chcete na ní využít online objednávání?</span>
+                        Rádi Vám pomůžeme do Vašich stránek vložit odkaz
+                        na objednávací kalendář. Stačí když nám napíšete.
+
+                    </p>
+                </section>
+                <section id="registration-steps-section">
+                    <div style="margin: 0 auto">
+                        <div id="step-one" class="step-container flex-horizontal">
+                            <a href="[[computeUrl(signedIn)]]" class="vertical-align badge" hidden="[[signedIn]]">
+                                1
+                            </a>
+                            <a href="[[computeUrl(signedIn)]]" class="flexchild">
+                                <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
+                            </a>
+                        </div>
+                        <div id="step-two" class="step-container flex-horizontal" hidden="[[signedIn]]">
+                            <div class="badge">2</div>
+                            <div class="flexchild headline vertical-align">PŘIDEJTE SVOU ORDINACI</div>
+                        </div>
+                        <div id="step-three" class="step-container flex-horizontal" hidden="[[signedIn]]">
+                            <div class="badge top-align">3</div>
+                            <div class="flexchild">
+                                <div class="headline">HOTOVO!</div>
+                                <p>Vaše ordinace je na internetu! Můžete si vybrat,
+                                    zda využijete online objednávání. Vše máte k dispozii zdarma.</p></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section id="own-website">
+            <div class="main-frame">
+                <h1>ZAUJALY VÁS NAŠE SLUŽBY?<br>
+                    CHCETE UNIKÁTNÍ WEBOVÉ STRÁNKY PŘESNĚ PRO VÁS?
+                </h1>
+                <a id="newweb-link" href="/newweb">ZJISTĚTĚ VÍCE</a>
+            </div>
+        </section>
+
+
         <section id="about-section">
             <div class="main-frame grid">
                 <section>
-                    <h1>PROČ TO DĚLÁME?</h1>
+                    <h1>PROČ DĚLÁME TENTO SYSTÉM?</h1>
                     <p>
                         Je rok 2017 a už 10 let existuje konkurence, která nabízí podobné služby co my. Místo toho, aby
                         se snažili uspokojit co nejvíc zákazníků, tak vybírají poplatky a zavazují smlouvami ke službám,
@@ -572,92 +929,15 @@
                         Kvalita zdravotní péče ovlivňuje každého z nás, a proto jsme si dali za cíl vytvořit tento
                         veřejný systém.
                     </p>
+
+                    <br>
+                    <p>Naše služby neustále zlepšujeme a rozšiřujeme, systém má sloužit Vám.
+                        Proto pokud máte jakýkoli návrh na zlepšení, neváhejte se nám ozvat. </p>
                 </section>
                 <section id="profile-images-section" class="">
                     <img src="../images/docinfo/jan.jpg" class="profile-image">
                     <img src="../images/docinfo/robert.jpg" class="profile-image">
                 </section>
-            </div>
-        </section>
-
-        <div id="discover-more-container">
-            <h2>Prohlídka systému</h2>
-            <img src="../images/docinfo/vertical-green-arrow.png" id="discover-arrow">
-        </div>
-
-
-        <section id="office-presence-main-section">
-            <div class="main-frame grid">
-                <section id="office-presence-section">
-                    <h1>KOMPLETNÍ PREZENTACE ORDINACE</h1>
-                    <p>Nabízíme Vám možnost prezentovat všechny důležité informace
-                        o Vaší ordinaci na internetu. </p>
-                    <p>
-                        Nemusíte si platit za vlastní stránky. K dispozici máte přehledné nastavení
-                        ordinace, kde můžete kdykoli měnit informace o Vaší ordinaci.
-                        <br>
-                        <br>
-                        <a class="styled-link" href="/d/strakova_plzen">Zobrazit ukázkový profil</a>
-                        <a class="regular-link" href="/newweb">
-                            <iron-icon icon="icons:star"></iron-icon>
-                            Profil zdarma Vám nestačí a chcete vlastní stránky?</a>
-                    </p>
-                </section>
-
-                <section class="img-section" hidden="[[mediumScreen]]">
-                    <img id="settings-img" class="" src="../images/docinfo/settings.png">
-                </section>
-            </div>
-        </section>
-
-        <section class="green" id="office-calendar-main-section">
-            <div class="main-frame grid">
-                <section class="img-section" hidden="[[mediumScreen]]">
-                    <img id="comp-img" class="presentation-img" src="../images/docinfo/calendar.png">
-                </section>
-                <section id="office-calendar-section">
-                    <h1>ONLINE OBJEDNÁVÁNÍ<br>A ELEKTRONICKÝ KALENDÁŘ</h1>
-                    <p>K dispozici máte online objednávání, které můžete využít jakkoli se Vám to hodí. Je jedno kolik
-                        objednávacích dnů nebo časů si
-                        vytvoříte,
-                        za nic platit nebudete.
-                    </p>
-                    <p>Elektronický kalendář přehledně reprezentuje Vaše objednané pacienty. Můžete v něm snadno
-                        objednávat nebo rušit schůzky.</p>
-                </section>
-            </div>
-        </section>
-
-        <section class="" id="patients-main-container">
-            <img id="online-booking-arrow" src="../images/docinfo/online_booking_arrow.png">
-            <div class="main-frame grid">
-                <section>
-                    <h1>KONTROLUJTE SI SAMI, KDO SE K VÁM MŮŽE OBJEDNAT</h1>
-                    <p>Nemusíte se obávat, že se k Vám objedná kdokoli. Pokud budete chtít,
-                        máte k dispozici potvrzování pacientů.
-                    </p>
-                    <p>
-                        Můžete si tak sami vybrat, kteří pacienti se mohou objednat a kteří ne. Tím si vytvoříte seznam
-                        Vašich pacientů, kterým můžete
-                        důvěřovat.
-                        <br>
-                        <br>
-                        <br>
-                        <a class="styled-link" href="/newweb">Zaujaly Vás naše služby, ale chcete vlastní stránky?</a>
-                    </p>
-                </section>
-                <section class="img-section">
-                    <img id="patients-image" src="../images/docinfo/patients.png">
-                </section>
-            </div>
-
-            <div id="bottom-registration-container" class="register-container">
-                <h1>PRO VYUŽITÍ VŠECH SLUŽEB SE ZAREGISTRUJTE</h1>
-                <a href="[[computeUrl(signedIn)]]">
-                    <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
-                </a>
-                <p>* Naše služby neustále zlepšujeme a rozšiřujeme, systém má sloužit Vám.
-                    Proto pokud máte jakýkoli návrh na zlepšení, neváhejte se nám ozvat. </p>
             </div>
         </section>
 
@@ -773,7 +1053,13 @@
             },
 
             computeButtonText: function (signedIn) {
-                return (signedIn) ? "Přidat ordinaci" : "Zaregistrovat se";
+                return (signedIn) ? "Přidat ordinaci" : "Zaregistrujte se";
+            },
+
+
+            scrollToPresentation: function () {
+                //TODO smooth scrolling
+                this.$.presentation.scrollIntoView();
             }
         });
     </script>
