@@ -80,7 +80,7 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
         "numberOfNotifications": {
-          // TODO: check if bullshit
+          // Only doctors are allowed to increment notification count. Hackable but sufficent for now
           ".read": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".write": "auth.uid === 'my-service-worker' || root.child('userOffices/' + auth.uid).exists()",
           ".validate": "newData.isNumber() && newData.val() >= 0"

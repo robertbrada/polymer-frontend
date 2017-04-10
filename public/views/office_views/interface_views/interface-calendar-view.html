@@ -127,7 +127,7 @@
                 overflow-y: auto;
             }
 
-            #patient-item {
+            .patient-item {
                 position: relative;
                 margin: 0;
                 padding: 1em;
@@ -165,19 +165,19 @@
                 border: 1px solid #c2c2c3;
             }
 
-            #booking-time {
+            .booking-time {
                 font-weight: bold;
                 color: var(--app-green-color);
                 margin-right: 1em;
             }
 
-            #patient-item:hover .dismiss-button {
+            .patient-item:hover .dismiss-button {
                 background-color: var(--app-red-color);
                 border-color: var(--app-red-color);
                 color: #fff;
             }
 
-            #patient-item:hover .details-button {
+            .patient-item:hover .details-button {
                 background-color: var(--app-accent-color);
                 border-color: var(--app-accent-color);
                 color: #fff;
@@ -232,6 +232,9 @@
                 }
             }
 
+            .deleted {
+                background-color: var(--app-background-color);
+            }
 
         </style>
 
@@ -274,29 +277,44 @@
                 <div id="patients-container">
 
                     <template is="dom-repeat" items="[[selectedDateTimes]]" as="time">
-                        <div id="patient-item" class="flex-horizontal-buttons">
-                            <div id="booking-time" class="vertical-align">[[computeTime(time.id)]]</div>
-
-                            <template is="dom-if" if="[[time.occupied]]">
+                        <template is="dom-if" if="[[time.deleted]]">
+                            <div class="patient-item flex-horizontal-buttons deleted">
+                                <div class="booking-time vertical-align">[[computeTime(time.id)]]</div>
                                 <div class="flexchild vertical-align">
-                                    [[time.appointmentData.fullName]]
-                                </div>
-                                <paper-button class="details-button hover-button" on-tap="handleDetail">Podrobnosti
-                                </paper-button>
-                            </template>
-
-                            <template is="dom-if" if="[[!time.occupied]]">
-                                <div class="flexchild">
-                                    <paper-button class="green" on-tap="addAppointment" raised>+ Přidat objednání
-                                    </paper-button>
+                                    Zrušený termín
                                 </div>
                                 <paper-button class="dismiss-button hover-button" args=[[time.id]]
-                                              on-tap="deleteTime">
-                                    Zrušit termín
+                                              on-tap="recoverTime">
+                                    Obnovit termín
                                 </paper-button>
+                            </div>
+                        </template>
 
-                            </template>
-                        </div>
+                        <template is="dom-if" if="[[!time.deleted]]">
+                            <div class="patient-item flex-horizontal-buttons">
+                                <div class="booking-time vertical-align">[[computeTime(time.id)]]</div>
+
+                                <template is="dom-if" if="[[time.occupied]]">
+                                    <div class="flexchild vertical-align">
+                                        [[time.appointmentData.fullName]]
+                                    </div>
+                                    <paper-button class="details-button hover-button" on-tap="handleDetail">Podrobnosti
+                                    </paper-button>
+                                </template>
+
+                                <template is="dom-if" if="[[!time.occupied]]">
+                                    <div class="flexchild">
+                                        <paper-button class="green" on-tap="addAppointment" raised>+ Přidat objednání
+                                        </paper-button>
+                                    </div>
+                                    <paper-button class="dismiss-button hover-button" args=[[time.id]]
+                                                  on-tap="deleteTime">
+                                        Zrušit termín
+                                    </paper-button>
+
+                                </template>
+                            </div>
+                        </template>
 
                         <!-- detail about patient is placed here, because of easier layout styling-->
                         <template is="dom-if" if="[[time.occupied]]">
@@ -534,7 +552,7 @@
             },
 
             setSelectedDateTimes: function (rawPrivate, monthTimes, dateId) {
-                var i, rawDateTimes = monthTimes[dateId], times, time;
+                var i, rawDateTimes = monthTimes[dateId], times, time, data;
 
                 if (rawDateTimes === undefined) {
                     times = [];
@@ -542,11 +560,15 @@
                     times = rawDateTimes.times;
                     for (i = 0; i < times.length; i++) {
                         time = times[i];
+                        time.deleted = false;
                         if (time.occupied) {
-                            if (rawPrivate === null) {
+                            data = (rawPrivate === null) ? undefined : rawPrivate[time.id];
+                            if (data === undefined) {
+                                // Time has been removed. The ID was set to false in public but there aren't any data in private
                                 time.occupied = false;
+                                time.deleted = true;
                             } else {
-                                time.appointmentData = rawPrivate[time.id];
+                                time.appointmentData = data;
                             }
                         }
                     }
@@ -700,7 +722,7 @@
             },
 
             computeIfOnlinePatient: function (source) {
-                return source == 'online'
+                return source === 'online'
             },
 
             handleDetail: function (event) {
@@ -719,10 +741,29 @@
                 });
             },
 
+            recoverTime: function (event) {
+                var time = event.model.time, officeId = this.officeId, timeId = time.id;
+
+                this.firebaseApp.database().ref('/appointmentsPublic/' + officeId + '/' + timeId).set(true).then(function () {
+                    this.fire("show-toast", {text: "Termín obnoven"});
+                    // Private data doesn't have to reload, so they are already synced
+                    this.set("synchronizationObject.rawPrivateSynced", true);
+                }.bind(this), function (error) {
+                    this.fire("show-dialog", {
+                        path: "", viewName: "genericdialog", open: true,
+                        data: {
+                            text: 'Při obnovování termínu se vyskytla chyba. Zkuste to prosím znovu.',
+                            buttonText: 'Zavřít'
+                        }
+                    });
+                }.bind(this));
+            },
+
             deleteTime: function (event) {
                 var time = event.model.time, officeId = this.officeId, timeId = time.id;
 
-                this.firebaseApp.database().ref('/appointmentsPublic/' + officeId + '/' + timeId).set(null).then(function () {
+                // Set the ID to false, so that it appears occupied
+                this.firebaseApp.database().ref('/appointmentsPublic/' + officeId + '/' + timeId).set(false).then(function () {
                     this.fire("show-toast", {text: "Termín zrušen"});
                     // Private data doesn't have to reload, so they are already synced
                     this.set("synchronizationObject.rawPrivateSynced", true);
@@ -749,7 +790,7 @@
                 objectToSave['/appointmentsPublic/' + officeId + '/' + timeId] = true;
                 objectToSave['/appointmentsPrivate/' + officeId + '/' + timeId] = null;
 
-                if (source == 'online') {
+                if (source === 'online') {
                     var patientUid = time.appointmentData.patient;
                     objectToSave['/userAppointments/' + patientUid + '/' + timeId] = null;
                     objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
@@ -761,7 +802,7 @@
 
                 db.ref('/').update(objectToSave).then(function () {
                     this.fire("show-toast", {text: "Objednání zrušeno"});
-                    if (source == 'online') {
+                    if (source === 'online') {
                         db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
                             return (currentCount === null) ? null : currentCount + 1;
                         });
