@@ -560,7 +560,6 @@
                     times = rawDateTimes.times;
                     for (i = 0; i < times.length; i++) {
                         time = times[i];
-                        time.deleted = false;
                         if (time.occupied) {
                             data = (rawPrivate === null) ? undefined : rawPrivate[time.id];
                             if (data === undefined) {
@@ -569,7 +568,11 @@
                                 time.deleted = true;
                             } else {
                                 time.appointmentData = data;
+                                time.deleted = false;
                             }
+                            // The following condition ensures that deleted is not overwritten when the date is selected for the second time,
+                        } else if(time.deleted !== true) {
+                            time.deleted = false;
                         }
                     }
                 }
