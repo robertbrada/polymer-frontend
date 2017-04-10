@@ -1,9 +1,11 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 <link rel="import" href="/bower_components/iron-form/iron-form.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="/styles/input-styles.html">
 
@@ -12,10 +14,22 @@
     <template>
         <style include="input-styles">
 
+            :host {
+                --light-blue: #245686;
+            }
+
+            .green {
+                color: var(--app-green-color);
+            }
+
+            .bolder {
+                font-weight: 400;
+            }
+
             #main-container {
                 background-color: #fff;
                 padding: 1em;
-                font-size: 1.3em;
+                font-size: 1.2em;
                 font-weight: 100;
                 max-width: 850px;
                 margin: 2em auto 0 auto;
@@ -28,14 +42,25 @@
                 font-size: 1.5em;
             }
 
+            h2 {
+                margin-top: 1.7em;
+                margin-bottom: 0;
+                font-size: 1.1em;
+                color: var(--light-blue);
+            }
+
             p {
-                line-height: 1.7em;
+                line-height: 1.6em;
+            }
+
+            :first-child p{
+                margin-top: 0.7em;
             }
 
             #question-container {
                 margin-top: 2.5em;
                 border-top: 1px solid #e2e2e3;
-                padding-top: 2em;
+                padding-top: 1em;
             }
 
             #question-container h2 {
@@ -70,12 +95,116 @@
                 padding-top: 1em;
                 border-top: 1px solid #e2e2e3;
             }
+
+            #pricing-container {
+                border-top: 1px solid #e2e2e3;
+                margin-top: 2em;
+                padding: 1.5em;
+            }
+
+            #pricing-container h2 {
+                text-align: center;
+                color: var(--app-green-color);
+                margin-top: 0;
+                margin-bottom: 2em;
+                font-size: 1.3em;
+            }
+
+            #pricing-container p {
+                margin-bottom: 1.8em;
+            }
+
+            #pricing-container > p {
+                font-weight: bolder;
+                text-align: center;
+                margin: 3em auto 0 auto;
+                color: var(--light-blue);
+            }
+
+            .pricing-input {
+                text-align: center;
+                display: inline-block;
+                width: 4em;
+                margin: 0 1em;
+            }
+
+            .pricing-button {
+                width: 48px;
+                height: 48px;
+            }
+
+            paper-icon-button {
+                color: #fff;
+                border-radius: 50%;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+            }
+
+            paper-icon-button:hover {
+                box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+                transform: scale(1.15);
+            }
+
+            .remove-button {
+                background-color: var(--light-blue);
+            }
+
+            .add-button {
+                background-color: var(--app-green-color);
+            }
+
+            #price {
+                text-align: center;
+                margin: 4em auto 1em auto;
+                font-size: 1.2em;
+            }
+
+            #price span{
+                color: var(--light-blue);
+            }
+
+            #contact-description {
+                text-align: center;
+                font-weight: bolder;
+                color: var(--light-blue);
+                padding: 1.5em 1em;
+                border: 1px solid var(--light-blue);
+            }
+
+            #contact-description p:first-child {
+                margin-top: 0;
+            }
+
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+                text-align: center;
+            }
+
             @media (max-width: 767px) {
 
                 :host {
                     font-size: 0.9em;
                 }
+
+                .flex-horizontal {
+                    @apply(--layout-vertical);
+                }
+
+                #discount-section{
+                    margin-top: 3em;
+                    padding-top: 1em;
+                    border-top: 1px solid #e2e2e3;
+                }
+
+                #price {
+                    margin-top: 2.5em;
+                }
             }
+
 
         </style>
         <div id="main-container">
@@ -83,35 +212,86 @@
 
             <img src="../images/docinfo/website.png" id="header-image">
 
-            <p>Vytvoříme Vám unikátní internetovou stránku na míru, kde můžete mít i online objednávání.
-                Vaše stránka bude dokonale propojena se systémem Docta.cz a budete tak moci spravovat informace pohodlně
-                z nastavení ordinace.
+            <h2>Mějte unikátní web</h2>
+            <p>Vytvoříme Vám unikátní internetovou stránku na míru, kde můžete mít i online objednávání. Vaše stránka
+                bude dokonale propojena se systémem Docta.cz a budete tak moci spravovat pacienty a informace pohodlně z
+                nastavení ordinace.
+
             </p>
+
+            <h2>Dokonalá funkčnost</h2>
             <p>
-                Stránky Vám vytvoříme za 500 Kč měsíčně bez dalších poplatků. Za online objednávání nic platit nebudete,
-                je tak zcela na Vás, zda ho chcete využít nebo ne.
-            </p>
-            <p>
-                Dnes tvoří stránky kdekdo, aniž by věděl, jak má stránka fungovat. Stránky jsou pak zmatečné a
-                fungují špatně na mobilních zařízeních. Tyto stránky jsou těžko vyhledatelné, jelikož kvalita stránek je
+                Dnes tvoří stránky kdekdo, aniž by věděl, jak má stránka fungovat. Stránky jsou pak zmatečné a fungují
+                špatně na mobilních zařízeních. Tyto stránky jsou těžko vyhledatelné, jelikož kvalita stránek je
                 důležitým faktorem pro internetové vyhledávače. Zajistíme, aby Vaše stránky fungovaly perfektně.
             </p>
+
+            <h2>Profesionální email</h2>
             <p>
-                Pokud už máte vlastní stránky, postaráme se, abyste s přesunem měli minimum starostí.
+                Založíme Vám email, který bude na Vaší doméně. Pokud máte například stránky na adrese <span class="green bolder">nejlepsidoktor.cz</span>,
+                Váš email může vypadat  <span class="green bolder">jsem@nejlepsidoktor.cz</span>.
             </p>
+
+            <h2>Už máte vlastní stránky</h2>
             <p>
-                V případě zájmu vyplňte prosím kontaktní formulář níže.
+                Pokud ano, postaráme se, abyste měli s přesunem minimum starostí.
             </p>
+
+            <h2 class="green">Pokud nám pomůžete, dáme Vám slevu</h2>
             <p>
-                Věříme, že s námi budete spokojeni.
+                Naše služba je nová a mnoho lékařů o ní ještě neví. Pokud nás doporučíte a Vámi doporučený doktor si
+                zaregistruje ordinaci, rádi Vám dáme slevu. Stačí když nám napíšete jména doktorů, které jste nám
+                doporučili.
             </p>
+
+            <div id="pricing-container">
+                <h2>A KOLIK VÁS TO BUDE STÁT?</h2>
+                <div class="flex-horizontal">
+                    <div id="doctors-section" class="pricig-input-section flexchild">
+                        <p>Pro kolik lékařů bude vaše stránka?</p>
+                        <paper-icon-button icon="remove" class="pricing-button remove-button"
+                                           on-tap="removeDoctor"></paper-icon-button>
+                        <paper-input class="pricing-input"
+                                     value="{{doctorCount}}"
+                                     prevent-invalid-input allowed-pattern="\d"
+                                     maxlength="2"></paper-input>
+                        <paper-icon-button icon="add" class="pricing-button add-button"
+                                           on-tap="addDoctor"></paper-icon-button>
+                    </div>
+
+                    <div id="discount-section" class="pricig-input-section flexchild">
+                        <p>Kolik lékařů nám doporučíte?</p>
+                        <paper-icon-button icon="remove" class="pricing-button remove-button"
+                                           on-tap="removeDiscount"></paper-icon-button>
+                        <paper-input class="pricing-input"
+                                     value="{{discountCount}}"
+                                     prevent-invalid-input allowed-pattern="\d"
+                                     maxlength="1"></paper-input>
+                        <paper-icon-button icon="add" class="pricing-button add-button"
+                                           on-tap="addDiscount"></paper-icon-button>
+
+                    </div>
+                </div>
+                <div id="price">VAŠE CENA: <span
+                        hidden="[[computePriceVisibility(price)]]"><b>[[price]] Kč / měsíčně</b></span></div>
+
+            </div>
+
+            <div id="contact-description">
+                <p>Pokud máte zájem nebo se chcete na něco zeptat, prosím, kontaktujte nás formulářem níže.</p>
+
+                <br><p>
+                    Věříme, že s námi budete spokojeni.
+                </p>
+            </div>
             <div id="question-container" hidden="[[messageSent]]">
                 <form id="docinfo_form" is="iron-form">
                     <h2>Kontaktní formulář</h2>
-                        Napište, jak Vás máme kontaktovat (email, telefon, ...). Pokud máme zavolat, dejte vědět, kdy se Vám to hodí.
+                    Napište, jak Vás máme kontaktovat (email, telefon, ...). Pokud máme zavolat, dejte vědět, kdy se Vám
+                    to hodí. Pokud nám doporučíte nějaké doktory, napište jejich jména do dobrovolné zprávy.
                     </p>
                     <paper-input id="contact_input" error-message="Pole nesmí být prázdné"
-                                      label="Kontakt na Vás" required>
+                                 label="Kontakt na Vás" required>
                     </paper-input>
                     <paper-textarea id="message_input" label="Dobrovolná zpráva" char-counter
                                     maxlength="2000"></paper-textarea>
@@ -132,6 +312,21 @@
                 messageSent: {
                     type: Boolean,
                     value: false
+                },
+
+                doctorCount: {
+                    type: Number,
+                    value: 0
+                },
+
+                discountCount: {
+                    type: Number,
+                    value: 0
+                },
+
+                price: {
+                    type: Number,
+                    computed: 'computePrice(doctorCount,discountCount)'
                 }
             },
 
@@ -145,7 +340,7 @@
             sendQuestion: function () {
 
                 var contact = this.$.contact_input.value,
-                    message = (!!this.$.message_input.value) ? this.$.message_input.value: null,
+                    message = (!!this.$.message_input.value) ? this.$.message_input.value : null,
                     db = firebase.apps[0].database();
 
                 db.ref('/newWebQuestions/').push({
@@ -163,6 +358,56 @@
                         }
                     });
                 }.bind(this));
+            },
+
+            computePrice: function (doctorCount, discountCount) {
+                //logarithmic price
+                var base = 2;
+                var threePrice = 700; //price for three doctors
+                var oneTwoPrice = 500; //price for one or two doctors
+
+                var discount = 0; //discount in percents
+                if (discountCount > 0) {
+                    discount = ((-0.6 / (discountCount + 0.4)) + 0.65); //example
+                }
+
+                if (0 < doctorCount && doctorCount < 3) {
+                    return Math.ceil(oneTwoPrice * (1 - discount));
+                } else if (doctorCount >= 3) {
+                    return Math.ceil((((threePrice) / 10) * (Math.log(doctorCount - (3 - base)) / Math.log(base))) * (1 - discount)) / 0.1; // gain/10 and /0.1 rounds it to tens;
+                } else {
+                    return 0;
+                }
+            },
+
+            computePriceVisibility: function (price) {
+                return price == 0;
+            },
+
+
+            //wanted to make only "add(event)" and "remove(event)" functions, but I found more complicated to check which of icon-button element was clicked
+            addDoctor: function () {
+                if (this.doctorCount < 99) {
+                    this.doctorCount++;
+                }
+            },
+
+            addDiscount: function () {
+                if (this.discountCount < 9) {
+                    this.discountCount++;
+                }
+            },
+
+            removeDoctor: function () {
+                if (this.doctorCount !== 0 && this.doctorCount !== "") {
+                    this.doctorCount--;
+                }
+            },
+
+            removeDiscount: function () {
+                if (this.discountCount !== 0 && this.doctorCount !== "") {
+                    this.discountCount--;
+                }
             }
         });
     </script>
