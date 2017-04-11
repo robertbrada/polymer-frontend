@@ -8,77 +8,27 @@
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="/styles/input-styles.html">
+<link rel="import" href="/styles/layout-styles.html">
 
 
 <dom-module id="newweb-view">
     <template>
-        <style include="input-styles">
+        <style include="input-styles layout-styles">
 
             :host {
-                --light-blue: #245686;
+                --light-blue: #244f86;
             }
 
             .green {
                 color: var(--app-green-color);
             }
 
-            .bolder {
-                font-weight: 400;
-            }
-
-            #main-container {
-                background-color: #fff;
-                padding: 1em;
-                font-size: 1.2em;
-                font-weight: 100;
-                max-width: 850px;
-                margin: 2em auto 0 auto;
-            }
-
-            h1 {
-                font-weight: 100;
-                text-align: center;
-                margin: 0 auto 0.9em 0;
-                font-size: 1.5em;
-            }
-
-            h2 {
-                margin-top: 1.7em;
-                margin-bottom: 0;
-                font-size: 1.1em;
+            .blue {
                 color: var(--light-blue);
             }
 
-            p {
-                line-height: 1.6em;
-            }
-
-            :first-child p{
-                margin-top: 0.7em;
-            }
-
-            #question-container {
-                margin-top: 2.5em;
-                border-top: 1px solid #e2e2e3;
-                padding-top: 1em;
-            }
-
-            #question-container h2 {
-                font-size: 1.2em;
-                letter-spacing: 0.02em;
-                margin-top: 0.5em;
-                margin-bottom: 1em;
-
-            }
-
-            paper-button {
-                background-color: var(--app-green-color);
-                color: #fff;
-                padding: 1em 2em;
-                font-size: 0.85em;
-                margin-top: 2em;
-                font-weight: 500;
-                letter-spacing: 0.03em;
+            .bolder {
+                font-weight: 400;
             }
 
             img {
@@ -86,8 +36,126 @@
                 margin: 3em auto;
                 display: block;
                 text-align: center;
+            }
+
+            #main-container {
+                background-color: #fff;
+                padding: 1em;
+                font-size: 1.2em;
+                font-weight: 100;
+                max-width: 1100px;
+                margin: 2em auto 0 auto;
+            }
+
+            header h1 {
+                font-weight: 100;
+                text-align: center;
+                margin: 0 auto 2.5em 0;
+                font-size: 1.5em;
+                color: #252526;
+            }
+
+            header {
+                border-bottom: 1px solid #e2e2e3;
+                padding-bottom: 1.5em;
+            }
+
+            header img {
+                max-width: 280px;
+            }
+
+            .headline-container {
+                padding: 2.5em 3.5em;
+                text-align: justify;
+                margin: 0 !important;
+                border-bottom: 1px solid #e2e2e3;
+            }
+
+            .headline-container:first-child {
+                border-right: 1px solid #e2e2e3
+            }
+
+            .headline-container h2 {
+                text-align: center;
+                margin-bottom: 1em;
+                margin-top: 1em;
+            }
+
+            .headline-container img {
+                max-height: 55px;
+                margin-bottom: 0;
+                margin-top: 0;
+            }
+
+            #help-section {
+                background-color: var(--light-blue);
+                color: #fff;
+                padding: 4.5em 2em;
+            }
+
+            #help-section h1 {
+                font-size: 1.45em;
+                letter-spacing: 0.03em;
+                text-align: left;
+                margin-bottom: 1em;
+                margin-top: 0;
+            }
+
+            #help-section .text-container {
+                max-width: 600px;
+                display: block;
+                margin: 0 auto;
+            }
+
+            p {
+                line-height: 1.6em;
+            }
+
+            :first-child p {
+                margin-top: 0.7em;
+            }
+
+            #own-website-section {
+                text-align: center;
+                margin: 2em auto;
+            }
+
+            #own-website-section h2 {
+                margin-top: 0;
 
             }
+
+            #questionContainer {
+                margin-top: 1em;
+                border-top: 1px solid #e2e2e3;
+                padding-top: 3em;
+                padding-bottom: 6em;
+            }
+
+            #questionContainer form {
+                max-width: 800px;
+                display: block;
+                margin: 0 auto;
+            }
+
+            #questionContainer h2 {
+                font-size: 1.2em;
+                letter-spacing: 0.02em;
+                margin-top: 0.5em;
+                margin-bottom: 1em;
+            }
+
+            paper-button {
+                background-color: var(--app-green-color);
+                color: #fff;
+                padding: 1em 2em;
+                font-size: 0.85em;
+                margin-top: 3em;
+                font-weight: 500;
+                letter-spacing: 0.03em;
+            }
+
+
 
             #message-sent {
                 color: var(--app-green-color);
@@ -97,16 +165,14 @@
             }
 
             #pricing-container {
-                border-top: 1px solid #e2e2e3;
-                margin-top: 2em;
                 padding: 1.5em;
+                margin-top: 2em;
             }
 
             #pricing-container h2 {
                 text-align: center;
-                color: var(--app-green-color);
                 margin-top: 0;
-                margin-bottom: 2em;
+                margin-bottom: 2.5em;
                 font-size: 1.3em;
             }
 
@@ -159,20 +225,35 @@
                 font-size: 1.2em;
             }
 
-            #price span{
+            #price span {
                 color: var(--light-blue);
-            }
-
-            #contact-description {
-                text-align: center;
-                font-weight: bolder;
-                color: var(--light-blue);
-                padding: 1.5em 1em;
-                border: 1px solid var(--light-blue);
             }
 
             #contact-description p:first-child {
                 margin-top: 0;
+            }
+
+            #example-web-link {
+                text-decoration: none;
+                cursor: pointer;
+                text-align: center;
+                padding: 1em 1em;
+                color: var(--app-green-color);
+                font-weight: bold;
+                font-size: 0.9em;
+                display: block;
+                border-radius: 10px;
+                width: 13.5em;
+                margin: 3em auto 0 auto;
+                border: 3px solid var(--app-green-color);
+                letter-spacing: 0.03em;
+                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+            }
+
+            #example-web-link:hover {
+                background-color: var(--app-green-color);
+                color: #fff;
+                transform: scale(1.05);
             }
 
             .flex-horizontal {
@@ -194,7 +275,7 @@
                     @apply(--layout-vertical);
                 }
 
-                #discount-section{
+                #discount-section {
                     margin-top: 3em;
                     padding-top: 1em;
                     border-top: 1px solid #e2e2e3;
@@ -205,47 +286,92 @@
                 }
             }
 
+            @media (max-width: 716px) {
+
+
+                header img {
+                    max-width: 150px;
+                }
+
+                .headline-container {
+                    padding: 2em 1em;
+                }
+
+                .headline-container img{
+                    max-height: 40px;
+                }
+
+                .headline-container:first-child {
+                    border-right: none
+                }
+            }
+
 
         </style>
         <div id="main-container">
-            <h1>Nechte si vytvořit webovou stránku od tvůrců Docta.cz</h1>
+            <header>
+                <h1>Nechte si vytvořit webovou stránku od tvůrců Docta.cz</h1>
+                <img src="../images/newweb/header.png">
+            </header>
+            <section class="grid">
+                <section class="headline-container">
+                    <img src="../images/newweb/stars.png">
+                    <h2 class="green">MĚJTE UNIKÁTNÍ WEB</h2>
+                    <p>Vytvoříme Vám unikátní internetovou stránku na míru,
+                        kde můžete mít i online objednávání. Vaše stránka bude
+                        dokonale propojena se systémem Docta.cz.
+                        Budete tak moci spravovat pacienty a informace pohodlně
+                        z nastavení ordinace.</p>
+                </section>
+                <section class="headline-container">
+                    <img src="../images/newweb/work.png">
+                    <h2 class="blue">VŽDY DOKONALE FUNKČNÍ</h2>
+                    <p> Dnes tvoří stránky kdekdo, aniž by věděl, jak má stránka fungovat. Stránky jsou pak zmatečné a
+                        fungují špatně na mobilních zařízeních. Tyto stránky jsou těžko vyhledatelné, jelikož kvalita
+                        stránek je
+                        důležitým faktorem pro internetové vyhledávače. Zajistíme, aby Vaše stránky fungovaly
+                        perfektně.</p>
+                </section>
+            </section>
 
-            <img src="../images/docinfo/website.png" id="header-image">
+            <section class="grid">
+                <section class="headline-container">
+                    <img src="../images/newweb/at.png" id="email-image">
+                    <h2 class="blue">PROFESIONÁLNÍ EMAIL</h2>
+                    <p>
+                        Založíme Vám email, který bude na Vaší doméně. Pokud máte stránky na adrese <span
+                            class="bolder">mojeordinace.cz</span>,
+                        Váš email může vypadat <span class="bolder">lekar@mojeordinace.cz</span>.
+                    </p>
+                </section>
+                <section class="headline-container">
+                    <img src="../images/newweb/website.png">
+                    <h2 class="green">JAK BUDE VAŠE STRÁNKA VYPADAT?</h2>
+                    <p> Zdarma vytvoříme návrh Vaší nové stránky. Můžete se pak
+                        rozhodnout, zda chcete stránky vytvořit.</p>
 
-            <h2>Mějte unikátní web</h2>
-            <p>Vytvoříme Vám unikátní internetovou stránku na míru, kde můžete mít i online objednávání. Vaše stránka
-                bude dokonale propojena se systémem Docta.cz. Budete tak moci spravovat pacienty a informace pohodlně z
-                nastavení ordinace.
+                    <a id="example-web-link" on-tap="scrollToForm">CHCI NEZÁVAZNÝ NÁVRH</a>
+                </section>
+            </section>
 
-            </p>
-
-            <h2>Dokonalá funkčnost</h2>
-            <p>
-                Dnes tvoří stránky kdekdo, aniž by věděl, jak má stránka fungovat. Stránky jsou pak zmatečné a fungují
-                špatně na mobilních zařízeních. Tyto stránky jsou těžko vyhledatelné, jelikož kvalita stránek je
-                důležitým faktorem pro internetové vyhledávače. Zajistíme, aby Vaše stránky fungovaly perfektně.
-            </p>
-
-            <h2>Profesionální email</h2>
-            <p>
-                Založíme Vám email, který bude na Vaší doméně. Pokud máte například stránky na adrese <span class="green bolder">nejlepsidoktor.cz</span>,
-                Váš email může vypadat  <span class="green bolder">jsem@nejlepsidoktor.cz</span>.
-            </p>
-
-            <h2>Už máte vlastní stránky</h2>
-            <p>
-                Pokud ano, postaráme se, abyste měli s přesunem minimum starostí.
-            </p>
-
-            <h2 class="green">Pokud nám pomůžete, dáme Vám slevu</h2>
-            <p>
-                Naše služba je nová a mnoho lékařů o ní ještě neví. Pokud nás doporučíte a Vámi doporučený doktor si
-                zaregistruje ordinaci, rádi Vám dáme slevu. Stačí když nám napíšete jména doktorů, které jste nám
-                doporučili.
-            </p>
+            <div id="own-website-section">
+                <h2 class="blue">Už máte vlastní stránky</h2>
+                <p>
+                    Pokud ano, postaráme se, abyste měli s přesunem minimum starostí.
+                </p>
+            </div>
+            <div id="help-section">
+                <div class="text-container">
+                    <h1>POMOZTE NÁM A DOSTANETE SLEVU</h1>
+                    <p>
+                        Naše služba je nová a mnoho lékařů o ní ještě neví. Pokud nás doporučíte a Vámi doporučený
+                        lékař si zaregistruje ordinaci, rádi Vám dáme slevu. Stačí nám napsat, které lékaře jste doporučili.
+                    </p>
+                </div>
+            </div>
 
             <div id="pricing-container">
-                <h2>A KOLIK VÁS TO BUDE STÁT?</h2>
+                <h2 class="blue">KOLIK STRÁNKY OD NÁS STOJÍ?</h2>
                 <div class="flex-horizontal">
                     <div id="doctors-section" class="pricig-input-section flexchild">
                         <p>Pro kolik lékařů bude vaše stránka?</p>
@@ -260,7 +386,7 @@
                     </div>
 
                     <div id="discount-section" class="pricig-input-section flexchild">
-                        <p>Kolik lékařů nám doporučíte?</p>
+                        <p><b class="green">SLEVA - </B>Kolik lékařů nám doporučíte?</p>
                         <paper-icon-button icon="remove" class="pricing-button remove-button"
                                            on-tap="removeDiscount"></paper-icon-button>
                         <paper-input class="pricing-input"
@@ -276,22 +402,14 @@
                         hidden="[[computePriceVisibility(price)]]"><b>[[price]] Kč / měsíčně</b></span></div>
 
             </div>
-
-            <div id="contact-description">
-                <p>Pokud máte zájem nebo se chcete na něco zeptat, prosím, kontaktujte nás formulářem níže.</p>
-
-                <br><p>
-                    Věříme, že s námi budete spokojeni.
-                </p>
-            </div>
-            <div id="question-container" hidden="[[messageSent]]">
+            <div id="questionContainer" hidden="[[messageSent]]">
                 <form id="docinfo_form" is="iron-form">
-                    <h2>Kontaktní formulář</h2>
-                    Napište, jak Vás máme kontaktovat (email, telefon, ...). Pokud máme zavolat, dejte vědět, kdy se Vám
-                    to hodí. Pokud nám doporučíte nějaké doktory, napište jejich jména do dobrovolné zprávy.
+                    <h2 class="green">MÁTE ZÁJEM O STRÁNKU NEBO CHCETE NEZÁVAZNÝ NÁVRH?</h2>
+                    V případě zájmu nám napište, jak Vás máme kontaktovat. Pokud máme zavolat, dejte vědět, kdy se Vám
+                    to hodí.
                     </p>
                     <paper-input id="contact_input" error-message="Pole nesmí být prázdné"
-                                 label="Kontakt na Vás" required>
+                                 label="Kontakt na Vás (email, telefon,...)" required>
                     </paper-input>
                     <paper-textarea id="message_input" label="Dobrovolná zpráva" char-counter
                                     maxlength="2000"></paper-textarea>
@@ -408,6 +526,10 @@
                 if (this.discountCount !== 0 && this.doctorCount !== "") {
                     this.discountCount--;
                 }
+            },
+
+            scrollToForm: function () {
+                this.$.questionContainer.scrollIntoView();
             }
         });
     </script>
