@@ -340,8 +340,8 @@
                     <h2 class="blue">PROFESIONÁLNÍ EMAIL</h2>
                     <p>
                         Založíme Vám email, který bude na Vaší doméně. Pokud máte stránky na adrese <span
-                            class="bolder">mojeordinace.cz</span>,
-                        Váš email může vypadat <span class="bolder">lekar@mojeordinace.cz</span>.
+                            class="bolder">ordinaceplzen.cz</span>,
+                        Váš email může vypadat <span class="bolder">lekar@ordinaceplzen.cz</span>.
                     </p>
                 </section>
                 <section class="headline-container">
@@ -445,7 +445,19 @@
                 price: {
                     type: Number,
                     computed: 'computePrice(doctorCount,discountCount)'
+                },
+
+                trackingId: {
+                    type: String
                 }
+            },
+
+            observers: [
+                'priceObserver(price, trackingId)'
+            ],
+
+            priceObserver: function (price, trackingId) {
+                firebase.apps[0].database().ref("/docInfoVisitors/" + trackingId).push(price);
             },
 
             send: function () {

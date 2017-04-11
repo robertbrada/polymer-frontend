@@ -187,7 +187,8 @@
                     <a hidden="[[!showOffices]]" href="office/interface/waiting-list/" aria-label="Informace pro lékaře">Mé
                         ordinace</a>
                 </div>
-                <div class="logo" main-title><a href="home/" aria-label="Domovská stránka"><img src="images/logo.png" style="width: 75px"></a></div>
+                <!--TODO: switch back to home-->
+                <div class="logo" main-title><a href="/docinfo" aria-label="Domovská stránka"><img src="images/logo.png" style="width: 75px"></a></div>
                 <div class="icon-bar-item">
                     <paper-icon-button icon="[[_computeLockIcon(signedIn)]]" on-tap="_loginButtonHandler">
                     </paper-icon-button>
@@ -227,10 +228,10 @@
             <d-view name="d" route="{{subRoute}}" small-screen="[[smallScreen]]" user-id="[[user.uid]]"></d-view>
             <e404-view name="e404"></e404-view>
             <emailaction-view name="emailaction" route="{{subRoute}}"></emailaction-view>
-            <docinfo-view name="docinfo" route="{{subRoute}}" signed-in="[[signedIn]]"></docinfo-view>
+            <docinfo-view name="docinfo" route="{{subRoute}}" signed-in="[[signedIn]]" tracking-id="{{trackingId}}"></docinfo-view>
             <registration-view name="registration" route="{{subRoute}}"></registration-view>
             <conditions-view name="conditions"></conditions-view>
-            <newweb-view name="newweb"></newweb-view>
+            <newweb-view name="newweb" tracking-id="[[trackingId]]"></newweb-view>
         </iron-pages>
 
         <custom-dialog id="main_dialog" with-backdrop entry-animation="scale-up-animation"
@@ -245,7 +246,8 @@
 
             behaviors: [RoutingBehavior],
 
-            defaultPage: 'home',
+            defaultPage: 'docinfo',
+//            defaultPage: 'home',
             viewPath: '/views/',
 
             properties: {
