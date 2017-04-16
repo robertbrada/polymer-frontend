@@ -32,11 +32,11 @@
             }
 
             .green-text {
-               color: var(--app-green-color);
+                color: var(--app-green-color);
             }
 
             .blue-text {
-               color: var(--app-accent-color);
+                color: var(--app-accent-color);
             }
 
             a {
@@ -49,13 +49,22 @@
                 text-decoration: underline;
             }
 
+            .styled-link {
+                font-weight: bold;
+                background-color: var(--app-green-color);
+                color: #fff;
+                padding: 0.6em 1.1em;
+                border-radius: 2em;
+                letter-spacing: 0.02em;
+            }
+
             .styled-link:hover {
                 text-decoration: none;
             }
 
             h1 {
                 letter-spacing: 0.03em;
-                font-size: 1.6em;
+                font-size: 1.5em;
                 margin-top: 0;
                 margin-bottom: 1.5em;
             }
@@ -73,7 +82,7 @@
             }
 
             .grid section {
-                padding: 3.5em 5%;
+                padding: 3em 5%;
                 margin: 0 !important;
                 position: relative;
             }
@@ -81,6 +90,7 @@
             section > p {
                 font-size: 1.2em;
                 line-height: 1.65em;
+                font-weight: 100;
             }
 
             header {
@@ -100,14 +110,16 @@
                 position: relative;
             }
 
-            header h1 img {
+            header #headline-arrow {
                 position: absolute;
                 left: -30px;
                 top: 7px;
             }
 
-            header .image-section {
-                text-align: right;
+            header h2 {
+                text-align: center;
+                margin-top: 0;
+                font-size: 1.3em;
             }
 
             header paper-button {
@@ -118,28 +130,10 @@
 
             header p {
                 font-size: 1.3em;
-                font-weight: 100 !important;
             }
 
             header paper-button {
                 margin-top: 0;
-            }
-
-
-            .register-container paper-button {
-                padding: 1.6em 2.6em;
-                font-weight: bold;
-                font-size: 1.1em;
-                letter-spacing: 0.08em;
-            }
-
-            .register-container p {
-                font-size: 1.1em;
-                font-weight: 300;
-                color: #808081;
-                max-width: 550px;
-                margin: 2em auto 1em auto;
-                padding: 0 1em;
             }
 
             #headline-arrow {
@@ -149,7 +143,6 @@
                 margin-right: 0.5em;
             }
 
-
             header .arrow {
                 max-height: 26px;
                 position: absolute;
@@ -157,50 +150,28 @@
                 left: calc(50% - 12em);
             }
 
-            /************************/
-            #discover-more-container {
-                text-align: center;
-                margin: 0 auto;
-                cursor: pointer;
-            }
-
-            #discover-more-container h2 {
-                font-weight: 500;
-                font-size: 1.5em;
-                margin: 0 auto 0.8em 0;
-            }
-
-
             /******************/
 
-            #office-calendar-main-section {
+            #who-can-book-section {
                 margin-bottom: 0;
-                padding-top: 4em;
+                padding-top: 3em;
                 position: relative;
             }
 
-            #office-calendar-main-section .arrow {
-                position: absolute;
-                height: 80px;
-                bottom: -79px;
-                right: 30%;
-            }
-
             /********************/
-            #patients-main-container {
+            #not-sure-container {
                 position: relative;
                 margin-top: 0;
                 padding-top: 1em;
                 padding-bottom: 1em;
-                background-color: #fafafa;
             }
 
-            #patients-main-container .main-frame {
+            #not-sure-container .main-frame {
                 max-width: 800px;
                 margin: 0 auto;
             }
 
-            #patients-main-container span {
+            #not-sure-container span {
                 color: var(--app-blue-color);
                 font-weight: bolder;
                 margin-top: 2.5em;
@@ -209,7 +180,7 @@
                 display: block;
             }
 
-            #patients-main-container .styled-link {
+            #not-sure-container .styled-link {
                 display: inline-block;
                 text-align: center;
             }
@@ -224,12 +195,6 @@
 
             /****************/
 
-            #bottom-registration-container h1 {
-                color: var(--app-accent-color);
-                font-size: 1.4em;
-                margin-top: 2em;
-            }
-
             .presentation-img {
                 position: absolute;
                 top: 0;
@@ -242,44 +207,191 @@
             #comp-img {
                 margin-left: 0;
                 margin-bottom: 0;
-                max-width: 560px;
-                max-height: 560px;
+                max-width: 550px;
+                max-height: 550px;
             }
 
             .img-section {
                 text-align: center;
             }
 
-            /*** ABOUT ***/
+            /*****************
+           -----OVERVIEW-----
+            ****************/
 
-            #profile-images-section {
-                margin-left: 5em;
-                max-width: 160px;
-                padding-left: 5em;
-                padding-right: 5em;
-                border-left: 1px solid #e2e2e3;
+            #overview {
+                color: #fff;
+                position: relative;
+                padding-top: 3em;
+                padding-bottom: 2.5em;
             }
 
-            .profile-image {
-                position: static;
-                max-width: 150px;
-                max-height: 150px;
+            #overview .main-frame section {
+                padding-left: 3.5%;
+                padding-right: 3.5%;
+                padding-bottom: 2em;
             }
 
-            #about-section {
-                margin-bottom: 0;
+            #overview .badge {
+                color: #fff;
+                background-color: var(--app-green-color);
+                border: none;
+                margin-left: 0;
+                margin-bottom: 1em;
+                font-size: 1.3em;
+                width: 35px;
+                height: 35px;
+                line-height: 1.9em;
+            }
+
+            #overview h1 {
+                font-size: 1.3em;
+                margin-bottom: 1.2em;
+                letter-spacing: 0.03em;
+            }
+
+            #overview p {
+                padding-bottom: 1em;
+                border-bottom: 1px solid rgba(256, 256, 256, 0.2);
+            }
+
+            #overview ul {
+                list-style: none;
+                padding-left: 0;
+                margin-bottom: 1.5em;
+            }
+
+            #overview iron-icon {
+                display: inline-block;
+                width: 25px;
+                margin-right: 1em;
+                color: var(--app-green-color);
+                vertical-align: text-bottom;
+            }
+
+            #overview ul li {
+                margin-top: 1.5em;
+                font-weight: bolder;
+                letter-spacing: 0.03em;
+                font-size: 1.1em;
+                position: relative;
+            }
+
+            #overview ul li span {
+                font-weight: bold;
+            }
+
+            #overview .page-arrow {
+                position: absolute;
+                top: -1px;
+                width: 5em;
+                left: calc(50% - 2.5em);
+            }
+
+
+            #overview ul li .arrow {
+                position: absolute;
+                margin-left: 2em;
+                max-width: 45px;
+                max-height: 35px;
+            }
+
+            #overview-button-container {
+                max-width: 800px;
+                text-align: center;
+                margin: 0.5em auto;
+                color: #fff;
+                font-weight: 500;
+            }
+
+            #overview-button-container paper-button {
+                padding: 1.2em 2em;
+                font-size: 1.1em;
+                border-radius: 5em;
+                margin: 1.5em 2em;
+            }
+
+            #show-more {
+                color: #fff;
+                cursor: pointer;
+                font-size: 1em;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                display: inline-block;
+                margin: 1.5em 2em;
+            }
+
+            /*****************
+            -----HOW HELP-----
+             ****************/
+
+            #how-help-section {
+                padding: 4em 1.5em 2em 1.4em;
+                position: relative;
+                box-shadow: 0px 0px 35px 0px rgba(180, 180, 185, 0.3);
+            }
+
+            #how-help-section h1 {
+                margin-bottom: 2em;
+                text-align: center;
+                font-size: 1.5em;
+                color: var(--app-accent-color);
+            }
+
+            #how-help-section .main-frame {
+                max-width: 1000px;
+            }
+
+            #how-help-section img {
+                max-height: 110px;
+            }
+
+            #how-help-section section {
+                text-align: center;
+                padding: 3em 7%;
+                height: 22.5em;
+            }
+
+            #how-help-section h2 {
+                margin-top: 2em;
+                font-size: 1.2em;
+            }
+
+            #how-help-section p {
+                text-align: left;
+                font-size: 1.25em;
+                left: 3.5em;
+                right: 3.5em;
+            }
+
+            #how-look-headline {
+                text-align: center;
+                font-size: 0.9em;
+                padding: 0 1em;
+                margin-top: 0;
+            }
+
+            #how-look-headline span {
+                position: relative;
+            }
+
+            #how-look-headline img {
+                max-height: 1.6em;
+                position: absolute;
+                right: -1.6em;
+                top: 10px;
             }
 
             /***** OFFICE PRESENTATION ********/
 
-            .styled-link {
-                font-weight: bold;
-                background-color: var(--app-green-color);
-                color: #fff;
-                padding: 0.6em 1.1em;
-                border-radius: 2em;
-                font-size: 1.1em;
-                letter-spacing: 0.02em;
+
+            #presentation{
+                padding-top: 2em;
+            }
+
+            #presentation .own-website-link {
+                display: block;
+                margin-top: 3em;
             }
 
             /*** QUESTION FORM ***/
@@ -299,14 +411,13 @@
                 margin: 0 auto;
             }
 
-
             #presentation .free-label {
                 margin-bottom: 1em;
             }
 
             #settings-img {
-                max-height: 450px;
-                max-width: 450px;
+                max-height: 490px;
+                max-width: 490px;
             }
 
             .free-label {
@@ -315,33 +426,33 @@
                 text-align: left;
                 border: none;
                 background-color: transparent;
-                padding: 0;
                 margin-bottom: 0.8em;
                 display: block;
                 width: 4.5em;
-                padding-bottom: 0.1em;
+                padding: 0 0 0.1em;
                 border-bottom: 1px solid var(--app-green-color);
             }
 
             #why-booking-section {
                 color: #fff;
                 text-align: center;
-                padding: 6em 2em 2em 2em;
+                padding: 6em 2em 1em 2em;
                 background-color: var(--app-green-color);
                 position: relative;
             }
 
-            #why-booking-section .main-frame{
-                padding-bottom: 2.5em;
-                border-bottom: 4px dashed #fff;
+            #why-booking-section .main-frame {
+                padding-bottom: 1.5em;
+                border-bottom: 3px dashed #fff;
             }
 
             #why-booking-section h1 {
                 margin-bottom: 0;
+                font-size: 1.4em;
             }
 
             .why-booking-img {
-                max-height: 130px;
+                max-height: 120px;
             }
 
             #why-booking-section .header-div {
@@ -363,18 +474,6 @@
                 line-height: 1.5em;
             }
 
-            #office-presence-section {
-                padding-top: 2em;
-            }
-
-            #office-presence-section, #add-online-booking {
-                background-color: #fafafa;
-            }
-            #office-presence-section .own-website-link {
-                display: block;
-                margin-top: 3em;
-            }
-
             #add-online-booking {
                 text-align: center;
                 position: relative;
@@ -385,28 +484,51 @@
                 display: inline-block;
             }
 
-            #add-online-booking h1 {
+            #add-online-booking h2 {
                 margin-bottom: 0;
+                margin-top: 0;
+                font-size: 1.3em;
             }
 
             #add-online-booking img {
                 color: var(--app-accent-color);
-                height: 40px;
+                height: 30px;
                 position: relative;
-                bottom: -44px;
+                bottom: -34px;
                 z-index: 2;
             }
 
+            /* REGISTRATION STEPS */
+
+            #registration {
+                color: #fff;
+                background-color: var(--app-accent-color);
+                text-align: center;
+                font-size: 0.9em;
+                position: relative;
+            }
+
+            #registration .main-frame {
+                max-width: 700px;
+                padding: 5.5em 1.5em;
+                overflow: inherit;
+            }
+
+            #registration h1 {
+                letter-spacing: 0.03em;
+                text-align: left;
+            }
+
             .badge {
-                border: 1px solid var(--app-accent-color);
+                background-color: #fff;
                 color: var(--app-accent-color);
-                width: 50px;
-                height: 50px;
+                width: 45px;
+                height: 45px;
                 border-radius: 100%;
                 display: inline-block;
                 font-size: 1.8em;
                 font-weight: bold;
-                line-height: 1.7em;
+                line-height: 1.9em;
                 text-align: center;
                 vertical-align: middle;
                 margin: auto 2em auto 0;
@@ -425,7 +547,7 @@
             #step-one .badge {
                 background-color: var(--app-green-color);
                 color: #fff;
-                border-color: var(--app-green-color);
+                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
             }
 
             .step-container {
@@ -469,7 +591,30 @@
                 font-size: 1.2em;
             }
 
-            .flex-horizontal {
+            /*** ABOUT ***/
+
+            #profile-images-section {
+                margin-left: 5em;
+                max-width: 160px;
+                padding-left: 5em;
+                padding-right: 5em;
+                border-left: 1px solid #e2e2e3;
+            }
+
+            .profile-image {
+                position: static;
+                max-width: 150px;
+                max-height: 150px;
+            }
+
+            #about-section {
+                margin-bottom: 0;
+            }
+
+
+            /****** FLEX LAYOUT ****/
+
+            .flex-horizontal, .booking-flex-horizontal {
                 @apply(--layout-horizontal);
             }
 
@@ -477,190 +622,10 @@
                 @apply(--layout-flex);
             }
 
-            #registration {
-                color: var(--app-accent-color);
-                background-color: #fff;
-                text-align: center;
-                font-size: 1.1em;
-                position: relative;
-                box-shadow: 0px 0px 55px 0px rgba(180, 180, 185, 0.4);
-            }
-
-            #registration .main-frame {
-                max-width: 700px;
-                padding: 6em 1.5em;
-                overflow: inherit;
-            }
-
-            #registration h1 {
-                letter-spacing: 0.03em;
-                text-align: left;
-            }
-
 
             /*
-           ----------------------
+           ---- MEDIA ----
            */
-
-            #overview {
-                color: #fff;
-                position: relative;
-                padding-top: 2em;
-                padding-bottom: 1em;
-            }
-
-            #overview .main-frame section{
-                padding-left: 3.5%;
-                padding-right: 3.5%;
-            }
-
-            #overview .badge {
-                color: #fff;
-                background-color: var(--app-green-color);
-                border: none;
-                margin-left: 0;
-                margin-bottom: 1em;
-                font-size: 1.3em;
-                width: 35px;
-                height: 35px;
-                line-height: 1.9em;
-            }
-
-            #overview h1 {
-                font-size: 1.3em;
-                margin-bottom: 2em;
-                letter-spacing: 0.03em;
-            }
-
-            #overview p {
-                padding-bottom: 1em;
-                border-bottom: 1px solid rgba(256, 256, 256, 0.2);
-            }
-
-            #overview ul {
-                list-style: none;
-                padding-left: 0;
-                margin-bottom: 1.5em;
-            }
-
-            #overview iron-icon {
-                display: inline-block;
-                width: 25px;
-                margin-right: 1em;
-                color: var(--app-green-color);
-                vertical-align: text-bottom;
-            }
-
-            #overview ul li {
-                margin-top: 1.5em;
-                font-weight: bolder;
-                letter-spacing: 0.03em;
-                font-size: 1.1em;
-            }
-
-            #overview ul li span {
-                font-weight: bold;
-            }
-
-            #overview-booking-arrow {
-                margin-left: 2em;
-                width: 45px;
-                height: auto;
-            }
-
-            #overview .arrow {
-                position: absolute;
-                top: -1px;
-                width: 5em;
-                left: calc(50% - 2.5em);
-            }
-
-            #overview-button-container {
-                max-width: 800px;
-                text-align: center;
-                margin: 0 auto;
-            }
-
-            #overview-button-container paper-button {
-                font-weight: 500;
-                padding: 1.2em 2em;
-                font-size: 1.1em;
-                border-radius: 5em;
-                display: block;
-                margin: 0 auto 1.5em auto;
-                width: 11em;
-            }
-
-            #show-more {
-                color: #fff;
-                cursor: pointer;
-                font-size: 1em;
-                font-weight: bold;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                display: block;
-                margin: 2.8em auto 1.5em auto;
-            }
-
-
-            /*****************
-            -----HOW HELP-----
-             ****************/
-
-            #how-help-section {
-                padding: 4em 1.5em 1em 1.4em;
-                position: relative;
-                box-shadow: 0px 0px 30px 2px rgba(180, 180, 185, 0.3);
-            }
-
-            #how-help-section h1 {
-                margin-bottom: 2em;
-                text-align: center;
-                font-size: 1.5em;
-                color: var(--app-accent-color);
-            }
-
-            #how-help-section .main-frame {
-                max-width: 1000px;
-            }
-
-            #how-help-section img {
-                max-height: 110px;
-            }
-
-            #how-help-section section {
-                text-align: center;
-                padding: 3em 7%;
-                height: 23.5em;
-            }
-
-            #how-help-section h2 {
-                margin-top: 2em;
-                font-size: 1.2em;
-            }
-
-            #how-help-section p {
-                text-align: left;
-                font-size: 1.25em;
-                left: 3.5em;
-                right: 3.5em;
-            }
-
-            #how-look-headline {
-                margin-top: 2em;
-            }
-
-            #how-look-headline span {
-                position: relative;
-            }
-
-            #how-look-headline img {
-                max-height: 1.6em;
-                position: absolute;
-                right: -1.6em;
-                top: 10px;
-            }
-
 
             @media (max-width: 1200px) {
                 #comp-img {
@@ -696,6 +661,14 @@
                     padding: 7% 5%;
                 }
 
+
+                header paper-button{
+                    display: block;
+                    width: 16em;
+                    text-align: center;
+                    margin: 1em auto;
+                }
+
                 .presentation-img {
                     position: static;
                     max-width: 150px;
@@ -711,7 +684,7 @@
                     max-width: 100%;
                 }
 
-                #office-calendar-main-section .arrow {
+                #who-can-book-section .arrow {
                     height: 40px;
                     bottom: -39px;
                 }
@@ -725,18 +698,27 @@
                 }
 
                 #registration {
-                    font-size: 1em;
+                    font-size: 0.9em;
                 }
 
-                #discover-more-container {
-                    font-size: 0.9em;
+                #overview ul li .arrow {
+                    top: 15px;
+                }
+
+                #how-help-section p {
+                    left: 0.5em;
+                    right: 0.5em;
                 }
             }
 
             @media (max-width: 980px) {
 
-                #office-calendar-main-section {
+                #who-can-book-section {
                     padding-top: 0;
+                }
+
+                .booking-flex-horizontal {
+                    @apply(--layout-vertical);
                 }
             }
 
@@ -751,7 +733,6 @@
                     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
                 }
             }
-
 
             /******** ANIMATIONS ************/
 
@@ -1010,15 +991,12 @@
                     </svg>
                 </section>
             </section>
-
-            <div id="discover-more-container" on-tap="scrollToPresentation">
-                <h2>Co můžete udělat?</h2>
-            </div>
+            <h2 class="blue-color">Co můžete udělat?</h2>
         </header>
 
 
         <section id="overview" class="blue-background">
-            <img src="../images/docinfo/header-arrow.png" class="arrow">
+            <img src="../images/docinfo/header-arrow.png" class="page-arrow">
             <div class="main-frame grid">
                 <section>
                     <h1>
@@ -1057,11 +1035,13 @@
                         <li>
                             <iron-icon icon="check"></iron-icon>
                             <span class="green-text">Volitelné: &nbsp;</span>Objednávací kalendář<img
-                                src="../images/docinfo/overview-booking-arrow.png" id="overview-booking-arrow" hidden="[[mediumScreen]]"></li>
+                                src="../images/docinfo/overview-booking-arrow.png" class="arrow" id="overview-booking-arrow"
+                                hidden="[[mediumScreen]]">
+                            <img src="../images/docinfo/down-arrow.png" class="arrow" hidden="[[!smallScreen]]"></li>
                     </ul>
                 </section>
 
-                <section class="">
+                <section>
                     <h1>
                         <div class="free-label">ZDARMA
                         </div>
@@ -1069,7 +1049,7 @@
                         BEZ TELEFONOVÁNÍ
                     </h1>
                     <p>Kalendář si můžete kdykoli přidat na svůj profil.
-                        Pacienti si v klidu vyberou volný termín, když se jim to hodí. </p>
+                        Pacienti si v klidu vyberou volný termín kdykoli se jim to hodí. </p>
                     <ul>
                         <li>
                             <iron-icon icon="check"></iron-icon>
@@ -1091,13 +1071,12 @@
                             <iron-icon icon="check"></iron-icon>
                             Objednané pacienty můžete zapisovat i ručně
                         </li>
-
                     </ul>
                 </section>
             </div>
 
             <div id="overview-button-container">
-                <paper-button>Mám zájem</paper-button>
+                <a href="[[computeUrl(signedIn)]]"><paper-button>Mám zájem</paper-button></a>
                 <a id="show-more">Chci zjistit více</a>
             </div>
         </section>
@@ -1107,16 +1086,16 @@
             <div class="main-frame grid">
                 <section>
                     <img src="../images/docinfo/patients-time.png">
-                    <h2 class="blue-text" >Ušetříte čas i pacientům</h2>
+                    <h2 class="blue-text">Ušetříte pacientům čas</h2>
                     <div class="slidingVertical">
                         <p>„
-                            Už nemusím telefonovat ani chodit do ordinace. Vše, co potřebuji.
-                            si zjistím z domova.“
+                            Už nemusím telefonovat ani chodit do ordinace. Vše, co potřebuji,
+                            si zjistím z pohodlí domova.“
                         </p>
                         <p>
                             „
                             Konečně dopředu vím, že má lékař dovolenou. Když to zjistím až v ordinaci,
-                            tak je to ztracený čas.
+                            tak už je pozdě.
                             “
                         </p>
                     </div>
@@ -1128,30 +1107,30 @@
                     <h2 class="blue-text">Pomůžete jim s léčbou</h2>
                     <div class="slidingVertical" id="help-patients-sliding">
 
-                        <p><span class="quotes">„</span>
+                        <p>„
                             Nerada telefonuji do ordinace. Díky Docta.cz jsem neodkládala
-                            objednání a včas začala léčit rakovinu. <span class="quotes">“</span></p>
+                            objednání a včas začala léčit rakovinu.“</p>
                         <p>
-                            <span class="quotes">„</span>
+                            „
                             Často se nemohu dovolat do ordinace. A když není ordinační den, nemohu
-                            se objednat vůbec.<span class="quotes">“</span>
+                            se objednat vůbec.“
                         </p>
                     </div>
                 </section>
             </div>
 
-            <h1 id="how-look-headline"><span  class="green-text">A jak náš systém vypadá? <img
-                    src="../images/docinfo/down-arrow.png"></span></h1>
+            <h2 id="how-look-headline" hidden="[[mediumScreen]]"><span class="green-text">Prohlédnětě si náš systém
+                <img src="../images/docinfo/down-arrow.png"></span></h2>
         </section>
 
-        <section id="office-presence-section">
+        <section id="presentation">
             <div class="main-frame grid">
                 <section>
                     <h1>
                         ZVEŘEJNĚTE INFORMACE O VAŠÍ
                         ORDINACI NA INTERENTU
                     </h1>
-                    <p>Po <a href="/registration">Registraci</a> vyplníte informace o své rodinaci.
+                    <p>Po <a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">registraci</a> <a href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">přidání ordinace</a> vyplníte informace o své rodinaci.
                         Na Vašem profilu pacienti uvidí veškeré důležité informace odkukoli a kdykoli.
                         Nebudou tak muset volat nebo chodit k Vám do ordinace, aby zjistili, co potřebují.</p>
                     <p>
@@ -1175,15 +1154,15 @@
 
         <div id="add-online-booking">
 
-            <h1 class="blue-text">
+            <h2 class="blue-text">
                 PŘIDEJTE SI NA SVŮJ PROFIL OBJEDNÁVACÍ KALENDÁŘ
-            </h1>
+            </h2>
             <img class="" src="../images/docinfo/rectangle-white-arrow.png">
         </div>
 
         <section id="why-booking-section" class="green-background">
             <h1>Proč použít objednávání na internetu?</h1>
-            <div class="main-frame grid">
+            <div class="main-frame booking-flex-horizontal grid">
                 <section>
                     <div class="header-div">
                         <img class="why-booking-img" src="../images/docinfo/save-time.png">
@@ -1219,7 +1198,7 @@
                 </section>
             </div>
         </section>
-        <section class="green-background" id="office-calendar-main-section">
+        <section class="green-background" id="who-can-book-section">
             <div class="main-frame grid">
                 <section class="img-section" hidden="[[mediumScreen]]">
                     <img id="comp-img" class="presentation-img" src="../images/docinfo/calendar.png">
@@ -1235,10 +1214,9 @@
                     <p>Nad tím, kdo se k Vám objedná, máte úplnou kontrolu.</p>
                 </section>
             </div>
-            <!--<img class="arrow" src="../images/docinfo/registration-arrow.png">-->
         </section>
 
-        <section id="patients-main-container">
+        <section id="not-sure-container">
             <div class="main-frame grid">
                 <section>
                     <h1>NEVÍTE, ZDA OBJEDNÁVÁNÍ VYUŽIJETE?</h1>
@@ -1246,24 +1224,26 @@
                         využijí. Až se naše služba stane
                         standardem, uvidíte nárůst objednaných pacientů.</p>
 
-                    <p>Registrace Vám zabere jen 10 minut a naše služby můžete využít kdykoli.</p>
+                    <p><a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">Registrace </a><a href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">Přidání ordinace </a>Vám zabere jen 10 minut a naše služby můžete využít kdykoli.</p>
 
                     <p>
                         <span>Už máte vlastní stránku a chcete využít online objednávání?</span>
                         Rádi Vám pomůžeme vložit odkaz na Vaše stránky. Pokud máte zájem,
-                        <a href="/registration">zaregistrujte</a> se a napište nám.
+                        <a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">zaregistrujte se</a><a href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">přidejte ordinaci</a> a napište nám.
                     </p>
 
                     <br>
                     <br>
-                    <a class="styled-link" href="/newweb">Zaujaly Vás naše služby, ale chcete vlastní stránky?</a>
+                    <p>
+                        <a class="styled-link" href="/newweb">Zaujaly Vás naše služby, ale chcete vlastní stránky?</a>
+                    </p>
+
 
                 </section>
             </div>
         </section>
 
         <section id="registration">
-            <!--<img src="../images/docinfo/header-arrow.png" class="arrow">-->
             <div class="main-frame">
                 <h1>JAK ZAČÍT POUŽÍVAT NAŠE SLUŽBY?</h1>
                 <section id="registration-steps-section">
