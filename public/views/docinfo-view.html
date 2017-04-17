@@ -62,6 +62,14 @@
                 text-decoration: none;
             }
 
+            .inner-page-link {
+                cursor: pointer;
+            }
+
+            .inner-page-link:hover {
+                text-decoration: underline;
+            }
+
             h1 {
                 letter-spacing: 0.03em;
                 font-size: 1.5em;
@@ -288,7 +296,6 @@
                 left: calc(50% - 2.5em);
             }
 
-
             #overview ul li .arrow {
                 position: absolute;
                 margin-left: 2em;
@@ -311,7 +318,7 @@
                 margin: 1.5em 2em;
             }
 
-            #show-more {
+            #linkToHelp {
                 color: #fff;
                 cursor: pointer;
                 font-size: 1em;
@@ -325,39 +332,39 @@
             -----HOW HELP-----
              ****************/
 
-            #how-help-section {
+            #help {
                 padding: 4em 1.5em 2em 1.4em;
                 position: relative;
                 box-shadow: 0px 0px 35px 0px rgba(180, 180, 185, 0.3);
             }
 
-            #how-help-section h1 {
+            #help h1 {
                 margin-bottom: 2em;
                 text-align: center;
                 font-size: 1.5em;
                 color: var(--app-accent-color);
             }
 
-            #how-help-section .main-frame {
+            #help .main-frame {
                 max-width: 1000px;
             }
 
-            #how-help-section img {
+            #help img {
                 max-height: 110px;
             }
 
-            #how-help-section section {
+            #help section {
                 text-align: center;
                 padding: 3em 7%;
                 height: 22.5em;
             }
 
-            #how-help-section h2 {
+            #help h2 {
                 margin-top: 2em;
                 font-size: 1.2em;
             }
 
-            #how-help-section p {
+            #help p {
                 text-align: left;
                 font-size: 1.25em;
                 left: 3.5em;
@@ -384,8 +391,7 @@
 
             /***** OFFICE PRESENTATION ********/
 
-
-            #presentation{
+            #presentation {
                 padding-top: 2em;
             }
 
@@ -547,7 +553,7 @@
             #step-one .badge {
                 background-color: var(--app-green-color);
                 color: #fff;
-                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
 
             .step-container {
@@ -611,7 +617,6 @@
                 margin-bottom: 0;
             }
 
-
             /****** FLEX LAYOUT ****/
 
             .flex-horizontal, .booking-flex-horizontal {
@@ -621,7 +626,6 @@
             .flexchild {
                 @apply(--layout-flex);
             }
-
 
             /*
            ---- MEDIA ----
@@ -661,8 +665,7 @@
                     padding: 7% 5%;
                 }
 
-
-                header paper-button{
+                header paper-button {
                     display: block;
                     width: 16em;
                     text-align: center;
@@ -705,7 +708,7 @@
                     top: 15px;
                 }
 
-                #how-help-section p {
+                #help p {
                     left: 0.5em;
                     right: 0.5em;
                 }
@@ -991,7 +994,7 @@
                     </svg>
                 </section>
             </section>
-            <h2 class="blue-color">Co můžete udělat?</h2>
+            <h2 id="linkToOverview" class="blue-color inner-page-link">Co můžete udělat?</h2>
         </header>
 
 
@@ -1035,7 +1038,8 @@
                         <li>
                             <iron-icon icon="check"></iron-icon>
                             <span class="green-text">Volitelné: &nbsp;</span>Objednávací kalendář<img
-                                src="../images/docinfo/overview-booking-arrow.png" class="arrow" id="overview-booking-arrow"
+                                src="../images/docinfo/overview-booking-arrow.png" class="arrow"
+                                id="overview-booking-arrow"
                                 hidden="[[mediumScreen]]">
                             <img src="../images/docinfo/down-arrow.png" class="arrow" hidden="[[!smallScreen]]"></li>
                     </ul>
@@ -1076,12 +1080,14 @@
             </div>
 
             <div id="overview-button-container">
-                <a href="[[computeUrl(signedIn)]]"><paper-button>Mám zájem</paper-button></a>
-                <a id="show-more">Chci zjistit více</a>
+                <a href="[[computeUrl(signedIn)]]">
+                    <paper-button>Mám zájem</paper-button>
+                </a>
+                <a id="linkToHelp" class="inner-page-link">Chci zjistit více</a>
             </div>
         </section>
 
-        <section id="how-help-section">
+        <section id="help">
             <h1>CO ZNAMENÁ 10 MINUT VAŠEHO ČASU PRO PACIENTY?</h1>
             <div class="main-frame grid">
                 <section>
@@ -1119,8 +1125,9 @@
                 </section>
             </div>
 
-            <h2 id="how-look-headline" hidden="[[mediumScreen]]"><span class="green-text">Prohlédnětě si náš systém
-                <img src="../images/docinfo/down-arrow.png"></span></h2>
+            <h2 id="how-look-headline" hidden="[[mediumScreen]]"><span id="linkToPresentation"
+                                                                       class="green-text inner-page-link">Prohlédnětě si náš systém
+                <img id="linkToPresentationArrow" src="../images/docinfo/down-arrow.png"></span></h2>
         </section>
 
         <section id="presentation">
@@ -1130,7 +1137,9 @@
                         ZVEŘEJNĚTE INFORMACE O VAŠÍ
                         ORDINACI NA INTERENTU
                     </h1>
-                    <p>Po <a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">registraci</a> <a href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">přidání ordinace</a> vyplníte informace o své rodinaci.
+                    <p>Po <a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">registraci</a> <a
+                            href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">přidání ordinace</a> vyplníte
+                        informace o své rodinaci.
                         Na Vašem profilu pacienti uvidí veškeré důležité informace odkukoli a kdykoli.
                         Nebudou tak muset volat nebo chodit k Vám do ordinace, aby zjistili, co potřebují.</p>
                     <p>
@@ -1224,12 +1233,15 @@
                         využijí. Až se naše služba stane
                         standardem, uvidíte nárůst objednaných pacientů.</p>
 
-                    <p><a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">Registrace </a><a href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">Přidání ordinace </a>Vám zabere jen 10 minut a naše služby můžete využít kdykoli.</p>
+                    <p><a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">Registrace </a><a
+                            href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">Přidání ordinace </a>Vám zabere jen
+                        10 minut a naše služby můžete využít kdykoli.</p>
 
                     <p>
                         <span>Už máte vlastní stránku a chcete využít online objednávání?</span>
                         Rádi Vám pomůžeme vložit odkaz na Vaše stránky. Pokud máte zájem,
-                        <a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">zaregistrujte se</a><a href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">přidejte ordinaci</a> a napište nám.
+                        <a href="[[computeUrl(signedIn)]]" hidden="[[signedIn]]">zaregistrujte se</a><a
+                            href="[[computeUrl(signedIn)]]" hidden="[[!signedIn]]">přidejte ordinaci</a> a napište nám.
                     </p>
 
                     <br>
@@ -1339,6 +1351,13 @@
                 "routePathObserver(route)"
             ],
 
+            listeners: {
+                'linkToOverview.click': 'scrollToOverview',
+                'linkToHelp.click': 'scrollToHelp',
+                'linkToPresentation.click': 'scrollToPresentation',
+                'linkToPresentationArrow.click': 'scrollToPresentation'
+            },
+
             ready: function () {
                 var xhr = new XMLHttpRequest(),
                     setIp = function (e) {
@@ -1355,6 +1374,15 @@
                 xhr.open('GET', "//ipinfo.io/json", true);
                 xhr.send();
                 xhr.addEventListener("readystatechange", setIp, false);
+
+
+                /* found this as the easiest way how to add event listeners for smooth scrolling.
+                But IntelliJ ECMA 5.1 doesn't recognize arrow function syntax and always breaks it
+                when ctrl+alt+l pressed. ECMA 6 needed for that*/
+//                this.$.linkToOverview.addEventListener('click', e => this.smoothScroll("overview"));
+//                this.$.linkToHelp.addEventListener('click', e => this.smoothScroll("help"));
+//                this.$.linkToPresentation.addEventListener('click', e => this.smoothScroll("presentation"));
+//                this.$.linkToPresentationArrow.addEventListener('click', e => this.smoothScroll("presentation"));
             },
 
             routePathObserver: function (route) {
@@ -1416,10 +1444,67 @@
                 return (signedIn) ? "Přidat ordinaci" : "Zaregistrujte se";
             },
 
+
+            //SCROLLING FUNCTIONS
+
+            currentYPosition: function () {
+                // Firefox, Chrome, Opera, Safari
+                if (self.pageYOffset) return self.pageYOffset;
+                return 0;
+            },
+
+            idYPosition: function (ID) {
+                var elm = Polymer.dom(this.root).querySelector("#" + ID),
+                    yOffset = elm.offsetTop - 60, /* -60 because want to scroll a bit above an element */
+                    node = elm;
+
+                /* needed when try to link to nested node */
+                while (node.offsetParent && node.offsetParent != document.body) {
+                    node = node.offsetParent;
+                    yOffset += node.offsetTop;
+                }
+                return yOffset;
+            },
+
+            /* found this algorithm, couldn't find how to make it easily.
+             element.scrollIntoView({behavior: "smooth"}); works only in Firefox */
+            smoothScroll: function (ID) {
+                var startY = this.currentYPosition(),
+                    stopY = this.idYPosition(ID),
+                    distance = stopY > startY ? stopY - startY : startY - stopY;
+
+                var speed = Math.round(distance / 60);
+                if (speed >= 20) speed = 20;
+                var step = Math.round(distance / 30),
+                    leapY = stopY > startY ? startY + step : startY - step,
+                    timer = 0;
+                if (stopY > startY) {
+                    for (var i = startY; i < stopY; i += step) {
+                        setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
+                        leapY += step;
+                        if (leapY > stopY) leapY = stopY;
+                        timer++;
+                    }
+                    return;
+                }
+                for (var i = startY; i > stopY; i -= step) {
+                    setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
+                    leapY -= step;
+                    if (leapY < stopY) leapY = stopY;
+                    timer++;
+                }
+            },
+
             scrollToPresentation: function () {
-                //TODO smooth scrolling
-                this.$.presentation.scrollIntoView();
+                this.smoothScroll("presentation");
+            },
+            scrollToHelp: function () {
+                this.smoothScroll("help");
+            },
+            scrollToOverview: function () {
+                this.smoothScroll("overview");
             }
+
         });
     </script>
 </dom-module>
