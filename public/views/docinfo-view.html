@@ -188,21 +188,11 @@
             }
 
             #header-intro {
-                padding-bottom: 4em;
-                border-bottom: 1px solid #e5e5e6;
+                padding-bottom: 7em;
             }
 
-            #header-headlines .badge {
-                border: none;
-                margin: 1em auto;
-                width: 65px;
-                height: 65px;
-                font-size: 1.8em;
-                line-height: 2.4em;
-            }
-
-            #header-headlines .description-div {
-                font-size: 0.95em;
+            #header-headlines h2{
+                margin: 0;
             }
 
             #opinion-section {
@@ -260,7 +250,7 @@
                 margin: 0 auto;
             }
 
-            #not-sure-container span {
+            #not-sure-container .headline {
                 font-weight: bolder;
                 margin-top: 2.5em;
                 padding-top: 1em;
@@ -308,10 +298,10 @@
             ****************/
 
             #overview {
-                color: #fff;
                 position: relative;
-                padding-top: 3em;
+                padding-top: 2em;
                 padding-bottom: 2.5em;
+                border-bottom: 1px solid #e2e2e3;
             }
 
             #overview .main-frame section {
@@ -343,6 +333,7 @@
                 width: 25px;
                 margin-right: 1em;
                 vertical-align: text-bottom;
+                color: var(--app-light-green-color);
             }
 
             #overview ul li {
@@ -368,13 +359,10 @@
                 max-width: 800px;
                 text-align: center;
                 margin: 0.5em auto;
-                color: #fff;
                 font-weight: 500;
             }
 
             #overview-button-container paper-button {
-                background-color: #fff;
-                color: var(--app-light-blue-color);
                 border-radius: 5em;
                 padding: 1.4em 2.2em;
                 font-size: 1.1em;
@@ -392,75 +380,13 @@
                 max-height: 20em;
             }
 
-            #linkToHelp {
-                color: #fff;
+            #linkToPresentation {
                 cursor: pointer;
                 font-size: 1em;
                 letter-spacing: 0.1em;
                 text-transform: uppercase;
                 display: inline-block;
                 margin: 1.5em 2em;
-            }
-
-            /*****************
-            -----HOW HELP-----
-             ****************/
-
-            #help {
-                padding: 4em 1.5em 2em 1.4em;
-                position: relative;
-                box-shadow: 0px 0px 35px 0px rgba(180, 180, 185, 0.3);
-            }
-
-            #help h1 {
-                margin-bottom: 2em;
-                text-align: center;
-                font-size: 1.5em;
-                color: var(--app-accent-color);
-            }
-
-            #help .main-frame {
-                max-width: 1000px;
-            }
-
-            #help img {
-                max-height: 110px;
-            }
-
-            #help section {
-                text-align: center;
-                padding: 3em 7%;
-                height: 22.5em;
-            }
-
-            #help h2 {
-                margin-top: 2em;
-                font-size: 1.2em;
-            }
-
-            #help p {
-                text-align: left;
-                font-size: 1.25em;
-                left: 3.5em;
-                right: 3.5em;
-            }
-
-            #how-look-headline {
-                text-align: center;
-                font-size: 0.9em;
-                padding: 0 1em;
-                margin-top: 0;
-            }
-
-            #how-look-headline span {
-                position: relative;
-            }
-
-            #how-look-headline img {
-                max-height: 1.6em;
-                position: absolute;
-                right: -1.6em;
-                top: 10px;
             }
 
             /***** OFFICE PRESENTATION ********/
@@ -502,6 +428,7 @@
 
             #overview .free-label {
                 background-color: var(--app-light-green-color);
+                color: #fff;
                 font-size: 0.9em;
                 border-radius: 5em;
                 text-align: center;
@@ -825,9 +752,9 @@
             /*** HEADER ANIMATION ***/
 
             .slidingVertical section {
-                animation: topToBottom 16s linear infinite 0s;
-                -ms-animation: topToBottom 16s linear infinite 0s;
-                -webkit-animation: topToBottom 16s linear infinite 0s;
+                animation: topToBottom 28s linear infinite 0s;
+                -ms-animation: topToBottom 28s linear infinite 0s;
+                -webkit-animation: topToBottom 28s linear infinite 0s;
 
                 opacity: 0;
                 overflow: hidden;
@@ -843,39 +770,21 @@
             }
 
             .slidingVertical section:nth-child(2) {
-                animation-delay: 8s;
-                -ms-animation-delay: 8s;
-                -webkit-animation-delay: 8s;
+                animation-delay: 7s;
+                -ms-animation-delay: 7s;
+                -webkit-animation-delay: 7s;
             }
 
-            /*** HELP ANIMATION ***/
-
-            .slidingVertical > p {
-                animation: topToBottom 20s linear infinite 0s;
-                -ms-animation: topToBottom 20s linear infinite 0s;
-                -webkit-animation: topToBottom 20s linear infinite 0s;
-
-                opacity: 0;
-                overflow: hidden;
-                position: absolute;
+            .slidingVertical section:nth-child(3) {
+                animation-delay: 14s;
+                -ms-animation-delay: 14s;
+                -webkit-animation-delay: 14s;
             }
 
-            .slidingVertical > p:nth-child(2) {
-                animation-delay: 10s;
-                -ms-animation-delay: 10s;
-                -webkit-animation-delay: 10s;
-            }
-
-            #help-patients-sliding p:nth-child(1) {
-                animation-delay: 5s;
-                -ms-animation-delay: 5s;
-                -webkit-animation-delay: 5s;
-            }
-
-            #help-patients-sliding p:nth-child(2) {
-                animation-delay: 15s;
-                -ms-animation-delay: 15s;
-                -webkit-animation-delay: 15s;
+            .slidingVertical section:nth-child(4) {
+                animation-delay: 21s;
+                -ms-animation-delay: 21s;
+                -webkit-animation-delay: 21s;
             }
 
             @-moz-keyframes topToBottom {
@@ -883,25 +792,30 @@
                 0% {
                     opacity: 0;
                 }
-                5% {
+                1% {
                     opacity: 0;
                     -webkit-transform: translateY(-50px);
                 }
-                10% {
+                4% {
                     opacity: 1;
                     -webkit-transform: translateY(0px);
                 }
-                25% {
+
+                22% {
                     opacity: 1;
                     -webkit-transform: translateY(0px);
                 }
-                30% {
+
+                26% {
                     opacity: 0;
                     -webkit-transform: translateY(50px);
                 }
+
                 80% {
                     opacity: 0;
+                    -webkit-transform: translateY(50px);
                 }
+
                 100% {
                     opacity: 0;
                 }
@@ -911,31 +825,30 @@
                 0% {
                     opacity: 0;
                 }
-                5% {
+                1% {
                     opacity: 0;
                     -webkit-transform: translateY(-50px);
                 }
-                10% {
-                    opacity: 1;
-                    -webkit-transform: translateY(0px);
-                }
-                25% {
+                4% {
                     opacity: 1;
                     -webkit-transform: translateY(0px);
                 }
 
-                50% {
+                22% {
                     opacity: 1;
                     -webkit-transform: translateY(0px);
                 }
 
-                55% {
+                26% {
                     opacity: 0;
                     -webkit-transform: translateY(50px);
                 }
+
                 80% {
                     opacity: 0;
+                    -webkit-transform: translateY(50px);
                 }
+
                 100% {
                     opacity: 0;
                 }
@@ -945,25 +858,30 @@
                 0% {
                     opacity: 0;
                 }
-                5% {
+                1% {
                     opacity: 0;
-                    -ms-transform: translateY(-50px);
+                    -webkit-transform: translateY(-50px);
                 }
-                10% {
+                4% {
                     opacity: 1;
-                    -ms-transform: translateY(0px);
+                    -webkit-transform: translateY(0px);
                 }
-                25% {
+
+                22% {
                     opacity: 1;
-                    -ms-transform: translateY(0px);
+                    -webkit-transform: translateY(0px);
                 }
-                30% {
+
+                26% {
                     opacity: 0;
-                    -ms-transform: translateY(50px);
+                    -webkit-transform: translateY(50px);
                 }
+
                 80% {
                     opacity: 0;
+                    -webkit-transform: translateY(50px);
                 }
+
                 100% {
                     opacity: 0;
                 }
@@ -995,7 +913,7 @@
                     <div class="slidingVertical">
                         <section>
                             <p>„
-                                Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
+                                1. Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
                                 si zjistím z pohodlí domova.“
                                 <br>
                                 <span>Petr, 42 let</span>
@@ -1005,7 +923,27 @@
 
                         <section>
                             <p>„
-                                Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
+                                2. Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
+                                si zjistím z pohodlí domova.“
+                                <br>
+                                <span>Marek, 51 let</span>
+                                <img src="../images/docinfo/face2.jpg" class="opinion-face">
+                            </p>
+                        </section>
+
+                        <section>
+                            <p>„
+                                3. Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
+                                si zjistím z pohodlí domova.“
+                                <br>
+                                <span>Marek, 51 let</span>
+                                <img src="../images/docinfo/face2.jpg" class="opinion-face">
+                            </p>
+                        </section>
+
+                        <section>
+                            <p>„
+                                4. Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
                                 si zjistím z pohodlí domova.“
                                 <br>
                                 <span>Marek, 51 let</span>
@@ -1016,51 +954,20 @@
                 </section>
             </section>
 
-            <div class="main-frame booking-flex-horizontal grid" id="header-headlines">
-                <section>
-                    <div class="header-div">
-                        <div class="badge light-blue-background">1</div>
-                        <h2>Nadpis</h2>
-                    </div>
-                    <div class="description-div">
-                        <p>Nezatěžujte sebe nebo Vaší sestru vyřizováním telefonátů. Vaši pacienti se objednají sami,
-                            můžete se tak plně věnovat
-                            práci, která má smysl.</p>
-                    </div>
+            <div class="booking-flex-horizontal grid" id="header-headlines">
+                <section class="light-green-background">
+                    <h2>DESÍTKY NÁVŠTEV KAŽDÝ DEN</h2>
                 </section>
-                <section>
-                    <div class="header-div">
-                        <div class="badge light-green-background">2</div>
-                        <h2>Nadpis</h2>
-                    </div>
-                    <div class="description-div">
-                        <p>Vytvoříme Vám kalendář přesně podle Vašich potřeb. Nemusíte listovat v papírech, vše budete
-                            mít přehledně na jednom
-                            místě.</p>
-                    </div>
+                <section class="light-blue-background">
+                    <h2>STOVKY AKTIVNÍCH UŽIVATELŮ</h2>
                 </section>
-                <section>
-                    <div class="header-div">
-                        <div class="badge dark-blue-background">3</div>
-                        <h2>Nadpis</h2>
-                    </div>
-                    <div class="description-div">
-                        <p>Pacienti se chtějí objednat kdy se jim to hodí. Dopřejte jim čas na rozmyšlenou a nenuťte je
-                            telefonovat během
-                            Vašich ordinačních hodin.</p>
-                    </div>
+                <section class="dark-blue-background">
+                    <h2>STOVKY HODIN UŠETŘENÉHO ČASU</h2>
                 </section>
             </div>
-            <div class="button-container">
-                <a href="[[registrationUrl]]">
-                    <paper-button>[[computeButtonText(signedIn)]]</paper-button>
-                </a>
-            </div>
-
-            <!--<h2 id="linkToOverview" class="blue-color inner-page-link">Co můžete udělat?</h2>-->
         </header>
 
-        <section id="overview" class="light-blue-background">
+        <section id="overview">
             <div class="main-frame grid">
                 <section>
                     <h1>
@@ -1098,8 +1005,8 @@
                         </li>
                         <li>
                             <iron-icon icon="check"></iron-icon>
-                            <b>Volitelné: &nbsp;</b>Objednávací kalendář<img
-                                src="../images/docinfo/top-arrow-white.png" class="arrow"
+                            <b class="green-text">Volitelné: &nbsp;</b>Objednávací kalendář<img
+                                src="../images/docinfo/top-arrow-green.png" class="arrow"
                                 id="overview-booking-arrow"
                                 hidden="[[mediumScreen]]">
                             <img src="../images/docinfo/down-arrow.png" class="arrow" hidden="[[!smallScreen]]"></li>
@@ -1146,53 +1053,10 @@
                 </a>
 
                 <br>
-                <a id="linkToHelp" class="inner-page-link">Chci zjistit více</a>
+                <a id="linkToPresentation" class="inner-page-link">Chci zjistit více</a>
             </div>
             <img src="../images/docinfo/overviewdoctor.png" id="overviewdoctor" hidden="[[mediumScreen]]">
 
-        </section>
-
-        <section id="help">
-            <h1>CO MŮŽE ZMĚNIT 10 MINUT STRÁVENÝCH REGISTRACÍ?</h1>
-            <div class="main-frame grid">
-                <section>
-                    <img src="../images/docinfo/patients-time.png">
-                    <h2 class="blue-text">Ušetříte pacientům čas</h2>
-                    <div class="slidingVertical">
-                        <p>„
-                            Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
-                            si zjistím z pohodlí domova.“
-                        </p>
-                        <p>
-                            „
-                            Konečně dopředu vím, že má lékař dovolenou. Když to zjistím až v ordinaci,
-                            tak už je pozdě.
-                            “
-                        </p>
-                    </div>
-
-                </section>
-
-                <section>
-                    <img src="../images/docinfo/save-patients.png">
-                    <h2 class="blue-text">Zpřístupníte pacientům léčbu</h2>
-                    <div class="slidingVertical" id="help-patients-sliding">
-
-                        <p>„
-                            Nerada telefonuji do ordinace. Díky této službě jsem neodkládala
-                            objednání a začala se léčit dříve.“</p>
-                        <p>
-                            „
-                            Často se nemohu dovolat do ordinace. A když není ordinační den, nemohu
-                            se objednat vůbec.“
-                        </p>
-                    </div>
-                </section>
-            </div>
-
-            <h2 id="how-look-headline" hidden="[[mediumScreen]]"><span id="linkToPresentation"
-                                                                       class="green-text inner-page-link">Prohlédnětě si náš systém
-                <img id="linkToPresentationArrow" src="../images/docinfo/down-arrow.png"></span></h2>
         </section>
 
         <section id="presentation">
@@ -1296,7 +1160,7 @@
                     </a>Vám zabere jen 10 minut a naše služby můžete využít kdykoli.</p>
 
                     <p>
-                        <span class="light-blue-text">Už máte vlastní stránku a chcete využít online objednávání?</span>
+                        <span class="light-blue-text headline">Už máte vlastní stránku a chcete využít online objednávání?</span>
                         Rádi Vám pomůžeme vložit odkaz na Vaše stránky. Pokud máte zájem,
                         <a href="[[registrationUrl]]">
                             <span hidden="[[signedIn]]">zaregistrujte se</span>
@@ -1438,9 +1302,7 @@
             ],
 
             listeners: {
-                'linkToHelp.click': 'scrollToHelp',
-                'linkToPresentation.click': 'scrollToPresentation',
-                'linkToPresentationArrow.click': 'scrollToPresentation'
+                'linkToPresentation.click': 'scrollToPresentation'
             },
 
             ready: function () {
@@ -1610,11 +1472,7 @@
 
             scrollToPresentation: function () {
                 this.smoothScroll("presentation");
-            },
-            scrollToHelp: function () {
-                this.smoothScroll("help");
             }
-
         });
     </script>
 </dom-module>
