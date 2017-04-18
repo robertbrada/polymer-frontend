@@ -184,12 +184,10 @@
                     </paper-icon-button>
                 </div>
                 <div class="text-bar-item" hidden="[[smallScreen]]">
-                    <a hidden="[[showOffices]]" href="docinfo/" aria-label="Informace pro lékaře">Pro lékaře</a>
-                    <a hidden="[[!showOffices]]" href="office/interface/waiting-list/" aria-label="Informace pro lékaře">Mé
-                        ordinace</a>
+                    <a href="[[_computeUrl(showOffices, page)]]">[[_computeText(showOffices, page)]]</a>
                 </div>
-                <!--TODO: switch back to home-->
-                <div class="logo" main-title><a href="/docinfo" aria-label="Domovská stránka"><img src="images/logo.png" style="width: 75px"></a></div>
+                <div class="logo" main-title><a href="/home" aria-label="Domovská stránka"><img src="images/logo.png" style="width: 75px"></a>
+                </div>
                 <div class="icon-bar-item">
                     <paper-icon-button icon="[[_computeLockIcon(signedIn)]]" on-tap="_loginButtonHandler">
                     </paper-icon-button>
@@ -329,6 +327,18 @@
             _changeRoute: function (event) {
                 this.route = {path: event.detail.url, prefix: '', __queryParams: {}};
                 event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+            },
+
+            _computeText: function (showOffices, page) {
+                if (showOffices) return "Mé ordinace";
+                if (page === "home") return "Pro lékaře";
+                return "Seznam lékařů";
+            },
+
+            _computeUrl: function (showOffices, page) {
+                if (showOffices) return "/office/interface/waiting-list/";
+                if (page === "home") return "/docinfo";
+                return "/home";
             }
         });
     </script>
