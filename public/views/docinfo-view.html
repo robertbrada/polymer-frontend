@@ -1054,7 +1054,6 @@
             <div class="button-container">
                 <a href="[[registrationUrl]]">
                     <paper-button>[[computeButtonText(signedIn)]]</paper-button>
-
                 </a>
             </div>
 
@@ -1227,7 +1226,8 @@
         </section>
 
         <section id="why-booking-section" class="light-blue-background">
-            <h1> <img class="arrow" src="../images/docinfo/right-arrow-green.png" hidden="[[mediumScreen]]">PŘIDEJTE SI NA PROFIL OBJEDNÁVACÍ KALENDÁŘ</h1>
+            <h1><img class="arrow" src="../images/docinfo/right-arrow-green.png" hidden="[[mediumScreen]]">PŘIDEJTE SI NA PROFIL OBJEDNÁVACÍ KALENDÁŘ
+            </h1>
             <div class="main-frame booking-flex-horizontal grid">
                 <section>
                     <div class="header-div">
@@ -1290,15 +1290,18 @@
                         využijí. Až se naše služba stane
                         standardem, uvidíte nárůst objednaných pacientů.</p>
 
-                    <p><a href="[[registrationUrl]]" hidden="[[signedIn]]">Registrace </a><a
-                            href="[[registrationUrl]]" hidden="[[!signedIn]]">Přidání ordinace </a>Vám zabere jen
-                        10 minut a naše služby můžete využít kdykoli.</p>
+                    <p><a href="[[registrationUrl]]">
+                        <span hidden="[[signedIn]]">Registrace </span>
+                        <span hidden="[[!signedIn]]">Přidání ordinace </span>
+                    </a>Vám zabere jen 10 minut a naše služby můžete využít kdykoli.</p>
 
                     <p>
                         <span class="light-blue-text">Už máte vlastní stránku a chcete využít online objednávání?</span>
                         Rádi Vám pomůžeme vložit odkaz na Vaše stránky. Pokud máte zájem,
-                        <a href="[[registrationUrl]]" hidden="[[signedIn]]">zaregistrujte se</a><a
-                            href="[[registrationUrl]]" hidden="[[!signedIn]]">přidejte ordinaci</a> a napište nám.
+                        <a href="[[registrationUrl]]">
+                            <span hidden="[[signedIn]]">zaregistrujte se</span>
+                            <span hidden="[[!signedIn]]">přidejte ordinaci</span>
+                        </a> a napište nám.
                     </p>
 
                     <br>
