@@ -11,37 +11,41 @@
 
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
-<link rel="import" href="/styles/button-styles.html">
 
 <dom-module id="docinfo-view">
     <template>
-        <style include="button-styles layout-styles input-styles">
+        <style include="layout-styles input-styles">
             :host {
                 display: block;
                 color: #252526;
             }
 
-            .green-background {
-                background-color: var(--app-green-color);
+            .light-green-background {
+                background-color: var(--app-light-green-color);
                 color: #fff !important;
             }
 
-            .blue-background {
+            .light-blue-background {
+                background-color: var(--app-light-blue-color);
+                color: #fff !important;
+            }
+
+            .dark-blue-background {
                 background-color: var(--app-accent-color);
                 color: #fff !important;
             }
 
             .green-text {
-                color: var(--app-green-color);
+                color: var(--app-light-green-color);
             }
 
-            .blue-text {
-                color: var(--app-accent-color);
+            .light-blue-text {
+                color: var(--app-light-blue-color);
             }
 
             a {
                 text-decoration: none;
-                color: var(--app-green-color);
+                color: var(--app-light-green-color);
                 font-weight: 500;
             }
 
@@ -49,9 +53,16 @@
                 text-decoration: underline;
             }
 
+            paper-button {
+                color: #fff;
+                background-color: var(--app-light-green-color);
+                margin: 1em auto;
+                padding: 1em 1.5em;
+            }
+
             .styled-link {
                 font-weight: bold;
-                background-color: var(--app-green-color);
+                background-color: var(--app-light-green-color);
                 color: #fff;
                 padding: 0.6em 1.1em;
                 border-radius: 2em;
@@ -70,6 +81,15 @@
                 text-decoration: underline;
             }
 
+            .badge {
+                border-radius: 100%;
+                display: inline-block;
+                font-weight: bold;
+                line-height: 1.9em;
+                text-align: center;
+                vertical-align: middle;
+            }
+
             h1 {
                 letter-spacing: 0.03em;
                 font-size: 1.5em;
@@ -83,7 +103,7 @@
             }
 
             .main-frame {
-                max-width: 1350px;
+                max-width: 1380px;
                 font-weight: lighter;
                 padding: 0;
                 margin: 0 auto;
@@ -103,19 +123,25 @@
 
             header {
                 background-color: #fff;
-                color: var(--app-accent-color);
-                padding-top: 1em;
+                padding-top: 2em;
                 padding-bottom: 1.2em;
+                border-bottom: none;
             }
 
             header > section {
-                max-width: 1300px;
+                max-width: 1380px;
                 margin: 0 auto;
                 text-align: left;
             }
 
+            header #header-text-section {
+                padding: 3em 10% 3em 4%;
+            }
+
             header h1 {
                 position: relative;
+                color: var(--app-accent-color);
+                font-size: 1.6em;
             }
 
             header #headline-arrow {
@@ -130,8 +156,16 @@
                 font-size: 1.3em;
             }
 
+            header .button-container {
+                text-align: center;
+                margin: 3em auto;
+            }
+
             header paper-button {
-                padding: 1.5em 2.5em;
+                background-color: var(--app-light-green-color);
+                border-radius: 5em;
+                font-size: 1.1em;
+                padding: 1.5em 2.4em;
                 font-weight: bold;
                 letter-spacing: 0.08em;
             }
@@ -140,12 +174,7 @@
                 font-size: 1.3em;
             }
 
-            header paper-button {
-                margin-top: 0;
-            }
-
             #headline-arrow {
-                color: var(--app-green-color);
                 height: 20px;
                 width: auto;
                 margin-right: 0.5em;
@@ -156,6 +185,58 @@
                 position: absolute;
                 top: calc(50% - 15px);
                 left: calc(50% - 12em);
+            }
+
+            #header-intro {
+                padding-bottom: 4em;
+                border-bottom: 1px solid #e5e5e6;
+            }
+
+            #header-headlines .badge {
+                border: none;
+                margin: 1em auto;
+                width: 65px;
+                height: 65px;
+                font-size: 1.8em;
+                line-height: 2.4em;
+            }
+
+            #header-headlines .description-div {
+                font-size: 0.95em;
+            }
+
+            #opinion-section {
+                position: relative;
+            }
+
+            #opinion-section p {
+                font-style: italic;
+                font-size: 1.2em;
+                font-weight: 400;
+                color: #fff;
+                padding: 2em;
+                border-radius: 6em;
+                margin-top: 2.5em;
+                text-align: left;
+                display: inline-block;
+                max-width: calc(100% - 100px);
+            }
+
+            #opinion-section p span {
+                float: right;
+                margin-top: 0.4em;
+            }
+
+            #opinion-section .slidingVertical section {
+                padding-bottom: 5em;
+            }
+
+            #opinion-section .opinion-face {
+                border-radius: 50%;
+                max-width: 90px;
+                position: absolute;
+                right: 0;
+                bottom: 0;
             }
 
             /******************/
@@ -180,7 +261,6 @@
             }
 
             #not-sure-container span {
-                color: var(--app-blue-color);
                 font-weight: bolder;
                 margin-top: 2.5em;
                 padding-top: 1em;
@@ -240,18 +320,6 @@
                 padding-bottom: 2em;
             }
 
-            #overview .badge {
-                color: #fff;
-                background-color: var(--app-green-color);
-                border: none;
-                margin-left: 0;
-                margin-bottom: 1em;
-                font-size: 1.3em;
-                width: 35px;
-                height: 35px;
-                line-height: 1.9em;
-            }
-
             #overview h1 {
                 font-size: 1.3em;
                 margin-bottom: 1.2em;
@@ -259,6 +327,7 @@
             }
 
             #overview p {
+                font-weight: 400;
                 padding-bottom: 1em;
                 border-bottom: 1px solid rgba(256, 256, 256, 0.2);
             }
@@ -273,7 +342,6 @@
                 display: inline-block;
                 width: 25px;
                 margin-right: 1em;
-                color: var(--app-green-color);
                 vertical-align: text-bottom;
             }
 
@@ -287,13 +355,6 @@
 
             #overview ul li span {
                 font-weight: bold;
-            }
-
-            #overview .page-arrow {
-                position: absolute;
-                top: -1px;
-                width: 5em;
-                left: calc(50% - 2.5em);
             }
 
             #overview ul li .arrow {
@@ -312,10 +373,23 @@
             }
 
             #overview-button-container paper-button {
-                padding: 1.2em 2em;
-                font-size: 1.1em;
+                background-color: #fff;
+                color: var(--app-light-blue-color);
                 border-radius: 5em;
-                margin: 1.5em 2em;
+                padding: 1.4em 2.2em;
+                font-size: 1.1em;
+                font-weight: bold;
+            }
+
+            #overview-button-container a:first-child:hover {
+                text-decoration: none;
+            }
+
+            #overviewdoctor {
+                position: absolute;
+                right: 2em;
+                bottom: 0;
+                max-height: 20em;
             }
 
             #linkToHelp {
@@ -426,24 +500,21 @@
                 max-width: 490px;
             }
 
-            .free-label {
-                color: var(--app-green-color);
+            #overview .free-label {
+                background-color: var(--app-light-green-color);
                 font-size: 0.9em;
-                text-align: left;
-                border: none;
-                background-color: transparent;
-                margin-bottom: 0.8em;
+                border-radius: 5em;
+                text-align: center;
+                margin-bottom: 1em;
                 display: block;
                 width: 4.5em;
-                padding: 0 0 0.1em;
-                border-bottom: 1px solid var(--app-green-color);
+                padding: 0.3em 0.8em
             }
 
             #why-booking-section {
                 color: #fff;
                 text-align: center;
-                padding: 6em 2em 1em 2em;
-                background-color: var(--app-green-color);
+                padding: 4em 2em 1em 2em;
                 position: relative;
             }
 
@@ -453,15 +524,25 @@
             }
 
             #why-booking-section h1 {
-                margin-bottom: 0;
                 font-size: 1.4em;
+                text-align: left;
+                display: inline-block;
+                margin: 0 auto 2em auto;
+                position: relative;
+            }
+
+            #why-booking-section h1 img {
+                position: absolute;
+                left: -4.2em;
+                top: -0.5em;
+                width: 3em;
             }
 
             .why-booking-img {
                 max-height: 120px;
             }
 
-            #why-booking-section .header-div {
+            .header-div {
                 text-align: center;
             }
 
@@ -478,12 +559,6 @@
                 font-size: 1.1em;
                 letter-spacing: 0.025em;
                 line-height: 1.5em;
-            }
-
-            #add-online-booking {
-                text-align: center;
-                position: relative;
-                padding: 3em 1.5em 0 1.5em;
             }
 
             #add-online-booking .free-label {
@@ -507,8 +582,6 @@
             /* REGISTRATION STEPS */
 
             #registration {
-                color: #fff;
-                background-color: var(--app-accent-color);
                 text-align: center;
                 font-size: 0.9em;
                 position: relative;
@@ -525,19 +598,13 @@
                 text-align: left;
             }
 
-            .badge {
-                background-color: #fff;
-                color: var(--app-accent-color);
-                width: 45px;
+            #registration .badge {
                 height: 45px;
-                border-radius: 100%;
-                display: inline-block;
+                width: 45px;
                 font-size: 1.8em;
-                font-weight: bold;
-                line-height: 1.9em;
-                text-align: center;
-                vertical-align: middle;
-                margin: auto 2em auto 0;
+                margin-right: 2em;
+                background-color: #fff;
+                color: var(--app-light-blue-color);
             }
 
             #step-one {
@@ -551,7 +618,7 @@
             }
 
             #step-one .badge {
-                background-color: var(--app-green-color);
+                background-color: var(--app-light-green-color);
                 color: #fff;
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
@@ -566,6 +633,7 @@
             }
 
             .step-container paper-button {
+                background-color: var(--app-light-green-color);
                 padding: 1.4em 2.4em;
                 font-weight: bold;
                 font-size: 1.1em;
@@ -618,6 +686,10 @@
             }
 
             /****** FLEX LAYOUT ****/
+
+            .booking-flex-horizontal > section {
+                text-align: justify;
+            }
 
             .flex-horizontal, .booking-flex-horizontal {
                 @apply(--layout-horizontal);
@@ -712,6 +784,12 @@
                     left: 0.5em;
                     right: 0.5em;
                 }
+
+                #header-headlines .badge {
+                    width: 60px;
+                    height: 60px;
+                    line-height: 2.8em;
+                }
             }
 
             @media (max-width: 980px) {
@@ -744,9 +822,35 @@
                 display: inline;
             }
 
-            .slidingVertical p {
+            /*** HEADER ANIMATION ***/
 
-                /*on all browsers*/
+            .slidingVertical section {
+                animation: topToBottom 16s linear infinite 0s;
+                -ms-animation: topToBottom 16s linear infinite 0s;
+                -webkit-animation: topToBottom 16s linear infinite 0s;
+
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+            }
+
+            .slidingVertical section:nth-child(odd) p {
+                background-color: var(--app-light-blue-color);
+            }
+
+            .slidingVertical section:nth-child(even) p {
+                background-color: var(--app-light-green-color);
+            }
+
+            .slidingVertical section:nth-child(2) {
+                animation-delay: 8s;
+                -ms-animation-delay: 8s;
+                -webkit-animation-delay: 8s;
+            }
+
+            /*** HELP ANIMATION ***/
+
+            .slidingVertical > p {
                 animation: topToBottom 20s linear infinite 0s;
                 -ms-animation: topToBottom 20s linear infinite 0s;
                 -webkit-animation: topToBottom 20s linear infinite 0s;
@@ -756,7 +860,7 @@
                 position: absolute;
             }
 
-            .slidingVertical p:nth-child(2) {
+            .slidingVertical > p:nth-child(2) {
                 animation-delay: 10s;
                 -ms-animation-delay: 10s;
                 -webkit-animation-delay: 10s;
@@ -864,88 +968,6 @@
                     opacity: 0;
                 }
             }
-
-            svg {
-                overflow: visible;
-            }
-
-            .pulse-spred {
-                transform-origin: center center;
-                animation: pulse-me 2.4s cubic-bezier(0, 0.5, 0.26, 0.72) infinite;
-                stroke-width: 0;
-                fill: #aeaeaf;
-
-            }
-
-            .pusle-static {
-                transform-origin: center center;
-                animation: scale-me 1.2s cubic-bezier(0, 0.5, 0.26, 0.72) infinite 0s alternate,
-                opacity-change 4.8s cubic-bezier(0, 0.5, 0.26, 0.72) infinite 0s;
-            }
-
-            #hearth-green {
-                opacity: 1;
-                fill: var(--app-green-color);
-            }
-
-            #hearth-blue {
-                opacity: 0;
-                fill: var(--app-accent-color);
-                -webkit-animation-delay: 2.4s;
-            }
-
-            @keyframes scale-me {
-                0% {
-                    transform: scale(1);
-                }
-                100% {
-                    transform: scale(1.2);
-                }
-            }
-
-            @keyframes opacity-change {
-                0% {
-                    opacity: 0.6;
-                }
-
-                30% {
-                    opacity: 1;
-                }
-
-                50% {
-                    opacity: 1;
-                }
-
-                51% {
-                    opacity: 0.1;
-                }
-
-                100% {
-                    opacity: 0;
-                }
-            }
-
-            @keyframes pulse-me {
-                0% {
-                    transform: scale(1);
-                    opacity: 0.15;
-                }
-
-                50% {
-                    opacity: 0.05;
-                }
-                90% {
-                    opacity: 0.01;
-                }
-
-                100% {
-                    transform: scale(5);
-                    opacity: 0;
-                    stroke-opacity: 0;
-                }
-            }
-
-
         </style>
 
         <iron-media-query query="max-width:460px" query-matches="{{mobileScreen}}"></iron-media-query>
@@ -953,8 +975,8 @@
         <iron-media-query query="max-width:980px" query-matches="{{mediumScreen}}"></iron-media-query>
 
         <header>
-            <section class="grid">
-                <section>
+            <section class="grid" id="header-intro">
+                <section id="header-text-section">
                     <h1><img src="../images/docinfo/headline-arrow.png" id="headline-arrow">
                         USNADNĚTE SI PRÁCI A POMOZTE PACIENTŮM
                     </h1>
@@ -963,41 +985,83 @@
                         pomoci lékařům a zlepšit péči o pacienty.
                     </p>
                     <p>
-                        Jako lékaři odvádíte důležitou práci a naším cílem je ji maximálně zjednodušit a zpřístupnit pacientům.
+                        Jako lékaři odvádíte důležitou práci a naším cílem je ji maximálně zjednodušit a zpřístupnit
+                        pacientům.
                         Naše služby poskytujeme bezplatně a k jejich využití se stačí zaregistrovat.
                     </p>
-                    <br><br>
-                    <a href="[[registrationUrl]]">
-                        <paper-button>[[computeButtonText(signedIn)]]</paper-button>
-
-                    </a>
                 </section>
 
-                <section class="image-section" hidden="[[smallScreen]]" id="pulse-section">
+                <section class="image-section" hidden="[[smallScreen]]" id="opinion-section">
+                    <div class="slidingVertical">
+                        <section>
+                            <p>„
+                                Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
+                                si zjistím z pohodlí domova.“
+                                <br>
+                                <span>Petr, 42 let</span>
+                                <img src="../images/docinfo/face1.jpg" class="opinion-face">
+                            </p>
+                        </section>
 
-                    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                    <svg class="presentation-img" id="hearth-svg"
-                         xmlns="http://www.w3.org/2000/svg" height="70px" width="25.896mm" version="1.1"
-                         viewBox="0 0 91.758563 82.033932">
-                        <g id="layer1" fill-rule="evenodd" fill="#26a69a" transform="translate(373.83 -393.78)">
-                            <path class="pulse-spred" id="circle-1"
-                                  d="m-350.3 393.79c-11.15-0.17286-21.071 8.348-22.776 17.451-2.1504 8.019 0.6383 17.772 4.5512 24.214 12.313 17.619 28.822 25.025 40.56 40.31 0.003 0.002 0.0389 0.0557 0.0406 0.0557 11.738-15.285 28.247-22.691 40.56-40.31 3.9129-6.4424 6.7016-16.195 4.5512-24.214-2.8692-15.32-29.008-28.989-45.115-2.3491-6.5417-10.852-14.744-15.039-22.372-15.158z"></path>
-                            <path class="pusle-static" id="hearth-blue"
-                                  d="m-350.3 393.79c-11.15-0.17286-21.071 8.348-22.776 17.451-2.1504 8.019 0.6383 17.772 4.5512 24.214 12.313 17.619 28.822 25.025 40.56 40.31 0.003 0.002 0.0389 0.0557 0.0406 0.0557 11.738-15.285 28.247-22.691 40.56-40.31 3.9129-6.4424 6.7016-16.195 4.5512-24.214-2.8692-15.32-29.008-28.989-45.115-2.3491-6.5417-10.852-14.744-15.039-22.372-15.158z"></path>
-
-                            <path class="pusle-static" id="hearth-green"
-                                  d="m-350.3 393.79c-11.15-0.17286-21.071 8.348-22.776 17.451-2.1504 8.019 0.6383 17.772 4.5512 24.214 12.313 17.619 28.822 25.025 40.56 40.31 0.003 0.002 0.0389 0.0557 0.0406 0.0557 11.738-15.285 28.247-22.691 40.56-40.31 3.9129-6.4424 6.7016-16.195 4.5512-24.214-2.8692-15.32-29.008-28.989-45.115-2.3491-6.5417-10.852-14.744-15.039-22.372-15.158z"></path>
-
-                        </g>
-                    </svg>
+                        <section>
+                            <p>„
+                                Už nemusím zbytečně telefonovat do ordinace. Vše, co potřebuji,
+                                si zjistím z pohodlí domova.“
+                                <br>
+                                <span>Marek, 51 let</span>
+                                <img src="../images/docinfo/face2.jpg" class="opinion-face">
+                            </p>
+                        </section>
+                    </div>
                 </section>
             </section>
-            <h2 id="linkToOverview" class="blue-color inner-page-link">Co můžete udělat?</h2>
+
+            <div class="main-frame booking-flex-horizontal grid" id="header-headlines">
+                <section>
+                    <div class="header-div">
+                        <div class="badge light-blue-background">1</div>
+                        <h2>Nadpis</h2>
+                    </div>
+                    <div class="description-div">
+                        <p>Nezatěžujte sebe nebo Vaší sestru vyřizováním telefonátů. Vaši pacienti se objednají sami,
+                            můžete se tak plně věnovat
+                            práci, která má smysl.</p>
+                    </div>
+                </section>
+                <section>
+                    <div class="header-div">
+                        <div class="badge light-green-background">2</div>
+                        <h2>Nadpis</h2>
+                    </div>
+                    <div class="description-div">
+                        <p>Vytvoříme Vám kalendář přesně podle Vašich potřeb. Nemusíte listovat v papírech, vše budete
+                            mít přehledně na jednom
+                            místě.</p>
+                    </div>
+                </section>
+                <section>
+                    <div class="header-div">
+                        <div class="badge dark-blue-background">3</div>
+                        <h2>Nadpis</h2>
+                    </div>
+                    <div class="description-div">
+                        <p>Pacienti se chtějí objednat kdy se jim to hodí. Dopřejte jim čas na rozmyšlenou a nenuťte je
+                            telefonovat během
+                            Vašich ordinačních hodin.</p>
+                    </div>
+                </section>
+            </div>
+            <div class="button-container">
+                <a href="[[registrationUrl]]">
+                    <paper-button>[[computeButtonText(signedIn)]]</paper-button>
+
+                </a>
+            </div>
+
+            <!--<h2 id="linkToOverview" class="blue-color inner-page-link">Co můžete udělat?</h2>-->
         </header>
 
-
-        <section id="overview" class="blue-background">
-            <img src="../images/docinfo/header-arrow.png" class="page-arrow">
+        <section id="overview" class="light-blue-background">
             <div class="main-frame grid">
                 <section>
                     <h1>
@@ -1035,8 +1099,8 @@
                         </li>
                         <li>
                             <iron-icon icon="check"></iron-icon>
-                            <span class="green-text">Volitelné: &nbsp;</span>Objednávací kalendář<img
-                                src="../images/docinfo/overview-booking-arrow.png" class="arrow"
+                            <b>Volitelné: &nbsp;</b>Objednávací kalendář<img
+                                src="../images/docinfo/top-arrow-white.png" class="arrow"
                                 id="overview-booking-arrow"
                                 hidden="[[mediumScreen]]">
                             <img src="../images/docinfo/down-arrow.png" class="arrow" hidden="[[!smallScreen]]"></li>
@@ -1081,8 +1145,12 @@
                 <a href="[[registrationUrl]]">
                     <paper-button>Mám zájem</paper-button>
                 </a>
+
+                <br>
                 <a id="linkToHelp" class="inner-page-link">Chci zjistit více</a>
             </div>
+            <img src="../images/docinfo/overviewdoctor.png" id="overviewdoctor" hidden="[[mediumScreen]]">
+
         </section>
 
         <section id="help">
@@ -1146,7 +1214,7 @@
                         <br>
                         <br>
                         <a class="styled-link" href="/d/strakova_plzen">Takto může vypadat Váš profil</a>
-                        <a class="own-website-link blue-text" href="/newweb">
+                        <a class="own-website-link light-blue-text" href="/newweb">
                             <iron-icon icon="icons:star" class="green-text"></iron-icon>
                             Profil zdarma Vám nestačí a chcete vlastní stránky?</a>
                     </p>
@@ -1158,16 +1226,8 @@
             </div>
         </section>
 
-        <div id="add-online-booking">
-
-            <h2 class="blue-text">
-                PŘIDEJTE SI NA SVŮJ PROFIL OBJEDNÁVACÍ KALENDÁŘ
-            </h2>
-            <img class="" src="../images/docinfo/rectangle-white-arrow.png">
-        </div>
-
-        <section id="why-booking-section" class="green-background">
-            <h1>Proč použít objednávání na internetu?</h1>
+        <section id="why-booking-section" class="light-blue-background">
+            <h1> <img class="arrow" src="../images/docinfo/right-arrow-green.png" hidden="[[mediumScreen]]">PŘIDEJTE SI NA PROFIL OBJEDNÁVACÍ KALENDÁŘ</h1>
             <div class="main-frame booking-flex-horizontal grid">
                 <section>
                     <div class="header-div">
@@ -1204,7 +1264,7 @@
                 </section>
             </div>
         </section>
-        <section class="green-background" id="who-can-book-section">
+        <section class="light-blue-background" id="who-can-book-section">
             <div class="main-frame grid">
                 <section class="img-section" hidden="[[mediumScreen]]">
                     <img id="comp-img" class="presentation-img" src="../images/docinfo/calendar.png">
@@ -1235,7 +1295,7 @@
                         10 minut a naše služby můžete využít kdykoli.</p>
 
                     <p>
-                        <span>Už máte vlastní stránku a chcete využít online objednávání?</span>
+                        <span class="light-blue-text">Už máte vlastní stránku a chcete využít online objednávání?</span>
                         Rádi Vám pomůžeme vložit odkaz na Vaše stránky. Pokud máte zájem,
                         <a href="[[registrationUrl]]" hidden="[[signedIn]]">zaregistrujte se</a><a
                             href="[[registrationUrl]]" hidden="[[!signedIn]]">přidejte ordinaci</a> a napište nám.
@@ -1252,13 +1312,13 @@
             </div>
         </section>
 
-        <section id="registration">
+        <section id="registration" class="light-blue-background">
             <div class="main-frame">
                 <h1>JAK ZAČÍT POUŽÍVAT NAŠE SLUŽBY?</h1>
                 <section id="registration-steps-section">
                     <div style="margin: 0 auto">
                         <div id="step-one" class="step-container flex-horizontal">
-                            <img class="arrow" src="../images/docinfo/right-arrow.png" hidden="[[mediumScreen]]">
+                            <img class="arrow" src="../images/docinfo/right-arrow-green.png" hidden="[[mediumScreen]]">
                             <a href="[[registrationUrl]]" class="vertical-align badge" hidden="[[signedIn]]">
                                 1
                             </a>
@@ -1375,7 +1435,6 @@
             ],
 
             listeners: {
-                'linkToOverview.click': 'scrollToOverview',
                 'linkToHelp.click': 'scrollToHelp',
                 'linkToPresentation.click': 'scrollToPresentation',
                 'linkToPresentationArrow.click': 'scrollToPresentation'
@@ -1551,9 +1610,6 @@
             },
             scrollToHelp: function () {
                 this.smoothScroll("help");
-            },
-            scrollToOverview: function () {
-                this.smoothScroll("overview");
             }
 
         });
