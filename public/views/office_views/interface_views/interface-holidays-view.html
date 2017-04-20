@@ -186,7 +186,7 @@
 
         </style>
 
-        <firebase-document id="holidays_document" app-name="[[appName]]"
+        <firebase-document id="holidays_document" app-name="docta"
                            path="/officeHolidays/[[officeId]]"
                            data="{{officeHolidays}}">
         </firebase-document>
@@ -259,13 +259,6 @@
             is: 'interface-holidays-view',
 
             properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                },
-
                 hideErrorMessage: {
                     type: Boolean,
                     value: true
@@ -350,24 +343,23 @@
                     substituteDoctorName: substituteDoctorName
                 };
 
-                this.saveAndNotify(db, objectToSave)
+                this.saveData(db, objectToSave)
             },
 
             deleteHolidays: function (event) {
                 var db = this.$.holidays_document.app.database(),
                     objectToSave = {},
                     officeId = this.officeId,
-                    hId = event.model.holiday.hId,
-                    endAt = this.officeHolidays[hId].endAt;
+                    hId = event.model.holiday.hId;
 
-                objectToSave["/taskQueue/holidayDeletions/" + officeId + "/" + hId] = endAt;
+                objectToSave["/taskQueue/holidayDeletions/" + officeId + "/" + hId] = this.officeHolidays[hId].endAt;
                 objectToSave["/taskQueue/holidayAdditions/" + officeId + "/" + hId] = null;
                 objectToSave["/officeHolidays/" + officeId + "/" + hId + "/status"] = "awaitsDeletion";
 
-                this.saveAndNotify(db, objectToSave);
+                this.saveData(db, objectToSave);
             },
 
-            saveAndNotify: function (db, objectToSave) {
+            saveData: function (db, objectToSave) {
                 db.ref("/").update(objectToSave).then(function () {
                     this.fire("show-toast", {text: "Změna uložena"});
                 }.bind(this), function (error) {
@@ -379,24 +371,6 @@
                         }
                     });
                 }.bind(this));
-
-//                this.notifyTaskProcessor();
-            },
-
-            notifyTaskProcessor: function () {
-                var request = new XMLHttpRequest(),
-                    appName = this.appName;
-
-                request.onerror = function () {
-                    // TODO: handle error
-                };
-
-                // TODO: enable pre-flight request redirection when CORS standard catches up
-                request.open("GET", "https://" + appName + ".appspot-preview.com/tasks/process", true);
-
-                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-                request.send();
             },
 
             computeStatus: function (status) {

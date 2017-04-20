@@ -59,11 +59,11 @@
             }
         </style>
 
-        <firebase-document id="user_document" app-name="[[appName]]"
+        <firebase-document id="user_document" app-name="docta"
                            path="/userInfo/[[user.uid]]" data="{{userInfo}}">
         </firebase-document>
 
-        <firebase-document app-name="[[appName]]"
+        <firebase-document app-name="docta"
                            path="/userContactedOffices/[[user.uid]]" data="{{userContactedOffices}}">
         </firebase-document>
 
@@ -126,15 +126,6 @@
             is: 'settings-view',
 
             behaviors: [FormValidationBehavior],
-
-            properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                }
-            },
 
             confirm: function () {
                 var form1Validity = this._validateForm(this.$.form1),

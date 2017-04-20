@@ -1343,13 +1343,13 @@
                                 return {name: 'IE', version: (tem[1] || '')};
                             }
                             if (M[1] === 'Chrome') {
-                                tem = ua.match(/\bOPR|Edge\/(\d+)/)
-                                if (tem != null) {
+                                tem = ua.match(/\bOPR|Edge\/(\d+)/);
+                                if (tem !== null) {
                                     return {name: 'Opera', version: tem[1]};
                                 }
                             }
                             M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
-                            if ((tem = ua.match(/version\/(\d+)/i)) != null) {
+                            if ((tem = ua.match(/version\/(\d+)/i)) !== null) {
                                 M.splice(1, 1, tem[1]);
                             }
                             return M[0] + " " + M[1];
@@ -1433,7 +1433,7 @@
                     node = elm;
 
                 /* needed when try to link to nested node */
-                while (node.offsetParent && node.offsetParent != document.body) {
+                while (node.offsetParent && node.offsetParent !== document.body) {
                     node = node.offsetParent;
                     yOffset += node.offsetTop;
                 }
@@ -1445,7 +1445,7 @@
             smoothScroll: function (ID) {
                 var startY = this.currentYPosition(),
                     stopY = this.idYPosition(ID),
-                    distance = stopY > startY ? stopY - startY : startY - stopY;
+                    distance = stopY > startY ? stopY - startY : startY - stopY, i;
 
                 var speed = Math.round(distance / 60);
                 if (speed >= 20) speed = 20;
@@ -1453,7 +1453,7 @@
                     leapY = stopY > startY ? startY + step : startY - step,
                     timer = 0;
                 if (stopY > startY) {
-                    for (var i = startY; i < stopY; i += step) {
+                    for (i = startY; i < stopY; i += step) {
                         setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
                         leapY += step;
                         if (leapY > stopY) leapY = stopY;
@@ -1461,7 +1461,7 @@
                     }
                     return;
                 }
-                for (var i = startY; i > stopY; i -= step) {
+                for (i = startY; i > stopY; i -= step) {
                     setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
                     leapY -= step;
                     if (leapY < stopY) leapY = stopY;

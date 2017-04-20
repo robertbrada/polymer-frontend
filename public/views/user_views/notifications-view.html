@@ -73,7 +73,7 @@
 
         </style>
 
-        <firebase-document id="notification_document" app-name="[[appName]]"
+        <firebase-document id="notification_document" app-name="docta"
                            path="/userNotifications/[[userId]]"
                            data="{{notificationsData}}">
         </firebase-document>
@@ -108,13 +108,6 @@
             is: 'notifications-view',
 
             properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                },
-
                 notificationsArray: {
                     type: Array,
                     computed: 'computeNotificationsArray(notificationsData)'

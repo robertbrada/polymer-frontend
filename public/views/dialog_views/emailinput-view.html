@@ -16,7 +16,7 @@
                 font-size: 1.2em;
             }
         </style>
-        <firebase-auth id="auth" app-name="[[appName]]"></firebase-auth>
+        <firebase-auth id="auth" app-name="docta"></firebase-auth>
 
         <p class="error">{{errorMessage}}</p>
         <p class="main-text">Zadejte prosím emailovou adresu,<br>na kterou bude zaslán odkaz pro obnovení hesla:</p>
@@ -36,15 +36,6 @@
             is: 'emailinput-view',
 
             behaviors: [FormValidationBehavior],
-
-            properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                }
-            },
 
             confirm: function () {
                 if (this._validateForm(this.$.main_form)) {

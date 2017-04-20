@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 
 <!--icons-->
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
@@ -210,7 +211,7 @@
 
                         <div id="photo-container">
                             <template is="dom-if" if="[[!office.photoAvailability]]">
-                                <img src$="[[office.photoUrl]]" id="profile-photo">
+                                <img src="[[office.photoUrl]]" id="profile-photo">
                             </template>
                         </div>
 

@@ -15,7 +15,7 @@
     <template>
         <style include="button-styles">
         </style>
-        <firebase-auth id="auth" app-name="[[appName]]"></firebase-auth>
+        <firebase-auth id="auth" app-name="docta"></firebase-auth>
 
         <form id="main_form" is="iron-form">
             <p>Prosím zadejte nové heslo:</p>
@@ -35,15 +35,6 @@
             is: 'passreset-view',
 
             behaviors: [FormValidationBehavior, PassVisibilityBehavior],
-
-            properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                }
-            },
 
             confirm: function () {
                 if (this._validateForm(this.$.main_form)) {

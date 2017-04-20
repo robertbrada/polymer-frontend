@@ -181,10 +181,10 @@
                 data="{{routeData}}"
                 tail="{{subRoute}}"></app-route>
 
-        <firebase-document app-name="[[appName]]" path="/userOffices/[[userId]]" data="{{userOffices}}">
+        <firebase-document app-name="docta" path="/userOffices/[[userId]]" data="{{userOffices}}">
         </firebase-document>
 
-        <firebase-document app-name="[[appName]]" path="/officeInterfaceInfo/[[officeId]]"
+        <firebase-document app-name="docta" path="/officeInterfaceInfo/[[officeId]]"
                            data="{{officeInterfaceInfo}}">
         </firebase-document>
 
@@ -279,13 +279,6 @@
             validPrefix: '/office/interface',
 
             properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                },
-
                 officeId: {
                     type: String,
                     computed: 'computeId(routeData.officeId, officeArray)',

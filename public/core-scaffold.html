@@ -157,10 +157,10 @@
 
         </style>
 
-        <firebase-auth id="auth" user="{{user}}" app-name="[[appName]]" provider="password"
+        <firebase-auth id="auth" user="{{user}}" app-name="docta" provider="password"
                        signed-in="{{signedIn}}"></firebase-auth>
 
-        <firebase-document app-name="[[appName]]" path="/userInterfaceInfo/[[user.uid]]"
+        <firebase-document app-name="docta" path="/userInterfaceInfo/[[user.uid]]"
                            data="{{userInterfaceInfo}}">
         </firebase-document>
 
@@ -254,13 +254,6 @@
                     type: Boolean,
                     value: false,
                     computed: '_computeOfficeVisibility(userInterfaceInfo.showOfficeInterface, signedIn)'
-                },
-
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
                 }
             },
 

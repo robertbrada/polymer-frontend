@@ -64,7 +64,7 @@
 
         </style>
 
-        <firebase-auth id="auth" app-name="[[appName]]" status-known="{{statusKnown}}"
+        <firebase-auth id="auth" app-name="docta" status-known="{{statusKnown}}"
                        user="{{user}}"></firebase-auth>
 
         <template is="dom-if" if="[[!loggedIn]]">
@@ -94,13 +94,6 @@
             is: 'requirements-element',
 
             properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                },
-
                 verifyEmail: {
                     type: Boolean
                 },

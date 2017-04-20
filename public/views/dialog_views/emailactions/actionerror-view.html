@@ -13,10 +13,10 @@
             }
         </style>
 
-        <firebase-auth id="auth" app-name="[[appName]]" user="{{user}}"></firebase-auth>
+        <firebase-auth id="auth" app-name="docta" user="{{user}}"></firebase-auth>
 
         <p class="main-text">Nepodařilo se potvrdit emailovou adresu. <br>
-            Potvrzení je vyžadováno pro povolení obědnávání.<br>
+            Potvrzení je vyžadováno pro povolení objednávání.<br>
             Níže klikněte pro opětovné poslání potvrzovacího emailu.
         </p>
         <paper-button responsive id="dialog-button" on-tap="confirm" raised>
@@ -27,15 +27,6 @@
     <script>
         Polymer({
             is: 'actionerror-view',
-
-            properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                }
-            },
 
             confirm: function () {
                 this.resendVerification();

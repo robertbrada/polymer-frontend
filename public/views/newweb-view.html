@@ -155,8 +155,6 @@
                 letter-spacing: 0.03em;
             }
 
-
-
             #message-sent {
                 color: var(--app-green-color);
                 font-weight: 500;
@@ -288,7 +286,6 @@
 
             @media (max-width: 716px) {
 
-
                 header img {
                     max-width: 150px;
                 }
@@ -297,7 +294,7 @@
                     padding: 2em 1em;
                 }
 
-                .headline-container img{
+                .headline-container img {
                     max-height: 40px;
                 }
 
@@ -405,8 +402,9 @@
             <div id="questionContainer" hidden="[[messageSent]]">
                 <form id="docinfo_form" is="iron-form">
                     <h2 class="green">MÁTE ZÁJEM O STRÁNKU NEBO CHCETE NEZÁVAZNÝ NÁVRH?</h2>
-                    V případě zájmu nám napište, jak Vás máme kontaktovat. Pokud máme zavolat, dejte vědět, kdy se Vám
-                    to hodí.
+                    <p>
+                        V případě zájmu nám napište, jak Vás máme kontaktovat. Pokud máme zavolat, dejte vědět, kdy se Vám
+                        to hodí.
                     </p>
                     <paper-input id="contact_input" error-message="Pole nesmí být prázdné"
                                  label="Kontakt na Vás (email, telefon,...)" required>
@@ -427,6 +425,11 @@
             is: 'newweb-view',
 
             properties: {
+                firebaseDatabase: {
+                    type: Object,
+                    value: firebase.apps[0].database()
+                },
+
                 messageSent: {
                     type: Boolean,
                     value: false
@@ -457,7 +460,7 @@
             ],
 
             priceObserver: function (price, trackingId) {
-                firebase.apps[0].database().ref("/docInfoVisitors/" + trackingId).push(price);
+                this.firebaseDatabase.ref("/docInfoVisitors/" + trackingId).push(price);
             },
 
             send: function () {
@@ -470,10 +473,9 @@
             sendQuestion: function () {
 
                 var contact = this.$.contact_input.value,
-                    message = (!!this.$.message_input.value) ? this.$.message_input.value : null,
-                    db = firebase.apps[0].database();
+                    message = (!!this.$.message_input.value) ? this.$.message_input.value : null;
 
-                db.ref('/newWebQuestions/').push({
+                this.firebaseDatabase.ref('/newWebQuestions/').push({
                     "contact": contact,
                     "message": message
                 }).then(function () {
@@ -511,7 +513,7 @@
             },
 
             computePriceVisibility: function (price) {
-                return price == 0;
+                return price === 0;
             },
 
 

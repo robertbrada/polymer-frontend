@@ -109,7 +109,7 @@
 
         </style>
 
-        <firebase-document id="office_document" app-name="[[appName]]" path="/officeFullInfo/[[officeId]]"
+        <firebase-document id="office_document" app-name="docta" path="/officeFullInfo/[[officeId]]"
                            data="{{officeFullInfo}}">
         </firebase-document>
 
@@ -183,13 +183,6 @@
             behaviors: [FormValidationBehavior],
 
             properties: {
-
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                },
 
                 localOfficeData: {
                     type: Object,

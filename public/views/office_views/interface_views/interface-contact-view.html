@@ -3,7 +3,7 @@
 <link rel="import" href="/bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 <link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/button-styles.html">
 
@@ -19,14 +19,11 @@
             }
 
             #content {
-                background-color: #fff; /* TODO: move to parent */
+                background-color: #fff;
                 padding: 2em;
             }
 
         </style>
-
-        <firebase-document id="issue_document" app-name="[[appName]]">
-        </firebase-document>
 
         <paper-material id="content" elevation="1">
             <h1>Napište nám, s čím máte problém, co je potřeba zlepšit, nebo jakoukoliv jinou připomínku.</h1>
@@ -40,15 +37,6 @@
         Polymer({
             is: 'interface-contact-view',
 
-            properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                }
-            },
-
             send: function () {
                 if (this.$.issue_input.validate()) {
                     this.saveIssue();
@@ -60,7 +48,7 @@
             saveIssue: function () {
                 var message = this.$.issue_input.value,
                     officeId = this.officeId,
-                    db = this.$.issue_document.app.database();
+                    db = firebase.apps[0].database();
 
                 if (!!officeId) {
                     db.ref("/issues/").push({

@@ -136,13 +136,6 @@
             validPrefix: '/office/registration',
 
             properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                },
-
                 firebaseDatabase: {
                     type: Object,
                     value: firebase.apps[0].database()

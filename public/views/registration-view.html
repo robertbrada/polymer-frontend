@@ -138,7 +138,7 @@
 
         </style>
 
-        <firebase-auth id="auth" app-name="[[appName]]"></firebase-auth>
+        <firebase-auth id="auth" app-name="docta"></firebase-auth>
 
         <date-validator validator-name="dateValidator"></date-validator>
 
@@ -242,13 +242,6 @@
             behaviors: [FormValidationBehavior, PassVisibilityBehavior],
 
             properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                },
-
                 fromDocInfo: {
                     type: Boolean,
                     value: false,

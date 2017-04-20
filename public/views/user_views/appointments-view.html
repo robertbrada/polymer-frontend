@@ -132,7 +132,7 @@
 
         </style>
 
-        <firebase-document id="appointment_document" app-name="[[appName]]" path="/userAppointments/[[userId]]"
+        <firebase-document id="appointment_document" app-name="docta" path="/userAppointments/[[userId]]"
                            data="{{appointmentsRaw}}">
         </firebase-document>
 
@@ -194,13 +194,6 @@
             is: 'appointments-view',
 
             properties: {
-                appName: {
-                    type: String,
-                    value: function () {
-                        return document.getElementById("main_app").name;
-                    }
-                },
-
                 appointmentsArray: {
                     type: Array,
                     computed: 'computeAppointments(appointmentsRaw)'
@@ -212,15 +205,14 @@
             },
 
             computeAppointments: function (appointmentsRaw) {
-                var convertedAppointment,
-                    appointmentsArray = Object.keys(appointmentsRaw).map(function (key) {
-                        convertedAppointment = appointmentsRaw[key];
-                        convertedAppointment["appointmentId"] = key;
-                        convertedAppointment["disabledButton"] = true;
-                        return convertedAppointment;
-                    });
+                var convertedAppointment;
 
-                return appointmentsArray;
+                return Object.keys(appointmentsRaw).map(function (key) {
+                    convertedAppointment = appointmentsRaw[key];
+                    convertedAppointment["appointmentId"] = key;
+                    convertedAppointment["disabledButton"] = true;
+                    return convertedAppointment;
+                });
             },
 
             computeAppointmentDate: function (appointmentId) {
