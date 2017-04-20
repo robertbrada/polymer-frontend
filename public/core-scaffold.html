@@ -184,7 +184,7 @@
                     </paper-icon-button>
                 </div>
                 <div class="text-bar-item" hidden="[[smallScreen]]">
-                    <a href="[[_computeUrl(showOffices, page)]]">[[_computeText(showOffices, page)]]</a>
+                    <a href="[[url]]">[[linkText]]</a>
                 </div>
                 <div class="logo" main-title><a href="/home" aria-label="Domovská stránka"><img src="images/logo.png" style="width: 75px"></a>
                 </div>
@@ -206,8 +206,7 @@
             <!-- Two-way bind `drawerOpened` since app-drawer can update `opened` itself. -->
             <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
                 <iron-selector role="navigation" class="drawer-list">
-                    <a href="docinfo/" hidden="[[showOffices]]">Pro lékaře</a>
-                    <a href="office/interface/waiting-list/" hidden="[[!showOffices]]">Mé ordinace</a>
+                    <a href="[[url]]">[[linkText]]</a>
                     <a href="user/notifications/" hidden="[[!signedIn]]">Upozornění</a>
                     <a href="user/appointments/" hidden="[[!signedIn]]">Návštěvy</a>
                     <a href="user/settings/" hidden="[[!signedIn]]">Nastavení</a>
@@ -254,6 +253,16 @@
                     type: Boolean,
                     value: false,
                     computed: '_computeOfficeVisibility(userInterfaceInfo.showOfficeInterface, signedIn)'
+                },
+
+                url: {
+                    type: String,
+                    computed: "_computeUrl(showOffices, page)"
+                },
+
+                linkText: {
+                    type: String,
+                    computed: "_computeText(showOffices, page)"
                 }
             },
 
