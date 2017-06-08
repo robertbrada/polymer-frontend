@@ -17,17 +17,24 @@
         <style include="layout-styles input-styles">
             :host {
                 display: block;
-                color: #252526;
+                color: #757575;
             }
 
-            .light-green-background {
-                background-color: var(--app-light-green-color);
+            .blue-background {
+                background-color: #05adc3;
                 color: #fff !important;
             }
 
-            .light-blue-background {
-                background-color: var(--app-light-blue-color);
-                color: #fff !important;
+            .green-text {
+                color: #0f9d58;
+            }
+
+            .blue-text {
+                color: #05adc3;
+            }
+
+            .yellow-text {
+                color: #f9a825;
             }
 
             a {
@@ -47,9 +54,23 @@
                 padding: 1em 1.5em;
             }
 
+            p {
+                font-weight: 100 !important;
+            }
+
+            .badge {
+                border-radius: 100%;
+                display: inline-block;
+                font-weight: bold;
+                line-height: 1.9em;
+                text-align: center;
+                vertical-align: middle;
+            }
+
             h1 {
                 letter-spacing: 0.03em;
-                font-size: 1.5em;
+                font-weight: 300;
+                font-size: 2em;
                 margin-top: 0;
                 margin-bottom: 1.5em;
             }
@@ -57,6 +78,13 @@
             paper-button {
                 transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            }
+
+            #message-sent {
+                font-weight: 400;
+                font-size: 1.1em;
+                margin: 0;
+                padding: 0.9em;
             }
 
             .main-frame {
@@ -67,8 +95,8 @@
             }
 
             .grid section {
-                padding: 4em 5%;
-                margin: 0 !important;
+                padding: 3em 5%;
+                /*margin: 0 !important;*/
                 position: relative;
             }
 
@@ -78,122 +106,121 @@
                 font-weight: 100;
             }
 
+            header {
+                text-align: left;
+                padding: 6em 0 10em 0;
+                position: relative;
+                border: none !important;
+            }
+
+            header > section {
+                max-width: 700px;
+                padding: 0 2em;
+            }
+
+            header img {
+                position: absolute;
+                right: 5%;
+                bottom: 0;
+                max-width: 40%;
+            }
+
+            header h1 {
+                font-weight: 300;
+                font-size: 2.5em;
+                margin-bottom: 1em;
+            }
+
+            header p {
+                font-size: 1.2em;
+                max-width: 500px;
+            }
+
             /******************/
 
-            #who-can-book-section {
-                margin-bottom: 0;
-                padding-top: 3em;
-                padding-bottom: 3em;
+            #how-it-works {
+                padding: 3em 0;
+            }
+
+            #how-it-works p {
+                max-width: 550px;
+            }
+
+            #how-it-works ul {
+                list-style: none;
+                padding-left: 0;
+                margin-bottom: 1.5em;
+            }
+
+            #how-it-works ul li iron-icon {
+                display: inline-block;
+                width: 25px;
+                margin-right: 1em;
+                vertical-align: text-bottom;
+                color: var(--app-light-green-color);
+            }
+
+            #how-it-works ul li {
+                margin-top: 0.8em;
+                letter-spacing: 0.03em;
+                font-size: 1.1em;
                 position: relative;
             }
 
-            #who-can-book-section img {
-                max-width: 300px;
+            #how-it-works #strakova-link {
+                display: inline-block;
+                margin-top: 2em;
             }
+
+            #how-it-works #newweb-link {
+                font-weight: 500;
+                color: #757575;
+            }
+
 
             /********************/
-            #officeCalendar {
-                padding: 5em 6% 0 3em;
+            #not-sure-container {
+                position: relative;
+                margin-top: 0;
+                padding-top: 1em;
+                padding-bottom: 1em;
             }
 
-            #officeCalendar h1 {
-                font-size: 1.6em;
-
+            #not-sure-container h1 {
+                margin-bottom: 0.7em;
             }
 
-            #officeCalendar p {
-                font-size: 1.4em;
-
-            }
-
-
-            #officeCalendar img {
-                max-width: 100%;
-                margin-top: 5em;
-                margin-bottom: -8px;
-            }
-
-            #officeCalendar .text-section {
-                max-width: 880px;
+            #not-sure-container .main-frame {
+                max-width: 800px;
                 margin: 0 auto;
             }
 
-            /****************/
-
-            .presentation-img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                margin: auto;
-            }
-
-            .img-section {
-                text-align: center;
+            #not-sure-container .headline {
+                font-weight: bolder;
+                margin-top: 2.5em;
+                padding-top: 1em;
+                border-top: 1px solid #e2e2e3;
+                display: block;
             }
 
             /***** OFFICE PRESENTATION ********/
 
-            #presentation {
-                 padding-top: 2em;
-             }
-
-            #presentation .text-section{
-                min-height: 450px;
-
-            }
-
-            /** HOLIDAY ***/
-
-            #holiday {
-                padding: 4em 0;
-            }
-
-            #holiday img {
-                max-width: 150px
-            }
-
-            /*** QUESTION FORM ***/
-
-            #question-container {
-                padding: 3em 1.5em;
-            }
-
-            #question-container h1 {
-                letter-spacing: 0.02em;
-                margin-top: 0.5em;
-
-            }
-
-            form {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-
-
-            #calendar-img {
-                max-height: 490px;
-                max-width: 490px;
-            }
-
-
             #why-booking-section {
-                color: #fff;
+                background-color: #fafafa;
                 text-align: center;
-                padding: 4em 2em 3em 2em;
+                padding: 4em 2em 1em 2em;
+                position: relative;
             }
 
-
-            #why-booking-section h1 img {
-                position: absolute;
-                left: -4.2em;
-                top: -0.5em;
-                width: 3em;
+            #why-booking-section h1 {
+                display: inline-block;
+                margin: 0 auto 2em auto;
+                position: relative;
             }
 
             .why-booking-img {
-                max-height: 120px;
+                max-height: 48px;
+                margin-bottom: 1em;
             }
 
             .header-div {
@@ -215,36 +242,152 @@
                 line-height: 1.5em;
             }
 
+
+            #add-online-booking h2 {
+                margin-bottom: 0;
+                margin-top: 0;
+                font-size: 1.3em;
+            }
+
+            #add-online-booking img {
+                color: var(--app-accent-color);
+                height: 30px;
+                position: relative;
+                bottom: -34px;
+                z-index: 2;
+            }
+
+            /* REGISTRATION STEPS */
+
+            #registration {
+                background-color: #f9f9f9;
+                text-align: center;
+                font-size: 0.9em;
+                position: relative;
+            }
+
+            #registration .main-frame {
+                max-width: 700px;
+                padding: 5.5em 1.5em;
+                overflow: inherit;
+            }
+
+            #registration h1 {
+                letter-spacing: 0.03em;
+                text-align: left;
+            }
+
+            #registration .badge {
+                height: 45px;
+                width: 45px;
+                font-size: 1.8em;
+                margin-right: 2em;
+                background-color: transparent;
+            }
+
+            #step-one {
+                position: relative;
+            }
+
+            #step-one .arrow {
+                position: absolute;
+                width: 5.3em;
+                left: -7.5em;
+            }
+
+            #step-one .badge {
+                background-color: var(--app-light-green-color);
+                color: #fff;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            }
+
+            .step-container {
+                margin: 3em auto;
+                text-align: left;
+            }
+
+            .step-container .headline {
+                font-size: 1.5em;
+            }
+
+            .step-container paper-button {
+                background-color: var(--app-light-green-color);
+                padding: 1.4em 2.4em;
+                font-weight: bold;
+                font-size: 1.1em;
+                letter-spacing: 0.08em;
+                margin: 0;
+            }
+
+            .vertical-align {
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+
+            .top-align {
+                margin-top: 0;
+                margin-bottom: auto;
+            }
+
+            #step-three .headline {
+                margin-top: 0.4em;
+                font-weight: bold;
+            }
+
+            #step-three p {
+                font-weight: 100;
+                font-size: 1.3em;
+            }
+
+            /*** QUESTION FORM ***/
+
+            #questionContainer {
+                padding: 3em 1.5em;
+            }
+
+            #questionContainer h1 {
+                letter-spacing: 0.02em;
+                margin-top: 0.5em;
+            }
+
+            #questionContainer p {
+                margin-bottom: 1.5em;
+                font-size: 1.2em;
+            }
+
+            #questionContainer paper-button {
+                margin-top: 2.5em;
+            }
+
+            form {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
             /****** FLEX LAYOUT ****/
 
             .booking-flex-horizontal > section {
                 text-align: justify;
             }
+
+            .flex-horizontal, .booking-flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+
+            .flexchild {
+                @apply(--layout-flex);
+            }
+
             /*
            ---- MEDIA ----
            */
 
+            @media (max-width: 1200px) {
 
-            @media (max-width: 980px) {
-
-                #officeCalendar {
-                    padding-bottom: 4em;
-                }
-
-                #holiday {
-                    padding-top: 2em;
-                    padding-bottom: 2em;
-                }
-
-                #presentation img {
-                    max-width: 300px;
-                }
-
-                #presentation .text-section{
-                    min-height: inherit;
+                header h1 {
+                    font-size: 1.6em;
                 }
             }
-
 
             @media (max-width: 716px) {
 
@@ -255,40 +398,162 @@
                 .grid section {
                     padding: 7% 5%;
                 }
-                .presentation-img {
-                    position: static;
-                    max-width: 150px;
-                    max-height: 150px;
+
+                header paper-button {
+                    display: block;
+                    width: 16em;
+                    text-align: center;
+                    margin: 1em auto;
+                }
+
+                #who-can-book-section .arrow {
+                    height: 40px;
+                    bottom: -39px;
                 }
 
                 .why-booking-img {
-                    max-height: 80px;
+                    max-height: 40px;
+                }
+
+                .badge {
+                    line-height: 2.3em;
+                }
+
+                #registration {
+                    font-size: 0.9em;
+                }
+
+                #overview ul li .arrow {
+                    top: 15px;
+                }
+
+                #help p {
+                    left: 0.5em;
+                    right: 0.5em;
+                }
+
+                #header-headlines .badge {
+                    width: 60px;
+                    height: 60px;
+                    line-height: 2.8em;
                 }
             }
 
             @media (max-width: 980px) {
+
                 .booking-flex-horizontal {
                     @apply(--layout-vertical);
                 }
+
+                header {
+                    padding-top: 2em;
+                    padding-bottom: 8em;
+                }
             }
 
+            @media (min-width: 767px) {
 
+                paper-button:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+                }
+            }
         </style>
 
         <iron-media-query query="max-width:460px" query-matches="{{mobileScreen}}"></iron-media-query>
         <iron-media-query query="max-width:716px" query-matches="{{smallScreen}}"></iron-media-query>
         <iron-media-query query="max-width:980px" query-matches="{{mediumScreen}}"></iron-media-query>
 
+        <header class="blue-background">
+            <img class="" src="../images/bookinginfo/office-calendar-computer.png">
 
-        <section id="why-booking-section" class="light-blue-background">
-            <h1>
-                PŘIDEJTE SE A OBJEDNÁVEJTE PACIENTY ONLINE
+            <div class="main-frame grid">
+                <section>
+                    <h1>
+                        Online objednávání na Docta.cz
+                    </h1>
+                    <p>
+                        Vyzkoušejte naše online objednávání. Budete mít přehled
+                        o svých pacientech. Není třeba listovat kalendářem.
+                        Vaši pacienti pacienti se objednají sami a online. Vy tak
+                        máte čas věnovat se práci, která má smysl.
+                        Navíc Vám budou Vaši klienti vděční.
+                    </p>
+                </section>
+
+            </div>
+        </header>
+
+        <section id="how-it-works">
+            <div class="main-frame grid">
+                <section>
+                    <h1 class="blue-text">
+                        Jak to funguje?
+                    </h1>
+                    <p>Nejprve se u nás zaregistrujete. Poté stačí vyplnit informace o Vaší ordinaci.
+                        Následně vytvoříme bezplatný profil, který může vypadat třeba <a class="blue-text" href="/d/strakova_plzen">takto</a>.
+                        Objednávací kalendář je dobrovolný, můžete si tak vytvořit třeba jen profil s informacemi pro pacienty.</p>
+                    <p>Informace na proflu si můžete upravit kdykoli a jakkoli uznáte za vhodné.
+                        <a href="/newweb" id="newweb-link">Pokud by Vám tento bezplatný profil nestačil, rádi Vám vytvoříme vlastní webové stránky na míru.</a>
+                    </p>
+
+                    <a id="strakova-link" class="blue-text" href="/d/strakova_plzen">TAKTO MŮŽE VYPADAT VÁŠ PROFIL ZDARMA
+                        <iron-icon icon="icons:forward"></iron-icon>
+                    </a>
+
+                </section>
+
+                <section>
+                    <h1 class="green-text">
+                        Co obsahuje bezplatný profil?
+                    </h1>
+                    <ul>
+                        <li>
+                            <iron-icon icon="check"></iron-icon>
+                            Veškeré kontaktní informace
+                        </li>
+                        <li>
+                            <iron-icon icon="check"></iron-icon>
+                            Seznam smluvních pojišťoven
+                        </li>
+                        <li>
+                            <iron-icon icon="check"></iron-icon>
+                            Upozornění na dovolenou
+                        </li>
+                        <li>
+                            <iron-icon icon="check"></iron-icon>
+                            Ordinační hodiny
+                        </li>
+                        <li>
+                            <iron-icon icon="check"></iron-icon>
+                            Posyktované služby a jejich ceny
+                        </li>
+                        <li>
+                            <iron-icon icon="check"></iron-icon>
+                            Libovolná zpráva pacientům
+                        </li>
+                        <li>
+                            <iron-icon icon="check"></iron-icon>
+                            Objednávací kalendář
+                        </li>
+                        <li>
+                            <iron-icon icon="star" style="color: #f9a825"></iron-icon>
+                            Něco Vám chybí? <span on-tap="scrollToForm" style="text-decoration: underline; cursor: pointer">Dejte nám vědět!</span>
+                        </li>
+                    </ul>
+
+                </section>
+            </div>
+        </section>
+
+        <section id="why-booking-section">
+            <h1>Proč používat online objednávání?
             </h1>
             <div class="main-frame booking-flex-horizontal grid">
                 <section>
                     <div class="header-div">
-                        <img class="why-booking-img" src="../images/docinfo/save-time.png">
-                        <h2>Ušetříte si čas</h2>
+                        <img class="why-booking-img" src="../images/docinfo/save-time-ns.png">
+                        <h2 class="yellow-text">Ušetříte si čas</h2>
                     </div>
                     <div class="description-div">
                         <p>Nezatěžujte sebe nebo Vaší sestru vyřizováním telefonátů. Vaši pacienti se objednají sami,
@@ -298,8 +563,8 @@
                 </section>
                 <section>
                     <div class="header-div">
-                        <img class="why-booking-img" src="../images/docinfo/save-work.png">
-                        <h2>Ušetříte si práci</h2>
+                        <img class="why-booking-img" src="../images/docinfo/save-work-ns.png">
+                        <h2 class="blue-text">Ušetříte si práci</h2>
                     </div>
                     <div class="description-div">
                         <p>Vytvoříme Vám kalendář přesně podle Vašich potřeb. Nemusíte listovat v papírech, vše budete
@@ -309,8 +574,8 @@
                 </section>
                 <section>
                     <div class="header-div">
-                        <img class="why-booking-img" src="../images/docinfo/help-patients.png">
-                        <h2>Pomůžete pacientům</h2>
+                        <img class="why-booking-img" src="../images/docinfo/help-patients-ns.png">
+                        <h2 class="green-text">Pomůžete pacientům</h2>
                     </div>
                     <div class="description-div">
                         <p>Pacienti se chtějí objednat kdy se jim to hodí. Dopřejte jim čas na rozmyšlenou a nenuťte je
@@ -320,72 +585,79 @@
                 </section>
             </div>
         </section>
-
-        <section id="presentation">
+        <section id="not-sure-container">
             <div class="main-frame grid">
-                <section class="text-section">
-                    <h1>
-                        VYTVOŘTE SI KALEDNÁŘ NA MÍRU
-                    </h1>
-                    <p>Vytvoříte si kalednář podle sebe. Každý den můžete mít jiné termíny. Navíc si můžete zvolit, na jak dlouho dopředu se Vám budou termíny tvořit.</p>
-                    <p>Pacienti se pak pohodlně objednají na vybraný termín. Případně Vám mohou poslat zprávu.</p>
-                </section>
-
-                <section class="img-section">
-                    <img id="calendar-img" class="presentation-img" src="../images/bookinginfo/calendar.png">
-                </section>
-            </div>
-        </section>
-
-        <section class="light-blue-background" id="who-can-book-section">
-            <div class="main-frame grid">
-                <section class="img-section" hidden="[[mediumScreen]]">
-                    <img class="presentation-img" src="../images/bookinginfo/access.png">
-                </section>
-                <section id="office-calendar-section">
-                    <h1 id="scrollTest">KDO SE K VÁM MŮŽE OBJEDNAT?</h1>
+                <section>
+                    <h1 class="green-text">Kdo se k Vám může objednat?</h1>
                     <p>Objednat se mohou jen pacienti, kteří jsou u nás zaregistrovaní.
-                        Navíc si můžete sami kontrolovat,
+                        Navíc si můžete sami vybírat,
                         kteří pacienti se k Vám mohou objednat a kteří ne. U každého pacienta uvidíte
                         informace k jeho identifikaci.
                         Můžete tak dovolit objednání jen svým pacientům.
                     </p>
-                </section>
-            </div>
-        </section>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <h1 class="blue-text">Nevíte, zda objednávání využijete?</h1>
+                    <p>Naše online objednávání je zcela bezplatné. Nezáleží tak na tom, jak moc jej Vaši klienti
+                        využijí. Až u Vás klienti tuto službu zaregistrují, uvidíte nárůst objednaných pacientů.</p>
 
-        <section class="" id="holiday">
-            <div class="main-frame grid">
-                <section>
-                    <h1 id="">DOVOLENÁ PROPOJENA S KALENDÁŘEM</h1>
-                    <p>Potřebujete si vzít dovolenou a chcete zrušit objednávání? Náš kalendář je perfektně propojen s
-                        dovolenou. Automaticky Vám zrušíme objednávací hodiny když nebudete v ordinaci.
+                    <p><a href="[[registrationUrl]]">
+                        <span hidden="[[signedIn]]">Registrace </span>
+                        <span hidden="[[!signedIn]]">Přidání ordinace </span>
+                    </a>Vám zabere jen 10 minut a naše služby můžete využít kdykoli.</p>
+
+                    <p>
+                        <span class="light-blue-text headline">Už máte vlastní stránku a chcete využít online objednávání?</span>
+                        Rádi Vám pomůžeme vložit odkaz na Vaše stránky. Pokud máte zájem,
+                        <a href="[[registrationUrl]]">
+                            <span hidden="[[signedIn]]">zaregistrujte se</span>
+                            <span hidden="[[!signedIn]]">přidejte ordinaci</span>
+                        </a> a napište nám.
                     </p>
-                </section>
-                <section class="img-section" hidden="[[mediumScreen]]">
-                    <img class="presentation-img" src="../images/bookinginfo/holiday.png">
+
+                    <br>
+                    <br>
+
                 </section>
             </div>
         </section>
 
-        <section id="officeCalendar" class="light-green-background">
+        <section id="registration" class="light-blue-background">
             <div class="main-frame">
-                <div class="text-section">
-                    <h1>VŠE MÁTE V PŘEHLEDNÉM KALENDÁŘI</h1>
-                    <p>V elektronickém kalendáři vidíte všechny objednané pacienty. Můžete zde rušit schůzky a objednávací časy.
-                        Můžete i sami přidávat nová objednání. </p>
-                </div>
-                <section class="img-section" hidden="[[mediumScreen]]">
-                    <img class="" src="../images/bookinginfo/office-calendar-computer.png">
+                <h1 class="green-text">Jak začít objednávat online?</h1>
+                <section id="registration-steps-section">
+                    <div style="margin: 0 auto">
+                        <div id="step-one" class="step-container flex-horizontal">
+                            <img class="arrow" src="../images/docinfo/right-arrow-green.png" hidden="[[mediumScreen]]">
+                            <a href="[[registrationUrl]]" class="vertical-align badge" hidden="[[signedIn]]">
+                                1
+                            </a>
+                            <a href="[[registrationUrl]]" class="flexchild">
+                                <paper-button raised>[[computeButtonText(signedIn)]]</paper-button>
+                            </a>
+                        </div>
+                        <div id="step-two" class="step-container flex-horizontal" hidden="[[signedIn]]">
+                            <div class="badge">2</div>
+                            <div class="flexchild headline vertical-align">PŘIDEJTE SVOU ORDINACI</div>
+                        </div>
+                        <div id="step-three" class="step-container flex-horizontal" hidden="[[signedIn]]">
+                            <div class="badge top-align">3</div>
+                            <div class="flexchild">
+                                <div class="headline">HOTOVO!</div>
+                                <p>Vaše ordinace je na internetu! Věříme, že budete spokojeni.</p></div>
+                        </div>
+                    </div>
                 </section>
-
             </div>
         </section>
 
-
-        <div id="question-container" hidden="[[messageSent]]">
+        <div id="questionContainer" hidden="[[messageSent]]">
             <form id="docinfo_form" is="iron-form">
-                <h1>MÁTE ZÁJEM NEBO JINÝ DOTAZ? NAPIŠTĚ NÁM</h1>
+                <h1>Napište nám</h1>
+                <p>Chcete se na něco zeptat, nebo nám chcete sdělit cokoli jiného?</p>
+
                 <gold-email-input id="email_input" error-message="Špatný formát"
                                   label="Vaše emailová adresa" required>
                 </gold-email-input>
@@ -395,6 +667,9 @@
                 <paper-button raised on-tap="send">Odeslat</paper-button>
             </form>
         </div>
+
+        <p class="blue-background" id="message-sent" hidden="[[!messageSent]]">Zpráva odeslána, děkujeme. Co nejdříve se Vám ozveme.</p>
+
     </template>
 
     <script>
@@ -412,8 +687,125 @@
                 messageSent: {
                     type: Boolean,
                     value: false
+                },
+
+                trackingId: {
+                    type: String,
+                    notify: true,
+                    computed: "computeId(ip, route)"
+                },
+
+                // Used to determine if the id was actually updated or not
+                oldTrackingId: {
+                    type: String,
+                    value: null
+                },
+
+                ip: {
+                    type: String,
+                    value: null
+                },
+
+                registrationUrl: {
+                    type: String,
+                    computed: "computeUrl(signedIn)"
+                },
+
+                idComputed: {
+                    type: Boolean,
+                    value: false
                 }
 
+            },
+
+            observers: [
+                "saveUserInfo(ip, trackingId)",
+                "saveRoute(route, trackingId)"
+            ],
+
+
+            ready: function () {
+                var xhr = new XMLHttpRequest(),
+                    setIp = function (e) {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            this.ip = response.ip;
+                        }
+                    }.bind(this);
+
+                xhr.open('GET', "//ipinfo.io/json", true);
+                xhr.send();
+                xhr.addEventListener("readystatechange", setIp, false);
+            },
+
+            computeId: function (ip, route) {
+                if (!this.idComputed) {
+                    var path = route.path;
+                    if (route.prefix === "/docinfo" && path.length > 1) {
+                        this.idComputed = true;
+                        return path.substring(1);
+                    } else if (!!ip) {
+                        this.idComputed = true;
+                        return this.ip.replace(/[.]/g, "-");
+                    }
+                }
+                return this.trackingId;
+            },
+
+            saveUserInfo: function (ip, trackingId) {
+                if (trackingId !== this.oldTrackingId && !!ip) {
+                    this.oldTrackingId = trackingId;
+
+                    var getBrowser = function () {
+                            var ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+                            if (/trident/i.test(M[1])) {
+                                tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                                return {name: 'IE', version: (tem[1] || '')};
+                            }
+                            if (M[1] === 'Chrome') {
+                                tem = ua.match(/\bOPR|Edge\/(\d+)/);
+                                if (tem !== null) {
+                                    return {name: 'Opera', version: tem[1]};
+                                }
+                            }
+                            M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+                            if ((tem = ua.match(/version\/(\d+)/i)) !== null) {
+                                M.splice(1, 1, tem[1]);
+                            }
+                            return M[0] + " " + M[1];
+                        },
+                        objectToSave = {
+                            ip: ip,
+                            browser: getBrowser(),
+
+                            browserLanguage: navigator.language,
+                            browserPlatform: navigator.platform,
+
+                            screenWidth: screen.width,
+                            screenHeight: screen.height,
+                            availableScreenWidth: innerWidth,
+                            availableScreenHeight: innerHeight
+                        };
+
+                    this.database.ref("/docInfoVisitors/" + trackingId + "/userInfo").update(objectToSave);
+                }
+            },
+
+            saveRoute: function (route, trackingId) {
+                var objectToSave = {
+                    URL: route.prefix + route.path,
+                    datetime: new Date().toString()
+                };
+
+                this.database.ref("/docInfoVisitors/" + trackingId).push(objectToSave);
+            },
+
+            computeUrl: function (signedIn) {
+                return (signedIn) ? "/office/registration/first" : "/registration/doc";
+            },
+
+            computeButtonText: function (signedIn) {
+                return (signedIn) ? "Přidat ordinaci" : "Zaregistrujte se";
             },
 
             send: function () {
@@ -444,6 +836,10 @@
                         }
                     });
                 }.bind(this));
+            },
+
+            scrollToForm: function () {
+                this.$.questionContainer.scrollIntoView();
             }
 
         });

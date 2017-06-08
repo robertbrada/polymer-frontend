@@ -352,7 +352,7 @@
             </section>
 
             <div id="own-website-section">
-                <h2 class="blue">Už máte vlastní stránky</h2>
+                <h2 class="blue">Už máte vlastní stránky?</h2>
                 <p>
                     Pokud ano, postaráme se, abyste měli s přesunem minimum starostí.
                 </p>
@@ -494,13 +494,13 @@
 
             computePrice: function (doctorCount, discountCount) {
                 //logarithmic price
-                var base = 2;
+                var base = 1.9;
                 var threePrice = 700; //price for three doctors
                 var oneTwoPrice = 500; //price for one or two doctors
 
                 var discount = 0; //discount in percents
                 if (discountCount > 0) {
-                    discount = ((-0.6 / (discountCount + 0.4)) + 0.65); //example
+                    discount = ((-0.6 / (discountCount + 0.35)) + 0.6); //example
                 }
 
                 if (0 < doctorCount && doctorCount < 3) {
