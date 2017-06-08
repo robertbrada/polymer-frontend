@@ -175,7 +175,7 @@
                     status = this.userContactedOffices[officeIds[i]].status;
                     if (status === 'awaitsVerification') {
                         objectToSave['/officePatientsToVerify/' + officeIds[i] + '/' + uid] = userInfo;
-                    } else if (status === 'visited') {
+                    } else if (status === 'accessed') {
                         objectToSave['/officePatients/' + officeIds[i] + '/' + uid] = userInfo;
                     } else if (status === 'blocked') {
                         objectToSave['/officeBlockedPatients/' + officeIds[i] + '/' + uid] = userInfo;

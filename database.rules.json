@@ -95,6 +95,12 @@
           ".write": "root.child('officePermissions/' + $oid + '/' + auth.uid + '/admin').exists()",
           "status": {
             ".validate": "newData.val() === 'awaitsVerification' || newData.val() === 'accessed' || newData.val() === 'blocked'"
+          },
+          "booked" :{
+            // TODO: security flaw - user can write false and fill all the booking times. Solvable by denying access and allow
+            // time deleting only by server, which checks there really aren't any booking times at that doctor by the user
+            ".write": "auth.uid === 'my-service-worker'",
+            ".validate": "newData.isBoolean()"
           }
         }
       }

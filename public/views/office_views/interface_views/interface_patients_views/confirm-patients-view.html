@@ -164,16 +164,16 @@
                 objectToSave['/officePatientsToVerify/' + officeId + '/' + patientUid] = null;
                 objectToSave['/userContactedOffices/' + patientUid + '/' + officeId + '/status'] = 'blocked';
                 objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
-                    'title': 'Verifikace zamítnuta',
-                    'message': 'Je nám líto, ale doktor Vám zablokoval přístup k objednání.',
-                    'sender': officeId
+                    title: 'Verifikace zamítnuta',
+                    message: 'Je nám líto, ale doktor Vám zablokoval přístup k objednání.',
+                    sender: officeId
                 };
 
                 rootRef.update(objectToSave).then(function () {
                     db.ref('/userInterfaceInfo/' + patientUid + '/numberOfNotifications').transaction(function (currentCount) {
                         return (currentCount === null) ? null : currentCount + 1;
                     });
-                    db.ref('/officeNumberOfNotifications/' + officeId).transaction(function (currentCount) {
+                    db.ref('/officeInterfaceInfo/' + officeId + '/patientsToVerify').transaction(function (currentCount) {
                         return (currentCount === null) ? null : currentCount - 1;
                     });
                 }).then(function () {
@@ -196,10 +196,10 @@
             computePatientsArray: function (officePatientsToVerify) {
                 return Object.keys(officePatientsToVerify).map(function (key) {
                     return {
-                        'name': officePatientsToVerify[key]['name'],
-                        'address': officePatientsToVerify[key]['address'],
-                        'dateOfBirth': officePatientsToVerify[key]['dateOfBirth'],
-                        'uid': key
+                        name: officePatientsToVerify[key]['name'],
+                        address: officePatientsToVerify[key]['address'],
+                        dateOfBirth: officePatientsToVerify[key]['dateOfBirth'],
+                        uid: key
                     }
                 });
             },

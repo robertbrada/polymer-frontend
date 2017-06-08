@@ -346,6 +346,7 @@
 
                 if (appointment.online) {
                     objectToSave['/userAppointments/' + appointment.patientId + '/' + appointment.id] = null;
+                    objectToSave['/userContactedOffices/' + appointment.patientId + '/' + officeId + '/booked'] = false;
                 }
 
                 this.objectsToSave.push(objectToSave);
@@ -355,7 +356,7 @@
 
                 var lenOfObjectArray = this.objectsToSave.length;
 
-                if (this.numWaitingToDelete == 0 && lenOfObjectArray != 0) { //lenOfObjectArray != 0 means not to check when page loaded
+                if (this.numWaitingToDelete === 0 && lenOfObjectArray !== 0) { //lenOfObjectArray != 0 means not to check when page loaded
                     var db = this.firebaseDatabase,
                         i = 0;
 
@@ -411,7 +412,7 @@
                 this.appointmentsArray = Object.keys(data).map(function (key) {
                     appointmentData = data[key];
 
-                    if (appointmentData.source == 'online') { //booked online
+                    if (appointmentData.source === 'online') { //booked online
                         convertedAppointment = {
                             online: true,
                             source: appointmentData.source,
@@ -423,7 +424,7 @@
                             showMessage: !!appointmentData.message,
                             viewMessage: false
                         };
-                    } else if (appointmentData.source == 'calendar') { //booked in interface calendar
+                    } else if (appointmentData.source === 'calendar') { //booked in interface calendar
                         convertedAppointment = {
                             online: false,
                             source: appointmentData.source,
@@ -432,7 +433,7 @@
                             showMessage: !!appointmentData.message,
                             viewMessage: false
                         };
-                    } else if (appointmentData.source == 'waitroom') { //in waitroom
+                    } else if (appointmentData.source === 'waitroom') { //in waitroom
                         convertedAppointment = {
                             online: false,
                             source: appointmentData.source,
@@ -463,9 +464,9 @@
             },
 
             computeInfoMessage: function (appointmentSource) {
-                if (appointmentSource == 'calendar') {
+                if (appointmentSource === 'calendar') {
                     return 'Pacient objednaný v kalendáři.';
-                } else if (appointmentSource == 'waitroom') {
+                } else if (appointmentSource === 'waitroom') {
                     return 'Pacient v čekárně.';
                 }
             },

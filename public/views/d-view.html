@@ -723,28 +723,33 @@
 
                 objectToSave['/appointmentsPublic/' + officeId + '/' + appointmentId] = false;
                 objectToSave['/userAppointments/' + uid + '/' + appointmentId] = {
-                    'message': patientMessage,
-                    'officeId': officeId,
-                    'address': officeData.address,
-                    'name': officeData.name
+                    message: patientMessage,
+                    officeId: officeId,
+                    address: officeData.address,
+                    name: officeData.name
                 };
 
                 db.ref("/userInfo/" + uid).once("value").then(function (snapshot) {
                     userInfo = snapshot.val();
 
                     if (patientStatus === null) {
-                        objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'accessed';
+                        objectToSave['/userContactedOffices/' + uid + '/' + officeId] = {
+                            status: 'accessed',
+                            booked: false
+                        };
                         objectToSave['/officePatients/' + officeId + '/' + uid] = userInfo;
                     }
 
                     objectToSave['/appointmentsPrivate/' + officeId + '/' + appointmentId] = {
-                        'source': 'online',
-                        'message': patientMessage,
-                        'patient': uid,
-                        'fullName': userInfo.name.firstName + " " + userInfo.name.lastName,
-                        'address': userInfo.address,
-                        'dateOfBirth': userInfo.dateOfBirth
+                        source: 'online',
+                        message: patientMessage,
+                        patient: uid,
+                        fullName: userInfo.name.firstName + " " + userInfo.name.lastName,
+                        address: userInfo.address,
+                        dateOfBirth: userInfo.dateOfBirth
                     };
+
+                    objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/booked'] = true;
 
                     // Save the appointment + optionally patientInfo
                     db.ref("/").update(objectToSave).then(function () {

@@ -571,7 +571,7 @@
                                 time.deleted = false;
                             }
                             // The following condition ensures that deleted is not overwritten when the date is selected for the second time,
-                        } else if(time.deleted !== true) {
+                        } else if (time.deleted !== true) {
                             time.deleted = false;
                         }
                     }
@@ -796,10 +796,11 @@
                 if (source === 'online') {
                     var patientUid = time.appointmentData.patient;
                     objectToSave['/userAppointments/' + patientUid + '/' + timeId] = null;
+                    objectToSave['/userContactedOffices/' + patientUid + '/' + officeId + '/booked'] = false;
                     objectToSave['/userNotifications/' + patientUid + '/' + rootRef.push().key] = {
-                        'title': 'Zrušené objednání',
-                        'message': 'Doktor zrušil vaše objednání dohodnuté na termín: ' + this.computeAppointmentDate(timeId),
-                        'sender': officeId
+                        title: 'Zrušené objednání',
+                        message: 'Doktor zrušil vaše objednání dohodnuté na termín: ' + this.computeAppointmentDate(timeId),
+                        sender: officeId
                     };
                 }
 

@@ -44,9 +44,15 @@
                     computed: 'computePatientStatusProperty(userContactedOffice)'
                 },
 
+                booked: {
+                    type: Boolean,
+                    notify: true,
+                    computed: 'computeBookedProperty(userContactedOffice)'
+                },
+
                 content: {
                     type: Object,
-                    computed: "computeContent(statusKnown, user, manualConfirmation, patientStatus)"
+                    computed: "computeContent(statusKnown, user, manualConfirmation, patientStatus, booked)"
                 },
 
                 contentObjects: {
@@ -85,12 +91,18 @@
                             title: "Žádost odeslána",
                             mainText: "Nyní prosím vyčkejte, než Vám doktor povolí přístup.",
                             buttonVisibility: false
+                        },
+
+                        booked: {
+                            title: "Termín rezervován",
+                            mainText: "U tohoto lékaře již máte zarezervovaný termín. Pokud chcete termín změnit, musíte jej nejprve smazat v Návštěvách",
+                            buttonVisibility: false
                         }
                     }
                 }
             },
 
-            computeContent: function (statusKnown, user, manualConfirmation, patientStatus) {
+            computeContent: function (statusKnown, user, manualConfirmation, patientStatus, booked) {
                 this.hidden = false;
                 this.disabledCalendar = true;
 
@@ -98,6 +110,8 @@
                     return this.contentObjects.logIn;
                 } else if (!user.emailVerified) {
                     return this.contentObjects.verify;
+                } else if (booked) {
+                    return this.contentObjects.booked;
                 } else if (manualConfirmation) {
                     if (patientStatus === null) {
                         return this.contentObjects.awaits;
@@ -149,7 +163,10 @@
 
                 db.ref('/userInfo/' + uid).once('value').then(function (snapshot) {
 
-                    objectToSave['/userContactedOffices/' + uid + '/' + officeId + '/status'] = 'awaitsVerification';
+                    objectToSave['/userContactedOffices/' + uid + '/' + officeId] = {
+                        status: 'awaitsVerification',
+                        booked: false
+                    };
                     objectToSave['/officePatientsToVerify/' + officeId + '/' + uid] = snapshot.val();
 
                     return db.ref('/').update(objectToSave).then(function () {
@@ -171,7 +188,11 @@
             },
 
             computePatientStatusProperty: function (userContactedOffice) {
-                return (Object.keys(userContactedOffice).length === 1) ? userContactedOffice.status : null;
+                return (!!userContactedOffice.status) ? userContactedOffice.status : null;
+            },
+
+            computeBookedProperty: function (userContactedOffice) {
+                return userContactedOffice.booked === true;
             }
         });
     </script>

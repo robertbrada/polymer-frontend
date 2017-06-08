@@ -312,9 +312,9 @@
                 objectToSave['/officePatients/' + officeId + '/' + patientId] = null;
                 objectToSave['/userContactedOffices/' + patientId + '/' + officeId + '/status'] = 'blocked';
                 objectToSave['/userNotifications/' + patientId + '/' + db.ref().push().key] = {
-                    'title': 'Zablokování přístupu',
-                    'message': 'Je nám líto, ale doktor Vám  odepřel přístup k objednání.',
-                    'sender': officeId
+                    title: 'Zablokování přístupu',
+                    message: 'Je nám líto, ale doktor Vám  odepřel přístup k objednání.',
+                    sender: officeId
                 };
 
                 db.ref('/').update(objectToSave).then(function () {
@@ -341,9 +341,9 @@
                     officeId = this.officeId;
 
                 objectToSave['/userNotifications/' + patient.uid + '/' + db.ref().push().key] = {
-                    'title': patient.messageTitle,
-                    'message': patient.messageBody,
-                    'sender': officeId
+                    title: patient.messageTitle,
+                    message: patient.messageBody,
+                    sender: officeId
                 };
 
                 db.ref('/').update(objectToSave).then(function () {
@@ -382,12 +382,12 @@
             computePatientsArray: function (officePatients) {
                 return Object.keys(officePatients).map(function (key) {
                     return {
-                        'name': officePatients[key]['name'],
-                        'address': officePatients[key]['address'],
-                        'dateOfBirth': officePatients[key]['dateOfBirth'],
-                        'uid': key,
-                        'messageTitle': null,
-                        'messageBody': null
+                        name: officePatients[key]['name'],
+                        address: officePatients[key]['address'],
+                        dateOfBirth: officePatients[key]['dateOfBirth'],
+                        uid: key,
+                        messageTitle: null,
+                        messageBody: null
                     }
                 });
             },

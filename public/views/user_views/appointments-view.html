@@ -263,14 +263,10 @@
                     objectToSave = {};
 
 
-                //smaze planovane objednani u lekare
                 objectToSave['/appointmentsPrivate/' + appointment.officeId + '/' + appointment.appointmentId] = null;
-
-                //povoli objednani na to appointmentId
                 objectToSave['/appointmentsPublic/' + appointment.officeId + '/' + appointment.appointmentId] = true;
-
-                //smaze planovane objednani u pacienta
                 objectToSave['/userAppointments/' + userId + '/' + appointment.appointmentId] = null;
+                objectToSave['/userContactedOffices/' + userId + '/' + appointment.officeId + '/booked'] = false;
 
 
                 db.ref("/").update(objectToSave).then(function () {
