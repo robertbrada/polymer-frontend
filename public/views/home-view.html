@@ -24,24 +24,70 @@
                 display: block;
                 --large-photo-width: 105px;
                 --small-photo-width: 85px;
-                background-color: #f8f8fa;
-                margin-top: -3em
+                margin-top: -3em;
+                color: #6f6f6f;
             }
 
-            h1 {
-                font-size: 1.6em;
-                padding: 1.5em;
-                color: #fff;
-                background-color: var(--app-accent-color);
-                margin: 2em 0 0;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            header {
+                background-color: #fbfbfb;
+                text-align: center;
+                padding: 5em 0 2.5em 0;
+                position: relative;
+                border-bottom: 15px solid #f3f3f3;
+            }
+
+            header #leftImage {
+                position: absolute;
+                left: 5%;
+                bottom: -15px;
+                width: 11%;
+                height: auto;
+                max-height: 30em;
+                max-width: 20em;
+            }
+
+            header #rightImage {
+                position: absolute;
+                right: 3%;
+                bottom: -15px;
+                width: 30%;
+                height: auto;
+                max-height: 30em;
+                max-width: 35em;
+            }
+
+            header #arrow {
+                height: 38px;
+            }
+
+            header > section {
+                max-width: 700px;
+                margin: 0 auto;
+                padding: 0 2em;
+            }
+
+            header h1 {
+                color: #0f9d58;
+                font-weight: 300;
+                font-size: 2.1em;
+                margin-bottom: 1em;
+            }
+
+            header h2 {
+                font-weight: 300;
+                font-size: 1.3em;
+                margin-bottom: 0.9em;
+                margin-top: 2em;
             }
 
             #offlice-list {
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
                 background-color: #fff;
             }
 
+            #buttons-container {
+                margin-top: 1.5em;
+                border-top: 1px solid #e0e0e1;
+            }
             /*** PROFILES ***/
 
             a {
@@ -56,9 +102,16 @@
             }
 
             .office-element {
-                padding: 1.8em;
-                border-bottom: 1px solid #e0e0e1;
+                padding: 2em;
+                box-shadow: none !important;
+                border-radius: 8px;
             }
+
+            .office-element:nth-child(2n-1) {
+               background-color: #f6f6f6;
+                border: 1px solid #e7e7e7;
+            }
+
 
             #profile-photo {
                 height: 100%;
@@ -79,7 +132,7 @@
 
             #name {
                 font-weight: bold;
-                font-size: 1.1em;
+                font-size: 1.2em;
             }
 
             #specialization {
@@ -159,13 +212,25 @@
                     padding-right: 0;
                 }
 
-                h1 {
-                    font-size: 1.1em;
-                    margin-top: 0;
+                header {
+                    font-size: 0.7em;
+                    padding-bottom: 2em;
+                }
+
+                header #arrow {
+                    height: 28px;
+                }
+
+                .office-element {
+                    border-radius: 0;
                 }
             }
 
             @media only screen and (max-width: 585px) {
+
+                .main-frame {
+                    margin-top: 1.8em;
+                }
 
                 .office-element {
                     position: relative;
@@ -202,9 +267,25 @@
 
         <iron-media-query query="max-width: 585px" query-matches="{{mobileScreen}}"></iron-media-query>
 
-        <div id="main-container" class="main-frame container flex-horizontal">
-            <h1>Vyberte si svého lékaře</h1>
+        <header>
 
+            <img id="rightImage" src="../images/home/rightimage-home.png" hidden="[[mobileScreen]]">
+            <img id="leftImage" src="../images/home/leftimage-home.png" hidden="[[mobileScreen]]">
+
+            <section>
+                <h1 class="green-text">
+                    Objednávání  a vše o lékařích<br> na jednom místě
+                </h1>
+
+                <h2>
+                    Pokračujte výběrem lékaře
+                </h2>
+
+                <img id="arrow" src="../images/home/home-arrow.png" hidden="[[mediumScreen]]">
+
+            </section>
+        </header>
+        <div id="main-container" class="main-frame container flex-horizontal">
             <div id="offlice-list">
                 <template is="dom-repeat" items="[[officesArray]]" as="office">
                     <div class="office-element container flex-horizontal-with-ratios">
@@ -240,7 +321,7 @@
                     </div>
                 </template>
             </div>
-            <div>
+            <div id="buttons-container">
                 <paper-button raised on-tap="previous" disabled="[[previousDisabled]]">
                     Předchozí
                 </paper-button>
