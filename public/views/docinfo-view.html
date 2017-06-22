@@ -35,12 +35,10 @@
             }
 
             .blue-text {
-                color: #05adc3;
+                /*color: #05adc3;*/
+                color: #44caca;
             }
 
-            .yellow-text {
-                color: #f9a825;
-            }
 
             a {
                 text-decoration: none;
@@ -60,9 +58,6 @@
                 font-weight: 500;
             }
 
-            .inner-page-link {
-                cursor: pointer;
-            }
 
             h1 {
                 letter-spacing: 0.03em;
@@ -73,7 +68,6 @@
             }
 
             p {
-                color: #757575;
                 font-weight: 300;
             }
 
@@ -84,7 +78,7 @@
                 padding: 0.9em;
             }
 
-            paper-button, #toregistration {
+            paper-button {
                 transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
@@ -109,32 +103,41 @@
             }
 
             header {
-                background-color: #fbfbfb;
-                text-align: center;
-                padding: 6em 0 10em 0;
+                text-align: left;
+                background-color: #44caca;
+                color: #fff;
+                /*text-align: center;*/
+                padding: 5em 0 24em 0;
                 position: relative;
                 border: none !important;
-                /*border-bottom: 45px solid #e5e5e5;*/
             }
 
             header #leftImage {
                 position: absolute;
-                left: 3%;
-                bottom: 0;
-                width: 14%;
+                left: 10%;
+                bottom: 25%;
+                width: 13%;
                 height: auto;
                 max-height: 40em;
                 max-width: 20em;
             }
 
+            header #centerImage {
+                position: absolute;
+                bottom: 0;
+                width: 15%;
+                left: calc(50% - 7.5%); /* half of width */
+                height: auto;
+                max-width: 21em;
+            }
+
             header #rightImage {
                 position: absolute;
-                right: 3%;
-                bottom: 0;
-                width: 20%;
+                right: 12%;
+                bottom: 15%;
+                width: 13%;
                 height: auto;
-                max-height: 40em;
-                max-width: 26em;
+                max-width: 15em;
             }
 
             header > section {
@@ -144,30 +147,18 @@
             }
 
             header h1 {
+                margin: 0 auto 1em auto;
+                max-width: 500px;
                 font-weight: 300;
-                font-size: 2.5em;
-                margin-bottom: 1em;
+                font-size: 2.1em;
             }
 
             header p {
-                font-size: 1.2em;
+                font-size: 1.3em;
                 max-width: 500px;
                 margin: 0 auto;
                 text-align: justify;
             }
-
-            header paper-button {
-                font-weight: bolder;
-                font-size: 1.1em;
-                text-transform: uppercase;
-                display: inline-block;
-                letter-spacing: 0.03em;
-                margin: 4.5em auto 0 auto;
-                padding: 1em 1.4em;
-                border-radius: 5em;
-            }
-
-
 
             /*****************
            -----OVERVIEW-----
@@ -182,7 +173,7 @@
             #overview .main-frame section {
                 padding-left: 4%;
                 padding-right: 4%;
-                padding-bottom: 2em;
+                padding-bottom: 3em;
             }
 
             #overview .main-frame section p {
@@ -192,7 +183,7 @@
             }
 
             #overview h1 {
-                font-size: 1.8em;
+                font-size: 1.7em;
                 margin-bottom: 1.2em;
                 letter-spacing: 0.03em;
             }
@@ -206,11 +197,62 @@
                 margin-top: 1.8em;
             }
 
+            /*** how-it-works ***/
+
+            #how-it-works {
+                background-color: #fafafa;
+                padding: 4em 0 0 0;
+                border-bottom: 35px solid #efefef;
+            }
+
+            #how-it-works .container {
+                max-width: 1100px;
+                margin: 0 auto;
+            }
+
+            #how-it-works .container > h1 {
+                text-align: center;
+                margin-bottom: 0;
+            }
+
+            #how-it-works h2 {
+                font-size: 1.15em;
+                margin-top: 0;
+            }
+
+            #how-it-works .main-frame {
+                margin-top: 4em;
+            }
+
+            #how-it-works > section {
+                padding: 6em 0;
+            }
+
+            #how-it-works section img {
+                max-height: 9.5em;
+            }
+
+            #how-it-works .imgSection {
+                text-align: center;
+            }
+
+            #how-it-works #office-section {
+                position: relative;
+                padding-bottom: 14em;
+            }
+
+            #how-it-works #doctorImage {
+                position: absolute;
+                bottom: 0;
+                width: 62%;
+                left: 18%;
+                max-height: 100%;
+            }
+
             /*** QUESTION FORM ***/
 
             #question-container {
-                background-color: #fafafa;
-                padding: 3em 1.5em;
+                padding: 0 1.5em 4em 1.5em;
             }
 
             #question-container h1 {
@@ -232,74 +274,10 @@
                 margin: 0 auto;
             }
 
-            #why-us {
-                color: #fff;
-                text-align: center;
-                padding: 4em 2em 1em 2em;
-                position: relative;
-            }
-
-            #why-us h1 {
-                /*font-size: 1.6em;*/
-                text-align: left;
-                display: inline-block;
-                margin: 0 auto 2em auto;
-                position: relative;
-            }
-
-            #why-us img {
-                width: 70px;
-                margin-bottom: 1em;
-            }
-
-            .header-div {
-                text-align: center;
-            }
-
-            #why-us {
-                background-color: #fafafa;
-                padding-bottom: 5em;
-                padding-top: 4em;
-                text-align: center;
-            }
-
-            #why-us h1 {
-                color: #757575;
-            }
-
-            #why-us .header-div h2 {
-                border-radius: 10em;
-                text-transform: uppercase;
-                font-size: 1.1em;
-                width: 13em;
-                margin: 0 auto 1em auto;
-            }
-
-            #why-us .description-div {
-                text-align: left;
-                font-size: 1.1em;
-                letter-spacing: 0.025em;
-                line-height: 1.5em;
-            }
-
-            #add-online-booking h2 {
-                margin-bottom: 0;
-                margin-top: 0;
-                font-size: 1.3em;
-            }
-
-            #add-online-booking img {
-                color: var(--app-accent-color);
-                height: 30px;
-                position: relative;
-                bottom: -34px;
-                z-index: 2;
-            }
-
             /* REGISTRATION STEPS */
 
             #registration {
-                padding: 5em 2em;
+                padding: 5em 2em 2em 2em;
             }
 
             #registration section {
@@ -313,30 +291,22 @@
                 text-align: left;
             }
 
-            #toregistration {
-                display: inline-block;
-                margin-top: 2.5em;
-                padding: 1.2em 2em;
-                border-radius: 0.25em;
 
-            }
-
-            #toregistration:hover {
-                text-decoration: none;
+            /*** ABOUT ***/
+            #about-us {
+                display: block;
+                width: 8em;
+                margin: 1em 0 0 auto;
+                padding: 1em;
+                font-size: 1.1em;
+                font-weight: bold;
+                text-align: center;
             }
 
             /****** FLEX LAYOUT ****/
 
             .booking-flex-horizontal > section {
                 text-align: justify;
-            }
-
-            .flex-horizontal, .booking-flex-horizontal {
-                @apply(--layout-horizontal);
-            }
-
-            .flexchild {
-                @apply(--layout-flex);
             }
 
             /*
@@ -346,8 +316,9 @@
             @media (max-width: 1200px) {
 
                 header {
-                    padding-top: 3em;
+                    padding: 3em 0 18em 0;
                 }
+
                 header h1 {
                     font-size: 1.9em;
                 }
@@ -371,19 +342,17 @@
                 header paper-button {
                     margin-top: 3em;
                 }
-            }
 
-            @media (max-width: 980px) {
-
-                .booking-flex-horizontal {
-                    @apply(--layout-vertical);
+                #how-it-works #office-section {
+                    padding-bottom: 10em;
                 }
+
             }
 
             @media (max-width: 546px) {
 
-                header h1 {
-                    text-align: left;
+                #how-it-works .main-frame {
+                    margin-top: 2em;
                 }
             }
 
@@ -396,7 +365,7 @@
 
             @media (min-width: 767px) {
 
-                paper-button:hover, #toregistration:hover {
+                paper-button:hover {
                     transform: scale(1.1);
                     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
                 }
@@ -410,23 +379,18 @@
 
         <header>
 
-            <img id="rightImage" src="../images/docinfo/right-part.png" hidden="[[mobileScreen]]">
-            <img id="leftImage"  src="../images/docinfo/left-part.png" hidden="[[mediumScreen]]">
+            <img id="rightImage" src="../images/docinfo/right-image.png" hidden="[[mobileScreen]]">
+            <img id="centerImage" src="../images/docinfo/center-image.png" hidden="[[mobileScreen]]" >
+            <img id="leftImage" src="../images/docinfo/left-image.png" hidden="[[mobileScreen]]">
 
             <section>
-                <h1 class="green-text">
-                    Vítejte na Docta.cz,<br>
-                    tvoříme moderní nástroje pro lékaře.
+                <h1>
+                    Udělejte ze své ordinace příjemné místo pro Vás i Vaše pacienty
                 </h1>
                 <p>
-                    Docta.cz je unikátní projekt, který vznikl za účelem
-                    pomoci lékařům a zlepšit péči o pacienty.
-                    Jako lékaři odvádíte důležitou práci a naším cílem je ji maximálně zjednodušit a zpřístupnit
-                    pacientům.
+                    Lékařská ordinace je místem, ve kterém by se měl cítit příjemně jak lékař,
+                    tak jeho pacienti. Naším cílem je z Vaší ordinace takové místo udělat.
                 </p>
-
-                <paper-button id="linkToOverview" class="inner-page-link green-background">ZJISTĚTE VÍCE
-                </paper-button>
 
             </section>
         </header>
@@ -435,92 +399,104 @@
             <div class="main-frame grid">
                 <section>
                     <h1 class="green-text">
-                        Objednávejte online!<br>
-                        Jen u nás zdarma a bez závazků
+                        Nenechte se rušit,<br>
+                        Postaráme se o Vaše telefonáty
                     </h1>
-                    <p>Připojte se k lékařům, kteří již online objednávání
-                        využívají. My Vám ho jako jediní poskytneme zdarma a bez závazků.
-                        Stačí krátká registrace a můžete objednávat už zítra!</p>
-                    <a class="green-text" href="../bookinginfo">DALŠÍ INFORMACE
-                        <iron-icon icon="icons:forward"></iron-icon>
-                    </a>
-
+                    <p>Neustále Vám někdo telefonuje do ordinace? Připravujeme pro Vás řešení!
+                        Postaráme se o hovory do Vaší ordinace. Pacienty objednáme a ostatní žádosti si poznamenáme.
+                        Vše uvidíte na svém počítači a nemusíte nic řešit. </p>
                 </section>
 
                 <section>
                     <h1 class="blue-text">
-                        Profesionální webové stránky <br> přesně pro Vás
+                        Objednávejte online,<br>
+                        Jen u nás zdarma a bez závazků
                     </h1>
-                    <p>Tvoříme profesionální webové stránky pro jednotlivé lékaře
-                        i zdravotnická zařízení. Zdarma Vám uděláme návrh Vašich nových
-                        stránek a navíc od nás můžete získat super cenu!</p>
-                    <a class="blue-text" href="../newweb">DALŠÍ INFORMACE
+                    <p>
+                        Vytvoříme Vám profil s kalendářem a informacemi o Vaší ordinaci.
+                        Pacienti se budou moci sami objednat a zjistit si vše potřebné.
+                    </p>
+                    <a class="blue-text" href="../bookinginfo">VÍCE INFORMACÍ
                         <iron-icon icon="icons:forward"></iron-icon>
                     </a>
                 </section>
             </div>
         </section>
 
-        <section id="why-us">
-            <h1>Proč být s námi?
-            </h1>
-            <div class="main-frame booking-flex-horizontal grid">
+        <div id="how-it-works">
+            <div class="container">
+                <h1>Jak vyřídíme telefonáty?</h1>
                 <section>
-                    <div class="header-div">
-                        <img class="why-booking-img" src="../images/docinfo/tools_icon.png">
-                        <h2 class="yellow-text">Moderní nástroje</h2>
-                    </div>
-                    <div class="description-div">
-                        <p>Náš systém je vytvořený na těch nejmodernějších technologiích. Nemusíte tak mít
-                            strach, že by naše služby byly někdy zastaralé.</p>
+                    <div class="main-frame grid">
+                        <section>
+                            <h2>
+                                1. Pacient volá do ordinace
+                            </h2>
+                            <p>Pacienti mají různé důvody pro telefnování do ordinace.
+                                Mohou se chtít objednat, zjistit informace o ordinaci anebo cokoli jiného.
+                            </p>
+                        </section>
+
+                        <section class="imgSection">
+                            <img id="patientImage" src="../images/docinfo/patient.png" >
+                        </section>
                     </div>
                 </section>
+
                 <section>
-                    <div class="header-div">
-                        <img class="why-booking-img" src="../images/docinfo/smile_icon.png">
-                        <h2 class="green-text">Spokojení zákazníci</h2>
-                    </div>
-                    <div class="description-div">
-                        <p>U nás platí víc než kde jinde, že spokojený zákazník je to nejdůležitější!
-                            Pokud máte nějaké dotazy, rádi Vám je zodpovíme a vše vysvětlíme.</p>
+                    <div class="main-frame grid">
+                        <section>
+                            <h2>
+                                2. My se o hovor postaráme
+                            </h2>
+                            <p>Hovor vyřídíme my. Pacienta
+                                můžeme například objednat nebo mu poskytnout informace o ordinaci. Musí-li být pacientova žádost
+                               řešena s Vámi, hovor přepojíme k Vám do ordinace a nebo si zapíšeme, co si pacient přál.</p>
+                        </section>
+
+                        <section class="imgSection">
+                            <img id="operatorImage" src="../images/docinfo/operator.png">
+
+                        </section>
                     </div>
                 </section>
-                <section>
-                    <div class="header-div">
-                        <img class="why-booking-img" src="../images/docinfo/handshake_icon.png">
-                        <h2 class="blue-text">Vzájemná spolupráce</h2>
+
+                <section id="office-section">
+                    <div class="main-frame grid">
+                        <section>
+                            <h2>
+                                3. Vy si v klidu děláte svou práci
+                            </h2>
+                            <p>Žádosti pacientů jsme vyřídili a Vy vidíte vše u sebe na počítači.
+                                Objednaní pacienti jsou přehledně v kalendáři.
+                                Ostatní žádosti od pacientů jsme vám poznamenali a můžete je vyřídit až se Vám bude chtít.</p>
+                        </section>
+
+                        <section>
+                        </section>
                     </div>
-                    <div class="description-div">
-                        <p>Chceme aby systém byl co nejužitečnější. Je něco, co byste změnili? Jsme otevřeni jakýmkoli nápadům na vylepšení, stačí se nám ozvat! </p>
-                    </div>
+                    <img id="doctorImage" src="../images/docinfo/doctor.png">
                 </section>
             </div>
-        </section>
+        </div>
+
 
         <div id="registration">
             <section>
-                <h1 class="green-text">Jak se k nám přidat?</h1>
-                <p>Jednoduše se u nás zaregistrujte, vyplňte informace o Vaší ordinaci a vše je připraveno k použití!
+                <h1 class="green-text">Zaujali jsme Vás?</h1>
+
+                <p>Napiště nám co Vás zajímá anebo jakoukoli jinou zprávu. My se Vám co nejdříve ozveme. Navíc když budete chtít, rádi za Vámi
+                    přijedeme a vše Vám vysvětlíme a ukážeme.
                 </p>
-                <a id="toregistration" href="../registration" class="green-background">ZAČÍT NYNÍ</a>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <h1 class="blue-text">Chtěli byste vše předvést osobně?</h1>
-                <p>Zaujali jsme Vás, ale chtěli byste vše vysvětlit osobně? Rádi za Vámi přijedeme,
-                    vše Vám vysvětlíme a ukážeme. Stačí když nám <span class="blue-text">napíšete</span> a my se Vám co nejdříve ozveme.</p>
             </section>
         </div>
 
         <div id="question-container" hidden="[[messageSent]]">
             <form id="docinfo_form" is="iron-form">
-                <h1>Napište nám!</h1>
-                <p>Chcete se na něco zeptat, nebo nám chcete sdělit cokoli jiného?</p>
                 <gold-email-input id="email_input" error-message="Špatný formát"
                                   label="Vaše emailová adresa" required>
                 </gold-email-input>
+                <br>
                 <paper-textarea id="message_input" label="Vaše zpráva" char-counter
                                 error-message="Zpráva nesmí být prázdná"
                                 maxlength="2000" required></paper-textarea>
@@ -528,8 +504,12 @@
             </form>
         </div>
 
-        <p class="blue-background" id="message-sent" hidden="[[!messageSent]]">Zpráva odeslána, děkujeme. Co nejdříve se Vám ozveme.</p>
+        <p class="blue-background" id="message-sent" hidden="[[!messageSent]]">Zpráva odeslána, děkujeme. Co nejdříve se
+            Vám ozveme.</p>
 
+        <!--<a id="about-us" class="blue-background" href="#">O NÁS-->
+            <!--<iron-icon icon="icons:forward"></iron-icon>-->
+        <!--</a>-->
     </template>
 
     <script>
@@ -584,7 +564,7 @@
             ],
 
             listeners: {
-                'linkToOverview.click': 'scrollToOverview'
+//                'linkToOverview.click': 'scrollToOverview'
             },
 
             ready: function () {
