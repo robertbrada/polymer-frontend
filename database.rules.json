@@ -271,14 +271,14 @@
         }
       }
     },
-    "docInfoQuestions": {
+    "docInfoPhoneNumbers": {
       ".read": false,
       ".write": true,
       "$pushId": {
-        "email": {
+        "phone": {
           ".validate": "newData.isString()"
         },
-        "message": {
+        "description": {
           ".validate": "newData.isString() && newData.val().length <= 2000"
         }
       }

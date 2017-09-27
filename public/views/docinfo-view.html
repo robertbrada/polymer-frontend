@@ -368,7 +368,7 @@
                     Vyzkoušejte nástroj, který usnadní provoz Vaší kliniky.
                 </p>
                 <div class="phone-input-container">
-                    <paper-input id="phone_input_header" label="Vaše telefonní číslo"
+                    <paper-input id="phone_input_header" label="Vaše telefonní číslo" required
                                  error-message="Zkontrolujte tvar čísla" no-label-float minlength="9"
                                  maxlength="30"></paper-input>
                     <paper-button id="phone_btn_header" raised on-tap="send">Kontaktujte mě</paper-button>
@@ -446,7 +446,7 @@
                                 Nechte nám svůj kontakt, ozveme se a pomůžeme
                             </p>
                             <div class="phone-input-container">
-                                <paper-input id="phone_input_footer" label="Vaše telefonní číslo"
+                                <paper-input id="phone_input_footer" label="Vaše telefonní číslo" required
                                              error-message="Zkontrolujte délku čísla" no-label-float minlength="9"
                                              maxlength="30"></paper-input>
                                 <paper-button id="phone_btn_footer" on-tap="send" raised>Kontaktujte mě</paper-button>
@@ -625,17 +625,13 @@
                 }
 
                 if (phone_input.validate()) {
-                    this.sendPhoneNumber(phone_input, description);
+                    this.sendPhoneNumber(phone_input.value, description);
                 }
             },
 
-            sendPhoneNumber: function (phone_input, description) {
-
-                var phone = phone_input.value,
-                    db = firebase.apps[0].database();
-
-                db.ref('/docInfoPhoneNumbers/').push({
-                    "phone": phone,
+            sendPhoneNumber: function (phoneNumber, description) {
+                this.database.ref('/docInfoPhoneNumbers/').push({
+                    "phone": phoneNumber,
                     "description": description
                 }).then(function () {
                     this.fire("show-toast", {text: "Děkujeme, brzy se Vám ozveme"});
