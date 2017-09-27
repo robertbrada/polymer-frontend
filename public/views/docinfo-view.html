@@ -1,28 +1,21 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
-<link rel="import" href="/bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="/bower_components/polymerfire/firebase-app-script.html">
 <link rel="import" href="/bower_components/iron-form/iron-form.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 
-<link rel="import" href="/styles/input-styles.html">
 <link rel="import" href="/styles/layout-styles.html">
 
 <dom-module id="docinfo-view">
     <template>
-        <style include="layout-styles input-styles">
+        <style include="layout-styles">
             :host {
                 display: block;
                 color: #757575;
-            }
-
-            .green-background {
-                background-color: #0f9d58;
-                color: #fff !important;
             }
 
             .blue-background {
@@ -35,10 +28,8 @@
             }
 
             .blue-text {
-                /*color: #05adc3;*/
-                color: #44caca;
+                color: #189cae;
             }
-
 
             a {
                 text-decoration: none;
@@ -56,15 +47,18 @@
                 margin: 1em auto;
                 padding: 1em 1.5em;
                 font-weight: 500;
-            }
+                text-transform: none;
 
+                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            }
 
             h1 {
                 letter-spacing: 0.03em;
                 font-weight: 300;
                 font-size: 2em;
                 margin-top: 0;
-                margin-bottom: 1em;
+                margin-bottom: 1.5em;
             }
 
             p {
@@ -76,11 +70,6 @@
                 font-size: 1.1em;
                 margin: 0;
                 padding: 0.9em;
-            }
-
-            paper-button {
-                transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             }
 
             .main-frame {
@@ -107,7 +96,7 @@
                 background-color: #44caca;
                 color: #fff;
                 /*text-align: center;*/
-                padding: 5em 0 24em 0;
+                padding: 5em 0 23em 0;
                 position: relative;
                 border: none !important;
             }
@@ -141,13 +130,13 @@
             }
 
             header > section {
-                max-width: 700px;
+                max-width: 500px;
                 margin: 0 auto;
                 padding: 0 2em;
             }
 
             header h1 {
-                margin: 0 auto 1em auto;
+                margin: 0 auto 1.7em auto;
                 max-width: 500px;
                 font-weight: 300;
                 font-size: 2.1em;
@@ -160,35 +149,46 @@
                 text-align: justify;
             }
 
+            header paper-button {
+                background-color: #183260;
+            }
+
             /*****************
-           -----OVERVIEW-----
+           ----- FEATURES -----
             ****************/
 
-            #overview {
+            #features {
+                padding: 0 0 3em 0;
+                max-width: 1060px;
+                margin: 0 auto;
+            }
+
+            .double-row {
                 position: relative;
-                padding-top: 3em;
-                padding-bottom: 3em;
             }
 
-            #overview .main-frame section {
-                padding-left: 4%;
-                padding-right: 4%;
-                padding-bottom: 3em;
+            .double-row .main-frame section {
+                padding-left: 5%;
+                padding-right: 5%;
+                padding-bottom: 0;
             }
 
-            #overview .main-frame section p {
+            .double-row .main-frame section p {
                 max-width: 480px;
                 text-align: justify;
 
             }
 
-            #overview h1 {
-                font-size: 1.7em;
+            .double-row h2 {
+                font-weight: 400;
+                font-size: 1.5em;
                 margin-bottom: 1.2em;
-                letter-spacing: 0.03em;
+                margin-top: 1.2em;
+                letter-spacing: 0.02em;
+                display: inline-block;
             }
 
-            #overview a {
+            .double-row a {
                 display: inline-block;
                 cursor: pointer;
                 font-weight: bold;
@@ -197,110 +197,88 @@
                 margin-top: 1.8em;
             }
 
-            /*** how-it-works ***/
-
-            #how-it-works {
-                background-color: #fafafa;
-                padding: 4em 0 0 0;
-                border-bottom: 35px solid #efefef;
-            }
-
-            #how-it-works .container {
-                max-width: 1100px;
-                margin: 0 auto;
-            }
-
-            #how-it-works .container > h1 {
-                text-align: center;
-                margin-bottom: 0;
-            }
-
-            #how-it-works h2 {
-                font-size: 1.15em;
-                margin-top: 0;
-            }
-
-            #how-it-works .main-frame {
-                margin-top: 4em;
-            }
-
-            #how-it-works > section {
-                padding: 6em 0;
-            }
-
-            #how-it-works section img {
-                max-height: 9.5em;
-            }
-
-            #how-it-works .imgSection {
-                text-align: center;
-            }
-
-            #how-it-works #office-section {
-                position: relative;
-                padding-bottom: 14em;
-            }
-
-            #how-it-works #doctorImage {
-                position: absolute;
-                bottom: 0;
-                width: 62%;
-                left: 18%;
-                max-height: 100%;
-            }
-
-            /*** QUESTION FORM ***/
-
-            #question-container {
-                padding: 0 1.5em 4em 1.5em;
-            }
-
-            #question-container h1 {
-                letter-spacing: 0.02em;
-                margin-top: 0.5em;
-            }
-
-            #question-container p {
-                margin-bottom: 1.5em;
-                font-size: 1.2em;
-            }
-
-            #question-container paper-button {
-                margin-top: 2.5em;
-            }
-
-            form {
-                max-width: 600px;
-                margin: 0 auto;
+            .feature-image {
+                height: 35px;
+                width: auto;
+                vertical-align: super;
+                margin-left: 3em;
             }
 
             /* REGISTRATION STEPS */
 
             #registration {
-                padding: 5em 2em 2em 2em;
-            }
-
-            #registration section {
-                max-width: 600px;
-                margin: 0 auto;
-                text-align: left;
+                padding: 5em 0 7em 0;
+                /*background-color: #fbfbfb;*/
             }
 
             #registration h1 {
+                text-align: center;
+                color: #757575;
+            }
+
+            #registration p {
                 letter-spacing: 0.03em;
+                margin: 1em auto 2em auto;
+                font-size: 1.3em;
+                text-align: center;
+            }
+
+            /* INPIT STYLES */
+
+            .phone-input-container {
+                padding-bottom: 2em;
+            }
+
+            header .phone-input-container {
+                margin-top: 2.5em;
+            }
+
+            .phone-input-container paper-button {
+                display: inline-block;
+                vertical-align: top;
+                font-size: 1.1em;
+                padding: 1.03em;
+                border-radius: 5px;
+                margin: 0 0 0 0.4em;
+            }
+
+            .phone-input-container paper-input {
+                background-color: #fff;
+                border-radius: 5px;
+                padding: 0.5em 1.2em;
+                display: inline-block;
+                margin-bottom: 0.8em /* on small screen when button is under input */
+            }
+
+            #registration .phone-input-container {
+                text-align: center;
+            }
+
+            #registration .phone-input-container paper-input {
+                border: 1px solid #e2e2e3;
                 text-align: left;
             }
 
+            paper-input {
 
-            /*** ABOUT ***/
-            #about-us {
-                display: block;
-                width: 8em;
-                margin: 1em 0 0 auto;
-                padding: 1em;
-                font-size: 1.1em;
-                font-weight: bold;
-                text-align: center;
+                --paper-input-container-label: {
+                    font-weight: 100;
+                    font-size: 1.2em;
+                };
+
+                --paper-input-container-underline: {
+                    display: none;
+                };
+
+                --paper-input-container-underline-focus: {
+                    display: none;
+                };
+
+                --paper-input-container-input: {
+                    color: #444;
+                    font-size: 1.3em;
+                    font-weight: 100;
+                }
             }
 
             /****** FLEX LAYOUT ****/
@@ -309,9 +287,7 @@
                 text-align: justify;
             }
 
-            /*
-           ---- MEDIA ----
-           */
+            /* ---- MEDIA ---- */
 
             @media (max-width: 1200px) {
 
@@ -339,12 +315,12 @@
                     padding: 7% 5%;
                 }
 
-                header paper-button {
-                    margin-top: 3em;
+                .phone-input-container paper-input {
+                    padding: 0.25em 1em;
                 }
 
-                #how-it-works #office-section {
-                    padding-bottom: 10em;
+                .feature-image {
+                    height: 25px;
                 }
 
             }
@@ -366,10 +342,11 @@
             @media (min-width: 767px) {
 
                 paper-button:hover {
-                    transform: scale(1.1);
+                    transform: scale(1.05);
                     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
                 }
             }
+
 
         </style>
 
@@ -380,136 +357,121 @@
         <header>
 
             <img id="rightImage" src="../images/docinfo/right-image.png" hidden="[[mobileScreen]]">
-            <img id="centerImage" src="../images/docinfo/center-image.png" hidden="[[mobileScreen]]" >
+            <img id="centerImage" src="../images/docinfo/center-image.png" hidden="[[mobileScreen]]">
             <img id="leftImage" src="../images/docinfo/left-image.png" hidden="[[mobileScreen]]">
 
             <section>
                 <h1>
-                    Udělejte ze své ordinace příjemné místo pro Vás i Vaše pacienty
+                    Jediný objednávací systém<br>navržený přímo pro <b>stomatologii</b>.
                 </h1>
-                <p>
-                    Lékařská ordinace je místem, ve kterém by se měl cítit příjemně jak lékař,
-                    tak jeho pacienti. Naším cílem je z Vaší ordinace takové místo udělat.
+                <p style="font-weight: 400">
+                    Vyzkoušejte nástroj, který usnadní provoz Vaší kliniky.
                 </p>
-
+                <div class="phone-input-container">
+                    <paper-input id="phone_input_header" label="Vaše telefonní číslo"
+                                 error-message="Zkontrolujte tvar čísla" no-label-float minlength="9"
+                                 maxlength="30"></paper-input>
+                    <paper-button id="phone_btn_header" raised on-tap="send">Kontaktujte mě</paper-button>
+                </div>
             </section>
         </header>
 
-        <section id="overview">
-            <div class="main-frame grid">
-                <section>
-                    <h1 class="green-text">
-                        Nenechte se rušit,<br>
-                        Postaráme se o Vaše telefonáty
-                    </h1>
-                    <p>Neustále Vám někdo telefonuje do ordinace? Připravujeme pro Vás řešení!
-                        Postaráme se o hovory do Vaší ordinace. Pacienty objednáme a ostatní žádosti si poznamenáme.
-                        Vše uvidíte na svém počítači a nemusíte nic řešit. </p>
-                </section>
+        <section id="features">
 
-                <section>
-                    <h1 class="blue-text">
-                        Objednávejte online,<br>
-                        Jen u nás zdarma a bez závazků
-                    </h1>
-                    <p>
-                        Vytvoříme Vám profil s kalendářem a informacemi o Vaší ordinaci.
-                        Pacienti se budou moci sami objednat a zjistit si vše potřebné.
-                    </p>
-                    <a class="blue-text" href="../bookinginfo">VÍCE INFORMACÍ
-                        <iron-icon icon="icons:forward"></iron-icon>
-                    </a>
-                </section>
-            </div>
+            <section class="double-row">
+                <div class="main-frame grid">
+                    <section>
+                        <h2 class="blue-text">
+                            Systém, který se<br>snadno používá
+                        </h2>
+                        <img class="feature-image" src="../images/docinfo/finger.png">
+
+                        <p>Systém obsahuje jen funkce, které opravdu potřebujete.
+                            Díky tomu je přehledný a snadno se použivá.
+                            Pacienti se mohou objednat sami a Vy o nich máte přehled.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 class="green-text">
+                            Zrychlete provoz<br>kliniky
+                        </h2>
+                        <img class="feature-image" src="../images/docinfo/accelerate.png">
+
+                        <p>
+                            Systém je navržený tak, aby personál strávil co nejméně času ovládáním systému
+                            a mohl se plně věnovat pacientům a provozu podniku.
+                        </p>
+                    </section>
+                </div>
+            </section>
+
+            <section class="double-row">
+                <div class="main-frame grid">
+                    <section>
+                        <h2 class="green-text">
+                            Vaše data jsou<br>u nás v bezpečí
+                        </h2>
+                        <img class="feature-image" src="../images/docinfo/lock.png">
+                        <p>
+                            Všechna data mezi Vaší klinikou a našimi servery jsou šifrována pomocí SSL.
+                            Je tak zamezen jakýkoliv přístup třetím stranám.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 class="blue-text">
+                            Rozšíříme systém<br>mezi pacienty
+                        </h2>
+                        <img class="feature-image" src="../images/docinfo/patients.png">
+
+                        <p>
+                            Uděláme vše pro to, aby se o Vašem novém systému dozvědělo co nejvíce pacientů.
+                            Ušetří to čas Vám i jim samotným.
+                        </p>
+                    </section>
+                </div>
+            </section>
         </section>
-
-        <div id="how-it-works">
-            <div class="container">
-                <h1>Jak vyřídíme telefonáty?</h1>
-                <section>
-                    <div class="main-frame grid">
-                        <section>
-                            <h2>
-                                1. Pacient volá do ordinace
-                            </h2>
-                            <p>Pacienti mají různé důvody pro telefonování do ordinace.
-                                Mohou se chtít objednat, zjistit informace o ordinaci anebo cokoli jiného.
-                            </p>
-                        </section>
-
-                        <section class="imgSection">
-                            <img id="patientImage" src="../images/docinfo/patient.png" >
-                        </section>
-                    </div>
-                </section>
-
-                <section>
-                    <div class="main-frame grid">
-                        <section>
-                            <h2>
-                                2. My se o hovor postaráme
-                            </h2>
-                            <p>Hovor vyřídíme my. Pacienta
-                                můžeme například objednat nebo mu poskytnout informace o ordinaci. Musí-li být pacientova žádost
-                               řešena s Vámi, hovor přepojíme k Vám do ordinace nebo Vám předáme zprávu k pozdějšímu vyřízení.</p>
-                        </section>
-
-                        <section class="imgSection">
-                            <img id="operatorImage" src="../images/docinfo/operator.png">
-
-                        </section>
-                    </div>
-                </section>
-
-                <section id="office-section">
-                    <div class="main-frame grid">
-                        <section>
-                            <h2>
-                                3. Vy si v klidu děláte svou práci
-                            </h2>
-                            <p>Žádosti pacientů jsme vyřídili a Vy vidíte vše u sebe na počítači.
-                                Objednaní pacienti jsou přehledně v kalendáři.
-                                Ostatní žádosti od pacientů jsme Vám poznamenali a můžete je vyřídit až se Vám bude chtít.</p>
-                        </section>
-
-                        <section>
-                        </section>
-                    </div>
-                    <img id="doctorImage" src="../images/docinfo/doctor.png">
-                </section>
-            </div>
-        </div>
 
 
         <div id="registration">
             <section>
-                <h1 class="green-text">Zaujali jsme Vás?</h1>
+                <h1 class="green-text">Zajímá Vás více?</h1>
 
-                <p>Napiště nám co Vás zajímá nebo jakoukoli jinou zprávu. My se Vám co nejdříve ozveme. Pokud budete chtít, rádi Vám vše
-                    vysvětlíme a ukážeme osobně.
-                </p>
+                <section class="double-row">
+                    <div class="main-frame grid">
+                        <section>
+                            <p>
+                                Nechte nám svůj kontakt, ozveme se a pomůžeme
+                            </p>
+                            <div class="phone-input-container">
+                                <paper-input id="phone_input_footer" label="Vaše telefonní číslo"
+                                             error-message="Zkontrolujte délku čísla" no-label-float minlength="9"
+                                             maxlength="30"></paper-input>
+                                <paper-button id="phone_btn_footer" on-tap="send" raised>Kontaktujte mě</paper-button>
+                            </div>
+                        </section>
+
+                        <section>
+                            <p>
+                                Nebo rovnou zavolejte Vy nám
+                            </p>
+                            <p>
+                                +420
+                                <a class="green-text"
+                                   style="font-weight: 400; text-decoration: none; cursor: default; margin: 0"
+                                   href="tel:602969900">602 969 900</a>
+                            </p>
+                        </section>
+                    </div>
+                </section>
             </section>
         </div>
 
-        <div id="question-container" hidden="[[messageSent]]">
-            <form id="docinfo_form" is="iron-form">
-                <gold-email-input id="email_input" error-message="Špatný formát"
-                                  label="Vaše emailová adresa" required>
-                </gold-email-input>
-                <br>
-                <paper-textarea id="message_input" label="Vaše zpráva" char-counter
-                                error-message="Zpráva nesmí být prázdná"
-                                maxlength="2000" required></paper-textarea>
-                <paper-button raised on-tap="send">Odeslat</paper-button>
-            </form>
-        </div>
+        <!--<p class="blue-background" id="message-sent" hidden="[[!messageSent]]">telefonní číslo odesláno, děkujeme. Brzy se-->
+        <!--Vám ozveme.</p>-->
 
-        <p class="blue-background" id="message-sent" hidden="[[!messageSent]]">Zpráva odeslána, děkujeme. Co nejdříve se
-            Vám ozveme.</p>
-
-        <!--<a id="about-us" class="blue-background" href="#">O NÁS-->
-            <!--<iron-icon icon="icons:forward"></iron-icon>-->
-        <!--</a>-->
     </template>
 
     <script>
@@ -563,10 +525,6 @@
                 "saveRoute(route, trackingId)"
             ],
 
-            listeners: {
-//                'linkToOverview.click': 'scrollToOverview'
-            },
-
             ready: function () {
                 var xhr = new XMLHttpRequest(),
                     setIp = function (e) {
@@ -600,7 +558,8 @@
                     this.oldTrackingId = trackingId;
 
                     var getBrowser = function () {
-                            var ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+                            var ua = navigator.userAgent, tem,
+                                M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
                             if (/trident/i.test(M[1])) {
                                 tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
                                 return {name: 'IE', version: (tem[1] || '')};
@@ -643,24 +602,43 @@
                 this.database.ref("/docInfoVisitors/" + trackingId).push(objectToSave);
             },
 
-            send: function () {
-                //  paper-textarea was not detected by form validation, so I'm validating the inputs manually
-                if (this.$.email_input.validate() && this.$.message_input.validate()) {
-                    this.sendQuestion();
+            computeUrl: function (signedIn) {
+                return (signedIn) ? "/office/registration/first" : "/registration/doc";
+            },
+
+            computeButtonText: function (signedIn) {
+                return (signedIn) ? "Přidat ordinaci" : "Zaregistrujte se";
+            },
+
+
+            send: function (event) {
+                id = event.target.id;
+                var phone_input, description = null;
+
+                // checks which of buttons was clicked
+                if (id === "phone_btn_header") {
+                    phone_input = this.$.phone_input_header;
+                    description = "header input";
+                } else if (id === "phone_btn_footer") {
+                    phone_input = this.$.phone_input_footer;
+                    description = "footer input";
+                }
+
+                if (phone_input.validate()) {
+                    this.sendPhoneNumber(phone_input, description);
                 }
             },
 
-            sendQuestion: function () {
+            sendPhoneNumber: function (phone_input, description) {
 
-                var email = this.$.email_input.value,
-                    message = this.$.message_input.value,
+                var phone = phone_input.value,
                     db = firebase.apps[0].database();
 
-                db.ref('/docInfoQuestions/').push({
-                    "email": email,
-                    "message": message
+                db.ref('/docInfoPhoneNumbers/').push({
+                    "phone": phone,
+                    "description": description
                 }).then(function () {
-                    this.fire("show-toast", {text: "Zpráva odeslána"});
+                    this.fire("show-toast", {text: "Děkujeme, brzy se Vám ozveme"});
                     this.messageSent = true;
                 }.bind(this), function () {
                     this.fire("show-dialog", {
@@ -671,70 +649,8 @@
                         }
                     });
                 }.bind(this));
-            },
-
-            computeUrl: function (signedIn) {
-                return (signedIn) ? "/office/registration/first" : "/registration/doc";
-            },
-
-            computeButtonText: function (signedIn) {
-                return (signedIn) ? "Přidat ordinaci" : "Zaregistrujte se";
-            },
-
-
-            //SCROLLING FUNCTIONS
-
-            currentYPosition: function () {
-                // Firefox, Chrome, Opera, Safari
-                if (self.pageYOffset) return self.pageYOffset;
-                return 0;
-            },
-
-            idYPosition: function (ID) {
-                var elm = Polymer.dom(this.root).querySelector("#" + ID),
-                    yOffset = elm.offsetTop - 60, /* -60 because want to scroll a bit above an element */
-                    node = elm;
-
-                /* needed when try to link to nested node */
-                while (node.offsetParent && node.offsetParent !== document.body) {
-                    node = node.offsetParent;
-                    yOffset += node.offsetTop;
-                }
-                return yOffset;
-            },
-
-            /* found this algorithm, couldn't find how to make it easily.
-             element.scrollIntoView({behavior: "smooth"}); works only in Firefox */
-            smoothScroll: function (ID) {
-                var startY = this.currentYPosition(),
-                    stopY = this.idYPosition(ID),
-                    distance = stopY > startY ? stopY - startY : startY - stopY, i;
-
-                var speed = Math.round(distance / 60);
-                if (speed >= 20) speed = 20;
-                var step = Math.round(distance / 30),
-                    leapY = stopY > startY ? startY + step : startY - step,
-                    timer = 0;
-                if (stopY > startY) {
-                    for (i = startY; i < stopY; i += step) {
-                        setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                        leapY += step;
-                        if (leapY > stopY) leapY = stopY;
-                        timer++;
-                    }
-                    return;
-                }
-                for (i = startY; i > stopY; i -= step) {
-                    setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                    leapY -= step;
-                    if (leapY < stopY) leapY = stopY;
-                    timer++;
-                }
-            },
-
-            scrollToOverview: function () {
-                this.smoothScroll("overview");
             }
+
         });
     </script>
 </dom-module>
